@@ -1,0 +1,101 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.141'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+repositories {
+    mavenLocal()
+
+    maven { url = "https://api.modrinth.com/maven"}
+    maven { url = "https://cursemaven.com" }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+    maven { url = "https://maven.createmod.net" }
+    maven { url = "https://maven.blamejared.com" }
+
+    flatDir {
+        dir("libs")
+    }
+    mavenCentral()
+}
+
+neoForge {
+    version = neo_version
+
+    parchment {
+        mappingsVersion = parchment_mappings_version
+        minecraftVersion = parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+def generatedResources = layout.buildDirectory.dir("generated/sources/modMetadata")
+
+tasks.register("generateModMetadata", ProcessResources) {
+    def props = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+
+    inputs.properties(props)
+
+    expand(props)
+
+    from("src/main/templates")
+    into(generatedResources)
+}
+
+sourceSets.main.resources.srcDir(generatedResources)
+
+tasks.named("processResources") {
+    dependsOn("generateModMetadata")
+}
+
+
+neoForge.ideSyncTask tasks.named("generateModMetadata")
+
+
+
+dependencies {
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
+
+    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
+
+    implementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
+}
