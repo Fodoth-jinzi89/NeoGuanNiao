@@ -11,7 +11,7 @@
 
 ## 📖 简介
 
-Neo Guan Niao（新·观鸟）是原 Guaniao 模组的**非官方** NeoForge 迁移版本。模组为 Minecraft 世界引入了多种真实的鸟类，每种鸟类都有其独特的行为、习性、外观和交互方式。
+Neo Guan Niao（新·观鸟）是原 [Guaniao](https://github.com/EdDYON/there-is-a-bird) 模组的**非官方** NeoForge 迁移版本。模组为 Minecraft 世界引入了多种真实的鸟类，每种鸟类都有其独特的行为、习性、外观和交互方式。
 
 ## ✨ 改进
 
