@@ -26,6 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -473,8 +475,9 @@ public class BirdGuideScreen extends Screen {
                     this.birdX,                           // 位置 X (float)
                     this.birdY,                           // 位置 Y (float)
                     scale,                                // 缩放 (float)
-                    new org.joml.Vector3f(0, 0, 0),       // 位置偏移 (Vector3f)
-                    new org.joml.Quaternionf()            // 旋转 (Quaternionf)
+                    new Vector3f(0, 0, 0),       // 位置偏移 (Vector3f)
+                    new Quaternionf()            // 旋转 (Quaternionf)
+                            .rotateZ((float) Math.PI).rotateY((float) Math.PI)
                             .rotateX(this.previewDragY * 0.017453292F)  // 转换角度为弧度
                             .rotateY(this.previewDragX * 0.017453292F),
                     null,                                 // 相机旋转 (可空)

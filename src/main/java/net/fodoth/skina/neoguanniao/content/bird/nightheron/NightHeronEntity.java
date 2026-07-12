@@ -42,6 +42,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +65,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import static net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronDefinition.*;
 
-public class NightHeronEntity extends PathfinderMob implements GeoEntity, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
+public class NightHeronEntity extends PathfinderMob implements GeoEntity, FlyingAnimal, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
 
     // ============ 数据序列化器 ============
     private static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
@@ -502,6 +503,11 @@ public class NightHeronEntity extends PathfinderMob implements GeoEntity, Scalab
     @Override
     public boolean isBirdEscaping() {
         return this.getBehaviorState().isEscape();
+    }
+
+    @Override
+    public boolean isFlying() {
+        return this.shouldUseFlyingAnimation();
     }
 
     // ============ 预览动画 ============
