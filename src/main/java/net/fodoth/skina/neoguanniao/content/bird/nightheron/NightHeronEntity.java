@@ -67,6 +67,7 @@ import static net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronDef
 
 public class NightHeronEntity extends PathfinderMob implements GeoEntity, FlyingAnimal, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
 
+
     // ============ 数据序列化器 ============
     private static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
             SynchedEntityData.defineId(NightHeronEntity.class, EntityDataSerializers.INT);
@@ -1267,9 +1268,23 @@ public class NightHeronEntity extends PathfinderMob implements GeoEntity, Flying
     }
 
     private boolean shouldUseFlyingAnimation() {
-        return !this.isInWater() && BirdFlightController.shouldPlayFlyAnimation(
-                this, this.getBehaviorState().isAirborne(), this.onGround(),
-                this.isInWater(), this.getDeltaMovement(), this.groundedAirborneTicks
+        // 如果行为状态是空中，直接返回 true（强制飞行动画）
+        if (this.getBehaviorState().isAirborne()) {
+            return true;
+        }
+
+        // 其他情况再检查水
+        if (this.isInWater()) {
+            return false;
+        }
+
+        return BirdFlightController.shouldPlayFlyAnimation(
+                this,
+                this.getBehaviorState().isAirborne(),
+                this.onGround(),
+                this.isNoGravity(),
+                this.getDeltaMovement(),
+                this.groundedAirborneTicks
         );
     }
 
@@ -1297,20 +1312,24 @@ public class NightHeronEntity extends PathfinderMob implements GeoEntity, Flying
         if (guidePreviewRawAnimation != null) {
             return animationState.setAndContinue(guidePreviewRawAnimation);
         }
+
         if (this.isEatingFish()) {
             return animationState.setAndContinue(EAT_ANIMATION);
         }
+
         if (this.shouldUseFlyingAnimation()) {
             return animationState.setAndContinue(this.chooseFlyingAnimation());
         }
 
-        double horizontalSpeed = this.getDeltaMovement().lengthSqr();
+        double horizontalSpeed = this.getDeltaMovement().horizontalDistanceSqr();
         if (this.getBehaviorState() == NightHeronBehaviorState.RUN_ESCAPE || horizontalSpeed > RUNNING_SPEED_THRESHOLD) {
             return animationState.setAndContinue(RUN_ANIMATION);
         }
+
         if (horizontalSpeed > WALKING_SPEED_THRESHOLD || !this.getNavigation().isDone()) {
             return animationState.setAndContinue(WALK_ANIMATION);
         }
+
         return animationState.setAndContinue(this.pickIdleAnimation());
     }
 

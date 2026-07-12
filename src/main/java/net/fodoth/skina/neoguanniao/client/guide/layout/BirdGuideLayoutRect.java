@@ -1,4 +1,4 @@
-package net.fodoth.skina.neoguanniao.client.gui.layout;
+package net.fodoth.skina.neoguanniao.client.guide.layout;
 
 /**
  * GUI 布局矩形区域
@@ -9,7 +9,7 @@ package net.fodoth.skina.neoguanniao.client.gui.layout;
  * @param w 宽度
  * @param h 高度
  */
-public record GuiLayoutRect(int x, int y, int w, int h) {
+public record BirdGuideLayoutRect(int x, int y, int w, int h) {
 
     /**
      * 获取右边界坐标
@@ -54,8 +54,8 @@ public record GuiLayoutRect(int x, int y, int w, int h) {
      * @param scaleY Y 轴缩放比例
      * @return 缩放后的新矩形
      */
-    public GuiLayoutRect scale(float scaleX, float scaleY) {
-        return new GuiLayoutRect(
+    public BirdGuideLayoutRect scale(float scaleX, float scaleY) {
+        return new BirdGuideLayoutRect(
                 Math.round((float) this.x * scaleX),
                 Math.round((float) this.y * scaleY),
                 Math.round((float) this.w * scaleX),
@@ -69,12 +69,12 @@ public record GuiLayoutRect(int x, int y, int w, int h) {
      * @param amount 缩进量（正值向内缩进，负值向外扩展）
      * @return 缩进后的新矩形
      */
-    public GuiLayoutRect inset(int amount) {
+    public BirdGuideLayoutRect inset(int amount) {
         int newX = this.x + amount;
         int newY = this.y + amount;
         int newW = Math.max(0, this.w - amount * 2);
         int newH = Math.max(0, this.h - amount * 2);
-        return new GuiLayoutRect(newX, newY, newW, newH);
+        return new BirdGuideLayoutRect(newX, newY, newW, newH);
     }
 
     /**
@@ -106,8 +106,8 @@ public record GuiLayoutRect(int x, int y, int w, int h) {
      * @param other 要复制的矩形
      * @return 新的矩形实例
      */
-    public static GuiLayoutRect copyOf(GuiLayoutRect other) {
-        return new GuiLayoutRect(other.x, other.y, other.w, other.h);
+    public static BirdGuideLayoutRect copyOf(BirdGuideLayoutRect other) {
+        return new BirdGuideLayoutRect(other.x, other.y, other.w, other.h);
     }
 
     /**
@@ -115,8 +115,8 @@ public record GuiLayoutRect(int x, int y, int w, int h) {
      *
      * @return 空矩形
      */
-    public static GuiLayoutRect empty() {
-        return new GuiLayoutRect(0, 0, 0, 0);
+    public static BirdGuideLayoutRect empty() {
+        return new BirdGuideLayoutRect(0, 0, 0, 0);
     }
 
     /**
@@ -128,7 +128,7 @@ public record GuiLayoutRect(int x, int y, int w, int h) {
      * @param h 高度
      * @return 新矩形
      */
-    public static GuiLayoutRect of(int x, int y, int w, int h) {
-        return new GuiLayoutRect(x, y, w, h);
+    public static BirdGuideLayoutRect of(int x, int y, int w, int h) {
+        return new BirdGuideLayoutRect(x, y, w, h);
     }
 }

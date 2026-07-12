@@ -22,6 +22,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         NeoGuanNiaoSoundEvents.SOUND_EVENTS.register(modEventBus);
         NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        NeoGuanNiaoComponents.DATA_COMPONENTS.register(modEventBus);
     }
 
 }

@@ -1,8 +1,8 @@
 package net.fodoth.skina.neoguanniao.client.guide;
 
-import net.fodoth.skina.neoguanniao.client.gui.layout.GuiLayoutConfig;
-import net.fodoth.skina.neoguanniao.client.gui.layout.GuiLayoutLoader;
-import net.fodoth.skina.neoguanniao.client.gui.layout.GuiLayoutRect;
+import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutConfig;
+import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutRect;
+import net.fodoth.skina.neoguanniao.client.keybind.NeoGuanNiaoClientKeyBindings;
 import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarGuidePreviewAnimation;
 import net.fodoth.skina.neoguanniao.content.bird.columbid.AbstractColumbidEntity;
@@ -11,6 +11,7 @@ import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronGuidePreviewAnimation;
 import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowGuidePreviewAnimation;
+import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -32,6 +33,7 @@ import org.joml.Vector3f;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class BirdGuideScreen extends Screen {
 
@@ -51,7 +53,7 @@ public class BirdGuideScreen extends Screen {
     private static final int EDIT_ACTIVE = -1;
     private static final int EDIT_HANDLE = -4722433;
     private static final int EDIT_MIN_SIZE = 24;
-    private static final boolean LAYOUT_EDITING_ENABLED = false;
+    private static final boolean LAYOUT_EDITING_ENABLED = true;
 
     // 数据
     private static final List<BirdGuideEntry> ENTRIES = List.of(
@@ -88,19 +90,19 @@ public class BirdGuideScreen extends Screen {
     private float birdScale;
 
     // 布局相关
-    private GuiLayoutConfig externalLayout;
+    private BirdGuideLayoutConfig externalLayout;
     private boolean debugLayout;
     private boolean layoutEditMode;
-    private final Map<String, GuiLayoutRect> editedRects;
+    private final Map<String, BirdGuideLayoutRect> editedRects;
     private String activeLayoutRectId;
     private EditDragMode editDragMode;
-    private GuiLayoutRect editDragStartRect;
+    private BirdGuideLayoutRect editDragStartRect;
     private int editDragStartMouseX;
     private int editDragStartMouseY;
     private Component editMessage;
     private int editMessageTicks;
 
-    public BirdGuideScreen() {
+    public BirdGuideScreen(BirdGuideLayoutConfig layout) {
         super(Component.translatable("gui.neoguanniao.bird_guide.title"));
         this.previewMotion = PreviewMotion.PERCH;
         this.previewAnimation = GuidePreviewAnimation.IDLE;
@@ -108,6 +110,7 @@ public class BirdGuideScreen extends Screen {
         this.editedRects = new LinkedHashMap<>();
         this.editDragMode = EditDragMode.NONE;
         this.editMessage = Component.empty();
+        this.externalLayout = layout;
     }
 
     @Override
@@ -117,16 +120,9 @@ public class BirdGuideScreen extends Screen {
 
     @Override
     protected void init() {
-        this.externalLayout = GuiLayoutLoader.loadBirdGuideLayout();
-        GuiLayoutRect closeButton = this.closeButtonRect();
-        this.addRenderableWidget(
-                Button.builder(
-                                Component.translatable("gui.neoguanniao.bird_guide.close"),
-                                (button) -> this.onClose()
-                        )
-                        .bounds(closeButton.x(), closeButton.y(), closeButton.w(), closeButton.h())
-                        .build()
-        );
+        ItemStack stack = BirdGuideClient.getCurrentGuideStack();
+        BirdGuideLayoutConfig loaded = BirdGuideLayoutHelper.loadFromStack(stack);
+        this.externalLayout = loaded != null ? loaded : BirdGuideLayoutHelper.createDefaultLayout();
     }
 
     @Override
@@ -150,8 +146,21 @@ public class BirdGuideScreen extends Screen {
         BirdGuideEntry entry = this.selectedEntry(this.selectedIndex);
         this.renderCenterDetails(graphics, entry);
         this.renderPreviewPanel(graphics, mouseX, mouseY);
+
+
         super.render(graphics, mouseX, mouseY, partialTicks);
+
+        // 布局调试渲染（在编辑模式下显示）
+        if (this.debugLayout || this.layoutEditMode) {
+            this.renderLayoutDebug(graphics);
+        }
+        if (this.layoutEditMode) {
+            this.renderLayoutEditHelp(graphics);
+        }
+        this.renderLayoutMessage(graphics);
+
     }
+
 
     @Override
     public void renderBackground(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
@@ -175,6 +184,16 @@ public class BirdGuideScreen extends Screen {
             return false;
         }
 
+        // 布局编辑模式 - 开始拖拽
+        if (this.layoutEditMode) {
+            if (this.startLayoutEditDrag(mouseX, mouseY)) {
+                return true;
+            }
+            // 点击空白取消选中
+            this.activeLayoutRectId = null;
+            this.editDragMode = EditDragMode.NONE;
+        }
+
         int pose = this.poseButtonIndexAt(mouseX, mouseY);
         if (pose >= 0) {
             this.selectPose(pose);
@@ -186,7 +205,7 @@ public class BirdGuideScreen extends Screen {
             return true;
         }
 
-        GuiLayoutRect list = this.layoutRect("species_list");
+        BirdGuideLayoutRect list = this.layoutRect("species_list");
         int listY = this.listRowsY(list);
         int stride = this.listRowStride(list);
 
@@ -217,6 +236,13 @@ public class BirdGuideScreen extends Screen {
             this.manualLookTicks = 60;
             return true;
         }
+
+        // 布局编辑拖拽
+        if (this.layoutEditMode && button == 0 && this.editDragMode != EditDragMode.NONE) {
+            this.updateLayoutEditDrag(mouseX, mouseY);
+            return true;
+        }
+
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
@@ -227,6 +253,13 @@ public class BirdGuideScreen extends Screen {
             this.manualLookTicks = 50;
             return true;
         }
+
+        // 布局编辑释放
+        if (this.layoutEditMode && button == 0 && this.editDragMode != EditDragMode.NONE) {
+            this.editDragMode = EditDragMode.NONE;
+            return true;
+        }
+
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
@@ -243,26 +276,14 @@ public class BirdGuideScreen extends Screen {
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        // 布局编辑模式快捷键
-        if (LAYOUT_EDITING_ENABLED && (keyCode == 67 && (modifiers & 1) != 0)) { // Ctrl+E
-            this.toggleLayoutEditMode();
-            return true;
+    public void reloadLayout() {
+        if (layoutEditMode) {
+            ItemStack stack = BirdGuideClient.getCurrentGuideStack();
+            BirdGuideLayoutConfig loaded = BirdGuideLayoutHelper.loadFromStack(stack);
+            this.externalLayout = Objects.requireNonNullElseGet(loaded, BirdGuideLayoutHelper::createDefaultLayout);
+            this.editedRects.clear();
+            this.showEditMessage(Component.translatable("gui.neoguanniao.bird_guide.layout_reloaded"));
         }
-        if (this.layoutEditMode) {
-            if (keyCode == 83 && (modifiers & 1) != 0) { // Ctrl+S
-                this.saveEditedLayout();
-                return true;
-            }
-            if (keyCode == 82 && (modifiers & 1) != 0) { // Ctrl+R
-                this.externalLayout = GuiLayoutLoader.loadBirdGuideLayout();
-                this.editedRects.clear();
-                this.showEditMessage(Component.literal("Layout reloaded"));
-                return true;
-            }
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     // ============ 辅助方法 ============
@@ -290,11 +311,11 @@ public class BirdGuideScreen extends Screen {
     // ============ 主要渲染方法 ============
 
     private void renderShell(GuiGraphics graphics) {
-        GuiLayoutRect header = this.layoutRect("header");
-        GuiLayoutRect main = this.layoutRect("main_panel");
-        GuiLayoutRect speciesList = this.layoutRect("species_list");
-        GuiLayoutRect detailHeader = this.layoutRect("detail_header");
-        GuiLayoutRect preview = this.layoutRect("preview_box");
+        BirdGuideLayoutRect header = this.layoutRect("header");
+        BirdGuideLayoutRect main = this.layoutRect("main_panel");
+        BirdGuideLayoutRect speciesList = this.layoutRect("species_list");
+        BirdGuideLayoutRect detailHeader = this.layoutRect("detail_header");
+        BirdGuideLayoutRect preview = this.layoutRect("preview_box");
 
         int titleY = header.y() + Math.max(0, (header.h() - 16) / 2);
         graphics.renderItem(new ItemStack(Items.BOOK), header.x() + 4, titleY - 4);
@@ -318,8 +339,8 @@ public class BirdGuideScreen extends Screen {
     }
 
     private void renderEntryList(GuiGraphics graphics, int mouseX, int mouseY) {
-        GuiLayoutRect header = this.layoutRect("species_header");
-        GuiLayoutRect list = this.layoutRect("species_list");
+        BirdGuideLayoutRect header = this.layoutRect("species_header");
+        BirdGuideLayoutRect list = this.layoutRect("species_list");
 
         int x = header.x() + 12;
         int y = header.y() + Math.max(0, (header.h() - 18) / 2);
@@ -355,9 +376,9 @@ public class BirdGuideScreen extends Screen {
     }
 
     private void renderCenterDetails(GuiGraphics graphics, BirdGuideEntry entry) {
-        GuiLayoutRect detailHeader = this.layoutRect("detail_header");
-        GuiLayoutRect tagArea = this.layoutRect("tag_area");
-        GuiLayoutRect infoCard = this.infoCardRect();
+        BirdGuideLayoutRect detailHeader = this.layoutRect("detail_header");
+        BirdGuideLayoutRect tagArea = this.layoutRect("tag_area");
+        BirdGuideLayoutRect infoCard = this.infoCardRect();
 
         graphics.enableScissor(detailHeader.x(), detailHeader.y(), detailHeader.right(), detailHeader.bottom());
         int x = detailHeader.x() + 12;
@@ -403,7 +424,7 @@ public class BirdGuideScreen extends Screen {
         }
     }
 
-    private void renderNotes(GuiGraphics graphics, BirdGuideEntry entry, GuiLayoutRect rect) {
+    private void renderNotes(GuiGraphics graphics, BirdGuideEntry entry, BirdGuideLayoutRect rect) {
         int x = rect.x();
         int y = rect.y();
         int w = rect.w();
@@ -453,8 +474,8 @@ public class BirdGuideScreen extends Screen {
     // ============ 预览面板渲染 ============
 
     private void renderPreviewPanel(GuiGraphics graphics, int mouseX, int mouseY) {
-        GuiLayoutRect main = this.layoutRect("main_panel");
-        GuiLayoutRect preview = this.layoutRect("preview_box");
+        BirdGuideLayoutRect main = this.layoutRect("main_panel");
+        BirdGuideLayoutRect preview = this.layoutRect("preview_box");
 
         int titleY = Math.max(main.y() + 8, preview.y() - 28);
         graphics.drawString(this.font, Component.translatable("gui.neoguanniao.bird_guide.observation_pose"), preview.x(), titleY, TEXT_COLOR, false);
@@ -495,7 +516,7 @@ public class BirdGuideScreen extends Screen {
     }
 
     private void renderPoseButtons(GuiGraphics graphics, int mouseX, int mouseY) {
-        GuiLayoutRect poseButtons = this.layoutRect("pose_buttons");
+        BirdGuideLayoutRect poseButtons = this.layoutRect("pose_buttons");
         int y = poseButtons.y();
         int h = this.poseButtonH(poseButtons);
 
@@ -541,7 +562,7 @@ public class BirdGuideScreen extends Screen {
         this.previewMotion = PreviewMotion.PERCH;
         this.previewAnimation = GuidePreviewAnimation.IDLE;
 
-        GuiLayoutRect preview = this.layoutRect("preview_box");
+        BirdGuideLayoutRect preview = this.layoutRect("preview_box");
         this.birdScale = this.basePreviewScale();
         int scale = this.previewRenderScale(preview);
         this.birdX = this.defaultStageX(preview, scale);
@@ -675,7 +696,7 @@ public class BirdGuideScreen extends Screen {
     }
 
     private void lockPreviewModelPosition() {
-        GuiLayoutRect preview = this.layoutRect("preview_box");
+        BirdGuideLayoutRect preview = this.layoutRect("preview_box");
         this.birdScale = this.basePreviewScale();
         int scale = this.previewRenderScale(preview);
         this.birdX = this.defaultStageX(preview, scale);
@@ -758,7 +779,7 @@ public class BirdGuideScreen extends Screen {
 
     // ============ 尺寸计算方法 ============
 
-    private int previewRenderScale(GuiLayoutRect preview) {
+    private int previewRenderScale(BirdGuideLayoutRect preview) {
         float baseScale = Math.min((float) preview.w() * 0.072F, (float) preview.h() * 0.18F);
         return Math.max(34, Math.round(baseScale * this.birdScale));
     }
@@ -767,33 +788,33 @@ public class BirdGuideScreen extends Screen {
         return this.isNightHeronSelected() ? 0.86F : 0.96F;
     }
 
-    private float defaultStageX(GuiLayoutRect preview, int scale) {
+    private float defaultStageX(BirdGuideLayoutRect preview, int scale) {
         return this.clampStageX(preview, (float) preview.centerX(), scale);
     }
 
-    private float defaultStageY(GuiLayoutRect preview, int scale) {
+    private float defaultStageY(BirdGuideLayoutRect preview, int scale) {
         float top = this.stageSafeTop(preview, scale);
         float bottom = this.stageSafeBottom(preview, scale);
         return top > bottom ? (float) preview.y() + (float) preview.h() * 0.58F : Mth.lerp(0.52F, top, bottom);
     }
 
-    private float stageSafeLeft(GuiLayoutRect preview, int scale) {
+    private float stageSafeLeft(BirdGuideLayoutRect preview, int scale) {
         return (float) preview.x() + 22.0F + (float) scale * 0.7F;
     }
 
-    private float stageSafeRight(GuiLayoutRect preview, int scale) {
+    private float stageSafeRight(BirdGuideLayoutRect preview, int scale) {
         return (float) preview.right() - 22.0F - (float) scale * 0.7F;
     }
 
-    private float stageSafeTop(GuiLayoutRect preview, int scale) {
+    private float stageSafeTop(BirdGuideLayoutRect preview, int scale) {
         return (float) preview.y() + 20.0F + (float) scale * 0.94F;
     }
 
-    private float stageSafeBottom(GuiLayoutRect preview, int scale) {
+    private float stageSafeBottom(BirdGuideLayoutRect preview, int scale) {
         return (float) preview.bottom() - 24.0F - (float) scale * 0.08F;
     }
 
-    private float clampStageX(GuiLayoutRect preview, float x, int scale) {
+    private float clampStageX(BirdGuideLayoutRect preview, float x, int scale) {
         float left = this.stageSafeLeft(preview, scale);
         float right = this.stageSafeRight(preview, scale);
         return left > right ? (float) preview.centerX() : Mth.clamp(x, left, right);
@@ -801,25 +822,25 @@ public class BirdGuideScreen extends Screen {
 
     // ============ 布局管理 ============
 
-    private GuiLayoutRect layoutRect(String id) {
+    private BirdGuideLayoutRect layoutRect(String id) {
         return this.layoutRect(id, this.fallbackRect(id));
     }
 
-    private GuiLayoutRect layoutRect(String id, GuiLayoutRect fallback) {
-        GuiLayoutRect edited = this.editedRects.get(id);
+    private BirdGuideLayoutRect layoutRect(String id, BirdGuideLayoutRect fallback) {
+        BirdGuideLayoutRect edited = this.editedRects.get(id);
         if (edited != null) {
             return edited;
         }
         return this.externalLayout == null ? fallback : this.externalLayout.rect(id, fallback, this.width, this.height);
     }
 
-    private GuiLayoutRect infoCardRect() {
+    private BirdGuideLayoutRect infoCardRect() {
         return this.infoCardRectFrom(this.layoutRect("info_card"));
     }
 
-    private GuiLayoutRect infoCardRectFrom(GuiLayoutRect raw) {
-        GuiLayoutRect tagArea = this.layoutRect("tag_area");
-        GuiLayoutRect main = this.layoutRect("main_panel");
+    private BirdGuideLayoutRect infoCardRectFrom(BirdGuideLayoutRect raw) {
+        BirdGuideLayoutRect tagArea = this.layoutRect("tag_area");
+        BirdGuideLayoutRect main = this.layoutRect("main_panel");
         int targetY = Math.max(raw.y(), tagArea.bottom() + 20);
         int maxBottom = main.bottom() - 24;
         int shifted = Math.max(0, targetY - raw.y());
@@ -827,21 +848,21 @@ public class BirdGuideScreen extends Screen {
         if (targetY + h > maxBottom) {
             h = Math.max(72, maxBottom - targetY);
         }
-        return new GuiLayoutRect(raw.x(), targetY, raw.w(), h);
+        return new BirdGuideLayoutRect(raw.x(), targetY, raw.w(), h);
     }
 
-    private GuiLayoutRect closeButtonRect() {
-        GuiLayoutRect raw = this.layoutRect("close_button");
+    private BirdGuideLayoutRect closeButtonRect() {
+        BirdGuideLayoutRect raw = this.layoutRect("close_button");
         int minW = Math.max(48, this.font.width(Component.translatable("gui.neoguanniao.bird_guide.close")) + 16);
         int minH = 20;
         int w = Mth.clamp(raw.w(), minW, minW + 18);
         int h = Mth.clamp(raw.h(), minH, minH + 6);
         int x = Mth.clamp(raw.centerX() - w / 2, 0, Math.max(0, this.width - w));
         int y = Mth.clamp(raw.centerY() - h / 2, 0, Math.max(0, this.height - h));
-        return new GuiLayoutRect(x, y, w, h);
+        return new BirdGuideLayoutRect(x, y, w, h);
     }
 
-    private GuiLayoutRect fallbackRect(String id) {
+    private BirdGuideLayoutRect fallbackRect(String id) {
         return switch (id) {
             case "header" -> this.scaleBaseRect(41, 21, 1520, 48);
             case "main_panel" -> this.scaleBaseRect(40, 90, 1520, 760);
@@ -853,29 +874,29 @@ public class BirdGuideScreen extends Screen {
             case "preview_box" -> this.scaleBaseRect(986, 172, 548, 430);
             case "pose_buttons" -> this.scaleBaseRect(986, 620, 548, 72);
             case "close_button" -> this.scaleBaseRect(1380, 790, 150, 42);
-            default -> new GuiLayoutRect(0, 0, Math.max(1, this.width), Math.max(1, this.height));
+            default -> new BirdGuideLayoutRect(0, 0, Math.max(1, this.width), Math.max(1, this.height));
         };
     }
 
-    private GuiLayoutRect scaleBaseRect(int x, int y, int w, int h) {
-        return new GuiLayoutRect(x, y, w, h).scale((float) this.width / 1600.0F, (float) this.height / 900.0F);
+    private BirdGuideLayoutRect scaleBaseRect(int x, int y, int w, int h) {
+        return new BirdGuideLayoutRect(x, y, w, h).scale((float) this.width / 1600.0F, (float) this.height / 900.0F);
     }
 
     // ============ 列表尺寸计算 ============
 
-    private int listContentX(GuiLayoutRect rect) {
+    private int listContentX(BirdGuideLayoutRect rect) {
         return rect.x() + 10;
     }
 
-    private int listContentW(GuiLayoutRect rect) {
+    private int listContentW(BirdGuideLayoutRect rect) {
         return Math.max(20, rect.w() - 20);
     }
 
-    private int listRowsY(GuiLayoutRect rect) {
+    private int listRowsY(BirdGuideLayoutRect rect) {
         return rect.y() + 4;
     }
 
-    private int listRowH(GuiLayoutRect rect) {
+    private int listRowH(BirdGuideLayoutRect rect) {
         if (ENTRIES.isEmpty()) {
             return 28;
         }
@@ -883,7 +904,7 @@ public class BirdGuideScreen extends Screen {
         return Mth.clamp((rect.h() - gap * Math.max(0, ENTRIES.size() - 1)) / ENTRIES.size(), 28, 46);
     }
 
-    private int listRowStride(GuiLayoutRect rect) {
+    private int listRowStride(BirdGuideLayoutRect rect) {
         return this.listRowH(rect) + 4;
     }
 
@@ -897,14 +918,14 @@ public class BirdGuideScreen extends Screen {
     }
 
     private int maxTextScroll(BirdGuideEntry entry) {
-        GuiLayoutRect note = this.infoCardRect();
+        BirdGuideLayoutRect note = this.infoCardRect();
         int visibleHeight = note.h() - 52;
         return Math.max(0, this.detailTextHeight(entry, note.w() - 28) - visibleHeight + 8);
     }
 
     // ============ 按钮计算 ============
 
-    private int poseButtonH(GuiLayoutRect rect) {
+    private int poseButtonH(BirdGuideLayoutRect rect) {
         return Math.clamp(rect.h(), 22, 34);
     }
 
@@ -912,16 +933,16 @@ public class BirdGuideScreen extends Screen {
         return 6;
     }
 
-    private int poseButtonW(GuiLayoutRect rect) {
+    private int poseButtonW(BirdGuideLayoutRect rect) {
         return Math.max(36, (rect.w() - this.poseButtonGap() * (POSES.length - 1)) / POSES.length);
     }
 
-    private int poseButtonX(GuiLayoutRect rect, int index) {
+    private int poseButtonX(BirdGuideLayoutRect rect, int index) {
         return rect.x() + index * (this.poseButtonW(rect) + this.poseButtonGap());
     }
 
     private int poseButtonIndexAt(double mouseX, double mouseY) {
-        GuiLayoutRect rect = this.layoutRect("pose_buttons");
+        BirdGuideLayoutRect rect = this.layoutRect("pose_buttons");
         int buttonH = this.poseButtonH(rect);
         if (mouseY < rect.y() || mouseY > rect.y() + buttonH) {
             return -1;
@@ -961,23 +982,23 @@ public class BirdGuideScreen extends Screen {
 
     // ============ 布局编辑模式 ============
 
-    private void toggleLayoutEditMode() {
+    public void toggleLayoutEditMode() {
         if (!this.layoutEditMode) {
             this.captureEditableLayout();
             this.layoutEditMode = true;
             this.debugLayout = false;
-            this.showEditMessage(Component.literal("Layout edit mode on"));
+            this.showEditMessage(Component.translatable("gui.neoguanniao.bird_guide.layout_edit_on"));
         } else {
             this.layoutEditMode = false;
             this.editDragMode = EditDragMode.NONE;
-            this.showEditMessage(Component.literal("Layout edit mode off"));
+            this.showEditMessage(Component.translatable("gui.neoguanniao.bird_guide.layout_edit_off"));
         }
     }
 
     private void captureEditableLayout() {
         this.editedRects.clear();
         for (String id : LAYOUT_RECT_IDS) {
-            GuiLayoutRect rect = "info_card".equals(id) ? this.infoCardRect() : this.layoutRect(id);
+            BirdGuideLayoutRect rect = "info_card".equals(id) ? this.infoCardRect() : this.layoutRect(id);
             this.editedRects.put(id, rect);
         }
     }
@@ -985,7 +1006,7 @@ public class BirdGuideScreen extends Screen {
     private boolean startLayoutEditDrag(double mouseX, double mouseY) {
         for (int i = LAYOUT_RECT_IDS.size() - 1; i >= 0; --i) {
             String id = LAYOUT_RECT_IDS.get(i);
-            GuiLayoutRect rect = this.editorRect(id);
+            BirdGuideLayoutRect rect = this.editorRect(id);
             EditDragMode mode = this.editModeAt(rect, mouseX, mouseY);
             if (mode != EditDragMode.NONE) {
                 this.activeLayoutRectId = id;
@@ -1004,7 +1025,7 @@ public class BirdGuideScreen extends Screen {
         if (this.activeLayoutRectId != null && this.editDragStartRect != null && this.editDragMode != EditDragMode.NONE) {
             int dx = (int) Math.round(mouseX) - this.editDragStartMouseX;
             int dy = (int) Math.round(mouseY) - this.editDragStartMouseY;
-            GuiLayoutRect next = this.editDragMode == EditDragMode.MOVE
+            BirdGuideLayoutRect next = this.editDragMode == EditDragMode.MOVE
                     ? this.moveEditedRect(this.editDragStartRect, dx, dy)
                     : this.resizeEditedRect(this.editDragStartRect, dx, dy, this.editDragMode);
             this.editedRects.put(this.activeLayoutRectId, next);
@@ -1014,13 +1035,13 @@ public class BirdGuideScreen extends Screen {
         }
     }
 
-    private GuiLayoutRect moveEditedRect(GuiLayoutRect rect, int dx, int dy) {
+    private BirdGuideLayoutRect moveEditedRect(BirdGuideLayoutRect rect, int dx, int dy) {
         int x = Mth.clamp(rect.x() + dx, 0, Math.max(0, this.width - rect.w()));
         int y = Mth.clamp(rect.y() + dy, 0, Math.max(0, this.height - rect.h()));
-        return new GuiLayoutRect(x, y, rect.w(), rect.h());
+        return new BirdGuideLayoutRect(x, y, rect.w(), rect.h());
     }
 
-    private GuiLayoutRect resizeEditedRect(GuiLayoutRect rect, int dx, int dy, EditDragMode mode) {
+    private BirdGuideLayoutRect resizeEditedRect(BirdGuideLayoutRect rect, int dx, int dy, EditDragMode mode) {
         int left = rect.x();
         int right = rect.right();
         int top = rect.y();
@@ -1051,10 +1072,10 @@ public class BirdGuideScreen extends Screen {
             }
         }
 
-        return new GuiLayoutRect(left, top, right - left, bottom - top);
+        return new BirdGuideLayoutRect(left, top, right - left, bottom - top);
     }
 
-    private EditDragMode editModeAt(GuiLayoutRect rect, double mouseX, double mouseY) {
+    private EditDragMode editModeAt(BirdGuideLayoutRect rect, double mouseX, double mouseY) {
         int handle = 5;
         boolean inExpanded = mouseX >= rect.x() - handle && mouseX <= rect.right() + handle
                 && mouseY >= rect.y() - handle && mouseY <= rect.bottom() + handle;
@@ -1079,23 +1100,33 @@ public class BirdGuideScreen extends Screen {
         return EditDragMode.NONE;
     }
 
-    private void saveEditedLayout() {
-        if (this.editedRects.isEmpty()) {
-            this.captureEditableLayout();
+    public void saveEditedLayout() {
+        if (layoutEditMode) {
+            if (this.editedRects.isEmpty()) {
+                this.captureEditableLayout();
+            }
+            Map<String, BirdGuideLayoutRect> rects = new LinkedHashMap<>();
+            for (String id : LAYOUT_RECT_IDS) {
+                rects.put(id, this.editorRect(id));
+            }
+
+            // 创建 GuiLayoutConfig
+            BirdGuideLayoutConfig config = new BirdGuideLayoutConfig("bird_guide", this.width, this.height, rects);
+
+            // 使用 BirdGuideLayoutHelper 保存到物品 NBT
+            boolean saved = BirdGuideLayoutHelper.saveToStack(BirdGuideClient.getCurrentGuideStack(), config);
+
+            this.externalLayout = config;
+            this.editedRects.clear();
+            this.editedRects.putAll(rects);
+            this.showEditMessage(Component.translatable(saved ?
+                    "gui.neoguanniao.bird_guide.layout_saved" :
+                    "gui.neoguanniao.bird_guide.layout_save_failed"));
         }
-        Map<String, GuiLayoutRect> rects = new LinkedHashMap<>();
-        for (String id : LAYOUT_RECT_IDS) {
-            rects.put(id, this.editorRect(id));
-        }
-        boolean saved = GuiLayoutLoader.saveBirdGuideLayout(this.width, this.height, rects);
-        this.externalLayout = GuiLayoutLoader.loadBirdGuideLayout();
-        this.editedRects.clear();
-        this.editedRects.putAll(rects);
-        this.showEditMessage(Component.literal(saved ? "Layout saved" : "Layout save failed"));
     }
 
-    private GuiLayoutRect editorRect(String id) {
-        GuiLayoutRect edited = this.editedRects.get(id);
+    private BirdGuideLayoutRect editorRect(String id) {
+        BirdGuideLayoutRect edited = this.editedRects.get(id);
         if (edited != null) {
             return "info_card".equals(id) ? this.infoCardRectFrom(edited) : edited;
         }
@@ -1157,22 +1188,82 @@ public class BirdGuideScreen extends Screen {
     }
 
     private void renderLayoutDebug(GuiGraphics graphics) {
-        // 布局调试渲染（如果启用）
-    }
+        if (!this.layoutEditMode) return;
 
-    private void renderLayoutEditHelp(GuiGraphics graphics) {
-        // 布局编辑帮助渲染（如果启用）
-    }
+        for (String id : LAYOUT_RECT_IDS) {
+            if ("close_button".equals(id)) continue;
 
-    private void drawEditHandles(GuiGraphics graphics, GuiLayoutRect rect, int color) {
-        // 编辑手柄渲染
+            BirdGuideLayoutRect rect = this.editorRect(id);
+            boolean active = id.equals(this.activeLayoutRectId);
+            int color = active ? EDIT_ACTIVE : ("main_panel".equals(id) ? -1430785793 : -1432496408);
+            this.drawThinBorder(graphics, rect.x(), rect.y(), rect.w(), rect.h(), color);
+            this.drawFittingString(graphics, Component.literal(id), rect.x() + 3, rect.y() + 3, rect.w() - 6, 0.55F, color);
+            this.drawEditHandles(graphics, rect, active ? EDIT_ACTIVE : EDIT_HANDLE);
+        }
     }
 
     private void drawHandle(GuiGraphics graphics, int centerX, int centerY, int size, int color) {
-        // 单个手柄渲染
+        graphics.fill(centerX, centerY, centerX + size, centerY + size, color);
+        // 添加边框
+        graphics.hLine(centerX, centerX + size, centerY, 0xFFFFFFFF);
+        graphics.hLine(centerX, centerX + size, centerY + size, 0xFFFFFFFF);
+        graphics.vLine(centerX, centerY, centerY + size, 0xFFFFFFFF);
+        graphics.vLine(centerX + size, centerY, centerY + size, 0xFFFFFFFF);
     }
+
+    private void renderLayoutEditHelp(GuiGraphics graphics) {
+        // 获取实际按键名称
+        Component help = getHelp();
+
+        int x = 8;
+        int y = this.height - 19;
+        int w = Math.min(this.width - 16, this.font.width(help) + 14);
+        graphics.fill(x, y, x + w, y + 14, -1442442469);
+        this.drawThinBorder(graphics, x, y, w, 14, BORDER_SOFT);
+        this.drawFittingString(graphics, help, x + 7, y + 3, w - 14, 1.0F, ACCENT_TEXT_COLOR);
+
+    }
+
+    private void renderLayoutMessage(GuiGraphics graphics) {
+        int y = this.height - 19;
+        if (this.editMessageTicks > 0) {
+            int messageW = Math.min(this.width - 16, this.font.width(this.editMessage) + 14);
+            int messageX = this.width - messageW - 8;
+            graphics.fill(messageX, y - 17, messageX + messageW, y - 3, -1442442469);
+            this.drawThinBorder(graphics, messageX, y - 17, messageW, 14, BORDER_SOFT);
+            this.drawFittingString(graphics, this.editMessage, messageX + 7, y - 14, messageW - 14, 1.0F, TEXT_COLOR);
+        }
+    }
+
+    private static @NotNull Component getHelp() {
+        String toggleKey = NeoGuanNiaoClientKeyBindings.TOGGLE_LAYOUT_EDIT.getKey().getDisplayName().getString();
+        String saveKey = NeoGuanNiaoClientKeyBindings.SAVE_LAYOUT.getKey().getDisplayName().getString();
+        String reloadKey = NeoGuanNiaoClientKeyBindings.RELOAD_LAYOUT.getKey().getDisplayName().getString();
+
+        // 使用本地化文本，并动态填入按键名称
+        return Component.translatable(
+                "gui.neoguanniao.bird_guide.layout_edit_help",
+                toggleKey, saveKey, reloadKey
+        );
+    }
+
+
+    private void drawEditHandles(GuiGraphics graphics, BirdGuideLayoutRect rect, int color) {
+        int size = 4;
+        this.drawHandle(graphics, rect.x(), rect.y(), size, color);
+        this.drawHandle(graphics, rect.centerX(), rect.y(), size, color);
+        this.drawHandle(graphics, rect.right(), rect.y(), size, color);
+        this.drawHandle(graphics, rect.x(), rect.centerY(), size, color);
+        this.drawHandle(graphics, rect.right(), rect.centerY(), size, color);
+        this.drawHandle(graphics, rect.x(), rect.bottom(), size, color);
+        this.drawHandle(graphics, rect.centerX(), rect.bottom(), size, color);
+        this.drawHandle(graphics, rect.right(), rect.bottom(), size, color);
+    }
+
 
     public boolean isDebugLayout() {
         return debugLayout;
     }
+
+
 }

@@ -604,11 +604,6 @@ public abstract class AbstractColumbidEntity extends TamableAnimal implements Ge
     }
 
     @Override
-    public float getScale() {
-        return 0.78F + this.getRandom().nextFloat() * 0.12F;
-    }
-
-    @Override
     protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockState) {
         this.playSound(SoundEvents.CHICKEN_STEP, 0.09F, 0.86F);
     }

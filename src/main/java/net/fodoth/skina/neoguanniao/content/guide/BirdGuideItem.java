@@ -23,9 +23,11 @@ public class BirdGuideItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (level.isClientSide) {
-            BirdGuideClient.open();
+            // 在客户端打开 GUI，传递物品堆以便加载布局
+            BirdGuideClient.open(stack);
         }
 
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
+
 }

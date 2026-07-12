@@ -1,4 +1,4 @@
-package net.fodoth.skina.neoguanniao.client.gui.layout;
+package net.fodoth.skina.neoguanniao.client.guide.layout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -8,8 +8,8 @@ import java.util.Map;
  * GUI 布局配置类
  * 存储屏幕布局的配置信息，包括基础尺寸和各个矩形区域的位置
  */
-public record GuiLayoutConfig(String screen, int baseWidth, int baseHeight, Map<String, GuiLayoutRect> rects) {
-    public GuiLayoutConfig(String screen, int baseWidth, int baseHeight, Map<String, GuiLayoutRect> rects) {
+public record BirdGuideLayoutConfig(String screen, int baseWidth, int baseHeight, Map<String, BirdGuideLayoutRect> rects) {
+    public BirdGuideLayoutConfig(String screen, int baseWidth, int baseHeight, Map<String, BirdGuideLayoutRect> rects) {
         this.screen = screen;
         this.baseWidth = baseWidth;
         this.baseHeight = baseHeight;
@@ -25,13 +25,13 @@ public record GuiLayoutConfig(String screen, int baseWidth, int baseHeight, Map<
      * @param screenHeight 当前屏幕高度
      * @return 缩放后的矩形区域
      */
-    public GuiLayoutRect rect(String id, GuiLayoutRect fallback, int screenWidth, int screenHeight) {
+    public BirdGuideLayoutRect rect(String id, BirdGuideLayoutRect fallback, int screenWidth, int screenHeight) {
         if (this.baseWidth > 0 && this.baseHeight > 0) {
-            GuiLayoutRect raw = this.rects.get(id);
+            BirdGuideLayoutRect raw = this.rects.get(id);
             if (raw != null && raw.isValid()) {
                 float scaleX = (float) screenWidth / (float) this.baseWidth;
                 float scaleY = (float) screenHeight / (float) this.baseHeight;
-                GuiLayoutRect scaled = raw.scale(scaleX, scaleY);
+                BirdGuideLayoutRect scaled = raw.scale(scaleX, scaleY);
                 return scaled.isValid() ? scaled : fallback;
             }
         }
@@ -41,7 +41,7 @@ public record GuiLayoutConfig(String screen, int baseWidth, int baseHeight, Map<
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof GuiLayoutConfig(String screen1, int width, int height, Map<String, GuiLayoutRect> rects1))) return false;
+        if (!(obj instanceof BirdGuideLayoutConfig(String screen1, int width, int height, Map<String, BirdGuideLayoutRect> rects1))) return false;
 
         return baseWidth == width
                 && baseHeight == height

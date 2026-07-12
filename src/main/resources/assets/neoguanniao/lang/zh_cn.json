@@ -142,5 +142,16 @@
   "item.neoguanniao.film.tooltip.empty": "这张胶片还没有影像",
   "item.neoguanniao.film.tooltip.frame": "与一圈木棍合成可悬挂的相框相片",
   "item.neoguanniao.film.named": "胶片 %s · %s",
-  "item.neoguanniao.photograph.named": "相框相片 · %s"
+  "item.neoguanniao.photograph.named": "相框相片 · %s",
+  "key.category.neoguanniao.bird_guide": "观鸟图鉴",
+  "key.neoguanniao.toggle_layout_edit": "切换布局编辑模式",
+  "key.neoguanniao.save_layout": "保存布局",
+  "key.neoguanniao.reload_layout": "重新加载布局",
+  "gui.neoguanniao.bird_guide.layout_edit_help": "布局编辑:  %s 退出  %s 保存  %s 重载",
+  "gui.neoguanniao.bird_guide.layout_saved": "布局已保存到物品",
+  "gui.neoguanniao.bird_guide.layout_save_failed": "保存布局失败",
+  "gui.neoguanniao.bird_guide.layout_edit_on": "布局编辑模式已开启",
+  "gui.neoguanniao.bird_guide.layout_edit_off": "布局编辑模式已关闭",
+  "gui.neoguanniao.bird_guide.layout_reloaded": "布局已从物品重新加载",
+  "block.neoguanniao.breadcrumbs": "面包屑"
 }

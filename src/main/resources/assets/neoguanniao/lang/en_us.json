@@ -142,5 +142,16 @@
   "item.neoguanniao.film.tooltip.empty": "This film has no image data.",
   "item.neoguanniao.film.tooltip.frame": "Craft with eight sticks to mount it as a hanging framed photograph.",
   "item.neoguanniao.film.named": "Film %s · %s",
-  "item.neoguanniao.photograph.named": "Framed Photograph · %s"
+  "item.neoguanniao.photograph.named": "Framed Photograph · %s",
+  "key.category.neoguanniao.bird_guide": "Bird Guide",
+  "key.neoguanniao.toggle_layout_edit": "Toggle Layout Edit Mode",
+  "key.neoguanniao.save_layout": "Save Layout",
+  "key.neoguanniao.reload_layout": "Reload Layout",
+  "gui.neoguanniao.bird_guide.layout_edit_help": "Layout Edit: %s exit  %s save  %s reload",
+  "gui.neoguanniao.bird_guide.layout_saved": "Layout saved to item",
+  "gui.neoguanniao.bird_guide.layout_save_failed": "Layout save failed",
+  "gui.neoguanniao.bird_guide.layout_edit_on": "Layout edit mode on",
+  "gui.neoguanniao.bird_guide.layout_edit_off": "Layout edit mode off",
+  "gui.neoguanniao.bird_guide.layout_reloaded": "Layout reloaded from item",
+  "block.neoguanniao.breadcrumbs": "Breadcrumbs"
 }
