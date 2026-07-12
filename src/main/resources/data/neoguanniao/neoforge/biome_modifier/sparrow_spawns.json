@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#neoguanniao:sparrow_habitat",
+  "spawners": {
+    "type": "neoguanniao:sparrow",
+    "weight": 18,
+    "minCount": 5,
+    "maxCount": 10
+  }
+}

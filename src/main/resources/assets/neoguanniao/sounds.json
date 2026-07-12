@@ -1,0 +1,160 @@
+{
+  "entity.night_heron.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.night_heron.ambient",
+    "sounds": [
+      {
+        "name": "neoguanniao:entity/night_heron/wa_1",
+        "weight": 10
+      },
+      {
+        "name": "neoguanniao:entity/night_heron/wa_2",
+        "weight": 9
+      },
+      {
+        "name": "neoguanniao:entity/night_heron/creak",
+        "weight": 1
+      }
+    ]
+  },
+  "entity.night_heron.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.night_heron.hurt",
+    "sounds": [
+      "neoguanniao:entity/night_heron/wa_1",
+      "neoguanniao:entity/night_heron/wa_2"
+    ]
+  },
+  "entity.night_heron.death": {
+    "subtitle": "subtitles.neoguanniao.entity.night_heron.death",
+    "sounds": [
+      "neoguanniao:entity/night_heron/death_1",
+      "neoguanniao:entity/night_heron/death_2",
+      "neoguanniao:entity/night_heron/death_3"
+    ]
+  },
+  "entity.night_heron.attack": {
+    "subtitle": "subtitles.neoguanniao.entity.night_heron.attack",
+    "sounds": [
+      "neoguanniao:entity/night_heron/attack"
+    ]
+  },
+  "entity.sparrow.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.sparrow.ambient",
+    "sounds": [
+      "neoguanniao:entity/sparrow/idle",
+      "neoguanniao:entity/sparrow/idle2",
+      "neoguanniao:entity/sparrow/idle3",
+      "neoguanniao:entity/sparrow/idle4",
+      "neoguanniao:entity/sparrow/idle5",
+      "neoguanniao:entity/sparrow/idle6",
+      "neoguanniao:entity/sparrow/idle7"
+    ]
+  },
+  "entity.sparrow.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.sparrow.hurt",
+    "sounds": [
+      "neoguanniao:entity/sparrow/idle",
+      "neoguanniao:entity/sparrow/idle2",
+      "neoguanniao:entity/sparrow/idle3",
+      "neoguanniao:entity/sparrow/idle4",
+      "neoguanniao:entity/sparrow/idle5",
+      "neoguanniao:entity/sparrow/idle6",
+      "neoguanniao:entity/sparrow/idle7"
+    ]
+  },
+  "entity.sparrow.death": {
+    "subtitle": "subtitles.neoguanniao.entity.sparrow.death",
+    "sounds": [
+      "neoguanniao:entity/sparrow/idle",
+      "neoguanniao:entity/sparrow/idle2",
+      "neoguanniao:entity/sparrow/idle3",
+      "neoguanniao:entity/sparrow/idle4",
+      "neoguanniao:entity/sparrow/idle5",
+      "neoguanniao:entity/sparrow/idle6",
+      "neoguanniao:entity/sparrow/idle7"
+    ]
+  },
+  "entity.budgerigar.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.budgerigar.ambient",
+    "sounds": [
+      "neoguanniao:entity/budgerigar/idle1",
+      "neoguanniao:entity/budgerigar/idle2",
+      "neoguanniao:entity/budgerigar/idle3",
+      "neoguanniao:entity/budgerigar/idle4",
+      "neoguanniao:entity/budgerigar/idle5",
+      "neoguanniao:entity/budgerigar/idle6",
+      "neoguanniao:entity/budgerigar/idle7",
+      "neoguanniao:entity/budgerigar/idle8",
+      "neoguanniao:entity/budgerigar/idle9",
+      "neoguanniao:entity/budgerigar/idle10",
+      "neoguanniao:entity/budgerigar/idle11",
+      "neoguanniao:entity/budgerigar/idle12"
+    ]
+  },
+  "entity.budgerigar.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.budgerigar.hurt",
+    "sounds": [
+      "neoguanniao:entity/budgerigar/hurt1",
+      "neoguanniao:entity/budgerigar/hurt2",
+      "neoguanniao:entity/budgerigar/hurt3",
+      "neoguanniao:entity/budgerigar/hurt4",
+      "neoguanniao:entity/budgerigar/hurt5"
+    ]
+  },
+  "entity.budgerigar.death": {
+    "subtitle": "subtitles.neoguanniao.entity.budgerigar.death",
+    "sounds": [
+      "neoguanniao:entity/budgerigar/death"
+    ]
+  },
+  "entity.budgerigar.interact": {
+    "subtitle": "subtitles.neoguanniao.entity.budgerigar.interact",
+    "sounds": [
+      "neoguanniao:entity/budgerigar/idle2",
+      "neoguanniao:entity/budgerigar/idle3",
+      "neoguanniao:entity/budgerigar/idle5",
+      "neoguanniao:entity/budgerigar/idle7",
+      "neoguanniao:entity/budgerigar/idle8",
+      "neoguanniao:entity/budgerigar/idle10",
+      "neoguanniao:entity/budgerigar/idle11",
+      "neoguanniao:entity/budgerigar/idle12"
+    ]
+  },
+  "entity.spotted_dove.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.spotted_dove.ambient",
+    "sounds": [
+      "neoguanniao:entity/spotted_dove/idle",
+      "neoguanniao:entity/spotted_dove/idle2",
+      {
+        "name": "neoguanniao:entity/spotted_dove/mate",
+        "weight": 2
+      }
+    ]
+  },
+  "entity.spotted_dove.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.spotted_dove.hurt",
+    "sounds": [
+      "neoguanniao:entity/spotted_dove/idle",
+      "neoguanniao:entity/spotted_dove/idle2"
+    ]
+  },
+  "entity.spotted_dove.death": {
+    "subtitle": "subtitles.neoguanniao.entity.spotted_dove.death",
+    "sounds": [
+      "neoguanniao:entity/spotted_dove/idle",
+      "neoguanniao:entity/spotted_dove/idle2"
+    ]
+  },
+  "entity.spotted_dove.mate": {
+    "subtitle": "subtitles.neoguanniao.entity.spotted_dove.mate",
+    "sounds": [
+      "neoguanniao:entity/spotted_dove/mate"
+    ]
+  },
+  "entity.pigeon.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.pigeon.ambient",
+    "sounds": [
+      "neoguanniao:entity/pigeon/pigeon_call_1",
+      "neoguanniao:entity/pigeon/pigeon_coo_1"
+    ]
+  }
+}

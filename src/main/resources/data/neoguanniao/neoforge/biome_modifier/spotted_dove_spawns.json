@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#neoguanniao:spotted_dove_habitat",
+  "spawners": {
+    "type": "neoguanniao:spotted_dove",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

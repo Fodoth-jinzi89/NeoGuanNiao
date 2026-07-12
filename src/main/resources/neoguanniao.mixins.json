@@ -3,10 +3,12 @@
   "minVersion": "0.8",
   "package": "net.fodoth.skina.neoguanniao.mixin",
   "compatibilityLevel": "JAVA_21",
+  "refmap": "neoguanniao.refmap.json",
   "mixins": [
+    "BlockStateBaseMixin"
   ],
-  "client": [
-  ],
+  "client": [],
+  "server": [],
   "injectors": {
     "defaultRequire": 1
   },

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neoguanniao:item/night_heron_spawn_egg"
+  }
+}
