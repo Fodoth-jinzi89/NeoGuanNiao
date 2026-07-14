@@ -85,16 +85,16 @@ public class BirdPostTameActionTicker extends AbstractBirdTicker {
                     : BirdBehaviorState.PREENING;
 
             // 计算行为持续时间
-            int baseTicks = birdData.tamedBehaviorTicks();
-            int variance = birdData.tamedBehaviorTicksVariance();
+            int baseTicks = birdData.tame().tamedBehaviorTicks();
+            int variance = birdData.tame().tamedBehaviorTicksVariance();
             int behaviorTicks = baseTicks + random.nextInt(variance);
 
             // 设置行为状态
             stateController.setBehaviorStateFor(newState, behaviorTicks);
 
             // 重置行为切换计时器
-            int swapBase = birdData.postTameActionSwapTicks();
-            int swapVariance = birdData.postTameActionSwapTicksVariance();
+            int swapBase = birdData.tame().postTameActionSwapTicks();
+            int swapVariance = birdData.tame().postTameActionSwapTicksVariance();
             postTameSwapTicker.setTicks(swapBase + random.nextInt(swapVariance));
         }
 

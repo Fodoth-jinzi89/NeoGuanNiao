@@ -1,6 +1,9 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.minecraft.resources.ResourceLocation;
@@ -61,7 +64,9 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @return 鸟模型对应的纹理资源位置
      */
     public ResourceLocation getTextureResource() {
-        return bird.getBirdData().location();
+        BirdData birdData = bird.getBirdData();
+        BirdModelDatum modelDatum = birdData.model();
+        return modelDatum.location();
     }
 
     /**
@@ -73,7 +78,9 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @return 模型缩放配置
      */
     public BirdModelScaleProfile modelScaleProfile() {
-        return bird.getBirdData().modelScaleProfile();
+        BirdData birdData = bird.getBirdData();
+        BirdModelDatum modelDatum = birdData.model();
+        return modelDatum.modelScaleProfile();
     }
 
     /**
@@ -101,7 +108,9 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @return 皮肤变体索引
      */
     public int getSkinVariant() {
-        int skinCount = bird.getBirdData().skinVariants();
+        BirdData birdData = bird.getBirdData();
+        BirdModelDatum modelDatum = birdData.model();
+        int skinCount = modelDatum.skinVariants();
         int variant = bird.getEntityData().get(SKIN_VARIANT);
         return Mth.clamp(variant, 0, skinCount - 1);
     }
@@ -115,7 +124,9 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @param variant 皮肤变体索引
      */
     public void setSkinVariant(int variant) {
-        int skinCount = bird.getBirdData().skinVariants();
+        BirdData birdData = bird.getBirdData();
+        BirdModelDatum modelDatum = birdData.model();
+        int skinCount = modelDatum.skinVariants();
         int clamped = Mth.clamp(variant, 0, skinCount - 1);
         bird.getEntityData().set(SKIN_VARIANT, clamped);
     }
@@ -129,7 +140,9 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      */
     public void randomizeSkinVariant() {
         var random = bird.getRandom();
-        int skinCount = bird.getBirdData().skinVariants();
+        BirdData birdData = bird.getBirdData();
+        BirdModelDatum modelDatum = birdData.model();
+        int skinCount = modelDatum.skinVariants();
         int variant = random.nextInt(skinCount);
         setSkinVariant(variant);
     }
@@ -145,7 +158,10 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
             AbstractBirdEntity<?> mate
     ) {
         var birdData = bird.getBirdData();
-        int variants = birdData.skinVariants();
+        BirdModelDatum modelDatum = birdData.model();
+        BirdMiscDatum miscDatum = birdData.misc();
+
+        int variants = modelDatum.skinVariants();
         var random = bird.getRandom();
 
         // 如果没有多种皮肤，直接设置为0
@@ -155,7 +171,7 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
         }
 
         // 概率变异
-        float mutantChance = birdData.mutantChance();
+        float mutantChance = miscDatum.mutantChance();
         if (random.nextFloat() < mutantChance) {
             int variant = random.nextInt(variants);
             setSkinVariant(variant);

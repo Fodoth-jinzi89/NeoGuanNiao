@@ -86,7 +86,7 @@ public class BirdAnimationController {
                 bird.onGround(),
                 bird.isInWater(),
                 bird.getDeltaMovement(),
-                bird.getBirdData().airborneGraceTicks());
+                bird.getBirdData().flying().airborneGraceTicks());
     }
 
     /**

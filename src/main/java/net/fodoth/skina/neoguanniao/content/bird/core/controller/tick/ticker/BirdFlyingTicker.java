@@ -3,8 +3,10 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -76,6 +78,8 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         var flyingController = bird.getFlyingController();
         var stateController = bird.getBehaviorStateController();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        BirdMiscDatum miscDatum = birdData.misc();
         var random = bird.getRandom();
 
         // 停止导航并重置飞行状态
@@ -87,18 +91,18 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         flyingController.flightTarget = flyingController.findAirCruiseTarget(false);
 
         // 设置飞行持续时长
-        int minDuration = birdData.waterEscapeMinDuration();
-        int randomDuration = random.nextInt(birdData.waterEscapeRandomDuration());
+        int minDuration = flyingDatum.waterEscapeMinDuration();
+        int randomDuration = random.nextInt(flyingDatum.waterEscapeRandomDuration());
         flightDuration = Math.max(flightDuration, minDuration + randomDuration);
 
         // 限制悬停重定向间隔
-        int retargetMin = birdData.waterEscapeHoverRetargetMin();
-        int retargetMax = birdData.waterEscapeHoverRetargetMax();
+        int retargetMin = flyingDatum.waterEscapeHoverRetargetMin();
+        int retargetMax = flyingDatum.waterEscapeHoverRetargetMax();
         hoverRetargetTicks = Math.clamp(hoverRetargetTicks, retargetMin, retargetMax);
 
         // 进入飞行状态
         bird.setNoGravity(true);
-        stateController.setBehaviorStateFor(BirdBehaviorState.FLYING, birdData.waterEscapeBehaviorTicks());
+        stateController.setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.waterEscapeBehaviorTicks());
 
         // 计算逃离方向和速度
         Vec3 toTarget = flyingController.flightTarget.subtract(bird.position());
@@ -109,8 +113,8 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         }
 
         Vec3 direction = horizontal.normalize();
-        double horizontalSpeed = birdData.waterEscapeHorizontalSpeed();
-        double verticalSpeed = birdData.waterEscapeVerticalSpeed();
+        double horizontalSpeed = flyingDatum.waterEscapeHorizontalSpeed();
+        double verticalSpeed = flyingDatum.waterEscapeVerticalSpeed();
         Vec3 movement = direction.scale(horizontalSpeed).add(0, verticalSpeed, 0);
 
         // 应用移动并朝向飞行方向
@@ -130,6 +134,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         var flyingController = bird.getFlyingController();
         var stateController = bird.getBehaviorStateController();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 飞行未激活时重置状态
         if (flightDuration <= 0 && !flyingController.isLandingFlight) {
@@ -184,7 +189,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
                 return;
             }
 
-            double reachDistance = birdData.flightLandingReachDistance();
+            double reachDistance = flyingDatum.flightLandingReachDistance();
             if (flightDuration <= 0 && toTarget.length() < reachDistance) {
                 flyingController.extendCruiseAfterUnsafeLanding();
                 return;
@@ -192,7 +197,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         }
 
         // 飞行目标重定向
-        double reachDistance = birdData.flightTargetReachDistance();
+        double reachDistance = flyingDatum.flightTargetReachDistance();
         if (toTarget.length() >= reachDistance && hoverRetargetTicks > 0) {
             --hoverRetargetTicks;
         } else {
@@ -213,14 +218,14 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
 
         // 群体飞行修正（非降落状态）
         if (!flyingController.isLandingFlight) {
-            double range = birdData.flockRange();
-            double separation = birdData.flockSeparation();
-            double alignment = birdData.flockAlignment();
-            double cohesion = birdData.flockCohesion();
-            double weightEscape = birdData.flockWeightEscape();
+            double range = flyingDatum.flockRange();
+            double separation = flyingDatum.flockSeparation();
+            double alignment = flyingDatum.flockAlignment();
+            double cohesion = flyingDatum.flockCohesion();
+            double weightEscape = flyingDatum.flockWeightEscape();
             double flockWeight = flyingController.isEscapeFlightActive
-                    ? birdData.flockEscapeWeight()
-                    : birdData.flockAmbientWeight();
+                    ? flyingDatum.flockEscapeWeight()
+                    : flyingDatum.flockAmbientWeight();
 
             Vec3 flockHeading = BirdFlightBoids.sameTypeHeading(
                     bird, range, separation,
@@ -241,18 +246,18 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         Vec3 desired = getDesired(toTarget, horizontalDirection, speed);
 
         // 应用阻尼和期望力
-        double movementScale = birdData.flightMovementScale();
-        double desiredScale = birdData.flightDesiredScale();
+        double movementScale = flyingDatum.flightMovementScale();
+        double desiredScale = flyingDatum.flightDesiredScale();
         Vec3 movement = bird.getDeltaMovement().scale(movementScale)
                 .add(desired.scale(desiredScale));
 
         // 失速恢复
         if (!flyingController.isLandingFlight) {
-            var stalledThreshold = birdData.flightStalledThreshold();
-            if (BirdFlightController.isStalledInAir(bird, flyingTime, stalledThreshold)) {
+            var stalledThreshold = flyingDatum.flightStalledThreshold();
+            if (BirdFlightManager.isStalledInAir(bird, flyingTime, stalledThreshold)) {
                 flyingController.retargetAirCruise(flyingController.isEscapeFlightActive);
-                double minSpeed = birdData.flightStalledMinSpeed();
-                double verticalBoost = birdData.flightStalledVerticalBoost();
+                double minSpeed = flyingDatum.flightStalledMinSpeed();
+                double verticalBoost = flyingDatum.flightStalledVerticalBoost();
                 movement = horizontalDirection.scale(Math.max(speed, minSpeed))
                         .add(0, verticalBoost, 0);
             }
@@ -274,25 +279,26 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
      */
     private @NotNull Vec3 getDesired(Vec3 toTarget, Vec3 horizontalDirection, double speed) {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird.getFlyingController();
 
         // 计算垂直目标
         double vertical;
         if (flyingController.isLandingFlight) {
-            double factor = birdData.flightVerticalLandingFactor();
-            double clampMin = birdData.flightVerticalClampMin();
-            double clampMax = birdData.flightVerticalClampMax();
+            double factor = flyingDatum.flightVerticalLandingFactor();
+            double clampMin = flyingDatum.flightVerticalClampMin();
+            double clampMax = flyingDatum.flightVerticalClampMax();
             vertical = Mth.clamp(
-                    toTarget.y * factor + birdData.flightLandingHoverBob(),
+                    toTarget.y * factor + flyingDatum.flightLandingHoverBob(),
                     clampMin,
                     clampMax
             );
         } else {
-            double factor = birdData.flightVerticalAmbientFactor();
-            double min = birdData.flightVerticalAmbientMin();
-            double max = birdData.flightVerticalAmbientMax();
-            double hoverBob = Math.sin((bird.tickCount + bird.getId()) * birdData.flightHoverBobFrequency())
-                    * birdData.flightHoverBobAmplitude();
+            double factor = flyingDatum.flightVerticalAmbientFactor();
+            double min = flyingDatum.flightVerticalAmbientMin();
+            double max = flyingDatum.flightVerticalAmbientMax();
+            double hoverBob = Math.sin((bird.tickCount + bird.getId()) * flyingDatum.flightHoverBobFrequency())
+                    * flyingDatum.flightHoverBobAmplitude();
             vertical = Mth.clamp(
                     toTarget.y * factor + hoverBob,
                     min,
@@ -314,27 +320,28 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
      */
     private double getSpeed(double horizontalDistance) {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird.getFlyingController();
 
         // 选择基础速度
         double speed;
         if (flyingController.isEscapeFlightActive) {
-            speed = birdData.flightEscapeSpeed();
+            speed = flyingDatum.flightEscapeSpeed();
         } else if (flyingController.isLandingFlight) {
-            speed = birdData.flightLandingSpeed();
+            speed = flyingDatum.flightLandingSpeed();
         } else {
-            speed = birdData.flightAmbientSpeed();
+            speed = flyingDatum.flightAmbientSpeed();
         }
 
         // 降落时减速
         if (flyingController.isLandingFlight) {
-            double decelDistance = birdData.flightLandingDecelDistance();
-            double decelFactor = birdData.flightLandingDecelFactor();
-            speed = BirdFlightController.decelerateNearLanding(
+            double decalDistance = flyingDatum.flightLandingDecalDistance();
+            double decalFactor = flyingDatum.flightLandingDecalFactor();
+            speed = BirdFlightManager.decelerateNearLanding(
                     speed,
                     horizontalDistance,
-                    decelDistance,
-                    decelFactor
+                    decalDistance,
+                    decalFactor
             );
         }
 
@@ -353,9 +360,10 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
         }
 
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
         int chance = bird.isTame()
-                ? birdData.ambientAirCruiseChanceTame()
-                : birdData.ambientAirCruiseChanceWild();
+                ? flyingDatum.ambientAirCruiseChanceTame()
+                : flyingDatum.ambientAirCruiseChanceWild();
 
         if (bird.getRandom().nextInt(chance) == 0) {
             Vec3 target = bird.getFlyingController().findAirCruiseTarget(false);
@@ -371,7 +379,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
      */
     private void tickGroundMovementFacing() {
         if (bird.getFlyingController().shouldFaceGroundMovement()) {
-            BirdFlightController.faceGroundMovement(bird, bird.getDeltaMovement(), 1.0E-4);
+            BirdFlightManager.faceGroundMovement(bird, bird.getDeltaMovement(), 1.0E-4);
         }
     }
 }

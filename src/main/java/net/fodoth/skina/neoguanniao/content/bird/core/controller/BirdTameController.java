@@ -3,6 +3,8 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdTameDatum;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -113,6 +115,7 @@ public class BirdTameController {
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
         BirdData birdData = bird.getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasTame = bird.isTame();
 
@@ -127,7 +130,7 @@ public class BirdTameController {
 
         // 设置好奇计时器
         int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
-        int curiousLimit = birdData.curiousTicksLimitForTame();
+        int curiousLimit = miscDatum.curiousTicksLimitForTame();
         timer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
 
         // 向附近鸟类分享信任值
@@ -175,10 +178,11 @@ public class BirdTameController {
     public void updateTrustedOwner(Player player) {
         var timer = bird.getTickController().getTickTimer();
         BirdData birdData = bird.getBirdData();
+        BirdTameDatum tameDatum = birdData.tame();
 
         // 检查信任值是否达到驯服阈值
         int trustTicks = timer.getBirdTrustTicker().getTicks();
-        int tameThreshold = birdData.trustTameThreshold();
+        int tameThreshold = tameDatum.trustTameThreshold();
 
         if (!bird.isTame() && trustTicks >= tameThreshold) {
             bird.tame(player);
@@ -202,6 +206,7 @@ public class BirdTameController {
         var eatingController = bird.getEatingController();
         var stateController = bird.getBehaviorStateController();
         BirdData birdData = bird.getBirdData();
+        BirdTameDatum tameDatum = birdData.tame();
         var random = bird.getRandom();
 
         // 清理进食状态并停止移动
@@ -209,16 +214,16 @@ public class BirdTameController {
         bird.getNavigation().stop();
 
         // 计算庆祝行为持续时长
-        int postTameActionTicks = birdData.tameCelebrationPostTameActionTicksMin()
-                + random.nextInt(birdData.tameCelebrationPostTameActionTicksVariance());
+        int postTameActionTicks = tameDatum.tameCelebrationPostTameActionTicksMin()
+                + random.nextInt(tameDatum.tameCelebrationPostTameActionTicksVariance());
 
         // 设置各种计时器
         timer.getBirdPostTameActionTicker().setTicks(postTameActionTicks);
-        timer.getBirdPostTameActionSwapTicker().setTicks(birdData.tameCelebrationPostTameActionSwapTicks());
+        timer.getBirdPostTameActionSwapTicker().setTicks(tameDatum.tameCelebrationPostTameActionSwapTicks());
 
         // 更新好奇计时器
         int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
-        int curiousLimit = birdData.tameCelebrationCuriousTicks();
+        int curiousLimit = tameDatum.tameCelebrationCuriousTicks();
         timer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
 
         // 重置空闲动画计时器
@@ -226,14 +231,14 @@ public class BirdTameController {
 
         // 更新食物效果计时器
         int currentFoodTicks = timer.getBirdFoodTicker().getTicks();
-        int foodTicks = birdData.tameCelebrationFoodTicks();
+        int foodTicks = tameDatum.tameCelebrationFoodTicks();
         timer.getBirdFoodTicker().setTicks(Math.max(currentFoodTicks, foodTicks));
 
         // 再次重置空闲动画计时器（确保清空）
         timer.getBirdIdleAnimationTicker().setTicks(0);
 
         // 设置为好奇状态
-        int behaviorTicks = birdData.tameCelebrationBehaviorStateTicks();
+        int behaviorTicks = tameDatum.tameCelebrationBehaviorStateTicks();
         stateController.setBehaviorStateFor(BirdBehaviorState.CURIOUS, behaviorTicks);
 
         // 看向玩家

@@ -11,7 +11,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.goal.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
@@ -1032,7 +1032,7 @@ public class BudgerigarEntity extends TamableAnimal implements GeoEntity, Flying
 
             double speed = this.escapeFlightActive ? 0.34 : (this.landingFlight ? 0.2 : 0.26);
             if (this.landingFlight) {
-                speed = BirdFlightController.decelerateNearLanding(speed, horizontalDistance, 3.4, 0.42);
+                speed = BirdFlightManager.decelerateNearLanding(speed, horizontalDistance, 3.4, 0.42);
             }
 
             double hoverBob = this.landingFlight ? -0.035 : Math.sin((this.tickCount + this.getId()) * 0.28) * 0.025;
@@ -1043,7 +1043,7 @@ public class BudgerigarEntity extends TamableAnimal implements GeoEntity, Flying
             Vec3 desired = new Vec3(horizontalDirection.x * speed, vertical, horizontalDirection.z * speed);
             Vec3 movement = this.getDeltaMovement().scale(0.32).add(desired.scale(0.68));
 
-            if (!this.landingFlight && BirdFlightController.isStalledInAir(this, this.timeFlying, 0.006)) {
+            if (!this.landingFlight && BirdFlightManager.isStalledInAir(this, this.timeFlying, 0.006)) {
                 this.retargetAirCruise(this.escapeFlightActive);
                 movement = horizontalDirection.scale(Math.max(speed, 0.18)).add(0, 0.08, 0);
             }
@@ -1276,14 +1276,14 @@ public class BudgerigarEntity extends TamableAnimal implements GeoEntity, Flying
     // ============ 朝向控制 ============
 
     private void faceFlightDirection(Vec3 movement) {
-        BirdFlightController.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
+        BirdFlightManager.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
     }
 
 
     private void tickGroundMovementFacing() {
         if (this.shouldFaceGroundMovement()) {
             @SuppressWarnings("unused")
-            boolean unused = BirdFlightController.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
+            boolean unused = BirdFlightManager.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
         }
     }
 
@@ -1303,7 +1303,7 @@ public class BudgerigarEntity extends TamableAnimal implements GeoEntity, Flying
     // ============ 动画 ============
 
     private boolean shouldPlayFlyAnimation() {
-        return BirdFlightController.shouldPlayFlyAnimation(this,
+        return BirdFlightManager.shouldPlayFlyAnimation(this,
                 this.getBehaviorState().isAirborne(), this.onGround(), this.isInWater(),
                 this.getDeltaMovement(), 0);
     }

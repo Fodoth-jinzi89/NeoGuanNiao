@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 
 /**
  * 鸟类日常行为控制器
@@ -38,8 +39,9 @@ public record BirdRoutineController(AbstractBirdEntity<?> bird) {
      */
     public boolean isActiveTime() {
         BirdData birdData = bird.getBirdData();
-        long activeStart = birdData.activeStartTime();
-        long activeEnd = birdData.activeEndTime();
+        BirdMiscDatum miscDatum = birdData.misc();
+        long activeStart = miscDatum.activeStartTime();
+        long activeEnd = miscDatum.activeEndTime();
         long time = bird.level().getDayTime() % DAY_LENGTH;
 
         return time >= activeStart || time < activeEnd;
@@ -56,8 +58,9 @@ public record BirdRoutineController(AbstractBirdEntity<?> bird) {
      */
     public boolean isRoostTime() {
         BirdData birdData = bird.getBirdData();
-        long activeStart = birdData.activeStartTime();
-        long activeEnd = birdData.activeEndTime();
+        BirdMiscDatum miscDatum = birdData.misc();
+        long activeStart = miscDatum.activeStartTime();
+        long activeEnd = miscDatum.activeEndTime();
         long time = bird.level().getDayTime() % DAY_LENGTH;
 
         return time >= activeEnd && time < activeStart;

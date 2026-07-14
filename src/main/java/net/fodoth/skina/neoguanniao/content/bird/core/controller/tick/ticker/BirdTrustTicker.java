@@ -35,7 +35,7 @@ public class BirdTrustTicker extends AbstractBirdTicker {
      */
     public void addTrust(int amount) {
         BirdData birdData = bird.getBirdData();
-        int trustLimit = birdData.trustTicksLimit();
+        int trustLimit = birdData.tame().trustTicksLimit();
         ticks = Mth.clamp(ticks + amount, 0, trustLimit);
     }
 }

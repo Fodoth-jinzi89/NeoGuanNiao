@@ -2,7 +2,9 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.*;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -31,7 +33,9 @@ public class BirdFlyingController {
         this.bird = entity;
         this.isEscapeFlightActive = false;
         this.isLandingFlight = false;
-        bird.setMoveControl(new FlyingMoveControl(bird, bird.getBirdData().maxTurns(), true));
+        BirdData birdData = bird.getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        bird.setMoveControl(new FlyingMoveControl(bird, miscDatum.maxTurns(), true));
     }
 
     /**
@@ -88,14 +92,16 @@ public class BirdFlyingController {
         var flyingTicker = timer.getBirdFlyingTicker();
         var stateController = bird.getBehaviorStateController();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        BirdMiscDatum miscDatum = birdData.misc();
 
         if (flyingTicker.getTicks() <= 0 && flyingTicker.flightDuration <= 0 && !isLandingFlight) {
             isEscapeFlightActive = fleeing;
             flightTarget = target == null ? findAirCruiseTarget(fleeing) : target;
 
             flyingTicker.flightDuration = fleeing
-                    ? birdData.escapeAirCruiseMinTicks() + bird.getRandom().nextInt(birdData.escapeAirCruiseRandomTicks())
-                    : birdData.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(birdData.ambientAirCruiseRandomTicks());
+                    ? flyingDatum.escapeAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.escapeAirCruiseRandomTicks())
+                    : flyingDatum.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.ambientAirCruiseRandomTicks());
             flyingTicker.flyingTime = 0;
             flyingTicker.hoverRetargetTicks = nextHoverRetargetDelay();
 
@@ -103,7 +109,7 @@ public class BirdFlyingController {
             bird.setSilent(false);
             bird.getNavigation().stop();
 
-            int stateTicks = fleeing ? birdData.shortFleeTicks() : birdData.shortFlyTicks();
+            int stateTicks = fleeing ? flyingDatum.shortFleeTicks() : flyingDatum.shortFlyTicks();
             BirdBehaviorState state = fleeing ? BirdBehaviorState.FLEEING : BirdBehaviorState.FLYING;
             stateController.setBehaviorStateFor(state, stateTicks);
         }
@@ -116,7 +122,8 @@ public class BirdFlyingController {
      */
     private int nextHoverRetargetDelay() {
         BirdData birdData = bird.getBirdData();
-        return birdData.hoverRetargetMinDelay() + bird.getRandom().nextInt(birdData.hoverRetargetDelayVariance());
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        return flyingDatum.hoverRetargetMinDelay() + bird.getRandom().nextInt(flyingDatum.hoverRetargetDelayVariance());
     }
 
     /**
@@ -128,27 +135,29 @@ public class BirdFlyingController {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        BirdMiscDatum miscDatum = birdData.misc();
 
         isEscapeFlightActive = false;
         isLandingFlight = false;
         flightTarget = target == null ? this.findAirCruiseTarget(false) : this.clampFlightTarget(target);
 
-        flyingTicker.flightDuration = birdData.minFlybyDuration() + bird.getRandom().nextInt(birdData.flybyDurationVariance() + 1);
+        flyingTicker.flightDuration = flyingDatum.minFlybyDuration() + bird.getRandom().nextInt(flyingDatum.flybyDurationVariance() + 1);
         flyingTicker.flyingTime = 0;
-        flyingTicker.hoverRetargetTicks = birdData.minHoverRetargetTicks() + bird.getRandom().nextInt(birdData.hoverRetargetTicksVariance() + 1);
-        flyingTicker.setTicks(Math.max(flyingTicker.getTicks(), birdData.minimumFlightTicks()));
+        flyingTicker.hoverRetargetTicks = flyingDatum.minHoverRetargetTicks() + bird.getRandom().nextInt(flyingDatum.hoverRetargetTicksVariance() + 1);
+        flyingTicker.setTicks(Math.max(flyingTicker.getTicks(), flyingDatum.minimumFlightTicks()));
 
         bird.getNavigation().stop();
         bird.setNoGravity(true);
         bird.setSilent(false);
-        bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, birdData.minimumFlightTicks());
+        bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.minimumFlightTicks());
 
         Vec3 direction = bird.getFlyingController().flightTarget.subtract(bird.position()).multiply(1.0, 0.0, 1.0);
         if (direction.length() <= 1.0E-4) {
             direction = randomHorizontalDirection();
         }
-        Vec3 movement = direction.normalize().scale(birdData.flybyHorizontalSpeed())
-                .add(0, birdData.flybyUpwardSpeed(), 0);
+        Vec3 movement = direction.normalize().scale(flyingDatum.flybyHorizontalSpeed())
+                .add(0, flyingDatum.flybyUpwardSpeed(), 0);
         bird.setDeltaMovement(movement);
         faceFlightDirection(movement);
         bird.xxa = 0.0F;
@@ -164,20 +173,23 @@ public class BirdFlyingController {
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
         if (standPosition != null && !isFlightInProgress()) {
             BirdData birdData = bird.getBirdData();
+            BirdFlyingDatum flyingDatum = birdData.flying();
+            BirdMiscDatum miscDatum = birdData.misc();
+
             Vec3 horizontal = standPosition.subtract(bird.position()).multiply(1.0, 0.0, 1.0);
 
             if (horizontal.length() > 1.0E-4) {
-                horizontal = horizontal.normalize().scale(birdData.birdBathMountHorizontalSpeed());
+                horizontal = horizontal.normalize().scale(flyingDatum.birdBathMountHorizontalSpeed());
             } else {
                 horizontal = Vec3.ZERO;
             }
 
-            Vec3 movement = new Vec3(horizontal.x, birdData.birdBathMountUpwardSpeed(), horizontal.z);
+            Vec3 movement = new Vec3(horizontal.x, flyingDatum.birdBathMountUpwardSpeed(), horizontal.z);
 
             bird.getNavigation().stop();
             bird.setNoGravity(false);
             bird.setSilent(false);
-            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, birdData.birdBathMountFlightTicks());
+            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.birdBathMountFlightTicks());
             bird.setDeltaMovement(movement);
             faceFlightDirection(movement);
             bird.xxa = 0.0F;
@@ -194,6 +206,8 @@ public class BirdFlyingController {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasEscaping = isEscapeFlightActive;
         flyingTicker.flightDuration = 0;
@@ -206,21 +220,21 @@ public class BirdFlyingController {
         bird.setNoGravity(false);
 
         bird.setDeltaMovement(bird.getDeltaMovement().multiply(
-                birdData.flightLandingHorizontalDamping(),
+                flyingDatum.flightLandingHorizontalDamping(),
                 0,
-                birdData.flightLandingHorizontalDamping()
+                flyingDatum.flightLandingHorizontalDamping()
         ));
 
         int cooldownTicks = wasEscaping
-                ? birdData.escapeCooldownMin() + bird.getRandom().nextInt(birdData.escapeCooldownVariance())
+                ? miscDatum.escapeCooldownMin() + bird.getRandom().nextInt(miscDatum.escapeCooldownVariance())
                 : (bird.isTame()
-                ? birdData.tameCooldownMin() + bird.getRandom().nextInt(birdData.tameCooldownVariance())
-                : birdData.wildCooldownMin() + bird.getRandom().nextInt(birdData.wildCooldownVariance())
+                ? miscDatum.tameCooldownMin() + bird.getRandom().nextInt(miscDatum.tameCooldownVariance())
+                : miscDatum.wildCooldownMin() + bird.getRandom().nextInt(miscDatum.wildCooldownVariance())
         );
         flyingTicker.setTicks(cooldownTicks);
 
         if (bird.getBehaviorStateController().getBehaviorState().isAirborne()) {
-            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, birdData.postFlightAlertTicks());
+            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, miscDatum.postFlightAlertTicks());
         }
     }
 
@@ -234,14 +248,15 @@ public class BirdFlyingController {
         } else {
             var timer = bird.getTickController().getTickTimer();
             BirdData birdData = bird.getBirdData();
+            BirdFlyingDatum flyingDatum = birdData.flying();
 
             isLandingFlight = true;
             isEscapeFlightActive = false;
-            timer.getBirdFlyingTicker().flightDuration = birdData.landingFlightMinDuration()
-                    + bird.getRandom().nextInt(birdData.landingFlightDurationVariance());
+            timer.getBirdFlyingTicker().flightDuration = flyingDatum.landingFlightMinDuration()
+                    + bird.getRandom().nextInt(flyingDatum.landingFlightDurationVariance());
             flightTarget = landingTarget;
             timer.getBirdFlyingTicker().hoverRetargetTicks = 0;
-            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, birdData.landingFlightStateTicks());
+            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.landingFlightStateTicks());
         }
     }
 
@@ -251,14 +266,15 @@ public class BirdFlyingController {
     public void extendCruiseAfterUnsafeLanding() {
         var timer = bird.getTickController().getTickTimer();
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
 
         isLandingFlight = false;
         isEscapeFlightActive = false;
-        timer.getBirdFlyingTicker().flightDuration = birdData.unsafeLandingCruiseMinDuration()
-                + bird.getRandom().nextInt(birdData.unsafeLandingCruiseDurationVariance());
+        timer.getBirdFlyingTicker().flightDuration = flyingDatum.unsafeLandingCruiseMinDuration()
+                + bird.getRandom().nextInt(flyingDatum.unsafeLandingCruiseDurationVariance());
         retargetAirCruise(false);
         bird.setNoGravity(true);
-        bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, birdData.unsafeLandingCruiseStateTicks());
+        bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.unsafeLandingCruiseStateTicks());
     }
 
     /**
@@ -279,6 +295,8 @@ public class BirdFlyingController {
      */
     public Vec3 findAirCruiseTarget(boolean fleeing) {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+
         Vec3 direction;
 
         if (fleeing && bird.getFrightController().frightSource != null) {
@@ -287,16 +305,16 @@ public class BirdFlyingController {
                     ? new Vec3(away.x, 0, away.z).normalize()
                     : this.randomHorizontalDirection();
         } else {
-            direction = bird.getRandom().nextInt(birdData.cruiseLookChanceDenominator()) == 0
+            direction = bird.getRandom().nextInt(flyingDatum.cruiseLookChanceDenominator()) == 0
                     ? bird.getLookAngle()
                     : this.randomHorizontalDirection();
         }
 
-        Vec3 target = BirdFlightTargeting.findAirTarget(bird, birdData.flightProfile(), direction, fleeing);
+        Vec3 target = BirdFlightTargeting.findAirTarget(bird, birdData.flying().flightProfile(), direction, fleeing);
         return target != null ? this.clampFlightTarget(target)
                 : this.clampFlightTarget(bird.position().add(
                 0,
-                bird.onGround() ? birdData.cruiseFallbackHeightGround() : birdData.cruiseFallbackHeightAir(),
+                bird.onGround() ? flyingDatum.cruiseFallbackHeightGround() : flyingDatum.cruiseFallbackHeightAir(),
                 0
         ));
     }
@@ -308,29 +326,30 @@ public class BirdFlyingController {
      */
     public Vec3 findLandingTarget() {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
 
         Vec3 sharedLanding = BirdFlightTargeting.findNearestDryLandingTarget(
                 bird,
-                birdData.landingSharedRadius(),
-                birdData.landingSharedVerticalRange()
+                flyingDatum.landingSharedRadius(),
+                flyingDatum.landingSharedVerticalRange()
         );
         if (sharedLanding != null) {
             return this.clampFlightTarget(sharedLanding);
         }
 
         BlockPos origin = bird.blockPosition();
-        BlockPos landing = this.findDryLandingSurface(origin, birdData.landingSurfaceSearchRadius());
+        BlockPos landing = this.findDryLandingSurface(origin, flyingDatum.landingSurfaceSearchRadius());
         if (landing != null) {
             return this.clampFlightTarget(Vec3.atBottomCenterOf(landing));
         }
 
-        for (int attempt = 0; attempt < birdData.landingRandomAttempts(); ++attempt) {
-            int halfRange = birdData.landingRandomHorizontalRange() / 2;
-            int x = origin.getX() + bird.getRandom().nextInt(birdData.landingRandomHorizontalRange()) - halfRange;
-            int z = origin.getZ() + bird.getRandom().nextInt(birdData.landingRandomHorizontalRange()) - halfRange;
+        for (int attempt = 0; attempt < flyingDatum.landingRandomAttempts(); ++attempt) {
+            int halfRange = flyingDatum.landingRandomHorizontalRange() / 2;
+            int x = origin.getX() + bird.getRandom().nextInt(flyingDatum.landingRandomHorizontalRange()) - halfRange;
+            int z = origin.getZ() + bird.getRandom().nextInt(flyingDatum.landingRandomHorizontalRange()) - halfRange;
             BlockPos candidate = this.findDryLandingSurface(
                     new BlockPos(x, origin.getY(), z),
-                    birdData.landingSurfaceSearchRadius()
+                    flyingDatum.landingSurfaceSearchRadius()
             );
             if (candidate != null) {
                 return this.clampFlightTarget(Vec3.atBottomCenterOf(candidate));
@@ -376,10 +395,11 @@ public class BirdFlyingController {
      */
     private Vec3 clampFlightTarget(Vec3 target) {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
         double y = Mth.clamp(
                 target.y,
-                bird.level().getMinBuildHeight() + birdData.flightTargetMinHeightOffset(),
-                bird.level().getMaxBuildHeight() - birdData.flightTargetMaxHeightOffset()
+                bird.level().getMinBuildHeight() + flyingDatum.flightTargetMinHeightOffset(),
+                bird.level().getMaxBuildHeight() - flyingDatum.flightTargetMaxHeightOffset()
         );
         return new Vec3(target.x, y, target.z);
     }
@@ -421,7 +441,9 @@ public class BirdFlyingController {
      * @param movement 飞行运动向量
      */
     public void faceFlightDirection(Vec3 movement) {
-        BirdFlightController.faceMovement(bird, movement, bird.getBirdData().flightProfile().maxPitchDegrees());
+        BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+        BirdFlightManager.faceMovement(bird, movement, flyingDatum.flightProfile().maxPitchDegrees());
     }
 
     /**
@@ -436,7 +458,8 @@ public class BirdFlyingController {
                     && state != BirdBehaviorState.PREENING && state != BirdBehaviorState.DANCING
                     && state != BirdBehaviorState.SLEEPING && state != BirdBehaviorState.ROOSTING) {
                 BirdData birdData = bird.getBirdData();
-                return bird.getDeltaMovement().lengthSqr() > birdData.walkingSpeedThreshold()
+                BirdMiscDatum miscDatum = birdData.misc();
+                return bird.getDeltaMovement().lengthSqr() > miscDatum.walkingSpeedThreshold()
                         || !bird.getNavigation().isDone();
             }
         }

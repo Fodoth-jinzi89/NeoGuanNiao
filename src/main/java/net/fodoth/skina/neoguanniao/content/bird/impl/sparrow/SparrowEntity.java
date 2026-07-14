@@ -10,7 +10,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdIntent;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
@@ -953,7 +953,7 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
     // ============ 地面朝向 ============
     private void tickGroundMovementFacing() {
         if (this.shouldFaceGroundMovement()) {
-            BirdFlightController.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
+            BirdFlightManager.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
         }
     }
 
@@ -1136,7 +1136,7 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
     }
 
     private void faceMovement(Vec3 movement) {
-        BirdFlightController.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
+        BirdFlightManager.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
     }
 
     @SuppressWarnings("deprecation")
@@ -1202,7 +1202,7 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
                     horizontalDirection.add(flockHeading), horizontalDirection);
         }
 
-        double speed = BirdFlightController.decelerateNearLanding(this.flightSpeed, horizontalDistance,
+        double speed = BirdFlightManager.decelerateNearLanding(this.flightSpeed, horizontalDistance,
                 this.escapeFlight ? 3.0 : 2.4, 0.5);
         double lift = Mth.clamp(toTarget.y * 0.16, -0.11, 0.16);
         if (flightAge < 8) {
@@ -1222,7 +1222,7 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
         Vec3 desired = horizontalDirection.scale(speed).add(0, lift, 0);
         Vec3 movement = this.getDeltaMovement().scale(0.32).add(desired.scale(0.68));
 
-        if (BirdFlightController.isStalledInAir(this, this.timeFlying, 0.006)) {
+        if (BirdFlightManager.isStalledInAir(this, this.timeFlying, 0.006)) {
             Vec3 newTarget = this.findShortFlightTarget(null, this.escapeFlight,
                     this.escapeFlight ? 8 : 4, this.escapeFlight ? 16 : 10);
             if (newTarget != null) {
@@ -1744,7 +1744,7 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
     }
 
     private boolean shouldPlayFlyAnimation() {
-        return BirdFlightController.shouldPlayFlyAnimation(this, this.getBehaviorState().isAirborne(),
+        return BirdFlightManager.shouldPlayFlyAnimation(this, this.getBehaviorState().isAirborne(),
                 this.onGround(), this.isInWater(), this.getDeltaMovement(), this.airborneFlightAnimationTicks);
     }
 

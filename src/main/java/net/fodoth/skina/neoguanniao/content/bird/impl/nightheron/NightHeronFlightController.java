@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.bird.impl.nightheron;
 
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -118,7 +118,7 @@ public final class NightHeronFlightController {
                 ? -Mth.clamp((height - glidePathHeight) * 0.038, 0.025, 0.11)
                 : (height < glidePathHeight - 1.4 && horizontalDistance > 7.0 ? 0.028 : (height > 1.3 ? -0.026 : -0.012));
         double speed = horizontalDistance > 7.0 ? 0.28 : 0.24;
-        speed = BirdFlightController.decelerateNearLanding(speed, horizontalDistance, 5.0, 0.46);
+        speed = BirdFlightManager.decelerateNearLanding(speed, horizontalDistance, 5.0, 0.46);
 
         Vec3 desired = approachDirection.scale(speed).add(0, verticalSpeed, 0);
         Vec3 movement = nightHeron.getDeltaMovement().scale(0.58).add(desired.scale(0.42));

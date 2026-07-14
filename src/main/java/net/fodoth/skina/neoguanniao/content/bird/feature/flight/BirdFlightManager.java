@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  * 鸟类飞行控制器
  * 提供飞行控制相关的工具方法，包括移动混合、转向、减速和朝向控制
  */
-public final class BirdFlightController {
+public final class BirdFlightManager {
 
-    private BirdFlightController() {
+    private BirdFlightManager() {
     }
 
     /**
@@ -22,6 +22,7 @@ public final class BirdFlightController {
      * @param desiredWeight 期望权重 (0-1)
      * @return 混合后的移动向量
      */
+    @Deprecated
     @NotNull
     public static Vec3 blendMovement(Vec3 current, Vec3 desired, double desiredWeight) {
         double weight = Mth.clamp(desiredWeight, 0.0, 1.0);
@@ -38,6 +39,7 @@ public final class BirdFlightController {
      * @param maxVertical 最大垂直速度
      * @return 转向向量
      */
+    @Deprecated
     @NotNull
     public static Vec3 steerToward(Mob bird, Vec3 target, double speed, double minVertical, double maxVertical) {
         Vec3 toTarget = target.subtract(bird.position());
@@ -123,7 +125,6 @@ public final class BirdFlightController {
      * @param minHorizontalSpeedSqr 最小水平速度平方阈值
      * @return 如果成功转向返回 true
      */
-
     public static boolean faceGroundMovement(Mob bird, Vec3 movement, double minHorizontalSpeedSqr) {
         if (movement.lengthSqr() <= minHorizontalSpeedSqr) {
             return false;
@@ -153,7 +154,6 @@ public final class BirdFlightController {
      * @param airborneGraceTicks 空中宽限期
      * @return 如果应该播放飞行动画返回 true
      */
-    @Deprecated
     public static boolean shouldPlayFlyAnimation(
             BirdFlightAware bird,
             boolean airborneState,

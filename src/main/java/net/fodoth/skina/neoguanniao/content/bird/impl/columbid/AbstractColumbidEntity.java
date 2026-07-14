@@ -12,7 +12,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSpeciesProfil
 import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.goal.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
@@ -994,7 +994,7 @@ public abstract class AbstractColumbidEntity extends TamableAnimal implements Ge
             Vec3 desired = (hasHorizontalSteering ? horizontal.scale(speed) : Vec3.ZERO).add(0, lift, 0);
             Vec3 movement = this.getDeltaMovement().scale(0.42).add(desired.scale(0.58));
 
-            if (!landingPhase && BirdFlightController.isStalledInAir(this, this.timeFlying, 0.008)) {
+            if (!landingPhase && BirdFlightManager.isStalledInAir(this, this.timeFlying, 0.008)) {
                 Vec3 nextWaypoint = this.chooseAutonomousFlightWaypoint(horizontal);
                 if (nextWaypoint != null) {
                     this.flightWaypoint = nextWaypoint;
@@ -1025,7 +1025,7 @@ public abstract class AbstractColumbidEntity extends TamableAnimal implements Ge
 
     private double getSpeed(boolean landingPhase, double horizontalDistance, boolean closeLandingApproach) {
         double speed = landingPhase
-                ? BirdFlightController.decelerateNearLanding(this.flightSpeed, horizontalDistance,
+                ? BirdFlightManager.decelerateNearLanding(this.flightSpeed, horizontalDistance,
                 this.highCruiseFlight ? 7.0 : 4.0, 0.22)
                 : this.flightSpeed;
         if (closeLandingApproach) {
@@ -1193,12 +1193,12 @@ public abstract class AbstractColumbidEntity extends TamableAnimal implements Ge
 
     // ============ 朝向控制 ============
     private void faceFlightDirection(Vec3 movement) {
-        BirdFlightController.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
+        BirdFlightManager.faceMovement(this, movement, FLIGHT_PROFILE.maxPitchDegrees());
     }
 
     private void tickGroundMovementFacing() {
         if (this.shouldFaceGroundMovement()) {
-            BirdFlightController.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
+            BirdFlightManager.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
         }
     }
 
@@ -1265,7 +1265,7 @@ public abstract class AbstractColumbidEntity extends TamableAnimal implements Ge
     private boolean shouldPlayFlyAnimation() {
         boolean airborneState = this.getBehaviorState().isAirborne()
                 && (!this.onGround() || this.isControlledFlightActive() || super.isInWater());
-        return BirdFlightController.shouldPlayFlyAnimation(this, airborneState, this.onGround(),
+        return BirdFlightManager.shouldPlayFlyAnimation(this, airborneState, this.onGround(),
                 this.isInWater(), this.getDeltaMovement(), 0);
     }
 

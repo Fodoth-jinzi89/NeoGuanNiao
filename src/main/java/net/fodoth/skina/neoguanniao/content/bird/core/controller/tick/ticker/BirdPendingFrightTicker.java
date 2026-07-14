@@ -57,9 +57,9 @@ public class BirdPendingFrightTicker extends AbstractBirdTicker {
             Vec3 sourcePos = frightController.pendingFrightSource;
             if (sourcePos != null) {
                 double lookX = sourcePos.x;
-                double lookY = sourcePos.y + birdData.pendingFrightLookYOffset();
+                double lookY = sourcePos.y + birdData.fright().pendingFrightLookYOffset();
                 double lookZ = sourcePos.z;
-                float lookSpeed = birdData.pendingFrightLookSpeed();
+                float lookSpeed = birdData.fright().pendingFrightLookSpeed();
                 bird.getLookControl().setLookAt(lookX, lookY, lookZ, lookSpeed, lookSpeed);
             }
             return;
@@ -71,7 +71,7 @@ public class BirdPendingFrightTicker extends AbstractBirdTicker {
                 : bird.position();
 
         // 确定受惊持续时间
-        int minDuration = birdData.pendingFrightMinDuration();
+        int minDuration = birdData.fright().pendingFrightMinDuration();
         int duration = Math.max(minDuration, pendingFrightDuration);
 
         // 清理待处理状态并触发受惊

@@ -3,6 +3,9 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFrightDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -42,6 +45,8 @@ public class BirdFrightController {
         var eatingController = bird.getEatingController();
         var brain = bird.getBirdBrain();
         BirdData birdData = bird.getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        BirdFrightDatum frightDatum = birdData.fright();
 
         // 清理进食状态
         eatingController.clearEating();
@@ -54,8 +59,8 @@ public class BirdFrightController {
 
         // 处理受惊信任损失
         float trustLoss = isPlayer
-                ? birdData.frightenedTrustLossPlayer()
-                : birdData.frightenedTrustLossOther();
+                ? miscDatum.frightenedTrustLossPlayer()
+                : miscDatum.frightenedTrustLossOther();
         brain.onFrightened(trustLoss);
 
         // 停止移动
@@ -63,14 +68,14 @@ public class BirdFrightController {
 
         // 设置为警戒状态
         int alertTicks = isPlayer
-                ? birdData.alertTicksPlayer()
-                : birdData.alertTicksOther();
+                ? miscDatum.alertTicksPlayer()
+                : miscDatum.alertTicksOther();
         stateController.setBehaviorStateFor(BirdBehaviorState.ALERT, alertTicks);
 
         // 非玩家攻击时延迟触发受惊
         if (!isPlayer) {
-            int delayTicks = birdData.frightDelayMin()
-                    + bird.getRandom().nextInt(birdData.frightDelayVariance());
+            int delayTicks = frightDatum.frightDelayMin()
+                    + bird.getRandom().nextInt(frightDatum.frightDelayVariance());
             queueFrightFrom(sourcePos, delayTicks);
         }
     }
@@ -97,6 +102,7 @@ public class BirdFrightController {
         var stateController = bird.getBehaviorStateController();
         var flyingController = bird.getFlyingController();
         BirdData birdData = bird.getBirdData();
+        BirdFrightDatum frightDatum = birdData.fright();
 
         // 设置受惊源
         frightSource = sourcePos;
@@ -113,7 +119,7 @@ public class BirdFrightController {
         pendingFrightSource = null;
 
         // 设置逃跑状态
-        int frightLimit = Math.min(birdData.frightTicksLimit(), ticks);
+        int frightLimit = Math.min(frightDatum.frightTicksLimit(), ticks);
         stateController.setBehaviorStateFor(BirdBehaviorState.FLEEING, frightLimit);
 
         // 如果在地面且未飞行，立即开始逃跑飞行
@@ -129,6 +135,7 @@ public class BirdFrightController {
      */
     protected void startEscapeFlight(Vec3 sourcePos) {
         BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 计算远离来源的方向
         Vec3 away = bird.position().subtract(sourcePos);
@@ -143,10 +150,10 @@ public class BirdFrightController {
         Vec3 direction = new Vec3(away.x, 0, away.z).normalize();
 
         // 计算逃跑目标位置
-        double horizontalDistance = birdData.escapeFlightMinDistance()
-                + bird.getRandom().nextDouble() * birdData.escapeFlightDistanceVariance();
-        double verticalHeight = birdData.escapeFlightMinHeight()
-                + bird.getRandom().nextDouble() * birdData.escapeFlightHeightVariance();
+        double horizontalDistance = flyingDatum.escapeFlightMinDistance()
+                + bird.getRandom().nextDouble() * flyingDatum.escapeFlightDistanceVariance();
+        double verticalHeight = flyingDatum.escapeFlightMinHeight()
+                + bird.getRandom().nextDouble() * flyingDatum.escapeFlightHeightVariance();
 
         Vec3 target = bird.position()
                 .add(direction.scale(horizontalDistance))
@@ -163,9 +170,11 @@ public class BirdFrightController {
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
         BirdData birdData = bird.getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        BirdFrightDatum frightDatum = birdData.fright();
 
         // 获取范围内的所有鸟类
-        double range = birdData.alertNearbyRange();
+        double range = miscDatum.alertNearbyRange();
         var entities = bird.level().getEntitiesOfClass(
                 AbstractBirdEntity.class,
                 bird.getBoundingBox().inflate(range)
@@ -178,16 +187,16 @@ public class BirdFrightController {
             }
 
             // 通知大脑受惊
-            bird.getBirdBrain().onFrightened(birdData.frightenAmount());
+            bird.getBirdBrain().onFrightened(frightDatum.frightenAmount());
 
             // 设置警戒状态
-            int alertTicks = birdData.alertTicks() + b.getRandom().nextInt(birdData.alertTicksVariant());
+            int alertTicks = miscDatum.alertTicks() + b.getRandom().nextInt(miscDatum.alertTicksVariant());
             b.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, alertTicks);
 
             // 设置好奇计时器
             var targetTimer = b.getTickController().getTickTimer();
             int currentCuriousTicks = targetTimer.getBirdCuriousTicker().getTicks();
-            int curiousLimit = birdData.curiousTicksLimitForAlert();
+            int curiousLimit = miscDatum.curiousTicksLimitForAlert();
             targetTimer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
         }
     }
@@ -204,6 +213,7 @@ public class BirdFrightController {
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
         BirdData birdData = bird.getBirdData();
+        BirdFrightDatum frightDatum = birdData.fright();
 
         // 如果正在进食，清除进食状态
         if (eatingController.isEating()) {
@@ -216,7 +226,7 @@ public class BirdFrightController {
         // 设置待处理受惊计时器
         var pendingTicker = timer.getBirdPendingFrightTicker();
         int currentPendingDuration = timer.getBirdPendingFrightTicker().pendingFrightDuration;
-        int pendingDurationLimit = birdData.pendingFrightDurationLimit();
+        int pendingDurationLimit = frightDatum.pendingFrightDurationLimit();
         timer.getBirdPendingFrightTicker().pendingFrightDuration = Math.max(currentPendingDuration, pendingDurationLimit);
 
         // 设置延迟时间
@@ -228,7 +238,7 @@ public class BirdFrightController {
         }
 
         // 设置为警戒状态
-        int alertLimit = Math.min(birdData.pendingFrightTicksLimit(), pendingTicker.getTicks() + 10);
+        int alertLimit = Math.min(frightDatum.pendingFrightTicksLimit(), pendingTicker.getTicks() + 10);
         stateController.setBehaviorStateFor(BirdBehaviorState.ALERT, alertLimit);
     }
 }

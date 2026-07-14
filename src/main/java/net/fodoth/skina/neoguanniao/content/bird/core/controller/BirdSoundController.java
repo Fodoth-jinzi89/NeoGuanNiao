@@ -2,6 +2,8 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdSoundDatum;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  *     <li>环境音播放间隔（Ambient Sound Interval）</li>
  *     <li>交互声音（Interaction Sound）</li>
  * </ul>
- * 具体声音资源由 {@link net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData}
+ * 具体声音资源由 {@link net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdSoundDatum}
  * 提供，使不同鸟种能够拥有独立的声音配置。
  * </p>
  *
@@ -37,7 +39,8 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public @Nullable SoundEvent getAmbientSound() {
         BirdData birdData = bird.getBirdData();
-        return birdData.ambientSound();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.ambientSound();
     }
 
     /**
@@ -48,7 +51,8 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public @Nullable SoundEvent getHurtSound(DamageSource source) {
         BirdData birdData = bird.getBirdData();
-        return birdData.hurtSound();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.hurtSound();
     }
 
     /**
@@ -58,7 +62,8 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public @Nullable SoundEvent getDeathSound() {
         BirdData birdData = bird.getBirdData();
-        return birdData.deathSound();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.deathSound();
     }
 
     /**
@@ -71,7 +76,8 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public float getVoicePitch() {
         BirdData birdData = bird.getBirdData();
-        return birdData.voicePitch();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.voicePitch();
     }
 
     /**
@@ -85,7 +91,8 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public int getAmbientSoundInterval() {
         BirdData birdData = bird.getBirdData();
-        return birdData.ambientSoundInterval();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.ambientSoundInterval();
     }
 
     /**
@@ -99,6 +106,7 @@ public record BirdSoundController(AbstractBirdEntity<?> bird) {
      */
     public @Nullable SoundEvent getInteractionSound() {
         BirdData birdData = bird.getBirdData();
-        return birdData.interactionSound();
+        BirdSoundDatum soundDatum = birdData.sound();
+        return soundDatum.interactionSound();
     }
 }

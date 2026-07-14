@@ -79,7 +79,7 @@ public class BirdBehaviorStateTicker extends AbstractBirdTicker {
         boolean hasOwner = bird.getOwner() != null;
         boolean isNavigating = !bird.getNavigation().isDone();
         double distanceToOwnerSqr = hasOwner ? bird.distanceToSqr(bird.getOwner()) : 0;
-        double followingThreshold = birdData.followingDistanceThreshold();
+        double followingThreshold = birdData.misc().followingDistanceThreshold();
 
         if (isTame && hasOwner && isNavigating && distanceToOwnerSqr > followingThreshold) {
             stateController.setBehaviorState(BirdBehaviorState.FOLLOWING);
@@ -88,7 +88,7 @@ public class BirdBehaviorStateTicker extends AbstractBirdTicker {
 
         // 根据移动情况选择行走或空闲状态
         double movementSpeedSqr = bird.getDeltaMovement().lengthSqr();
-        double walkingThreshold = birdData.walkingSpeedThreshold();
+        double walkingThreshold = birdData.misc().walkingSpeedThreshold();
         boolean isMoving = movementSpeedSqr > walkingThreshold;
         boolean isDoneNavigating = bird.getNavigation().isDone();
 

@@ -8,7 +8,7 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathMountable;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathUseGoal;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightController;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.goal.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
@@ -959,12 +959,12 @@ public class NightHeronEntity extends PathfinderMob implements GeoEntity, Flying
 
     // ============ 朝向控制 ============
     void faceMovementDirection(Vec3 movement) {
-        BirdFlightController.faceMovement(this, movement, BirdFlightProfile.NIGHT_HERON.maxPitchDegrees());
+        BirdFlightManager.faceMovement(this, movement, BirdFlightProfile.NIGHT_HERON.maxPitchDegrees());
     }
 
     private void tickGroundMovementFacing() {
         if (this.shouldFaceGroundMovement()) {
-            BirdFlightController.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
+            BirdFlightManager.faceGroundMovement(this, this.getDeltaMovement(), 1.0E-4);
         }
     }
 
@@ -1278,7 +1278,7 @@ public class NightHeronEntity extends PathfinderMob implements GeoEntity, Flying
             return false;
         }
 
-        return BirdFlightController.shouldPlayFlyAnimation(
+        return BirdFlightManager.shouldPlayFlyAnimation(
                 this,
                 this.getBehaviorState().isAirborne(),
                 this.onGround(),

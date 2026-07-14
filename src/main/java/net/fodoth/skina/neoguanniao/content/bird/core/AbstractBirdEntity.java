@@ -143,7 +143,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 new AABB(pos.getX() - 8, pos.getY() - 4, pos.getZ() - 8,
                         pos.getX() + 8, pos.getY() + 4, pos.getZ() + 8));
 
-        return entities.size() <= birdData.spawnRarity();
+        return entities.size() <= birdData.misc().spawnRarity();
     }
 
 
@@ -314,7 +314,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     public BirdFlightProfile birdFlightProfile() {
-        return birdData.flightProfile();
+        return birdData.flying().flightProfile();
     }
 
     @Override
@@ -373,7 +373,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     }
 
     public <E extends AbstractBirdEntity<?>> PlayState movementController(AnimationState<E> animationState) {
-        return animationState.setAndContinue(getBirdData().guidePreviewAnimation().animation());
+        return animationState.setAndContinue(getBirdData().animation().guidePreviewAnimation().animation());
     }
 
     @Override

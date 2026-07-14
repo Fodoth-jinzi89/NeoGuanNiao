@@ -149,7 +149,7 @@ net.fodoth.skina.neoguanniao
 - **舒适** (`comfort`): 环境影响
 - **警觉** (`alertness`): 警戒状态
 
-#### 飞行系统 (`BirdFlightController`)
+#### 飞行系统 (`BirdFlightManager`)
 
 - Boids 群体飞行算法
 - 动态目标寻找
