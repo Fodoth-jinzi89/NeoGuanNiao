@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.entity.sparrow;
 
-import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

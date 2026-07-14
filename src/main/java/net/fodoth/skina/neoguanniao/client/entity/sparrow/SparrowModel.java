@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.entity.sparrow;
 
-import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowDefinition;
-import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowDefinition;
+import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowEntity;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.model.GeoModel;

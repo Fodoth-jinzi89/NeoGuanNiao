@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.entity.columbid;
 
-import net.fodoth.skina.neoguanniao.content.bird.columbid.AbstractColumbidEntity;
-import net.fodoth.skina.neoguanniao.content.bird.columbid.ColumbidDefinition;
+import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.AbstractColumbidEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.ColumbidDefinition;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.model.GeoModel;

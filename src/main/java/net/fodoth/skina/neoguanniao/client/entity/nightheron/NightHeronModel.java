@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.entity.nightheron;
 
-import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronDefinition;
-import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronDefinition;
+import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronEntity;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.model.GeoModel;

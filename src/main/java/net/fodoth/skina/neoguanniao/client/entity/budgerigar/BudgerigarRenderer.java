@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.entity.budgerigar;
 
-import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -1,11 +1,11 @@
 package net.fodoth.skina.neoguanniao.event;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.columbid.PigeonEntity;
-import net.fodoth.skina.neoguanniao.content.bird.columbid.SpottedDoveEntity;
-import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.PigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.SpottedDoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.world.entity.SpawnPlacementTypes;

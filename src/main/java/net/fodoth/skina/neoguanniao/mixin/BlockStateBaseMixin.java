@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.mixin;
 
-import net.fodoth.skina.neoguanniao.content.bird.flight.BirdFlightAware;
+import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;

@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.entity.columbid;
 
-import net.fodoth.skina.neoguanniao.content.bird.columbid.PigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.PigeonEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

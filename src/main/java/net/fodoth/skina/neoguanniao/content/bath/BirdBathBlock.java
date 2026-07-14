@@ -324,4 +324,6 @@ public class BirdBathBlock extends BaseEntityBlock {
             player.drop(replacement, false);
         }
     }
+
+
 }

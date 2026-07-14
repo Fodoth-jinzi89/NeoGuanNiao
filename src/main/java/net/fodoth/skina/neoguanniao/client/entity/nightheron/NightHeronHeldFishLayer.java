@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.entity.nightheron;
 
-import net.fodoth.skina.neoguanniao.content.bird.nightheron.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;

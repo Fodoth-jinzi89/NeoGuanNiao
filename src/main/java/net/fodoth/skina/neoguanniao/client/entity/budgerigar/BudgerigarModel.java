@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.entity.budgerigar;
 
-import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarDefinition;
-import net.fodoth.skina.neoguanniao.content.bird.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarDefinition;
+import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.model.GeoModel;

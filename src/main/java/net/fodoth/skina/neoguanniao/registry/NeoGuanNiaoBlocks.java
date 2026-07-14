@@ -40,9 +40,10 @@ public final class NeoGuanNiaoBlocks {
                 () -> new BirdCageBlock(
                         variant,
                         Properties.of()
-                                .strength(1.5F)
+                                .strength(1.5F, 6.0F)
                                 .sound(SoundType.WOOD)
-                                .noOcclusion()
+                                .noOcclusion().requiresCorrectToolForDrops()
+                                .destroyTime(1.5F)
                 )
         );
     }
@@ -53,10 +54,11 @@ public final class NeoGuanNiaoBlocks {
                 () -> new BirdBathBlock(
                         variant,
                         Properties.of()
-                                .strength(1.8F)
+                                .strength(1.8F, 6.0F)
                                 .sound(variant.soundType())
                                 .dynamicShape()
-                                .noOcclusion()
+                                .noOcclusion().requiresCorrectToolForDrops()
+                                .destroyTime(1.5F)
                 )
         );
     }
