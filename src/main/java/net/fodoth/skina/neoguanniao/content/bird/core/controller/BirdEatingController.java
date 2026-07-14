@@ -16,54 +16,67 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * 鸟类进食控制器。
+ * 鸟类进食控制器
  * <p>
  * 负责处理鸟类进食、喂食、信任值增长以及驯服相关逻辑。
+ * </p>
  */
 public record BirdEatingController(AbstractBirdEntity<?> bird) {
 
     /**
-     * 判断鸟类当前是否处于进食状态。
+     * 判断鸟类当前是否处于进食状态
      *
      * @return 如果正在进食返回 true
      */
     public boolean isEating() {
-        return bird.getTickController().eatingTicks > 0
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 检查进食计时器是否大于0，或行为状态是否为进食
+        return timer.getBirdEatingTicker().getTicks() > 0
                 || bird.getBehaviorStateController().getBehaviorState() == BirdBehaviorState.EATING;
     }
 
-
     /**
-     * 处理玩家喂食交互。
+     * 处理玩家喂食交互
      *
      * @param player 玩家
-     * @param hand 交互使用的手
+     * @param hand   交互使用的手
      * @return 交互结果
      */
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        // 获取玩家手中的物品
         ItemStack stack = player.getItemInHand(hand);
 
+        // 检查物品是否可食用
         if (!isEdibleFood(stack)) {
             return null;
         }
 
+        // 客户端处理
         if (bird.level().isClientSide) {
             return InteractionResult.sidedSuccess(true);
         }
 
+        // 如果正在进食，阻止重复交互
         if (isEating()) {
             return InteractionResult.SUCCESS;
         }
 
+        // 复制一份食物用于后续处理
         ItemStack eaten = stack.copy();
         eaten.setCount(1);
 
+        // 非创造模式下减少物品数量
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
 
+        // 获取鸟类数据
         BirdData data = bird.getBirdData();
 
+        // 检查驯服逻辑
         bird.getTameController().checkTame(
                 player,
                 eaten,
@@ -71,115 +84,163 @@ public record BirdEatingController(AbstractBirdEntity<?> bird) {
                 data.addTrustNearbyValue()
         );
 
+        // 开始进食动画
         startEatingFood(eaten);
 
         return InteractionResult.SUCCESS;
     }
 
-
     /**
-     * 消耗掉落物作为食物。
+     * 消耗掉落物作为食物
      *
      * @param itemEntity 掉落物实体
      */
     public void consumeItemEntity(ItemEntity itemEntity) {
+        // 获取掉落物中的物品
         ItemStack stack = itemEntity.getItem();
 
+        // 复制一份食物用于后续处理
         ItemStack eaten = stack.copy();
         eaten.setCount(1);
 
+        // 减少掉落物数量
         stack.shrink(1);
 
+        // 如果掉落物为空则移除，否则更新
         if (stack.isEmpty()) {
             itemEntity.discard();
         } else {
             itemEntity.setItem(stack);
         }
 
+        // 获取鸟类数据
         BirdData data = bird.getBirdData();
 
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 开始进食动画
         startEatingFood(eaten);
 
-        bird.getTickController().addTrust(
-                (int) (data.addTrustValue()
-                        * data.droppedItemTrustMultiplier())
-        );
+        // 增加信任值（使用掉落物信任倍率）
+        int trustAmount = (int) (data.addTrustValue() * data.droppedItemTrustMultiplier());
+        timer.getBirdTrustTicker().addTrust(trustAmount);
 
-        bird.getTickController().curiousTicks =
-                Math.max(
-                        bird.getTickController().curiousTicks,
-                        data.curiousTicksLimitForDroppedFood()
-                );
+        // 设置好奇计时器（使用掉落物好奇时长限制）
+        int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
+        int curiousLimit = data.curiousTicksLimitForDroppedFood();
+        timer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
 
-        shareTrustNearby(
-                (int) (data.addTrustNearbyValue()
-                        * data.droppedItemTrustMultiplier())
-        );
+        // 向附近同类分享信任值
+        int nearbyTrustAmount = (int) (data.addTrustNearbyValue() * data.droppedItemTrustMultiplier());
+        shareTrustNearby(nearbyTrustAmount);
     }
 
-
     /**
-     * 向附近同类鸟类共享信任值。
+     * 向附近同类鸟类共享信任值
      *
      * @param amount 增加的信任值
      */
     public void shareTrustNearby(int amount) {
+        // 获取鸟类数据
         BirdData birdData = bird.getBirdData();
-        for (AbstractBirdEntity<?> b : bird.level().getEntitiesOfClass(
-                AbstractBirdEntity.class, bird.getBoundingBox().inflate(birdData.trustShareRange()))) {
-            if (b != bird) {
-                b.getTickController().addTrust(amount);
-                b.getTickController().curiousTicks = Math.max(b.getTickController().curiousTicks, birdData.curiousTicksLimitForSharedTrust());
+
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 获取范围内的所有鸟类实体
+        double range = birdData.trustShareRange();
+        var entities = bird.level().getEntitiesOfClass(
+                AbstractBirdEntity.class,
+                bird.getBoundingBox().inflate(range)
+        );
+
+        // 遍历范围内的鸟类
+        for (AbstractBirdEntity<?> b : entities) {
+            // 排除自身
+            if (b == bird) {
+                continue;
             }
+
+            // 获取目标鸟类的计时器
+            var targetTimer = b.getTickController().getTickTimer();
+
+            // 增加信任值
+            targetTimer.getBirdTrustTicker().addTrust(amount);
+
+            // 设置好奇计时器
+            int currentCuriousTicks = targetTimer.getBirdCuriousTicker().getTicks();
+            int curiousLimit = birdData.curiousTicksLimitForSharedTrust();
+            targetTimer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
         }
     }
 
     /**
-     * 开始普通进食行为。
+     * 开始普通进食行为
      *
      * @param foodStack 食物物品
      */
     public void startEatingFood(ItemStack foodStack) {
+        // 获取鸟类数据
         BirdData birdData = bird.getBirdData();
-        startEatingBehavior(
-                birdData.eatingTicks() + bird.getRandom().nextInt(birdData.eatingTicksVariant()),
-                birdData.foodTicks() + bird.getRandom().nextInt(birdData.foodTicksVariant()),
-                birdData.eatAmount(),
-                birdData.eatSoundVolume() + bird.getRandom().nextFloat() * birdData.eatSoundVolumeVariant(),
-                birdData.eatSoundPitch() + bird.getRandom().nextFloat() * birdData.eatSoundPitchVariant()
-        );
+
+        // 计算进食参数（加上随机变化）
+        int eatingTicks = birdData.eatingTicks() + bird.getRandom().nextInt(birdData.eatingTicksVariant());
+        int foodTicks = birdData.foodTicks() + bird.getRandom().nextInt(birdData.foodTicksVariant());
+        float eatAmount = birdData.eatAmount();
+        float volume = birdData.eatSoundVolume() + bird.getRandom().nextFloat() * birdData.eatSoundVolumeVariant();
+        float pitch = birdData.eatSoundPitch() + bird.getRandom().nextFloat() * birdData.eatSoundPitchVariant();
+
+        // 开始进食行为
+        startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch);
     }
 
     /**
-     * 消耗鸟浴盆中的一份食物。
+     * 消耗鸟浴盆中的一份食物
      *
-     * @param bath 鸟浴盆方块实体
+     * @param bath        鸟浴盆方块实体
      * @param contentType 食物类型
      */
     public void consumeBirdBathServing(BirdBathBlockEntity bath, BirdBathContentType contentType) {
+        // 获取鸟类数据
+        BirdData birdData = bird.getBirdData();
+
+        // 计算进食参数（加上随机变化）
+        int eatingTicks = birdData.eatingTicks() + bird.getRandom().nextInt(birdData.eatingTicksVariant());
+        int foodTicks = birdData.foodTicks() + bird.getRandom().nextInt(birdData.foodTicksVariant());
+        float eatAmount = birdData.eatAmount();
+        float volume = birdData.eatSoundVolume() + bird.getRandom().nextFloat() * birdData.eatSoundVolumeVariant();
+        float pitch = birdData.eatSoundPitch() + bird.getRandom().nextFloat() * birdData.eatSoundPitchVariant();
+        float multiplier = birdData.eatBathMultiplier();
+
+        // 根据内容类型开始进食
         if (contentType == BirdBathContentType.BREAD) {
-            this.startEatingFood(new ItemStack(Items.BREAD));
+            // 面包使用普通食物逻辑
+            startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch, multiplier);
         } else {
-            BirdData birdData = bird.getBirdData();
-            startEatingBehavior(
-                    birdData.eatingTicks() + bird.getRandom().nextInt(birdData.eatingTicksVariant()),
-                    birdData.foodTicks() + bird.getRandom().nextInt(birdData.foodTicksVariant()),
-                    birdData.eatAmount(),
-                    birdData.eatSoundVolume() + bird.getRandom().nextFloat() * birdData.eatSoundVolumeVariant(),
-                    birdData.eatSoundPitch() + bird.getRandom().nextFloat() * birdData.eatSoundPitchVariant(), birdData.eatBathMultiplier()
-            );
+            // 其他食物类型
+            startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch, multiplier);
         }
     }
 
     /**
-     * 结束当前进食状态。
+     * 结束当前进食状态
      */
     public void clearEating() {
-        bird.getTickController().eatingTicks = 0;
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 重置进食计时器
+        timer.getBirdEatingTicker().setTicks(0);
+
+        // 如果当前状态为进食，根据大脑决策切换到合适状态
         if (bird.getBehaviorStateController().getBehaviorState() == BirdBehaviorState.EATING) {
-            bird.getBehaviorStateController().setBehaviorState(bird.getBirdBrain().wantsForage()
-                    ? BirdBehaviorState.FORAGING
-                    : BirdBehaviorState.IDLE);
+            boolean wantsForage = bird.getBirdBrain().wantsForage();
+            BirdBehaviorState nextState = wantsForage ? BirdBehaviorState.FORAGING : BirdBehaviorState.IDLE;
+            bird.getBehaviorStateController().setBehaviorState(nextState);
         }
     }
 
@@ -207,16 +268,39 @@ public record BirdEatingController(AbstractBirdEntity<?> bird) {
      * @param multiplier  全局倍率（影响所有数值参数）
      */
     private void startEatingBehavior(int eatingTicks, int foodTicks, float eatAmount, float volume, float pitch, float multiplier) {
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 计算应用倍率后的值
+        int finalEatingTicks = (int) (eatingTicks * multiplier);
+        int finalFoodTicks = (int) (foodTicks * multiplier);
+        float finalEatAmount = eatAmount * multiplier;
+        float finalVolume = volume * multiplier;
+        float finalPitch = pitch * multiplier;
+
+        // 停止导航移动
         bird.getNavigation().stop();
-        bird.getTickController().eatingTicks = (int) (eatingTicks * multiplier);
-        bird.getTickController().foodTicks = (int) (foodTicks * multiplier);
-        bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.EATING, bird.getTickController().eatingTicks);
-        bird.getBirdBrain().onEat(eatAmount * multiplier);
-        bird.playSound(SoundEvents.GENERIC_EAT, volume * multiplier, pitch * multiplier);
+
+        // 设置进食计时器和食物效果计时器
+        timer.getBirdEatingTicker().setTicks(finalEatingTicks);
+        timer.getBirdFoodTicker().setTicks(finalFoodTicks);
+
+        // 设置行为状态为进食并锁定
+        bird.getBehaviorStateController().setBehaviorStateFor(
+                BirdBehaviorState.EATING,
+                finalEatingTicks
+        );
+
+        // 通知大脑进食事件
+        bird.getBirdBrain().onEat(finalEatAmount);
+
+        // 播放进食音效
+        bird.playSound(SoundEvents.GENERIC_EAT, finalVolume, finalPitch);
     }
 
     /**
-     * 判断物品是否可作为鸟类食物。
+     * 判断物品是否可作为鸟类食物
      *
      * @param stack 物品堆
      * @return 如果可以食用返回 true
@@ -226,28 +310,41 @@ public record BirdEatingController(AbstractBirdEntity<?> bird) {
     }
 
     /**
-     * 开始鸟浴盆进食或饮水动画。
+     * 开始鸟浴盆进食或饮水动画
      *
      * @param contentType 鸟浴盆内容类型
-     * @param ticks 动画持续 Tick 数
+     * @param ticks       动画持续 Tick 数
      */
     public void startBirdBathFeedingAnimation(BirdBathContentType contentType, int ticks) {
+        // 获取计时器控制器
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+
+        // 停止导航移动
         bird.getNavigation().stop();
+
+        // 获取鸟类数据
         BirdData birdData = bird.getBirdData();
+
+        // 根据内容类型设置不同的行为状态
         if (contentType.isFood()) {
-            bird.getTickController().eatingTicks = Math.max(
-                    bird.getTickController().eatingTicks,
-                    Math.max(birdData.eatingTicksLimitForBath(), ticks)
+            // 食物类型：设置为进食状态
+            int currentEatingTicks = timer.getBirdEatingTicker().getTicks();
+            int eatingLimit = Math.max(birdData.eatingTicksLimitForBath(), ticks);
+            int finalEatingTicks = Math.max(currentEatingTicks, eatingLimit);
+
+            timer.getBirdEatingTicker().setTicks(finalEatingTicks);
+            bird.getBehaviorStateController().setBehaviorStateFor(
+                    BirdBehaviorState.EATING,
+                    finalEatingTicks
             );
-            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.EATING, bird.getTickController().eatingTicks);
         } else {
+            // 非食物类型（如饮水）：设置为好奇状态
+            int curiousLimit = Math.max(birdData.curiousTicksLimitForBath(), ticks / 2);
             bird.getBehaviorStateController().setBehaviorStateFor(
                     BirdBehaviorState.CURIOUS,
-                    Math.max(birdData.curiousTicksLimitForBath(), ticks / 2)
+                    curiousLimit
             );
         }
     }
-
-
-
 }

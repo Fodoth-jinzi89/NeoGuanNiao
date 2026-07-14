@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
-
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
@@ -10,9 +9,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.UUID;
 
 /**
- * 鸟类驯服控制器。
- *
- * <p>负责处理鸟实体的驯服流程，包括：</p>
+ * 鸟类驯服控制器
+ * <p>
+ * 负责处理鸟实体的驯服流程，包括：
  * <ul>
  *     <li>记录当前尝试驯服的玩家</li>
  *     <li>增加玩家对鸟的信任值</li>
@@ -20,42 +19,39 @@ import java.util.UUID;
  *     <li>同步驯服成功与失败事件</li>
  *     <li>执行驯服成功后的庆祝行为</li>
  * </ul>
- *
- * <p>驯服机制基于信任值系统。
+ * 驯服机制基于信任值系统。
  * 玩家通过投喂增加鸟的信任值，当信任值达到鸟种设定阈值后，
- * 鸟将被玩家驯服并建立主人关系。</p>
+ * 鸟将被玩家驯服并建立主人关系。
+ * </p>
  */
 public class BirdTameController {
 
     /**
-     * 当前正在尝试驯服该鸟的玩家 UUID。
-     *
-     * <p>用于记录最近一次参与驯服交互的玩家，
-     * 例如驯服成功后的视线追踪和庆祝行为。</p>
-     */
-    private UUID interestedPlayerUUID;
-
-    /**
-     * 驯服失败事件 ID。
-     *
-     * <p>用于通过实体事件同步客户端表现。</p>
+     * 驯服失败事件 ID，用于通过实体事件同步客户端表现
      */
     private static final byte EVENT_TAME_FAILED = 6;
 
     /**
-     * 驯服成功事件 ID。
-     *
-     * <p>用于通过实体事件同步客户端表现。</p>
+     * 驯服成功事件 ID，用于通过实体事件同步客户端表现
      */
     private static final byte EVENT_TAME_SUCCESS = 7;
 
     /**
-     * 当前控制的鸟实体。
+     * 当前正在尝试驯服该鸟的玩家 UUID
+     * <p>
+     * 用于记录最近一次参与驯服交互的玩家，
+     * 例如驯服成功后的视线追踪和庆祝行为。
+     * </p>
+     */
+    private UUID interestedPlayerUUID;
+
+    /**
+     * 当前控制的鸟实体
      */
     private final AbstractBirdEntity<?> bird;
 
     /**
-     * 创建鸟类驯服控制器。
+     * 创建鸟类驯服控制器
      *
      * @param entity 当前控制的鸟实体
      */
@@ -64,10 +60,11 @@ public class BirdTameController {
     }
 
     /**
-     * 广播驯服结果事件。
-     *
-     * <p>服务端通过实体事件通知客户端，
-     * 由客户端执行对应的驯服表现。</p>
+     * 广播驯服结果事件
+     * <p>
+     * 服务端通过实体事件通知客户端，
+     * 由客户端执行对应的驯服表现。
+     * </p>
      *
      * @param tame 是否驯服成功
      */
@@ -77,9 +74,10 @@ public class BirdTameController {
     }
 
     /**
-     * 处理客户端收到的驯服事件。
-     *
-     * <p>根据事件 ID 更新客户端实体的驯服状态。</p>
+     * 处理客户端收到的驯服事件
+     * <p>
+     * 根据事件 ID 更新客户端实体的驯服状态。
+     * </p>
      *
      * @param id 实体事件 ID
      */
@@ -92,9 +90,9 @@ public class BirdTameController {
     }
 
     /**
-     * 检查并执行驯服流程。
-     *
-     * <p>该方法会：</p>
+     * 检查并执行驯服流程
+     * <p>
+     * 该方法会：
      * <ol>
      *     <li>记录交互玩家</li>
      *     <li>播放进食行为</li>
@@ -103,26 +101,42 @@ public class BirdTameController {
      *     <li>检查是否达到驯服条件</li>
      *     <li>触发成功或失败事件</li>
      * </ol>
+     * </p>
      *
-     * @param player 当前交互玩家
-     * @param eaten 用于驯服的食物
-     * @param addTrust 增加的信任值
+     * @param player         当前交互玩家
+     * @param eaten          用于驯服的食物
+     * @param addTrust       增加的信任值
      * @param addTrustNearby 附近鸟类获得的额外信任值
      */
     public void checkTame(Player player, ItemStack eaten, int addTrust, int addTrustNearby) {
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+        var eatingController = bird.getEatingController();
+        BirdData birdData = bird.getBirdData();
+
         boolean wasTame = bird.isTame();
+
+        // 记录当前交互玩家
         setInterestedPlayerUUID(player.getUUID());
 
-        bird.getEatingController().startEatingFood(eaten);
-        bird.getTickController().addTrust(addTrust);
-        bird.getTickController().curiousTicks = Math.max(
-                bird.getTickController().curiousTicks,
-                bird.getBirdData().curiousTicksLimitForTame()
-        );
-        bird.getEatingController().shareTrustNearby(addTrustNearby);
+        // 开始进食
+        eatingController.startEatingFood(eaten);
 
+        // 增加信任值
+        timer.getBirdTrustTicker().addTrust(addTrust);
+
+        // 设置好奇计时器
+        int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
+        int curiousLimit = birdData.curiousTicksLimitForTame();
+        timer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
+
+        // 向附近鸟类分享信任值
+        eatingController.shareTrustNearby(addTrustNearby);
+
+        // 更新驯服状态和主人信息
         updateTrustedOwner(player);
 
+        // 触发驯服成功或失败事件
         if (!wasTame && bird.isTame()) {
             startTameCelebration(player);
             broadcastTameEvent(true);
@@ -132,7 +146,7 @@ public class BirdTameController {
     }
 
     /**
-     * 设置当前感兴趣玩家。
+     * 设置当前感兴趣玩家
      *
      * @param interestedPlayerUUID 玩家 UUID
      */
@@ -141,7 +155,7 @@ public class BirdTameController {
     }
 
     /**
-     * 获取当前感兴趣玩家 UUID。
+     * 获取当前感兴趣玩家 UUID
      *
      * @return 玩家 UUID，可能为 {@code null}
      */
@@ -150,16 +164,23 @@ public class BirdTameController {
     }
 
     /**
-     * 更新鸟的驯服状态和主人信息。
-     *
-     * <p>当信任值达到驯服阈值时执行驯服；
-     * 如果已经驯服但尚未设置主人，则补充主人 UUID。</p>
+     * 更新鸟的驯服状态和主人信息
+     * <p>
+     * 当信任值达到驯服阈值时执行驯服；
+     * 如果已经驯服但尚未设置主人，则补充主人 UUID。
+     * </p>
      *
      * @param player 当前驯服玩家
      */
     public void updateTrustedOwner(Player player) {
-        if (!bird.isTame()
-                && bird.getTickController().trustTicks >= bird.getBirdData().trustTameThreshold()) {
+        var timer = bird.getTickController().getTickTimer();
+        BirdData birdData = bird.getBirdData();
+
+        // 检查信任值是否达到驯服阈值
+        int trustTicks = timer.getBirdTrustTicker().getTicks();
+        int tameThreshold = birdData.trustTameThreshold();
+
+        if (!bird.isTame() && trustTicks >= tameThreshold) {
             bird.tame(player);
         } else if (bird.isTame() && bird.getOwner() == null) {
             bird.setOwnerUUID(player.getUUID());
@@ -167,47 +188,55 @@ public class BirdTameController {
     }
 
     /**
-     * 开始驯服成功后的庆祝行为。
-     *
-     * <p>清理当前进食状态，停止移动，
-     * 并根据鸟种配置进入短暂的好奇庆祝状态。</p>
+     * 开始驯服成功后的庆祝行为
+     * <p>
+     * 清理当前进食状态，停止移动，
+     * 并根据鸟种配置进入短暂的好奇庆祝状态。
+     * </p>
      *
      * @param player 驯服玩家
      */
     public void startTameCelebration(Player player) {
-        bird.getEatingController().clearEating();
+        var tickController = bird.getTickController();
+        var timer = tickController.getTickTimer();
+        var eatingController = bird.getEatingController();
+        var stateController = bird.getBehaviorStateController();
+        BirdData birdData = bird.getBirdData();
+        var random = bird.getRandom();
+
+        // 清理进食状态并停止移动
+        eatingController.clearEating();
         bird.getNavigation().stop();
 
-        BirdData birdData = bird.getBirdData();
+        // 计算庆祝行为持续时长
+        int postTameActionTicks = birdData.tameCelebrationPostTameActionTicksMin()
+                + random.nextInt(birdData.tameCelebrationPostTameActionTicksVariance());
 
-        bird.getTickController().postTameActionTicks =
-                birdData.tameCelebrationPostTameActionTicksMin()
-                        + bird.getRandom().nextInt(birdData.tameCelebrationPostTameActionTicksVariance());
+        // 设置各种计时器
+        timer.getBirdPostTameActionTicker().setTicks(postTameActionTicks);
+        timer.getBirdPostTameActionSwapTicker().setTicks(birdData.tameCelebrationPostTameActionSwapTicks());
 
-        bird.getTickController().postTameActionSwapTicks =
-                birdData.tameCelebrationPostTameActionSwapTicks();
+        // 更新好奇计时器
+        int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
+        int curiousLimit = birdData.tameCelebrationCuriousTicks();
+        timer.getBirdCuriousTicker().setTicks(Math.max(currentCuriousTicks, curiousLimit));
 
-        bird.getTickController().curiousTicks =
-                Math.max(
-                        bird.getTickController().curiousTicks,
-                        birdData.tameCelebrationCuriousTicks()
-                );
+        // 重置空闲动画计时器
+        timer.getBirdIdleAnimationTicker().setTicks(0);
 
-        bird.getTickController().idleAnimationTicks = 0;
+        // 更新食物效果计时器
+        int currentFoodTicks = timer.getBirdFoodTicker().getTicks();
+        int foodTicks = birdData.tameCelebrationFoodTicks();
+        timer.getBirdFoodTicker().setTicks(Math.max(currentFoodTicks, foodTicks));
 
-        bird.getTickController().foodTicks =
-                Math.max(
-                        bird.getTickController().foodTicks,
-                        birdData.tameCelebrationFoodTicks()
-                );
+        // 再次重置空闲动画计时器（确保清空）
+        timer.getBirdIdleAnimationTicker().setTicks(0);
 
-        bird.getTickController().behaviorStateLockTicks = 0;
+        // 设置为好奇状态
+        int behaviorTicks = birdData.tameCelebrationBehaviorStateTicks();
+        stateController.setBehaviorStateFor(BirdBehaviorState.CURIOUS, behaviorTicks);
 
-        bird.getBehaviorStateController().setBehaviorStateFor(
-                BirdBehaviorState.CURIOUS,
-                birdData.tameCelebrationBehaviorStateTicks()
-        );
-
+        // 看向玩家
         bird.getLookControl().setLookAt(player, 35.0F, 35.0F);
     }
 }

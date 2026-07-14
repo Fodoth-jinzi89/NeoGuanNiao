@@ -229,7 +229,9 @@ public record BirdData(
         long activeStartTime,
         long activeEndTime,
 
-        int maxTurns
+        int maxTurns,
+
+        float mutantChance
 
 
 
@@ -436,7 +438,8 @@ public record BirdData(
 
                 23000L,
                 11500L,
-                10
+                10,
+                0.05F
 
 
         );

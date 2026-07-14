@@ -186,21 +186,39 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     }
 
     @Override
-    public @Nullable T getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob mate) {
+    public @Nullable T getBreedOffspring(
+            @NotNull ServerLevel level,
+            @NotNull AgeableMob mate
+    ) {
         T child = this.createChild(level);
+
         if (child != null) {
             this.initializeChild(child);
-            child.birdModelController.randomizeSkinVariant();
+
+            if (mate instanceof AbstractBirdEntity<?> other) {
+                child.birdModelController.inheritSkinVariant(
+                        this,
+                        other
+                );
+            } else {
+                child.birdModelController.randomizeSkinVariant();
+            }
+
+
             float mateScale = mate instanceof AbstractBirdEntity<?> other
                     ? other.getIndividualModelScale()
                     : this.getIndividualModelScale();
 
-            child.setIndividualModelScale(BirdModelScale.inheritIndividualScale(
-                    child.getRandom(),
-                    this.getIndividualModelScale(),
-                    mateScale,
-                    child.modelScaleProfile()));
+            child.setIndividualModelScale(
+                    BirdModelScale.inheritIndividualScale(
+                            child.getRandom(),
+                            this.getIndividualModelScale(),
+                            mateScale,
+                            child.modelScaleProfile()
+                    )
+            );
         }
+
         return child;
     }
 
@@ -261,8 +279,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         birdBrain.save(compoundTag);
-        compoundTag.putInt("BirdTrustTicks", birdTickController.trustTicks);
-        compoundTag.putInt("BirdCuriousTicks", birdTickController.curiousTicks);
+        compoundTag.putInt("BirdTrustTicks", birdTickController.getTickTimer().getBirdTrustTicker().getTicks());
+        compoundTag.putInt("BirdCuriousTicks", birdTickController.getTickTimer().getBirdCuriousTicker().getTicks());
         compoundTag.putInt("BirdSkinVariant", birdModelController.getSkinVariant());
         BirdModelScale.save(compoundTag, this.getIndividualModelScale(), this.modelScaleProfile());
         if (birdTameController.getInterestedPlayerUUID() != null) {
@@ -274,8 +292,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         birdBrain.load(compoundTag);
-        birdTickController.trustTicks = compoundTag.getInt("BirdTrustTicks");
-        birdTickController.curiousTicks = compoundTag.getInt("BirdCuriousTicks");
+        birdTickController.getTickTimer().getBirdTrustTicker().setTicks(compoundTag.getInt("BirdTrustTicks"));
+        birdTickController.getTickTimer().getBirdCuriousTicker().setTicks(compoundTag.getInt("BirdCuriousTicks"));
         if (compoundTag.contains("BirdSkinVariant", CompoundTag.TAG_INT)) {
             birdModelController.setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
         } else {
