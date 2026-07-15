@@ -3,13 +3,15 @@ package net.fodoth.skina.neoguanniao.client;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.client.bath.BirdBathItemRenderer;
 import net.fodoth.skina.neoguanniao.client.bath.BirdBathRenderer;
+import net.fodoth.skina.neoguanniao.client.bird.BirdModelRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageItemRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
-import net.fodoth.skina.neoguanniao.client.entity.budgerigar.BudgerigarRenderer;
-import net.fodoth.skina.neoguanniao.client.entity.columbid.PigeonRenderer;
-import net.fodoth.skina.neoguanniao.client.entity.columbid.SpottedDoveRenderer;
-import net.fodoth.skina.neoguanniao.client.entity.nightheron.NightHeronRenderer;
-import net.fodoth.skina.neoguanniao.client.entity.sparrow.SparrowRenderer;
+import net.fodoth.skina.neoguanniao.client.old.budgerigar.BudgerigarRenderer;
+import net.fodoth.skina.neoguanniao.client.old.columbid.PigeonRenderer;
+import net.fodoth.skina.neoguanniao.client.old.columbid.SpottedDoveRenderer;
+import net.fodoth.skina.neoguanniao.client.old.nightheron.NightHeronRenderer;
+import net.fodoth.skina.neoguanniao.client.old.sparrow.SparrowRenderer;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -57,7 +59,10 @@ public final class NeoGuanNiaoClientModEvents {
                 PigeonRenderer::new
         );
 
-
+        event.registerEntityRenderer(
+                NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
+                (context -> new BirdModelRenderer<>(context, NeoGuanNiaoBirdData.BUDGERIGAR.get()))
+        );
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),

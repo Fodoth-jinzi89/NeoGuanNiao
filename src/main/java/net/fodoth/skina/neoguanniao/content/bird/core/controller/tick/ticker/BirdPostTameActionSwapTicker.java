@@ -11,14 +11,13 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
  * 该计时器在服务端和客户端均执行。
  * </p>
  */
-public class BirdPostTameActionSwapTicker extends AbstractBirdTicker {
+public class BirdPostTameActionSwapTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 创建驯服后行为切换计时器（在服务端和客户端均执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdPostTameActionSwapTicker(AbstractBirdEntity<?> bird) {
-        super(bird);
+    public BirdPostTameActionSwapTicker() {
+        super();
     }
 }

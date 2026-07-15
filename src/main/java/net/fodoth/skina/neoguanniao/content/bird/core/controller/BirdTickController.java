@@ -22,25 +22,20 @@ import net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.BirdTickTi
  * 不直接定义具体行为规则，行为选择由各个 Ticker 负责。
  * </p>
  */
-public class BirdTickController {
-
-    /**
-     * 行为状态锁定剩余 Tick 数
-     */
-    public int behaviorStateLockTicks;
+public class BirdTickController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>  {
 
     /**
      * 鸟类 Tick 计时器，管理所有基于 Tick 的计时器
      */
-    private final BirdTickTimer tickTimer;
+    private final BirdTickTimer<T> TICK_TIMER;
 
-    /**
-     * 创建鸟类 Tick 生命周期控制器
-     *
-     * @param entity 鸟类实体
-     */
-    public BirdTickController(AbstractBirdEntity<?> entity) {
-        this.tickTimer = new BirdTickTimer(entity);
+    public BirdTickController() {
+        this.TICK_TIMER = new BirdTickTimer<>();
+    }
+
+    @Override
+    protected void onAttach() {
+        TICK_TIMER.attach(bird());
     }
 
     /**
@@ -50,7 +45,7 @@ public class BirdTickController {
      * </p>
      */
     public void tick() {
-        tickTimer.runTick();
+        TICK_TIMER.tick();
     }
 
     /**
@@ -60,7 +55,7 @@ public class BirdTickController {
      * </p>
      */
     public void tickClient() {
-        tickTimer.runClientTick();
+        TICK_TIMER.tickClient();
     }
 
     /**
@@ -68,7 +63,7 @@ public class BirdTickController {
      *
      * @return 鸟类 Tick 计时器实例
      */
-    public BirdTickTimer getTickTimer() {
-        return tickTimer;
+    public BirdTickTimer<?> getTickTimer() {
+        return TICK_TIMER;
     }
 }

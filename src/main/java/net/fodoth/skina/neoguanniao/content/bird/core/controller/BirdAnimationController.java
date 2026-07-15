@@ -10,108 +10,191 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * 鸟类动画控制器
- * <p>
- * 负责管理 GeckoLib 动画实例、注册动画控制器，并根据鸟类当前状态
- * 判断应播放的动画类型。
- * </p>
  *
+ * <p>
+ * 负责管理 GeckoLib 动画实例、注册动画控制器，
+ * 并根据鸟类当前状态判断应播放的动画类型。
+ * </p>
  */
-public class BirdAnimationController {
+public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T> {
 
     /**
      * 当前待播放的待机动画
      */
-    public RawAnimation currentIdleAnimation;
+    private RawAnimation currentIdleAnimation;
+
+    /**
+     * 当前引导预览动画
+     */
+    private RawAnimation currentGuideAnimation;
+
+
 
     /**
      * GeckoLib 动画实例缓存
      */
-    public final AnimatableInstanceCache cache;
+    private AnimatableInstanceCache cache;
 
-    /**
-     * 关联的鸟类实体
-     */
-    private final AbstractBirdEntity<?> bird;
 
-    /**
-     * 构造鸟类动画控制器
-     *
-     * @param entity 鸟类实体，不能为 null
-     */
-    public BirdAnimationController(AbstractBirdEntity<?> entity) {
-        this.bird = entity;
-        this.cache = GeckoLibUtil.createInstanceCache(bird);
-        this.currentIdleAnimation = pickIdleAnimation();
+    public BirdAnimationController() {
     }
 
+
     /**
-     * 获取当前待播放的待机动画
-     * <p>
-     * 如果当前未指定待机动画，则返回默认空动画。
-     * </p>
+     * Controller 绑定实体后的初始化
+     */
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+
+        this.cache = GeckoLibUtil.createInstanceCache(bird());
+
+        this.currentIdleAnimation = pickIdleAnimation();
+
+        setGuidePreviewAnimation(null);
+    }
+
+
+    /**
+     * 获取 GeckoLib 动画缓存
+     */
+    public AnimatableInstanceCache cache() {
+        if (cache == null) {
+            throw new IllegalStateException(
+                    "BirdAnimationController is not attached"
+            );
+        }
+
+        return cache;
+    }
+
+
+    /**
+     * 获取当前待机动画
      *
-     * @return 当前待机动画，不为 null
+     * @return 当前待机动画
      */
     public RawAnimation pickIdleAnimation() {
-        return currentIdleAnimation == null
-                ? BirdGuidePreviewAnimation.NONE.animation()
-                : currentIdleAnimation;
+
+        var bird = bird();
+
+        var tickController = bird.getTickController();
+        var tickTimer = tickController.getTickTimer();
+        var birdData = bird.getbirdData();
+        var animationDatum = birdData.animation();
+
+        int idleTicker = tickTimer.getBirdIdleAnimationTicker().getTicks();
+        int trustTicker = tickTimer.getBirdTrustTicker().getTicks();
+        int curiousTicker = tickTimer.getBirdCuriousTicker().getTicks();
+
+
+        if (idleTicker <= 0) {
+
+            int randomMax = getIdleAnimationRollMax(
+                    trustTicker,
+                    curiousTicker
+            );
+
+            int roll = bird.getRandom().nextInt(randomMax);
+
+
+            if (roll == 0) {
+
+                this.currentIdleAnimation =
+                        animationDatum.animationMap().get("preen");
+
+                int duration =
+                        animationDatum.preenDuration()
+                                + bird.getRandom()
+                                .nextInt(animationDatum.preenDurationVariance());
+
+                tickTimer.getBirdIdleAnimationTicker()
+                        .setTicks(duration);
+
+
+            } else if (
+                    roll > 2
+                            || shouldUseIdleAnimation(
+                            trustTicker,
+                            curiousTicker
+                    )
+            ) {
+
+                this.currentIdleAnimation =
+                        animationDatum.animationMap().get("idle");
+
+
+                int duration =
+                        animationDatum.idleDuration()
+                                + bird.getRandom()
+                                .nextInt(animationDatum.idleDurationVariance());
+
+
+                tickTimer.getBirdIdleAnimationTicker()
+                        .setTicks(duration);
+
+
+            } else {
+
+                int duration =
+                        animationDatum.otherDuration()
+                                + bird.getRandom()
+                                .nextInt(animationDatum.otherDurationVariance());
+
+
+                tickTimer.getBirdIdleAnimationTicker()
+                        .setTicks(duration);
+            }
+        }
+
+
+        return currentIdleAnimation;
     }
+
 
     /**
      * 注册 GeckoLib 动画控制器
-     * <p>
-     * 为鸟类实体注册名为 "movement" 的动画控制器，
-     * 过渡时间为 4 帧。
-     * </p>
-     *
-     * @param controllers 动画控制器注册器，用于接收注册的控制器
      */
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(bird, "movement", 4, bird::movementController));
+    public void registerControllers(
+            AnimatableManager.ControllerRegistrar controllers
+    ) {
+        controllers.add(
+                new AnimationController<>(
+                        bird(),
+                        "movement",
+                        4,
+                        bird()::movementController
+                )
+        );
     }
 
+
     /**
-     * 判断当前是否应该播放飞行动画
-     * <p>
-     * 综合考虑鸟类的空中状态、地面状态、移动速度等因素，
-     * 决定是否应该播放飞行动画。
-     * </p>
-     *
-     * @return 如果应该播放飞行动画返回 true，否则返回 false
+     * 判断是否播放飞行动画
      */
     public boolean shouldPlayFlyAnimation() {
-        return shouldPlayFlyAnimation(bird,
-                bird.getBehaviorStateController().getBehaviorState().isAirborne(),
+
+        var bird = bird();
+
+        return shouldPlayFlyAnimation(
+                bird,
+                bird.getBehaviorStateController()
+                        .getBehaviorState()
+                        .isAirborne(),
+
                 bird.onGround(),
+
                 bird.isInWater(),
+
                 bird.getDeltaMovement(),
-                bird.getBirdData().flying().airborneGraceTicks());
+
+                bird.getbirdData()
+                        .flying()
+                        .airborneGraceTicks()
+        );
     }
 
-    /**
-     * 判断是否应该播放飞行动画（静态方法）
-     * <p>
-     * 核心逻辑：
-     * <ul>
-     *   <li>如果飞行功能未激活且未处于空中状态：</li>
-     *   <ul>
-     *     <li>在地面时不播放飞行</li>
-     *     <li>处于空中宽限期则播放</li>
-     *     <li>非无重力且未着陆/未逃离时，根据下落速度和水平移动判断</li>
-     *   </ul>
-     *   <li>其他情况默认播放飞行动画</li>
-     * </ul>
-     * </p>
-     *
-     * @param bird 鸟类实体，必须实现 {@link BirdFlightAware} 接口
-     * @param airborneState 是否处于空中状态
-     * @param onGround 是否在地面上
-     * @param noGravity 是否处于无重力状态（如水中）
-     * @param movement 当前移动向量
-     * @param airborneGraceTicks 空中宽限期（刻数），用于平滑过渡
-     * @return 如果应该播放飞行动画返回 true，否则返回 false
-     */
+
     private static boolean shouldPlayFlyAnimation(
             BirdFlightAware bird,
             boolean airborneState,
@@ -120,33 +203,96 @@ public class BirdAnimationController {
             Vec3 movement,
             int airborneGraceTicks
     ) {
-        // 飞行功能未激活且未处于空中状态
+
         if (!bird.isBirdFlightActive() && !airborneState) {
-            // 在地面上不播放飞行动画
+
             if (onGround) {
                 return false;
             }
 
-            // 空中宽限期允许继续播放飞行动画
+
             if (airborneGraceTicks > 0) {
                 return true;
             }
 
-            // 非无重力状态且未着陆未逃离时，根据移动判断
-            if (!noGravity && !bird.isBirdLanding() && !bird.isBirdEscaping()) {
-                // 下落速度不是特别快时播放飞行
+
+            if (!noGravity
+                    && !bird.isBirdLanding()
+                    && !bird.isBirdEscaping()) {
+
+
                 if (movement.y > -0.85) {
                     return true;
                 }
-                // 有水平移动时播放飞行
+
+
                 return movement.lengthSqr() > 0.001;
             }
 
-            // 其他情况默认播放飞行
+
             return true;
         }
 
-        // 飞行功能激活或处于空中状态，默认播放飞行
+
         return true;
+    }
+
+
+    public void setGuidePreviewAnimation(
+            RawAnimation guidePreviewAnimation
+    ) {
+
+        this.currentGuideAnimation =
+                guidePreviewAnimation == null
+                        ? BirdGuidePreviewAnimation.NONE.animation()
+                        : guidePreviewAnimation;
+    }
+
+
+    private int getIdleAnimationRollMax(
+            int trustTicker,
+            int curiousTicker
+    ) {
+
+        var birdData = bird().getbirdData();
+        var animationDatum = birdData.animation();
+
+
+        boolean isCuriousAndTrusting =
+                trustTicker <= animationDatum.trustTickerMaxLimit()
+                        && curiousTicker <= 0;
+
+
+        return isCuriousAndTrusting
+                ? animationDatum.maxCuriousAndTrustingIndex()
+                : animationDatum.minCuriousAndTrustingIndex();
+    }
+
+
+    private boolean shouldUseIdleAnimation(
+            int trustTicker,
+            int curiousTicker
+    ) {
+
+        var animationDatum =
+                bird().getbirdData().animation();
+
+
+        return trustTicker <= animationDatum.trustTickerLimit()
+                && curiousTicker <= 0;
+    }
+
+
+    @Override
+    public void tick() {
+        super.tick();
+    }
+
+    public RawAnimation getCurrentGuideAnimation() {
+        return currentGuideAnimation;
+    }
+
+    public AnimatableInstanceCache getCache() {
+        return cache;
     }
 }

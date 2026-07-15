@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelAndTextureDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
@@ -25,9 +25,8 @@ import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.
  * 确保模型属性能够在客户端与服务端之间同步。
  * </p>
  *
- * @param bird 当前控制的鸟实体
  */
-public record BirdModelController(AbstractBirdEntity<?> bird) {
+public class BirdModelController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
     /**
      * 随机生成并设置当前鸟个体的模型缩放比例
@@ -59,17 +58,6 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
     }
 
     /**
-     * 获取当前鸟使用的纹理资源路径
-     *
-     * @return 鸟模型对应的纹理资源位置
-     */
-    public ResourceLocation getTextureResource() {
-        BirdData birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
-        return modelDatum.location();
-    }
-
-    /**
      * 获取当前鸟种的模型缩放配置
      * <p>
      * 不同鸟种可以通过配置文件定义不同的体型变化范围。
@@ -78,8 +66,8 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @return 模型缩放配置
      */
     public BirdModelScaleProfile modelScaleProfile() {
-        BirdData birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
+        BirdData birdData = bird.getbirdData();
+        BirdModelAndTextureDatum modelDatum = birdData.model();
         return modelDatum.modelScaleProfile();
     }
 
@@ -108,8 +96,8 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @return 皮肤变体索引
      */
     public int getSkinVariant() {
-        BirdData birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
+        BirdData birdData = bird.getbirdData();
+        BirdModelAndTextureDatum modelDatum = birdData.model();
         int skinCount = modelDatum.skinVariants();
         int variant = bird.getEntityData().get(SKIN_VARIANT);
         return Mth.clamp(variant, 0, skinCount - 1);
@@ -124,8 +112,8 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      * @param variant 皮肤变体索引
      */
     public void setSkinVariant(int variant) {
-        BirdData birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
+        BirdData birdData = bird.getbirdData();
+        BirdModelAndTextureDatum modelDatum = birdData.model();
         int skinCount = modelDatum.skinVariants();
         int clamped = Mth.clamp(variant, 0, skinCount - 1);
         bird.getEntityData().set(SKIN_VARIANT, clamped);
@@ -140,8 +128,8 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
      */
     public void randomizeSkinVariant() {
         var random = bird.getRandom();
-        BirdData birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
+        BirdData birdData = bird.getbirdData();
+        BirdModelAndTextureDatum modelDatum = birdData.model();
         int skinCount = modelDatum.skinVariants();
         int variant = random.nextInt(skinCount);
         setSkinVariant(variant);
@@ -157,8 +145,8 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
             AbstractBirdEntity<?> parent,
             AbstractBirdEntity<?> mate
     ) {
-        var birdData = bird.getBirdData();
-        BirdModelDatum modelDatum = birdData.model();
+        var birdData = bird.getbirdData();
+        BirdModelAndTextureDatum modelDatum = birdData.model();
         BirdMiscDatum miscDatum = birdData.misc();
 
         int variants = modelDatum.skinVariants();
@@ -183,5 +171,13 @@ public record BirdModelController(AbstractBirdEntity<?> bird) {
         int mateSkin = mate.getModelController().getSkinVariant();
         int inheritedSkin = random.nextBoolean() ? parentSkin : mateSkin;
         setSkinVariant(inheritedSkin);
+    }
+
+
+    public ResourceLocation textureForVariant(int variant) {
+        var l = bird.getbirdData().model().textureLocations();
+        return variant >= 0 && variant < l.length
+                ? l[variant]
+                : l[0];
     }
 }

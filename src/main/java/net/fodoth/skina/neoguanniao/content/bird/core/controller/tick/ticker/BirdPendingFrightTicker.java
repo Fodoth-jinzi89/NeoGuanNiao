@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdPendingFrightTicker extends AbstractBirdTicker {
+public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 待处理受惊的持续时间
@@ -24,10 +24,9 @@ public class BirdPendingFrightTicker extends AbstractBirdTicker {
     /**
      * 创建待处理受惊计时器（仅在服务端执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdPendingFrightTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+    public BirdPendingFrightTicker() {
+        super( true, false);
     }
 
     /**
@@ -44,7 +43,7 @@ public class BirdPendingFrightTicker extends AbstractBirdTicker {
         }
 
         var frightController = bird.getFrightController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
 
         // 减少计时器
         --ticks;

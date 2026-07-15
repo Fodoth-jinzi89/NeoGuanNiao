@@ -23,6 +23,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoSoundEvents.SOUND_EVENTS.register(modEventBus);
         NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         NeoGuanNiaoComponents.DATA_COMPONENTS.register(modEventBus);
+        NeoGuanNiaoBirdData.BIRD_DATA.register(modEventBus);
     }
 
 }

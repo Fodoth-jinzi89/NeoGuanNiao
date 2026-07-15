@@ -2,25 +2,20 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 
 /**
  * 鸟类行为状态计时器
  * <p>
- * 负责在服务端更新并修正鸟类的默认行为状态。
+ * 负责更新并修正鸟类的默认行为状态。
  * 当没有特殊行为（进食、飞行、受惊等）占用时，
  * 根据环境条件、驯服状态和移动情况选择合适的状态。
  * </p>
  */
-public class BirdBehaviorStateTicker extends AbstractBirdTicker {
+public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
-    /**
-     * 创建行为状态计时器（仅在服务端执行）
-     *
-     * @param bird 鸟类实体
-     */
-    public BirdBehaviorStateTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+
+    public BirdBehaviorStateTicker() {
+        super();
     }
 
     /**
@@ -42,11 +37,9 @@ public class BirdBehaviorStateTicker extends AbstractBirdTicker {
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
         var routineController = bird.getRoutineController();
-        BirdData birdData = bird.getBirdData();
-
-        // 获取当前行为状态和计时器状态
-        BirdBehaviorState currentState = stateController.getBehaviorState();
-        AbstractBirdTicker postTameActionTicker = timer.getBirdPostTameActionTicker();
+        var birdData = bird.getbirdData();
+        var currentState = stateController.getBehaviorState();
+        var postTameActionTicker = timer.getBirdPostTameActionTicker();
 
         // 只有在无特殊行为占用时才修正状态
         boolean hasNoSpecialState = ticks <= 0

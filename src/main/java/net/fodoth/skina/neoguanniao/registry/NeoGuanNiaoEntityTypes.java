@@ -1,10 +1,10 @@
 package net.fodoth.skina.neoguanniao.registry;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.PigeonEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.SpottedDoveEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -23,6 +23,9 @@ public final class NeoGuanNiaoEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<BudgerigarEntity>> BUDGERIGAR;
     public static final DeferredHolder<EntityType<?>, EntityType<SpottedDoveEntity>> SPOTTED_DOVE;
     public static final DeferredHolder<EntityType<?>, EntityType<PigeonEntity>> PIGEON;
+
+
+    public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity>> NEO_BUDGERIGAR;
 
     private NeoGuanNiaoEntityTypes() {
     }
@@ -73,6 +76,13 @@ public final class NeoGuanNiaoEntityTypes {
         PIGEON = registerCreature(
                 "pigeon",
                 PigeonEntity::new,
+                0.4F,
+                0.54F
+        );
+
+        NEO_BUDGERIGAR = registerCreature(
+                "neo_budgerigar",
+                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity::new,
                 0.4F,
                 0.54F
         );

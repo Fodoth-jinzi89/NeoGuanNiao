@@ -19,9 +19,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
  * 而是为 AI、Tick 系统等提供当前环境状态查询。
  * </p>
  *
- * @param bird 当前控制的鸟实体
  */
-public record BirdRoutineController(AbstractBirdEntity<?> bird) {
+public class BirdRoutineController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
     /**
      * Minecraft 世界一天的 Tick 长度
@@ -38,7 +37,7 @@ public record BirdRoutineController(AbstractBirdEntity<?> bird) {
      * @return 当前是否为活动时间
      */
     public boolean isActiveTime() {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         long activeStart = miscDatum.activeStartTime();
         long activeEnd = miscDatum.activeEndTime();
@@ -57,7 +56,7 @@ public record BirdRoutineController(AbstractBirdEntity<?> bird) {
      * @return 当前是否为栖息时间
      */
     public boolean isRoostTime() {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         long activeStart = miscDatum.activeStartTime();
         long activeEnd = miscDatum.activeEndTime();

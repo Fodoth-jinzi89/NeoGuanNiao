@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdFlyingTicker extends AbstractBirdTicker {
+public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 当前飞行持续剩余 Tick 数
@@ -49,10 +49,9 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
     /**
      * 创建飞行计时器（仅在服务端执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdFlyingTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+    public BirdFlyingTicker() {
+        super(true, false);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
 
         var flyingController = bird.getFlyingController();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
         var random = bird.getRandom();
@@ -133,7 +132,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
     private void tickFlight() {
         var flyingController = bird.getFlyingController();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 飞行未激活时重置状态
@@ -278,7 +277,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
      * @return 期望移动速度向量
      */
     private @NotNull Vec3 getDesired(Vec3 toTarget, Vec3 horizontalDirection, double speed) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird.getFlyingController();
 
@@ -319,7 +318,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
      * @return 当前飞行速度
      */
     private double getSpeed(double horizontalDistance) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird.getFlyingController();
 
@@ -359,7 +358,7 @@ public class BirdFlyingTicker extends AbstractBirdTicker {
             return;
         }
 
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         int chance = bird.isTame()
                 ? flyingDatum.ambientAirCruiseChanceTame()

@@ -14,15 +14,14 @@ import net.minecraft.util.Mth;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdTrustTicker extends AbstractBirdTicker {
+public class BirdTrustTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 创建信任值计时器（仅在服务端执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdTrustTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+    public BirdTrustTicker() {
+        super(true, false);
     }
 
     /**
@@ -34,7 +33,7 @@ public class BirdTrustTicker extends AbstractBirdTicker {
      * @param amount 增加的信任值
      */
     public void addTrust(int amount) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         int trustLimit = birdData.tame().trustTicksLimit();
         ticks = Mth.clamp(ticks + amount, 0, trustLimit);
     }

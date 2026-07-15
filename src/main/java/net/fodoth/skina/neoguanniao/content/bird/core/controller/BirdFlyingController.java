@@ -17,25 +17,35 @@ import net.minecraft.world.phys.Vec3;
  * 负责管理鸟类飞行状态、飞行目标、起飞、巡航、降落以及飞行朝向等逻辑。
  * </p>
  */
-public class BirdFlyingController {
+public class BirdFlyingController<T extends AbstractBirdEntity<T>>
+        extends AbstractBirdController<T> {
 
     public boolean isEscapeFlightActive;
     public boolean isLandingFlight;
     public Vec3 flightTarget;
-    private final AbstractBirdEntity<?> bird;
 
-    /**
-     * 创建鸟类飞行控制器
-     *
-     * @param entity 鸟类实体
-     */
-    public BirdFlyingController(AbstractBirdEntity<?> entity) {
-        this.bird = entity;
+
+    public BirdFlyingController() {
         this.isEscapeFlightActive = false;
         this.isLandingFlight = false;
-        BirdData birdData = bird.getBirdData();
+        this.flightTarget = null;
+    }
+
+
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+
+        BirdData birdData = bird().getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
-        bird.setMoveControl(new FlyingMoveControl(bird, miscDatum.maxTurns(), true));
+
+        bird().setMoveControl(
+                new FlyingMoveControl(
+                        bird(),
+                        miscDatum.maxTurns(),
+                        true
+                )
+        );
     }
 
     /**
@@ -91,7 +101,7 @@ public class BirdFlyingController {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -121,7 +131,7 @@ public class BirdFlyingController {
      * @return 延迟 Tick 数
      */
     private int nextHoverRetargetDelay() {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         return flyingDatum.hoverRetargetMinDelay() + bird.getRandom().nextInt(flyingDatum.hoverRetargetDelayVariance());
     }
@@ -134,7 +144,7 @@ public class BirdFlyingController {
     public void startFlybyFlight(Vec3 target) {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -172,7 +182,7 @@ public class BirdFlyingController {
      */
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
         if (standPosition != null && !isFlightInProgress()) {
-            BirdData birdData = bird.getBirdData();
+            BirdData birdData = bird.getbirdData();
             BirdFlyingDatum flyingDatum = birdData.flying();
             BirdMiscDatum miscDatum = birdData.misc();
 
@@ -205,7 +215,7 @@ public class BirdFlyingController {
     public void finishFlight() {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -247,7 +257,7 @@ public class BirdFlyingController {
             this.extendCruiseAfterUnsafeLanding();
         } else {
             var timer = bird.getTickController().getTickTimer();
-            BirdData birdData = bird.getBirdData();
+            BirdData birdData = bird.getbirdData();
             BirdFlyingDatum flyingDatum = birdData.flying();
 
             isLandingFlight = true;
@@ -265,7 +275,7 @@ public class BirdFlyingController {
      */
     public void extendCruiseAfterUnsafeLanding() {
         var timer = bird.getTickController().getTickTimer();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         isLandingFlight = false;
@@ -294,7 +304,7 @@ public class BirdFlyingController {
      * @return 巡航目标位置
      */
     public Vec3 findAirCruiseTarget(boolean fleeing) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         Vec3 direction;
@@ -325,7 +335,7 @@ public class BirdFlyingController {
      * @return 降落目标；如果不存在返回 {@code null}
      */
     public Vec3 findLandingTarget() {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         Vec3 sharedLanding = BirdFlightTargeting.findNearestDryLandingTarget(
@@ -394,7 +404,7 @@ public class BirdFlyingController {
      * @return 调整后的飞行目标
      */
     private Vec3 clampFlightTarget(Vec3 target) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         double y = Mth.clamp(
                 target.y,
@@ -441,7 +451,7 @@ public class BirdFlyingController {
      * @param movement 飞行运动向量
      */
     public void faceFlightDirection(Vec3 movement) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdFlightManager.faceMovement(bird, movement, flyingDatum.flightProfile().maxPitchDegrees());
     }
@@ -457,7 +467,7 @@ public class BirdFlyingController {
             if (!state.isAirborne() && state != BirdBehaviorState.EATING
                     && state != BirdBehaviorState.PREENING && state != BirdBehaviorState.DANCING
                     && state != BirdBehaviorState.SLEEPING && state != BirdBehaviorState.ROOSTING) {
-                BirdData birdData = bird.getBirdData();
+                BirdData birdData = bird.getbirdData();
                 BirdMiscDatum miscDatum = birdData.misc();
                 return bird.getDeltaMovement().lengthSqr() > miscDatum.walkingSpeedThreshold()
                         || !bird.getNavigation().isDone();

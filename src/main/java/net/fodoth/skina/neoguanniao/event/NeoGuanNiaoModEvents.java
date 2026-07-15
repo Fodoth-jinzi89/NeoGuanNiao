@@ -1,11 +1,11 @@
 package net.fodoth.skina.neoguanniao.event;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.PigeonEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.columbid.SpottedDoveEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.nightheron.NightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -54,6 +54,12 @@ public final class NeoGuanNiaoModEvents {
                 NeoGuanNiaoEntityTypes.PIGEON.get(),
                 PigeonEntity.createAttributes().build()
         );
+
+
+        event.put(
+                NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
+                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity.createAttributes().build()
+        );
     }
 
 
@@ -99,6 +105,14 @@ public final class NeoGuanNiaoModEvents {
                 PigeonEntity::canSpawn,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
+
+        event.register(
+                NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
     }
 
 
@@ -113,4 +127,9 @@ public final class NeoGuanNiaoModEvents {
             event.accept(NeoGuanNiaoItems.PIGEON_SPAWN_EGG.get());
         }
     }
+
+
+
+
+
 }

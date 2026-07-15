@@ -18,21 +18,10 @@ import org.jetbrains.annotations.NotNull;
  * 负责处理鸟类受惊、逃跑、警戒以及惊吓传播等行为。
  * </p>
  */
-public class BirdFrightController {
+public class BirdFrightController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
     public Vec3 frightSource;
     public Vec3 pendingFrightSource;
-    private final AbstractBirdEntity<?> bird;
-
-    /**
-     * 创建鸟类受惊控制器
-     *
-     * @param bird 鸟类实体
-     */
-    public BirdFrightController(AbstractBirdEntity<?> bird) {
-        this.bird = bird;
-    }
-
     /**
      * 处理受到伤害后的受惊行为
      *
@@ -44,7 +33,7 @@ public class BirdFrightController {
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
         var brain = bird.getBirdBrain();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();
 
@@ -101,7 +90,7 @@ public class BirdFrightController {
         var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
         var flyingController = bird.getFlyingController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFrightDatum frightDatum = birdData.fright();
 
         // 设置受惊源
@@ -134,7 +123,7 @@ public class BirdFrightController {
      * @param sourcePos 惊吓来源位置
      */
     protected void startEscapeFlight(Vec3 sourcePos) {
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 计算远离来源的方向
@@ -169,7 +158,7 @@ public class BirdFrightController {
     public void alertNearbyBirds() {
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();
 
@@ -212,7 +201,7 @@ public class BirdFrightController {
         var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdFrightDatum frightDatum = birdData.fright();
 
         // 如果正在进食，清除进食状态

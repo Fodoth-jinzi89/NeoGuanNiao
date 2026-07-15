@@ -11,14 +11,9 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdCuriousTicker extends AbstractBirdTicker {
+public class BirdCuriousTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
-    /**
-     * 创建好奇状态计时器（仅在服务端执行）
-     *
-     * @param bird 鸟类实体
-     */
-    public BirdCuriousTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+    public BirdCuriousTicker() {
+        super(true, false);
     }
 }

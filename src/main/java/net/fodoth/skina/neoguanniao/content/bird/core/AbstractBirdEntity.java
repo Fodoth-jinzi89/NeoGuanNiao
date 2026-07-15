@@ -5,6 +5,7 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathContentType;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathFeedingAnimatable;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathMountable;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.*;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTickController;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
@@ -28,8 +30,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -61,50 +61,45 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.FLOAT);
 
     // ==================== 常量 ========================
-    protected static BirdData birdData;
+    protected final BirdData BIRD_DATA;
+    protected final BirdControllers<T> BIRD_CONTROLLERS;
 
     // ==================== 变量 =======================
     protected BirdBrain birdBrain;
 
-    // ========= 控制器 =========
-    protected BirdTickController birdTickController;
-    protected BirdFlyingController birdFlyingController;
-    protected BirdRoutineController birdRoutineController;
-    protected BirdEatingController birdEatingController;
-    protected BirdTameController birdTameController;
-    protected BirdGoalController birdGoalController;
-    protected BirdFrightController birdFrightController;
-    protected BirdSoundController birdSoundController;
-    protected BirdAnimationController birdAnimationController;
-    protected BirdModelController birdModelController;
-    protected BirdBehaviorStateController birdBehaviorStateController;
 
-
-    // ============ 构造方法 ============
-    public AbstractBirdEntity(EntityType<T> entityType, Level level) {
+    protected AbstractBirdEntity(EntityType<T> entityType,
+                                 Level level, BirdData birdData, BirdControllers<T> birdControllers) {
         super(entityType, level);
-        this.initFeatures();
-        this.initControllers();
-        this.initPathfindingMalus();
+        this.BIRD_DATA = birdData;
+        this.BIRD_CONTROLLERS = birdControllers;
+        initFeatures();
+        initPathfindingMalus();
     }
 
-    private void initFeatures() {
-        birdData = BirdData.createDefault();
-        this.birdBrain = new BirdBrain(this, null);
+    /**
+     * 子类需要实现此方法返回自身
+     * 用于安全的类型转换
+     */
+    protected abstract T getSelf();
+
+    /**
+     * 初始化控制器，在子类构造完成后调用
+     */
+    protected void initControllers() {
+        if (BIRD_CONTROLLERS != null) {
+            BIRD_CONTROLLERS.attach(getSelf()); // 使用 getSelf() 方法
+        }
     }
 
-    private void initControllers() {
-        this.birdTickController = new BirdTickController(this);
-        this.birdFlyingController = new BirdFlyingController(this);
-        this.birdRoutineController = new BirdRoutineController(this);
-        this.birdEatingController = new BirdEatingController(this);
-        this.birdTameController = new BirdTameController(this);
-        this.birdGoalController = new BirdGoalController(this);
-        this.birdFrightController = new BirdFrightController(this);
-        this.birdSoundController = new BirdSoundController(this);
-        this.birdAnimationController = new BirdAnimationController(this);
-        this.birdModelController = new BirdModelController(this);
-        this.birdBehaviorStateController = new BirdBehaviorStateController(this);
+    public BirdControllers<T> getBirdControllers() {
+        return BIRD_CONTROLLERS;
+    }
+
+    protected void initFeatures() {
+        if (birdBrain == null) {
+            birdBrain = new BirdBrain(this, null);
+        }
     }
 
     protected void initPathfindingMalus() {
@@ -114,19 +109,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, 16.0F);
     }
 
-    protected static AttributeSupplier.Builder createAttributes() {
-        return TamableAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.25)
-                .add(Attributes.FLYING_SPEED, 0.30)
-                .add(Attributes.FOLLOW_RANGE, 15.0);
-    }
-
     /**
      * 生成规则由 {@link NeoGuanNiaoModEvents} 注册。
      */
-    public static boolean canSpawn(EntityType<AbstractBirdEntity<?>> entityType, ServerLevelAccessor level,
-                                   MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean canSpawn(EntityType<? extends AbstractBirdEntity<?>> entityType, ServerLevelAccessor level,
+                                   MobSpawnType spawnType, BlockPos pos, RandomSource random, BirdData birdData) {
         BlockState below = level.getBlockState(pos.below());
         boolean validGround = below.is(BlockTags.DIRT)
                 || below.is(BlockTags.SAND)
@@ -154,6 +141,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     protected void initializeChild(T child) {
     }
 
+    public ResourceLocation getTextureResource() {
+        return getModelController().textureForVariant(getModelController().getSkinVariant());
+    }
+
     @Override
     public @NotNull SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level,
                                                  @NotNull DifficultyInstance difficulty,
@@ -166,15 +157,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 spawnGroupData
         );
 
-        this.birdModelController.randomizeSkinVariant();
-
-        birdModelController.randomizeModelScale();
+        getModelController().randomizeSkinVariant();
+        getModelController().randomizeModelScale();
 
         return data;
     }
-
-    @Override
-    protected abstract void registerGoals();
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
@@ -196,12 +183,12 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             this.initializeChild(child);
 
             if (mate instanceof AbstractBirdEntity<?> other) {
-                child.birdModelController.inheritSkinVariant(
+                child.getModelController().inheritSkinVariant(
                         this,
                         other
                 );
             } else {
-                child.birdModelController.randomizeSkinVariant();
+                child.getModelController().randomizeSkinVariant();
             }
 
 
@@ -233,7 +220,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     @Override
     public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
         if (BEHAVIOR_STATE.equals(key)) {
-            birdBehaviorStateController.decodeBehaviorState();
+            getBehaviorStateController().decodeBehaviorState();
         }
         super.onSyncedDataUpdated(key);
     }
@@ -242,16 +229,16 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void aiStep() {
         super.aiStep();
         if (this.level().isClientSide) {
-            birdTickController.tickClient();
+            getTickController().tickClient();
         } else {
             birdBrain.tick();
-            birdTickController.tick();
+            getTickController().tick();
         }
     }
 
     @Override
     public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
-        InteractionResult result = birdEatingController.mobInteract(player, hand);
+        InteractionResult result = getEatingController().mobInteract(player, hand);
         if (result != null) {
             return result;
         }
@@ -260,7 +247,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     public void handleEntityEvent(byte id) {
-        birdTameController.handleTameEvent(id);
+        getTameController().handleTameEvent(id);
         super.handleEntityEvent(id);
     }
 
@@ -269,7 +256,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public boolean hurt(@NotNull DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
         if (hurt && !this.level().isClientSide) {
-            birdFrightController.processHurt(source);
+            getFrightController().processHurt(source);
         }
         return hurt;
     }
@@ -279,12 +266,12 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         birdBrain.save(compoundTag);
-        compoundTag.putInt("BirdTrustTicks", birdTickController.getTickTimer().getBirdTrustTicker().getTicks());
-        compoundTag.putInt("BirdCuriousTicks", birdTickController.getTickTimer().getBirdCuriousTicker().getTicks());
-        compoundTag.putInt("BirdSkinVariant", birdModelController.getSkinVariant());
+        compoundTag.putInt("BirdTrustTicks", getTickController().getTickTimer().getBirdTrustTicker().getTicks());
+        compoundTag.putInt("BirdCuriousTicks", getTickController().getTickTimer().getBirdCuriousTicker().getTicks());
+        compoundTag.putInt("BirdSkinVariant", getModelController().getSkinVariant());
         BirdModelScale.save(compoundTag, this.getIndividualModelScale(), this.modelScaleProfile());
-        if (birdTameController.getInterestedPlayerUUID() != null) {
-            compoundTag.putUUID("BirdInterestedPlayer", birdTameController.getInterestedPlayerUUID());
+        if (getTameController().getInterestedPlayerUUID() != null) {
+            compoundTag.putUUID("BirdInterestedPlayer", getTameController().getInterestedPlayerUUID());
         }
     }
 
@@ -292,118 +279,152 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         birdBrain.load(compoundTag);
-        birdTickController.getTickTimer().getBirdTrustTicker().setTicks(compoundTag.getInt("BirdTrustTicks"));
-        birdTickController.getTickTimer().getBirdCuriousTicker().setTicks(compoundTag.getInt("BirdCuriousTicks"));
+        getTickController().getTickTimer().getBirdTrustTicker().setTicks(compoundTag.getInt("BirdTrustTicks"));
+        getTickController().getTickTimer().getBirdCuriousTicker().setTicks(compoundTag.getInt("BirdCuriousTicks"));
         if (compoundTag.contains("BirdSkinVariant", CompoundTag.TAG_INT)) {
-            birdModelController.setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
+            getModelController().setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
         } else {
             NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] BirdSkinVariant compound tag is missing! + Entity: {}", this.getStringUUID());
-            birdModelController.randomizeSkinVariant();
+            getModelController().randomizeSkinVariant();
         }
         if (compoundTag.contains("BirdModelScale", CompoundTag.TAG_FLOAT)) {
             this.setIndividualModelScale(BirdModelScale.load(compoundTag, this.modelScaleProfile()));
         } else {
             NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] BirdModelScale compound tag is missing! + Entity: {}", this.getStringUUID());
-            birdModelController.randomizeModelScale();
+            getModelController().randomizeModelScale();
         }
         if (compoundTag.hasUUID("BirdInterestedPlayer")) {
-            birdTameController.setInterestedPlayerUUID(compoundTag.getUUID("BirdInterestedPlayer"));
+            getTameController().setInterestedPlayerUUID(compoundTag.getUUID("BirdInterestedPlayer"));
         }
     }
 
 
     @Override
     public BirdFlightProfile birdFlightProfile() {
-        return birdData.flying().flightProfile();
+        return BIRD_DATA.flying().flightProfile();
     }
 
     @Override
     public boolean isBirdFlightActive() {
-        return birdFlyingController.isBirdFlightActive();
+        return getFlyingController().isBirdFlightActive();
     }
 
     @Override
     public boolean isBirdLanding() {
-        return birdFlyingController.isLandingFlight;
+        return getFlyingController().isLandingFlight;
     }
 
     @Override
     public boolean isBirdEscaping() {
-        return birdFlyingController.isEscapeFlightActive;
+        return getFlyingController().isEscapeFlightActive;
     }
 
     @Override
     public BirdModelScaleProfile modelScaleProfile() {
-        return birdModelController.modelScaleProfile();
+        return getModelController().modelScaleProfile();
     }
 
     @Override
     public float getIndividualModelScale() {
-        return birdModelController.getIndividualModelScale();
+        return getModelController().getIndividualModelScale();
     }
 
     @Override
     public void setIndividualModelScale(float scale) {
-        birdModelController.setIndividualModelScale(scale);
+        getModelController().setIndividualModelScale(scale);
     }
 
     @Override
     public boolean isFlying() {
-        return birdFlyingController.isBirdFlying();
+        return getFlyingController().isBirdFlying();
     }
 
     @Override
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
-        return birdFlyingController.startBirdBathMountFlight(standPosition);
+        return getFlyingController().startBirdBathMountFlight(standPosition);
     }
 
     @Override
     public void startBirdBathFeedingAnimation(BirdBathContentType contentType, int ticks) {
-        birdEatingController.startBirdBathFeedingAnimation(contentType, ticks);
+        getEatingController().startBirdBathFeedingAnimation(contentType, ticks);
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        birdAnimationController.registerControllers(controllers);
+        getAnimationController().registerControllers(controllers);
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return birdAnimationController.cache;
+        return getAnimationController().getCache();
     }
 
     public <E extends AbstractBirdEntity<?>> PlayState movementController(AnimationState<E> animationState) {
-        return animationState.setAndContinue(getBirdData().animation().guidePreviewAnimation().animation());
+        // 这里需要使用泛型，但内部调用需要调整
+        RawAnimation guidePreviewRawAnimation = getAnimationController().getCurrentGuideAnimation();
+        if (guidePreviewRawAnimation != null) {
+            return animationState.setAndContinue(guidePreviewRawAnimation);
+        }
+
+        BirdBehaviorState state = getBehaviorStateController().getBehaviorState();
+
+        var tickTimer = getTickController().getTickTimer();
+        if (state != BirdBehaviorState.DANCING && tickTimer.getBirdNearbyMusicTicker().getTicks() <= 0) {
+            if (state != BirdBehaviorState.EATING && tickTimer.getBirdEatingTicker().getTicks() <= 0) {
+                if (state == BirdBehaviorState.SLEEPING) {
+                    return animationState.setAndContinue(tickTimer.getBirdBehaviorStateTicker().getTicks() > 0
+                            ? BIRD_DATA.animation().animationMap().get("sleep") : BIRD_DATA.animation().animationMap().get("sleep_loop"));
+                }
+                if (getAnimationController().shouldPlayFlyAnimation()) {
+                    return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("fly"));
+                }
+                if (!(this.getDeltaMovement().lengthSqr() > BIRD_DATA.misc().walkingSpeedThreshold())
+                        && this.getNavigation().isDone() && state != BirdBehaviorState.WALKING) {
+                    if (state == BirdBehaviorState.PREENING) {
+                        return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("preen"));
+                    }
+                    if (state != BirdBehaviorState.CURIOUS && state != BirdBehaviorState.ALERT
+                            && tickTimer.getBirdCuriousTicker().getTicks() <= 0) {
+                        return animationState.setAndContinue(getAnimationController().pickIdleAnimation());
+                    }
+                    return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("curious"));
+                }
+                return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("walk"));
+            }
+            return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("eat"));
+        }
+        return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("dance"));
     }
+
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return birdSoundController.getAmbientSound();
+        return getSoundController().getAmbientSound();
     }
 
     @Override
     protected SoundEvent getHurtSound(@NotNull DamageSource source) {
-        return birdSoundController.getHurtSound(source);
+        return getSoundController().getHurtSound(source);
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return birdSoundController.getDeathSound();
+        return getSoundController().getDeathSound();
     }
 
     @Override
     public int getAmbientSoundInterval() {
-        return birdSoundController.getAmbientSoundInterval();
+        return getSoundController().getAmbientSoundInterval();
     }
 
     @Override
     public float getVoicePitch() {
-        return birdSoundController.getVoicePitch();
+        return getSoundController().getVoicePitch();
     }
 
     @Override
     public boolean isFood(@NotNull ItemStack itemStack) {
-        return birdEatingController.isEdibleFood(itemStack);
+        return getEatingController().isEdibleFood(itemStack);
     }
 
     @Override
@@ -412,48 +433,52 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         super.checkFallDamage(y, onGround, state, pos);
     }
 
-    public BirdTickController getTickController() {
-        return birdTickController;
+    public BirdTickController<T> getTickController() {
+        return BIRD_CONTROLLERS.birdTickController();
     }
 
-    public BirdFlyingController getFlyingController() {
-        return birdFlyingController;
+    public BirdFlyingController<T> getFlyingController() {
+        return BIRD_CONTROLLERS.birdFlyingController();
     }
 
-    public BirdFrightController getFrightController() {
-        return birdFrightController;
+    public BirdFrightController<T> getFrightController() {
+        return BIRD_CONTROLLERS.birdFrightController();
     }
 
-    public BirdRoutineController getRoutineController() {
-        return birdRoutineController;
+    public BirdRoutineController<T> getRoutineController() {
+        return BIRD_CONTROLLERS.birdRoutineController();
     }
 
-    public BirdEatingController getEatingController() {
-        return birdEatingController;
+    public BirdEatingController<T> getEatingController() {
+        return BIRD_CONTROLLERS.birdEatingController();
     }
 
-    public BirdTameController getTameController() {
-        return birdTameController;
+    public BirdTameController<T> getTameController() {
+        return BIRD_CONTROLLERS.birdTameController();
     }
 
-    public BirdGoalController getGoalController() {
-        return birdGoalController;
+    public BirdGoalController<T> getGoalController() {
+        return BIRD_CONTROLLERS.birdGoalController();
     }
 
-    public BirdSoundController getSoundController() {
-        return birdSoundController;
+    public BirdSoundController<T> getSoundController() {
+        return BIRD_CONTROLLERS.birdSoundController();
     }
 
-    public BirdModelController getModelController() {
-        return birdModelController;
+    public BirdModelController<T> getModelController() {
+        return BIRD_CONTROLLERS.birdModelController();
     }
 
-    public BirdBehaviorStateController getBehaviorStateController() {
-        return birdBehaviorStateController;
+    public BirdBehaviorStateController<T> getBehaviorStateController() {
+        return BIRD_CONTROLLERS.birdBehaviorStateController();
     }
 
-    public BirdData getBirdData() {
-        return birdData;
+    public BirdAnimationController<T> getAnimationController() {
+        return BIRD_CONTROLLERS.birdAnimationController();
+    }
+
+    public BirdData getbirdData() {
+        return BIRD_DATA;
     }
 
     public BirdBrain getBirdBrain() {

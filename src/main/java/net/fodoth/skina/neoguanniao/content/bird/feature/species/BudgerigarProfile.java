@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.feature.species;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSenses;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSpeciesProfile;
-import net.fodoth.skina.neoguanniao.content.bird.impl.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;

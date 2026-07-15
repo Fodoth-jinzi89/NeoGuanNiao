@@ -26,7 +26,7 @@ import java.util.UUID;
  * 鸟将被玩家驯服并建立主人关系。
  * </p>
  */
-public class BirdTameController {
+public class BirdTameController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
     /**
      * 驯服失败事件 ID，用于通过实体事件同步客户端表现
@@ -46,20 +46,6 @@ public class BirdTameController {
      * </p>
      */
     private UUID interestedPlayerUUID;
-
-    /**
-     * 当前控制的鸟实体
-     */
-    private final AbstractBirdEntity<?> bird;
-
-    /**
-     * 创建鸟类驯服控制器
-     *
-     * @param entity 当前控制的鸟实体
-     */
-    public BirdTameController(AbstractBirdEntity<?> entity) {
-        this.bird = entity;
-    }
 
     /**
      * 广播驯服结果事件
@@ -114,7 +100,7 @@ public class BirdTameController {
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasTame = bird.isTame();
@@ -142,10 +128,14 @@ public class BirdTameController {
         // 触发驯服成功或失败事件
         if (!wasTame && bird.isTame()) {
             startTameCelebration(player);
+            triggerTameSideEffects(player);
             broadcastTameEvent(true);
         } else if (!wasTame) {
             broadcastTameEvent(false);
         }
+    }
+
+    public void triggerTameSideEffects(Player player) {
     }
 
     /**
@@ -177,7 +167,7 @@ public class BirdTameController {
      */
     public void updateTrustedOwner(Player player) {
         var timer = bird.getTickController().getTickTimer();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdTameDatum tameDatum = birdData.tame();
 
         // 检查信任值是否达到驯服阈值
@@ -205,7 +195,7 @@ public class BirdTameController {
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         BirdTameDatum tameDatum = birdData.tame();
         var random = bird.getRandom();
 

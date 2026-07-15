@@ -12,15 +12,10 @@ import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
  * 该计时器在服务端和客户端均执行。
  * </p>
  */
-public class BirdEatingTicker extends AbstractBirdTicker {
+public class BirdEatingTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
-    /**
-     * 创建进食计时器（在服务端和客户端均执行）
-     *
-     * @param bird 鸟类实体
-     */
-    public BirdEatingTicker(AbstractBirdEntity<?> bird) {
-        super(bird);
+    public BirdEatingTicker() {
+        super();
     }
 
     /**

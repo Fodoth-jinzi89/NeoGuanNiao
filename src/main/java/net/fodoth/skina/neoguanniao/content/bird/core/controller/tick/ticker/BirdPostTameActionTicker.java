@@ -13,15 +13,14 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
  * 该计时器在服务端和客户端均执行。
  * </p>
  */
-public class BirdPostTameActionTicker extends AbstractBirdTicker {
+public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 创建驯服后行为持续计时器（在服务端和客户端均执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdPostTameActionTicker(AbstractBirdEntity<?> bird) {
-        super(bird);
+    public BirdPostTameActionTicker() {
+        super();
     }
 
     /**
@@ -42,7 +41,7 @@ public class BirdPostTameActionTicker extends AbstractBirdTicker {
         var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getBirdData();
+        BirdData birdData = bird.getbirdData();
         var random = bird.getRandom();
 
         // 减少计时器

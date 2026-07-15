@@ -8,7 +8,7 @@ public record BirdData(
         BirdFlyingDatum flying,
         BirdFrightDatum fright,
         BirdMiscDatum misc,
-        BirdModelDatum model,
+        BirdModelAndTextureDatum model,
         BirdSoundDatum sound,
         BirdTameDatum tame
 ) {
@@ -19,9 +19,41 @@ public record BirdData(
                 BirdFlyingDatum.createDefault(),
                 BirdFrightDatum.createDefault(),
                 BirdMiscDatum.createDefault(),
-                BirdModelDatum.createDefault(),
+                BirdModelAndTextureDatum.createDefault(),
                 BirdSoundDatum.createDefault(),
                 BirdTameDatum.createDefault()
         );
+    }
+
+    public BirdData withAnimation(BirdAnimationDatum animation) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withEating(BirdEatingDatum eating) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withFlying(BirdFlyingDatum flying) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withFright(BirdFrightDatum fright) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withMisc(BirdMiscDatum misc) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withModel(BirdModelAndTextureDatum model) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withSound(BirdSoundDatum sound) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
+    }
+
+    public BirdData withTame(BirdTameDatum tame) {
+        return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
     }
 }

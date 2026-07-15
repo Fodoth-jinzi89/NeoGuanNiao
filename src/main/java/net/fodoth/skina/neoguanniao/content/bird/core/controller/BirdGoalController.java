@@ -8,7 +8,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
  * 提供各类 AI Goal 的启动条件判断。
  * </p>
  */
-public record BirdGoalController(AbstractBirdEntity<?> bird) {
+public class BirdGoalController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
     /**
      * 判断是否可以开始觅食目标

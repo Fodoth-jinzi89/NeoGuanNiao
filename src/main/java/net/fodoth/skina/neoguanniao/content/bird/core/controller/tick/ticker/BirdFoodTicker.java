@@ -11,14 +11,13 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdFoodTicker extends AbstractBirdTicker {
+public class BirdFoodTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
 
     /**
      * 创建食物效果计时器（仅在服务端执行）
      *
-     * @param bird 鸟类实体
      */
-    public BirdFoodTicker(AbstractBirdEntity<?> bird) {
-        super(bird, true, false);
+    public BirdFoodTicker() {
+        super(true, false);
     }
 }
