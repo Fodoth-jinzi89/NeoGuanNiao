@@ -8,8 +8,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdEatingDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdTameDatum;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -31,8 +31,8 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      * @return 如果正在进食返回 true
      */
     public boolean isEating() {
-        // 通过行为状态控制器判断
-        return bird.getBehaviorStateController().getBehaviorState() == BirdBehaviorState.EATING;
+        BirdBehaviorState currentState = bird.getBehaviorStateController().getBehaviorState();
+        return currentState == BirdBehaviorState.EATING;
     }
 
     /**
@@ -47,8 +47,26 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         ItemStack stack = player.getItemInHand(hand);
 
         // 检查物品是否可食用
+        // 用 CONSUME 防止客户端看不到
         if (!isEdibleFood(stack)) {
-            return null;
+            return InteractionResult.CONSUME;
+        }
+
+        // 如果正在进食，阻止重复交互
+        if (isEating()) {
+            return InteractionResult.CONSUME;
+        }
+
+        // 鹦鹉跳舞也不吃东西
+        if (bird() instanceof BudgerigarEntity budgerigar) {
+            if (budgerigar.isBusyWithMusicOrSleep()) {
+                return InteractionResult.CONSUME;
+            }
+        }
+
+        // 睡觉不吃东西
+        if (bird().getRoutineController().isSleepingOrRoosting()) {
+            return InteractionResult.CONSUME;
         }
 
         // 客户端处理
@@ -56,10 +74,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
             return InteractionResult.sidedSuccess(true);
         }
 
-        // 如果正在进食，阻止重复交互
-        if (isEating()) {
-            return InteractionResult.SUCCESS;
-        }
 
         // 复制一份食物用于后续处理
         ItemStack eaten = stack.copy();
@@ -147,9 +161,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         BirdData birdData = bird().getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
 
-        // 获取计时器控制器
-        var tickController = bird().getTickController();
-        var timer = tickController.getTickTimer();
 
         // 获取范围内的所有鸟类实体
         double range = miscDatum.trustShareRange();
@@ -289,16 +300,17 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         bird().getBirdBrain().onEat(finalEatAmount);
 
         // 播放进食音效
-        bird().playSound(SoundEvents.GENERIC_EAT, finalVolume, finalPitch);
+        bird().playSound(bird().getbirdData().sound().eatSound(), finalVolume, finalPitch);
     }
 
     /**
-     * 判断物品是否可作为鸟类食物
+     * 检查物品是否为鸟类可食用食物
      *
      * @param stack 物品堆
-     * @return 如果可以食用返回 true
+     * @return 是否为可食用食物
      */
     public boolean isEdibleFood(ItemStack stack) {
+
         return stack.is(NeoGuanNiaoItemTags.BIRD_FOOD);
     }
 

@@ -28,4 +28,12 @@ public enum BirdBehaviorState {
     public boolean isActive() {
         return this != SLEEPING && this != ROOSTING;
     }
+
+    public boolean isUnsafeFlyEnabled() {
+        return this == BirdBehaviorState.IDLE || this == BirdBehaviorState.WALKING || this == BirdBehaviorState.SENTINEL || this == BirdBehaviorState.ALERT || this == BirdBehaviorState.ROOSTING || this == BirdBehaviorState.SLEEPING || this == BirdBehaviorState.PREENING || this == BirdBehaviorState.CURIOUS || this == BirdBehaviorState.DANCING;
+    }
+
+    public boolean isUnsafeFloatEnabled() {
+        return isUnsafeFlyEnabled() || this == BirdBehaviorState.EATING;
+    }
 }

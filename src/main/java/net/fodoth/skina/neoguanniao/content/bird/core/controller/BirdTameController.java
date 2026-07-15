@@ -224,9 +224,6 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
         int foodTicks = tameDatum.tameCelebrationFoodTicks();
         timer.getBirdFoodTicker().setTicks(Math.max(currentFoodTicks, foodTicks));
 
-        // 再次重置空闲动画计时器（确保清空）
-        timer.getBirdIdleAnimationTicker().setTicks(0);
-
         // 设置为好奇状态
         int behaviorTicks = tameDatum.tameCelebrationBehaviorStateTicks();
         stateController.setBehaviorStateFor(BirdBehaviorState.CURIOUS, behaviorTicks);

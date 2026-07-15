@@ -18,6 +18,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoBlocks.BLOCKS.register(modEventBus);
         NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         NeoGuanNiaoItems.ITEMS.register(modEventBus);
+        NeoGuanNiaoItemTags.register();
         NeoGuanNiaoEntityTypes.ENTITY_TYPES.register(modEventBus);
         NeoGuanNiaoRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         NeoGuanNiaoSoundEvents.SOUND_EVENTS.register(modEventBus);

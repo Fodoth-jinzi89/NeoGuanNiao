@@ -19,9 +19,17 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
 
     /**
      * 当前计时器剩余 Tick 数
+     * <p>
+     * 请使用 {@link #getTicks()} 和 {@link #setTicks(int)} 方法访问此字段，不要直接访问。
+     * </p>
      */
-    protected int ticks;
+    private int ticks;
 
+    /**
+     * 关联的鸟类实体
+     */
+    // Lazy attach
+    private T bird;
 
     /**
      * 是否在服务端执行 Tick 更新
@@ -39,10 +47,7 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
     protected final boolean isLoopTicker;
 
 
-    /**
-     * 关联的鸟类实体
-     */
-    protected T bird;
+
 
 
     /**
@@ -145,8 +150,16 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
 
     /**
      * 设置 Tick 数
+     *
+     * @param ticks 要设置的 tick 数量，若在{@link #run()}中设置为 0 将触发一次 {@link #onExpire()}
+     * @throws IllegalArgumentException 如果 ticks 为负数
      */
     public void setTicks(int ticks) {
+        // 参数验证
+        if (ticks < 0) {
+            throw new IllegalArgumentException("Ticks cannot be negative: " + ticks);
+        }
+
         this.ticks = ticks;
     }
 
@@ -176,16 +189,24 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      */
     public void tick() {
 
-        if (ticks <= 0 && isLoopTicker) {
+        if (!shouldTickCommon) {
+            return;
+        }
+
+        // 循环计时器归零时重置
+        if (isLoopTicker && ticks <= 0) {
             reset();
         }
 
-        if (shouldTickCommon && ticks > 0) {
+        // 计时器递减并执行
+        if (ticks > 0) {
             --ticks;
+            run();
+            if (ticks <= 0) {
+                onExpire();
+            }
         }
 
-
-        run();
     }
 
 
@@ -194,15 +215,23 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      */
     public void tickClient() {
 
-        if (ticks <= 0 && isLoopTicker) {
-            reset();
+        if (!shouldTickClient) {
+            return;
         }
 
-        if (shouldTickClient && ticks > 0) {
+        // 循环计时器归零时重置
+        if (isLoopTicker && ticks <= 0) {
+            resetClient();
+        }
+
+        // 计时器递减并执行
+        if (ticks > 0) {
             --ticks;
+            runClient();
+            if (ticks <= 0) {
+                onExpireClient();
+            }
         }
-
-        runClient();
     }
 
 
@@ -222,6 +251,16 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
 
 
     protected void reset() {
+    }
 
+    protected void resetClient() {
+        reset();
+    }
+
+    protected void onExpire() {
+    }
+
+    protected void onExpireClient() {
+        onExpire();
     }
 }

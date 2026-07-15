@@ -99,7 +99,7 @@ public final class NightHeronProfile extends BirdSpeciesProfile {
     // ============ 玩家交互 ============
 
     @Override
-    public boolean isTemptingPlayer(Player player) {
+    public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
         return player.getMainHandItem().is(Items.COD)
                 || player.getMainHandItem().is(Items.SALMON)
                 || player.getOffhandItem().is(Items.COD)

@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 
 /**
  * 鸟类驯服后行为切换计时器
@@ -19,5 +20,18 @@ public class BirdPostTameActionSwapTicker<T extends AbstractBirdEntity<T>> exten
      */
     public BirdPostTameActionSwapTicker() {
         super();
+    }
+
+    @Override
+    protected void onExpire() {
+        var behaviorStateTicker = bird().getTickController().getTickTimer().getBirdBehaviorStateTicker();
+        var stateController = bird().getBehaviorStateController();
+        var currentState = stateController.getBehaviorState();
+        boolean isCuriousOrPreening = currentState == BirdBehaviorState.CURIOUS
+                || currentState == BirdBehaviorState.PREENING;
+        if (isCuriousOrPreening) {
+            behaviorStateTicker.setTicks(0);
+            stateController.setBehaviorState(BirdBehaviorState.IDLE);
+        }
     }
 }

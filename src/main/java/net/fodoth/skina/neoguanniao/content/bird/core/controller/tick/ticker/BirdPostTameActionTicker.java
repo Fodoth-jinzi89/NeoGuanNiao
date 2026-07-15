@@ -32,23 +32,16 @@ public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends A
      */
     @Override
     protected void run() {
-        // 计时器归零时不处理
-        if (ticks <= 0) {
-            return;
-        }
 
-        var tickController = bird.getTickController();
+        var tickController = bird().getTickController();
         var timer = tickController.getTickTimer();
-        var stateController = bird.getBehaviorStateController();
-        var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getbirdData();
-        var random = bird.getRandom();
-
-        // 减少计时器
-        --ticks;
+        var stateController = bird().getBehaviorStateController();
+        var eatingController = bird().getEatingController();
+        BirdData birdData = bird().getbirdData();
+        var random = bird().getRandom();
 
         // 如果鸟被骑乘，不执行任何行为
-        if (bird.isPassenger()) {
+        if (bird().isPassenger()) {
             return;
         }
 
@@ -58,7 +51,7 @@ public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends A
         }
 
         // 获取当前行为状态
-        BirdBehaviorState currentState = stateController.getBehaviorState();
+        var currentState = stateController.getBehaviorState();
 
         // 如果正在睡眠或栖息，转为好奇状态
         if (currentState == BirdBehaviorState.SLEEPING || currentState == BirdBehaviorState.ROOSTING) {
@@ -67,13 +60,12 @@ public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends A
         }
 
         // 定期注视主人（每 8 刻更新一次）
-        if (bird.getOwner() != null && bird.tickCount % 8 == 0) {
-            bird.getLookControl().setLookAt(bird.getOwner(), 35.0F, 35.0F);
+        if (bird().getOwner() != null && bird().tickCount % 8 == 0) {
+            bird().getLookControl().setLookAt(bird().getOwner(), 35.0F, 35.0F);
         }
 
         // 获取相关计时器
         var postTameSwapTicker = timer.getBirdPostTameActionSwapTicker();
-        var behaviorStateTicker = timer.getBirdBehaviorStateTicker();
 
         // 切换驯服后行为（好奇/整理羽毛）
         boolean shouldSwitch = postTameSwapTicker.getTicks() <= 0 || currentState == BirdBehaviorState.IDLE;
@@ -97,14 +89,6 @@ public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends A
             postTameSwapTicker.setTicks(swapBase + random.nextInt(swapVariance));
         }
 
-        // 如果切换计时器结束且处于好奇或整理羽毛状态，回到空闲状态
-        if (postTameSwapTicker.getTicks() <= 0) {
-            boolean isCuriousOrPreening = currentState == BirdBehaviorState.CURIOUS
-                    || currentState == BirdBehaviorState.PREENING;
-            if (isCuriousOrPreening) {
-                behaviorStateTicker.setTicks(0);
-                stateController.setBehaviorState(BirdBehaviorState.IDLE);
-            }
-        }
     }
+
 }

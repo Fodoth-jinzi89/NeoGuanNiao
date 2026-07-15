@@ -10,6 +10,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfil
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import software.bernie.geckolib.animation.RawAnimation;
@@ -47,7 +48,8 @@ public final class NeoGuanNiaoBirdData {
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_HURT.get(),
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_DEATH.get(),
-                                            NeoGuanNiaoSoundEvents.BUDGERIGAR_INTERACT.get()
+                                            NeoGuanNiaoSoundEvents.BUDGERIGAR_INTERACT.get(),
+                                            SoundEvents.PARROT_EAT
                                     )
                             )
                             .withFlying(

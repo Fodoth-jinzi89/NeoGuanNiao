@@ -27,24 +27,14 @@ public class BirdEatingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
      */
     @Override
     protected void run() {
-        // 仅在计时器大于 0 时处理进食逻辑
-        if (ticks <= 0) {
-            return;
-        }
-
-        var stateController = bird.getBehaviorStateController();
-        var eatingController = bird.getEatingController();
-
+        var stateController = bird().getBehaviorStateController();
         // 停止移动并保持进食状态
-        bird.getNavigation().stop();
+        bird().getNavigation().stop();
         stateController.setBehaviorState(BirdBehaviorState.EATING);
+    }
 
-        // 减少计时器
-        --ticks;
-
-        // 计时器归零时清除进食状态
-        if (ticks <= 0) {
-            eatingController.clearEating();
-        }
+    @Override
+    protected void onExpire() {
+        bird().getEatingController().clearEating();
     }
 }

@@ -8,6 +8,8 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManage
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.phys.Vec3;
 
@@ -56,7 +58,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     public boolean isBirdFlightActive() {
         var timer = bird.getTickController().getTickTimer();
 
-        boolean hasFlightDuration = timer.getBirdFlyingTicker().flightDuration > 0;
+        boolean hasFlightDuration = timer.getBirdFlyingTicker().getTicks() > 0;
         boolean isLandingFlight = bird.isBirdLanding();
         boolean isAirborne = bird.getBehaviorStateController().getBehaviorState().isAirborne();
         boolean isInWaterAndNotOnGround = bird.isInWater() && !bird.onGround();
@@ -73,7 +75,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         var timer = bird.getTickController().getTickTimer();
         BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
 
-        return timer.getBirdFlyingTicker().flightDuration > 0
+        return timer.getBirdFlyingTicker().getTicks() > 0
                 || bird.isBirdLanding()
                 || !bird.onGround()
                 || bird.isInWater()
@@ -88,7 +90,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      */
     public boolean isFlightInProgress() {
         var timer = bird.getTickController().getTickTimer();
-        return timer.getBirdFlyingTicker().flightDuration > 0 || bird.isBirdLanding();
+        return timer.getBirdFlyingTicker().getTicks() > 0 || bird.isBirdLanding();
     }
 
     /**
@@ -103,20 +105,19 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         var stateController = bird.getBehaviorStateController();
         BirdData birdData = bird.getbirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
-        BirdMiscDatum miscDatum = birdData.misc();
 
-        if (flyingTicker.getTicks() <= 0 && flyingTicker.flightDuration <= 0 && !isLandingFlight) {
+        if (flyingTicker.getTicks() <= 0 && flyingTicker.flyingTime <= 0 && !isLandingFlight) {
             isEscapeFlightActive = fleeing;
             flightTarget = target == null ? findAirCruiseTarget(fleeing) : target;
 
-            flyingTicker.flightDuration = fleeing
+            flyingTicker.setTicks(fleeing
                     ? flyingDatum.escapeAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.escapeAirCruiseRandomTicks())
-                    : flyingDatum.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.ambientAirCruiseRandomTicks());
+                    : flyingDatum.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.ambientAirCruiseRandomTicks()));
             flyingTicker.flyingTime = 0;
             flyingTicker.hoverRetargetTicks = nextHoverRetargetDelay();
 
             bird.setNoGravity(true);
-            bird.setSilent(false);
+            bird.setSilent(true);
             bird.getNavigation().stop();
 
             int stateTicks = fleeing ? flyingDatum.shortFleeTicks() : flyingDatum.shortFlyTicks();
@@ -152,7 +153,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         isLandingFlight = false;
         flightTarget = target == null ? this.findAirCruiseTarget(false) : this.clampFlightTarget(target);
 
-        flyingTicker.flightDuration = flyingDatum.minFlybyDuration() + bird.getRandom().nextInt(flyingDatum.flybyDurationVariance() + 1);
+        flyingTicker.setTicks(flyingDatum.minFlybyDuration() + bird.getRandom().nextInt(flyingDatum.flybyDurationVariance() + 1));
         flyingTicker.flyingTime = 0;
         flyingTicker.hoverRetargetTicks = flyingDatum.minHoverRetargetTicks() + bird.getRandom().nextInt(flyingDatum.hoverRetargetTicksVariance() + 1);
         flyingTicker.setTicks(Math.max(flyingTicker.getTicks(), flyingDatum.minimumFlightTicks()));
@@ -220,7 +221,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasEscaping = isEscapeFlightActive;
-        flyingTicker.flightDuration = 0;
+        flyingTicker.setTicks(0);
         flyingTicker.flyingTime = 0;
         flightTarget = null;
         flyingTicker.hoverRetargetTicks = 0;
@@ -228,10 +229,12 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         isEscapeFlightActive = false;
         isLandingFlight = false;
         bird.setNoGravity(false);
+        bird.setSilent(false);
+        bird.noCulling = false;
 
         bird.setDeltaMovement(bird.getDeltaMovement().multiply(
                 flyingDatum.flightLandingHorizontalDamping(),
-                0,
+                flyingDatum.flightLandingVerticalDamping(),
                 flyingDatum.flightLandingHorizontalDamping()
         ));
 
@@ -241,7 +244,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
                 ? miscDatum.tameCooldownMin() + bird.getRandom().nextInt(miscDatum.tameCooldownVariance())
                 : miscDatum.wildCooldownMin() + bird.getRandom().nextInt(miscDatum.wildCooldownVariance())
         );
-        flyingTicker.setTicks(cooldownTicks);
+        bird().getTickController().getTickTimer().getBirdLandingTicker().setTicks(cooldownTicks);
+
+        bird().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, cooldownTicks, 0, false, false));
 
         if (bird.getBehaviorStateController().getBehaviorState().isAirborne()) {
             bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, miscDatum.postFlightAlertTicks());
@@ -262,8 +267,8 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
             isLandingFlight = true;
             isEscapeFlightActive = false;
-            timer.getBirdFlyingTicker().flightDuration = flyingDatum.landingFlightMinDuration()
-                    + bird.getRandom().nextInt(flyingDatum.landingFlightDurationVariance());
+            timer.getBirdFlyingTicker().setTicks(flyingDatum.landingFlightMinDuration()
+                    + bird.getRandom().nextInt(flyingDatum.landingFlightDurationVariance()));
             flightTarget = landingTarget;
             timer.getBirdFlyingTicker().hoverRetargetTicks = 0;
             bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.landingFlightStateTicks());
@@ -280,8 +285,8 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
         isLandingFlight = false;
         isEscapeFlightActive = false;
-        timer.getBirdFlyingTicker().flightDuration = flyingDatum.unsafeLandingCruiseMinDuration()
-                + bird.getRandom().nextInt(flyingDatum.unsafeLandingCruiseDurationVariance());
+        timer.getBirdFlyingTicker().setTicks(flyingDatum.unsafeLandingCruiseMinDuration()
+                + bird.getRandom().nextInt(flyingDatum.unsafeLandingCruiseDurationVariance()));
         retargetAirCruise(false);
         bird.setNoGravity(true);
         bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.unsafeLandingCruiseStateTicks());

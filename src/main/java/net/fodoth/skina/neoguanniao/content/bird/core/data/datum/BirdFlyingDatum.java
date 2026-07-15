@@ -42,6 +42,7 @@ public record BirdFlyingDatum(
 
         // 飞行结束
         double flightLandingHorizontalDamping,
+        double flightLandingVerticalDamping,
 
         // 降落
         int landingFlightMinDuration,
@@ -129,7 +130,8 @@ public record BirdFlyingDatum(
                 // 起飞与逃离 (6)
                 24, 45, 0.35D, 120.0D, 120.0D, 140.0D,
                 // 飞行结束 (1)
-                0.24D,
+                0.5D,
+                0.5D,
                 // 降落 (3)
                 160, 160, 180,
                 // 不安全降落 (3)
@@ -143,7 +145,7 @@ public record BirdFlyingDatum(
                 // 水上逃生 (7)
                 90, 50, 70, 0.22, 0.28, 1, 12,
                 // 飞行系统参数 (21)
-                1.85, 0.35, 0.32, 0.68, 0.006, 0.18, 0.08, 0.34, 0.2, 0.26,
+                1.85, 3.5, 0.32, 0.68, 0.006, 0.18, 0.08, 0.34, 0.2, 0.26,
                 3.4, 0.42, 0.025, 0.28, -0.035, -0.13, 0.055, -0.075, 0.16, 0.11, 0.12,
                 // 群体飞行 (7)
                 13.0, 2.4, 0.035, 0.45, 0.18, 0.08, 0.1,
@@ -179,6 +181,7 @@ public record BirdFlyingDatum(
                 escapeFlightMinHeight,
                 escapeFlightHeightVariance,
                 flightLandingHorizontalDamping,
+                flightLandingVerticalDamping,
                 landingFlightMinDuration,
                 landingFlightDurationVariance,
                 landingFlightStateTicks,

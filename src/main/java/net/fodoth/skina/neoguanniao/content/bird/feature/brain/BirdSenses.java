@@ -51,7 +51,7 @@ public class BirdSenses {
         if (this.nearestPlayer != null && !this.nearestPlayer.isSpectator()) {
             this.nearestPlayerDistance = Math.sqrt(bird.distanceToSqr(this.nearestPlayer));
             this.nearestPlayerSprinting = this.nearestPlayer.isSprinting();
-            this.temptingPlayerNearby = profile.isTemptingPlayer(this.nearestPlayer);
+            this.temptingPlayerNearby = profile.isTemptingPlayer(this.nearestPlayer, bird);
         } else {
             this.nearestPlayer = null;
             this.nearestPlayerDistance = Double.MAX_VALUE;

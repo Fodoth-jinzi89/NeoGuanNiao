@@ -216,7 +216,7 @@ public abstract class BirdSpeciesProfile {
     /**
      * 判断玩家是否具有诱惑力
      */
-    public boolean isTemptingPlayer(Player player) {
+    public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
         return false;
     }
 

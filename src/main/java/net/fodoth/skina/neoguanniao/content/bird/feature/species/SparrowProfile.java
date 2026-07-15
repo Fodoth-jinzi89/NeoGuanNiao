@@ -97,7 +97,7 @@ public final class SparrowProfile extends BirdSpeciesProfile {
     // ============ 玩家交互 ============
 
     @Override
-    public boolean isTemptingPlayer(Player player) {
+    public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
         return player.getMainHandItem().is(Items.WHEAT_SEEDS)
                 || player.getMainHandItem().is(Items.MELON_SEEDS)
                 || player.getMainHandItem().is(Items.PUMPKIN_SEEDS)

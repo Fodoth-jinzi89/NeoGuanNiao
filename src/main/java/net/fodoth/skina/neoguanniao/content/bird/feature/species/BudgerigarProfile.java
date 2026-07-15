@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.feature.species;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSenses;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSpeciesProfile;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
@@ -89,9 +89,12 @@ public final class BudgerigarProfile extends BirdSpeciesProfile {
     // ============ 玩家交互 ============
 
     @Override
-    public boolean isTemptingPlayer(Player player) {
-        return BudgerigarEntity.isEdibleFood(player.getMainHandItem())
-                || BudgerigarEntity.isEdibleFood(player.getOffhandItem());
+    public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
+        if (bird instanceof BudgerigarEntity b) {
+            return b.getEatingController().isEdibleFood(player.getMainHandItem())
+                    || b.getEatingController().isEdibleFood(player.getOffhandItem());
+        }
+        return false;
     }
 
     // ============ 环境感知 ============

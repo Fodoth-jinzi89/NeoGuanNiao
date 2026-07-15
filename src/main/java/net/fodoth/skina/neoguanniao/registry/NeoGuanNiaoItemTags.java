@@ -7,8 +7,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 public class NeoGuanNiaoItemTags {
-    public static final TagKey<Item> BIRD_FOOD = TagKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "bird_food")
-    );
+    public static final TagKey<Item> BIRD_FOOD;
+
+    static {
+        BIRD_FOOD = TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "bird_food")
+        );
+    }
+
+    public static void register() {
+        // 空方法，仅用于触发类加载
+    }
 }

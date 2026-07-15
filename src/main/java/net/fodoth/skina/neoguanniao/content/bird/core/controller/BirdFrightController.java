@@ -65,6 +65,8 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
                     + bird.getRandom().nextInt(frightDatum.frightDelayVariance());
             queueFrightFrom(sourcePos, delayTicks);
         }
+
+        alertNearbyBirds();
     }
 
     /**
@@ -154,8 +156,6 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
      * 向附近鸟类传播警戒状态
      */
     public void alertNearbyBirds() {
-        var tickController = bird.getTickController();
-        var timer = tickController.getTickTimer();
         BirdData birdData = bird.getbirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();

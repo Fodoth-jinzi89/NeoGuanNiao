@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
+public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T> {
 
     /**
      * 待处理受惊的持续时间
@@ -26,7 +26,7 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
      *
      */
     public BirdPendingFrightTicker() {
-        super( true, false);
+        super(true, false);
     }
 
     /**
@@ -37,34 +37,32 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
      */
     @Override
     protected void run() {
-        // 计时器归零时不处理
-        if (ticks <= 0) {
-            return;
+
+        var frightController = bird().getFrightController();
+        BirdData birdData = bird().getbirdData();
+
+        bird().getNavigation().stop();
+
+        Vec3 sourcePos = frightController.pendingFrightSource;
+        if (sourcePos != null) {
+            double lookX = sourcePos.x;
+            double lookY = sourcePos.y + birdData.fright().pendingFrightLookYOffset();
+            double lookZ = sourcePos.z;
+            float lookSpeed = birdData.fright().pendingFrightLookSpeed();
+            bird().getLookControl().setLookAt(lookX, lookY, lookZ, lookSpeed, lookSpeed);
+
         }
+    }
 
-        var frightController = bird.getFrightController();
-        BirdData birdData = bird.getbirdData();
+    @Override
+    protected void onExpire() {
 
-        // 停止导航移动
-        bird.getNavigation().stop();
-
-        // 计时器仍在运行时，持续注视惊吓来源
-        if (ticks > 0) {
-            Vec3 sourcePos = frightController.pendingFrightSource;
-            if (sourcePos != null) {
-                double lookX = sourcePos.x;
-                double lookY = sourcePos.y + birdData.fright().pendingFrightLookYOffset();
-                double lookZ = sourcePos.z;
-                float lookSpeed = birdData.fright().pendingFrightLookSpeed();
-                bird.getLookControl().setLookAt(lookX, lookY, lookZ, lookSpeed, lookSpeed);
-            }
-            return;
-        }
-
-        // 计时器归零，执行实际受惊行为
+        // 计时器即将归零，执行实际受惊行为
+        var frightController = bird().getFrightController();
+        BirdData birdData = bird().getbirdData();
         Vec3 sourcePos = frightController.pendingFrightSource != null
                 ? frightController.pendingFrightSource
-                : bird.position();
+                : bird().position();
 
         // 确定受惊持续时间
         int minDuration = birdData.fright().pendingFrightMinDuration();
@@ -74,5 +72,6 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
         frightController.pendingFrightSource = null;
         pendingFrightDuration = 0;
         frightController.frightenFrom(sourcePos, duration);
+
     }
 }

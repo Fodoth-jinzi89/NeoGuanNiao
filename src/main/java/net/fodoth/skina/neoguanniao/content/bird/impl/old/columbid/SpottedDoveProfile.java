@@ -80,7 +80,7 @@ public final class SpottedDoveProfile extends BirdSpeciesProfile {
     // ============ 玩家交互 ============
 
     @Override
-    public boolean isTemptingPlayer(Player player) {
+    public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
         return AbstractColumbidEntity.isSeedFood(player.getMainHandItem())
                 || AbstractColumbidEntity.isSeedFood(player.getOffhandItem());
     }

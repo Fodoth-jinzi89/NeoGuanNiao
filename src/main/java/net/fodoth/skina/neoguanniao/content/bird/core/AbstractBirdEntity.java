@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.bird.core;
 
-import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathContentType;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathFeedingAnimatable;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathMountable;
@@ -284,13 +283,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (compoundTag.contains("BirdSkinVariant", CompoundTag.TAG_INT)) {
             getModelController().setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
         } else {
-            NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] BirdSkinVariant compound tag is missing! + Entity: {}", this.getStringUUID());
             getModelController().randomizeSkinVariant();
         }
         if (compoundTag.contains("BirdModelScale", CompoundTag.TAG_FLOAT)) {
             this.setIndividualModelScale(BirdModelScale.load(compoundTag, this.modelScaleProfile()));
         } else {
-            NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] BirdModelScale compound tag is missing! + Entity: {}", this.getStringUUID());
             getModelController().randomizeModelScale();
         }
         if (compoundTag.hasUUID("BirdInterestedPlayer")) {
@@ -397,10 +394,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 // 地面移动逻辑
                 double deltaMovementSqr = this.getDeltaMovement().lengthSqr();
                 double walkingThreshold = BIRD_DATA.misc().walkingSpeedThreshold();
-                boolean isNavigating = this.getNavigation().isDone();
+                boolean isNavigationDone = this.getNavigation().isDone();
 
                 // 静止状态：移动速度低于阈值、导航结束且不是行走状态
-                if (!(deltaMovementSqr > walkingThreshold) && isNavigating && state != BirdBehaviorState.WALKING) {
+                // 或者：走不动了
+                if ((!(deltaMovementSqr > walkingThreshold) && isNavigationDone && state != BirdBehaviorState.WALKING) || ((state == BirdBehaviorState.WALKING) && deltaMovementSqr < 1.0E-3)) {
 
                     // 梳理羽毛
                     if (state == BirdBehaviorState.PREENING) {
@@ -521,5 +519,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void setMoveControl(MoveControl control) {
         this.moveControl = control;
     }
+
 
 }

@@ -220,7 +220,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
                     && !bird.isBirdEscaping()) {
 
 
-                if (movement.y > -0.85) {
+                if (movement.y > -0.85 && Math.abs(movement.y) > 0.001) {
                     return true;
                 }
 

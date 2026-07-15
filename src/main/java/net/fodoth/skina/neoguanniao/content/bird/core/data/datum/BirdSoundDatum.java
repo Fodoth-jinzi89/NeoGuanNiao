@@ -9,9 +9,10 @@ public record BirdSoundDatum(
         SoundEvent ambientSound,
         SoundEvent hurtSound,
         SoundEvent deathSound,
-        SoundEvent interactionSound
+        SoundEvent interactionSound,
+        SoundEvent eatSound
 ) {
     public static BirdSoundDatum createDefault() {
-        return new BirdSoundDatum(0.5F, 180, null, null, null, null);
+        return new BirdSoundDatum(0.5F, 180, null, null, null, null, null);
     }
 }

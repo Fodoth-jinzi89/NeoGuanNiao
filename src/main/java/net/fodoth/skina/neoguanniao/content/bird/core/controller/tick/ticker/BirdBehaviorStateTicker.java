@@ -31,21 +31,20 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
      * </p>
      */
     @Override
-    protected void run() {
-        var tickController = bird.getTickController();
+    protected void onExpire() {
+        var tickController = bird().getTickController();
         var timer = tickController.getTickTimer();
-        var stateController = bird.getBehaviorStateController();
-        var eatingController = bird.getEatingController();
-        var routineController = bird.getRoutineController();
-        var birdData = bird.getbirdData();
+        var stateController = bird().getBehaviorStateController();
+        var eatingController = bird().getEatingController();
+        var routineController = bird().getRoutineController();
+        var birdData = bird().getbirdData();
         var currentState = stateController.getBehaviorState();
         var postTameActionTicker = timer.getBirdPostTameActionTicker();
 
         // 只有在无特殊行为占用时才修正状态
-        boolean hasNoSpecialState = ticks <= 0
-                && postTameActionTicker.getTicks() <= 0
+        boolean hasNoSpecialState = postTameActionTicker.getTicks() <= 0
                 && !eatingController.isEating()
-                && !bird.isPassenger();
+                && !bird().isPassenger();
 
         if (!hasNoSpecialState) {
             return;
@@ -53,8 +52,8 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
 
         // 检查是否应该进入睡眠状态
         boolean shouldSleep = routineController.isRoostTime()
-                && bird.onGround()
-                && bird.getNavigation().isDone();
+                && bird().onGround()
+                && bird().getNavigation().isDone();
 
         if (shouldSleep) {
             stateController.setBehaviorState(BirdBehaviorState.SLEEPING);
@@ -68,10 +67,10 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
         }
 
         // 检查是否应该跟随主人
-        boolean isTame = bird.isTame();
-        boolean hasOwner = bird.getOwner() != null;
-        boolean isNavigating = !bird.getNavigation().isDone();
-        double distanceToOwnerSqr = hasOwner ? bird.distanceToSqr(bird.getOwner()) : 0;
+        boolean isTame = bird().isTame();
+        boolean hasOwner = bird().getOwner() != null;
+        boolean isNavigating = !bird().getNavigation().isDone();
+        double distanceToOwnerSqr = hasOwner ? bird().distanceToSqr(bird().getOwner()) : 0;
         double followingThreshold = birdData.misc().followingDistanceThreshold();
 
         if (isTame && hasOwner && isNavigating && distanceToOwnerSqr > followingThreshold) {
@@ -80,10 +79,10 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
         }
 
         // 根据移动情况选择行走或空闲状态
-        double movementSpeedSqr = bird.getDeltaMovement().lengthSqr();
+        double movementSpeedSqr = bird().getDeltaMovement().lengthSqr();
         double walkingThreshold = birdData.misc().walkingSpeedThreshold();
         boolean isMoving = movementSpeedSqr > walkingThreshold;
-        boolean isDoneNavigating = bird.getNavigation().isDone();
+        boolean isDoneNavigating = bird().getNavigation().isDone();
 
         if (!isMoving && isDoneNavigating) {
             // 如果当前是临时状态，则切换到空闲
