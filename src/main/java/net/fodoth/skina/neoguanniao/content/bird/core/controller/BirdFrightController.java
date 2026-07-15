@@ -28,8 +28,6 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
      * @param source 伤害来源
      */
     public void processHurt(@NotNull DamageSource source) {
-        var tickController = bird.getTickController();
-        var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
         var brain = bird.getBirdBrain();

@@ -196,7 +196,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
     }
 
 
-    // 便捷方法（与 getter 相同，但名称更简洁）
+    // 便捷方法（与 getter 相同）
     public BirdTickController<T> birdTickController() {
         return birdTickController;
     }

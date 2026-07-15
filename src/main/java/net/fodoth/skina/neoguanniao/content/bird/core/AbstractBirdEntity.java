@@ -359,40 +359,73 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return getAnimationController().getCache();
     }
 
+    /**
+     * 控制实体动画状态机，根据行为状态和计时器决定播放哪种动画
+     *
+     * @param animationState 动画状态对象，用于设置和切换动画
+     * @return 播放状态，包含要播放的动画
+     */
     public <E extends AbstractBirdEntity<?>> PlayState movementController(AnimationState<E> animationState) {
-        // 这里需要使用泛型，但内部调用需要调整
+        // 优先检查是否有引导预览动画（外部强制指定的动画）
         RawAnimation guidePreviewRawAnimation = getAnimationController().getCurrentGuideAnimation();
         if (guidePreviewRawAnimation != null) {
             return animationState.setAndContinue(guidePreviewRawAnimation);
         }
 
         BirdBehaviorState state = getBehaviorStateController().getBehaviorState();
-
         var tickTimer = getTickController().getTickTimer();
-        if (state != BirdBehaviorState.DANCING && tickTimer.getBirdNearbyMusicTicker().getTicks() <= 0) {
+
+        // 舞蹈动画条件：只有在非舞蹈状态且音乐计时器已归零时，才进入常规动画逻辑
+        // 否则直接播放舞蹈动画
+        if (state != BirdBehaviorState.DANCING && tickTimer.getBirdMusicTicker().getTicks() <= 0) {
+
+            // 进食动画条件：进食状态中或进食计时器未归零
             if (state != BirdBehaviorState.EATING && tickTimer.getBirdEatingTicker().getTicks() <= 0) {
+
+                // 睡眠动画：根据行为计时器判断是进入睡眠还是睡眠循环
                 if (state == BirdBehaviorState.SLEEPING) {
-                    return animationState.setAndContinue(tickTimer.getBirdBehaviorStateTicker().getTicks() > 0
-                            ? BIRD_DATA.animation().animationMap().get("sleep") : BIRD_DATA.animation().animationMap().get("sleep_loop"));
+                    String sleepAnimation = tickTimer.getBirdBehaviorStateTicker().getTicks() > 0
+                            ? "sleep" : "sleep_loop";
+                    return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get(sleepAnimation));
                 }
+
+                // 飞行动画：由飞行条件控制器决定
                 if (getAnimationController().shouldPlayFlyAnimation()) {
                     return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("fly"));
                 }
-                if (!(this.getDeltaMovement().lengthSqr() > BIRD_DATA.misc().walkingSpeedThreshold())
-                        && this.getNavigation().isDone() && state != BirdBehaviorState.WALKING) {
+
+                // 地面移动逻辑
+                double deltaMovementSqr = this.getDeltaMovement().lengthSqr();
+                double walkingThreshold = BIRD_DATA.misc().walkingSpeedThreshold();
+                boolean isNavigating = this.getNavigation().isDone();
+
+                // 静止状态：移动速度低于阈值、导航结束且不是行走状态
+                if (!(deltaMovementSqr > walkingThreshold) && isNavigating && state != BirdBehaviorState.WALKING) {
+
+                    // 梳理羽毛
                     if (state == BirdBehaviorState.PREENING) {
                         return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("preen"));
                     }
+
+                    // 空闲动画：非好奇、非警觉状态且好奇计时器归零时播放
                     if (state != BirdBehaviorState.CURIOUS && state != BirdBehaviorState.ALERT
                             && tickTimer.getBirdCuriousTicker().getTicks() <= 0) {
                         return animationState.setAndContinue(getAnimationController().pickIdleAnimation());
                     }
+
+                    // 好奇动画（默认的静止状态动画）
                     return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("curious"));
                 }
+
+                // 行走动画（移动中）
                 return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("walk"));
             }
+
+            // 进食动画（进食状态或进食计时器未归零）
             return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("eat"));
         }
+
+        // 舞蹈动画（音乐计时器运行中或处于舞蹈状态）
         return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("dance"));
     }
 

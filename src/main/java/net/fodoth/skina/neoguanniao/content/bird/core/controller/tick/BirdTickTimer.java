@@ -26,7 +26,8 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     private final BirdPostTameActionSwapTicker<T> birdPostTameActionSwapTicker;
     private final BirdPostTameActionTicker<T> birdPostTameActionTicker;
     private final BirdTrustTicker<T> birdTrustTicker;
-    private final BirdNearbyMusicTicker<T> birdNearbyMusicTicker;
+    private final BirdFindNearbyMusicLoopTicker<T> birdFindNearbyMusicLoopTicker;
+    private final BirdMusicTicker<T> birdMusicTicker;
 
 
     private final List<AbstractBirdTicker<T>> tickers;
@@ -67,8 +68,11 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
         birdTrustTicker =
                 new BirdTrustTicker<>();
 
-        birdNearbyMusicTicker =
-                new BirdNearbyMusicTicker<>();
+        birdFindNearbyMusicLoopTicker =
+                new BirdFindNearbyMusicLoopTicker<>();
+
+        birdMusicTicker =
+                new BirdMusicTicker<>();
 
 
         tickers = List.of(
@@ -83,7 +87,8 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
                 birdPostTameActionSwapTicker,
                 birdPostTameActionTicker,
                 birdTrustTicker,
-                birdNearbyMusicTicker
+                birdFindNearbyMusicLoopTicker,
+                birdMusicTicker
         );
     }
 
@@ -184,7 +189,11 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     }
 
 
-    public BirdNearbyMusicTicker<T> getBirdNearbyMusicTicker() {
-        return birdNearbyMusicTicker;
+    public BirdFindNearbyMusicLoopTicker<T> getBirdFindNearbyMusicLoopTicker() {
+        return birdFindNearbyMusicLoopTicker;
+    }
+
+    public BirdMusicTicker<T> getBirdMusicTicker() {
+        return birdMusicTicker;
     }
 }

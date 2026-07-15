@@ -13,7 +13,7 @@ public class BudgerigarMusicDanceGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.budgerigar.getTickController().getTickTimer().getBirdNearbyMusicTicker().getTicks() > 0
+        return this.budgerigar.getTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
                 && !this.budgerigar.getEatingController().isEating()
                 && !this.budgerigar.getBehaviorStateController().getBehaviorState().isEscape();
     }
@@ -26,7 +26,7 @@ public class BudgerigarMusicDanceGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.budgerigar.getTickController().getTickTimer().getBirdNearbyMusicTicker().getTicks() > 0
+        return this.budgerigar.getTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
                 && !this.budgerigar.getEatingController().isEating()
                 && !this.budgerigar.getBehaviorStateController().getBehaviorState().isEscape();
     }

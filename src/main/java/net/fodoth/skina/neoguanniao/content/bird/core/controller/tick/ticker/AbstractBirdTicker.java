@@ -35,6 +35,10 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
     protected final boolean shouldTickClient;
 
 
+
+    protected final boolean isLoopTicker;
+
+
     /**
      * 关联的鸟类实体
      */
@@ -63,8 +67,24 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
             boolean shouldTickCommon,
             boolean shouldTickClient
     ) {
+        this(shouldTickCommon, shouldTickClient, false);
+    }
+
+    /**
+     * 创建计时器
+     *
+     * @param shouldTickCommon 是否执行服务端 Tick
+     * @param shouldTickClient 是否执行客户端 Tick
+     * @param isLoopTicker 是否是循环计时器（归零后会重置计时）
+     */
+    public AbstractBirdTicker(
+            boolean shouldTickCommon,
+            boolean shouldTickClient,
+            boolean isLoopTicker
+    ) {
         this.shouldTickCommon = shouldTickCommon;
         this.shouldTickClient = shouldTickClient;
+        this.isLoopTicker = isLoopTicker;
     }
 
 
@@ -146,15 +166,24 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
         return shouldTickCommon;
     }
 
+    public boolean isLoopTicker() {
+        return isLoopTicker;
+    }
+
 
     /**
      * 服务端 Tick
      */
     public void tick() {
 
+        if (ticks <= 0 && isLoopTicker) {
+            reset();
+        }
+
         if (shouldTickCommon && ticks > 0) {
             --ticks;
         }
+
 
         run();
     }
@@ -164,6 +193,10 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      * 客户端 Tick
      */
     public void tickClient() {
+
+        if (ticks <= 0 && isLoopTicker) {
+            reset();
+        }
 
         if (shouldTickClient && ticks > 0) {
             --ticks;
@@ -185,5 +218,10 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      */
     protected void runClient() {
         run();
+    }
+
+
+    protected void reset() {
+
     }
 }

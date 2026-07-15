@@ -50,7 +50,6 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         this.cache = GeckoLibUtil.createInstanceCache(bird());
 
         this.currentIdleAnimation = pickIdleAnimation();
-
         setGuidePreviewAnimation(null);
     }
 

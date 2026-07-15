@@ -87,7 +87,7 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
     @Override
     protected void initControllers() {
         super.initControllers();
-        getBirdControllers().getBirdTickController().getTickTimer().getBirdNearbyMusicTicker().setTicks(10 + this.getRandom().nextInt(20));
+        getBirdControllers().getBirdTickController().getTickTimer().getBirdFindNearbyMusicLoopTicker().setTicks(10 + this.getRandom().nextInt(20));
     }
 
 
@@ -183,15 +183,15 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
     }
 
     public boolean isDancing() {
-        return this.getBirdControllers().getBirdTickController().getTickTimer().getBirdNearbyMusicTicker().getTicks() > 0
+        return this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
                 || this.getBirdControllers().getBirdBehaviorStateController().getBehaviorState() == BirdBehaviorState.DANCING;
     }
 
 
     public void triggerMusic(int ticks) {
-        this.getBirdControllers().getBirdTickController().getTickTimer().getBirdNearbyMusicTicker().setTicks(
+        this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().setTicks(
                 Math.max(
-                        this.getBirdControllers().getBirdTickController().getTickTimer().getBirdNearbyMusicTicker().getTicks(),
+                        this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().getTicks(),
                         ticks
                 )
         );

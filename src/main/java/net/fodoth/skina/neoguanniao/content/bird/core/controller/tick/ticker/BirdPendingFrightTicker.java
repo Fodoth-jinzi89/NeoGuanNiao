@@ -45,9 +45,6 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
         var frightController = bird.getFrightController();
         BirdData birdData = bird.getbirdData();
 
-        // 减少计时器
-        --ticks;
-
         // 停止导航移动
         bird.getNavigation().stop();
 
