@@ -79,4 +79,9 @@ public class BirdRoutineController<T extends AbstractBirdEntity<T>> extends Abst
         BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
         return state == BirdBehaviorState.SLEEPING || state == BirdBehaviorState.ROOSTING;
     }
+
+    public boolean isSleeping() {
+        BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
+        return state == BirdBehaviorState.SLEEPING;
+    }
 }

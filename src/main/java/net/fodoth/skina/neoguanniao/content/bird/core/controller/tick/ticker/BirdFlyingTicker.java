@@ -51,6 +51,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
 
     @Override
     protected void onExpire() {
+        super.onExpire();
         if (!bird().getFlyingController().isLandingFlight && bird().getTickController().getTickTimer().getBirdLandingTicker().getTicks() == 0) {
             bird().getFlyingController().beginLandingFlight();
             flyingTime = 0;

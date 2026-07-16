@@ -1,5 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.bird.core;
 
+import java.util.EnumSet;
+
 public enum BirdBehaviorState {
     IDLE,
     WALKING,
@@ -25,15 +27,37 @@ public enum BirdBehaviorState {
         return this == FLEEING || this == ALERT;
     }
 
-    public boolean isActive() {
-        return this != SLEEPING && this != ROOSTING;
+    /**
+     * 判断是否启用不安全飞行计时器
+     */
+    public boolean isUnsafeFlyTickerEnabled() {
+        return EnumSet.of(
+                BirdBehaviorState.IDLE,
+                BirdBehaviorState.SENTINEL,
+                BirdBehaviorState.ALERT,
+                BirdBehaviorState.PREENING,
+                BirdBehaviorState.CURIOUS,
+                BirdBehaviorState.DANCING,
+                BirdBehaviorState.ROOSTING,
+                BirdBehaviorState.SLEEPING
+        ).contains(this);
     }
 
-    public boolean isUnsafeFlyEnabled() {
-        return this == BirdBehaviorState.IDLE || this == BirdBehaviorState.WALKING || this == BirdBehaviorState.SENTINEL || this == BirdBehaviorState.ALERT || this == BirdBehaviorState.ROOSTING || this == BirdBehaviorState.SLEEPING || this == BirdBehaviorState.PREENING || this == BirdBehaviorState.CURIOUS || this == BirdBehaviorState.DANCING;
-    }
+    /**
+     * 判断是否启用不安全浮动计时器
+     */
+    public boolean isUnsafeFloatTickerEnabled() {
+        EnumSet<BirdBehaviorState> flyStates = EnumSet.of(
+                BirdBehaviorState.IDLE,
+                BirdBehaviorState.WALKING,
+                BirdBehaviorState.SENTINEL,
+                BirdBehaviorState.ALERT,
+                BirdBehaviorState.PREENING,
+                BirdBehaviorState.CURIOUS,
+                BirdBehaviorState.DANCING,
+                BirdBehaviorState.EATING
+        );
 
-    public boolean isUnsafeFloatEnabled() {
-        return isUnsafeFlyEnabled() || this == BirdBehaviorState.EATING;
+        return flyStates.contains(this);
     }
 }

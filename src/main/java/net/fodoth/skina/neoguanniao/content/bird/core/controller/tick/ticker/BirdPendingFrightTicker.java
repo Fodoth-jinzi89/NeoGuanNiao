@@ -57,6 +57,7 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
     @Override
     protected void onExpire() {
 
+        super.onExpire();
         // 计时器即将归零，执行实际受惊行为
         var frightController = bird().getFrightController();
         BirdData birdData = bird().getbirdData();

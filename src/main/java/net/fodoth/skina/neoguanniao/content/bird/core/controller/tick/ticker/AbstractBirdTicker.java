@@ -1,6 +1,8 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 /**
  * 鸟类 Tick 计时器抽象基类
@@ -43,11 +45,9 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
     protected final boolean shouldTickClient;
 
 
-
     protected final boolean isLoopTicker;
 
-
-
+    private boolean frozen = false;
 
 
     /**
@@ -80,7 +80,7 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      *
      * @param shouldTickCommon 是否执行服务端 Tick
      * @param shouldTickClient 是否执行客户端 Tick
-     * @param isLoopTicker 是否是循环计时器（归零后会重置计时）
+     * @param isLoopTicker     是否是循环计时器（归零后会重置计时）
      */
     public AbstractBirdTicker(
             boolean shouldTickCommon,
@@ -159,8 +159,9 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
         if (ticks < 0) {
             throw new IllegalArgumentException("Ticks cannot be negative: " + ticks);
         }
-
+        onSet(this.ticks, ticks);
         this.ticks = ticks;
+
     }
 
 
@@ -189,13 +190,18 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      */
     public void tick() {
 
-        if (!shouldTickCommon) {
+
+        if (!shouldTickCommon || isFrozen()) {
             return;
         }
 
         // 循环计时器归零时重置
         if (isLoopTicker && ticks <= 0) {
             reset();
+            updateFrozen();
+            if (isFrozen()) {
+                return;
+            }
         }
 
         // 计时器递减并执行
@@ -215,13 +221,17 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
      */
     public void tickClient() {
 
-        if (!shouldTickClient) {
+        if (!shouldTickClient || isFrozen()) {
             return;
         }
 
         // 循环计时器归零时重置
         if (isLoopTicker && ticks <= 0) {
             resetClient();
+            updateFrozenClient();
+            if (isFrozen()) {
+                return;
+            }
         }
 
         // 计时器递减并执行
@@ -251,6 +261,7 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
 
 
     protected void reset() {
+        onReset();
     }
 
     protected void resetClient() {
@@ -258,9 +269,94 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
     }
 
     protected void onExpire() {
+        if (enableLifecycleLog() && !isLoopTicker) {
+            NeoGuanNiao.LOGGER.info(
+                    "[Ticker] {} expired",
+                    debugName()
+            );
+        }
     }
 
     protected void onExpireClient() {
         onExpire();
+    }
+
+
+    protected void onSet(int ticksOld, int ticksNew) {
+        if (enableLifecycleLog() && !isLoopTicker) {
+            NeoGuanNiao.LOGGER.info(
+                    "[Ticker] {}: Set {} -> {}",
+                    debugName(),
+                    ticksOld,
+                    ticksNew
+            );
+        }
+    }
+
+    protected void onReset() {
+        if (enableLifecycleLog()) {
+            NeoGuanNiao.LOGGER.info(
+                    "[LoopTicker] {} reset ({})",
+                    debugName(),
+                    ticks
+            );
+        }
+    }
+
+    public final boolean isRunning() {
+        return ticks > 0;
+    }
+
+    public final void onDebug() {
+        debug();
+    }
+
+    protected void debug() {
+    }
+
+    protected String debugName() {
+        String name = getClass().getSimpleName();
+
+        if (name.startsWith("Bird")) {
+            name = name.substring(4);
+        }
+
+        if (name.endsWith("Ticker")) {
+            name = name.substring(0, name.length() - 6);
+        }
+
+        return name;
+    }
+
+    public final String debugLine() {
+        String state = isRunning() ? "✔" : "✘";
+        if (isFrozen()) {
+            state = "□";
+        }
+        return String.format(
+                " %-28s %s %4d",
+                debugName(),
+                state,
+                ticks
+        );
+    }
+
+    public final boolean enableLifecycleLog() {
+        return !FMLEnvironment.production;
+    }
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    protected void updateFrozen() {
+    }
+
+    protected void updateFrozenClient() {
+        updateFrozen();
     }
 }

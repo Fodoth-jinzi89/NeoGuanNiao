@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
+// TODO 兼容原版Sleeping系统，鸟可以睡在书架啦床啦之类的方块，可以占用床，搞个标签
 public class BudgerigarRoostGoal extends Goal {
     private final BudgerigarEntity budgerigar;
     private BlockPos roostPos;
@@ -23,7 +24,7 @@ public class BudgerigarRoostGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.budgerigar.getRoutineController().isRoostTime() || this.budgerigar.getEatingController().isEating() || this.budgerigar.isDancing()) {
+        if (!this.budgerigar.getRoutineController().isRoostTime() || this.budgerigar.getEatingController().isEating() || this.budgerigar.isDancing() || this.budgerigar.getRoutineController().isSleeping()) {
             return false;
         }
 
@@ -38,7 +39,7 @@ public class BudgerigarRoostGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         return this.roostPos != null && this.budgerigar.getRoutineController().isRoostTime()
-                && !this.budgerigar.getEatingController().isEating() && !this.budgerigar.isDancing();
+                && !this.budgerigar.getEatingController().isEating() && !this.budgerigar.isDancing() && !this.budgerigar.getRoutineController().isSleeping();
     }
 
     @Override

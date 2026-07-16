@@ -35,6 +35,7 @@ public class BirdEatingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
 
     @Override
     protected void onExpire() {
+        super.onExpire();
         bird().getEatingController().clearEating();
     }
 }

@@ -59,8 +59,8 @@ public class BudgerigarEatFoodGoal extends Goal {
 
         double distance = this.budgerigar.distanceToSqr(this.targetFood);
 
-        if (distance < 1.5) {
-            this.budgerigar.getEatingController().consumeItemEntity(this.targetFood);
+        if (distance < 1.0) {
+            this.budgerigar.getEatingController().consumeItemEntity(this.budgerigar, this.targetFood);
             this.targetFood = null;
             this.budgerigar.getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
             return;

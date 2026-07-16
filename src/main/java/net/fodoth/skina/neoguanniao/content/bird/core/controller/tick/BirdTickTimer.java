@@ -1,9 +1,13 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker.*;
+import net.neoforged.fml.loading.FMLEnvironment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 鸟类 Tick 计时器管理器
@@ -30,6 +34,11 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     private final BirdMusicTicker<T> birdMusicTicker;
     private final BirdLandingTicker<T> birdLandingTicker;
     private final BirdUnsafeFlyLoopTicker<T> birdUnsafeFlyLoopTicker;
+    private final BirdUnsafeFloatLoopTicker<T> birdUnsafeFloatLoopTicker;
+
+
+
+    private final DebugLoopTicker<T> debugLoopTicker;
 
 
     private final List<AbstractBirdTicker<T>> tickers;
@@ -80,8 +89,11 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
 
         birdUnsafeFlyLoopTicker = new BirdUnsafeFlyLoopTicker<>();
 
+        birdUnsafeFloatLoopTicker = new BirdUnsafeFloatLoopTicker<>();
 
-        tickers = List.of(
+        debugLoopTicker = new DebugLoopTicker<>();
+
+        List<AbstractBirdTicker<T>> tickers = new ArrayList<>(List.of(
                 birdBehaviorStateTicker,
                 birdCuriousTicker,
                 birdEatingTicker,
@@ -96,8 +108,16 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
                 birdFindNearbyMusicLoopTicker,
                 birdMusicTicker,
                 birdLandingTicker,
-                birdUnsafeFlyLoopTicker
-        );
+                birdUnsafeFlyLoopTicker,
+                birdUnsafeFloatLoopTicker
+        ));
+
+        if (!FMLEnvironment.production) {
+            tickers.add(debugLoopTicker);
+            NeoGuanNiao.LOGGER.info("[NeoGuanNiao] Dev environment, register DebugLoopTicker");
+        }
+
+        this.tickers = List.copyOf(tickers);
     }
 
 
@@ -212,4 +232,20 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     public BirdUnsafeFlyLoopTicker<T> getBirdUnsafeFlyLoopTicker() {
         return birdUnsafeFlyLoopTicker;
     }
+
+    public BirdUnsafeFloatLoopTicker<T> getBirdUnsafeFloatLoopTicker() {
+        return birdUnsafeFloatLoopTicker;
+    }
+
+    public void forEachTicker(Consumer<AbstractBirdTicker<T>> consumer) {
+        tickers.forEach(consumer);
+    }
+
+    public DebugLoopTicker<T> getDebugLoopTicker() {
+        if (FMLEnvironment.production) {
+            NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] Warn: Trying to get debug loop ticker in production environment! It will not tick.");
+        }
+        return debugLoopTicker;
+    }
+
 }

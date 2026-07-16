@@ -87,8 +87,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
      */
     protected void initControllers() {
         if (BIRD_CONTROLLERS != null) {
-            BIRD_CONTROLLERS.attach(getSelf()); // 使用 getSelf() 方法
+            BIRD_CONTROLLERS.attach(getSelf());
         }
+
+        // 用于兼容坐垫之类的
+        getBirdControllers().getBirdTickController().getTickTimer().getBirdLandingTicker().setTicks(100);
     }
 
     public BirdControllers<T> getBirdControllers() {
@@ -333,7 +336,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     public boolean isFlying() {
-        return getFlyingController().isBirdFlying();
+        return getFlyingController().isBirdFlyingOrLanding();
     }
 
     @Override
@@ -397,8 +400,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 boolean isNavigationDone = this.getNavigation().isDone();
 
                 // 静止状态：移动速度低于阈值、导航结束且不是行走状态
-                // 或者：走不动了
-                if ((!(deltaMovementSqr > walkingThreshold) && isNavigationDone && state != BirdBehaviorState.WALKING) || ((state == BirdBehaviorState.WALKING) && deltaMovementSqr < 1.0E-3)) {
+                if ((!(deltaMovementSqr > walkingThreshold) && isNavigationDone && state != BirdBehaviorState.WALKING)) {
 
                     // 梳理羽毛
                     if (state == BirdBehaviorState.PREENING) {

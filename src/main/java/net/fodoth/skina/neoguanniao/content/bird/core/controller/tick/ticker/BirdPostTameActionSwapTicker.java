@@ -24,6 +24,7 @@ public class BirdPostTameActionSwapTicker<T extends AbstractBirdEntity<T>> exten
 
     @Override
     protected void onExpire() {
+        super.onExpire();
         var behaviorStateTicker = bird().getTickController().getTickTimer().getBirdBehaviorStateTicker();
         var stateController = bird().getBehaviorStateController();
         var currentState = stateController.getBehaviorState();

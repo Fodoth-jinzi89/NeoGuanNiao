@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
  * 负责处理鸟类进食、喂食、信任值增长以及驯服相关逻辑。
  * </p>
  */
-public class BirdEatingController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
+public class BirdEatingController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T> {
 
 
     /**
@@ -105,9 +105,10 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
     /**
      * 消耗掉落物作为食物
      *
+     * @param bird       鸟类实体
      * @param itemEntity 掉落物实体
      */
-    public void consumeItemEntity(ItemEntity itemEntity) {
+    public void consumeItemEntity(AbstractBirdEntity<T> bird, ItemEntity itemEntity) {
         // 获取掉落物中的物品
         ItemStack stack = itemEntity.getItem();
 
@@ -134,6 +135,9 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         var tickController = bird().getTickController();
         var timer = tickController.getTickTimer();
 
+        // ========== 新增：食物飞向鸟类动画 ==========
+        spawnFlyingFood(bird, itemEntity, eaten);
+
         // 开始进食动画
         startEatingFood(eaten);
 
@@ -149,6 +153,21 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 向附近同类分享信任值
         int nearbyTrustAmount = (int) (tameDatum.addTrustNearbyValue() * miscDatum.droppedItemTrustMultiplier());
         shareTrustNearby(nearbyTrustAmount);
+    }
+
+    private void spawnFlyingFood(AbstractBirdEntity<T> bird, ItemEntity itemEntity, ItemStack food) {
+        ItemEntity flyingFood = new ItemEntity(bird.level(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), food.copy());
+        flyingFood.setPickUpDelay(20);
+        flyingFood.lifespan = 10;
+        double dx = bird.getX() - flyingFood.getX();
+        double dy = bird.getY() + 0.5 * bird.getBbHeight() - flyingFood.getY();
+        double dz = bird.getZ() - flyingFood.getZ();
+        double speed = 0.18;
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (distance > 0) {
+            flyingFood.setDeltaMovement((dx / distance) * speed, (dy / distance) * speed, (dz / distance) * speed);
+        }
+        bird.level().addFreshEntity(flyingFood);
     }
 
     /**

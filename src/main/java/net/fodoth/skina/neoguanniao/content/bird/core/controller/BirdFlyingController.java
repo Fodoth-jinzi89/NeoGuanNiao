@@ -1,16 +1,26 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.*;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightManager;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -71,16 +81,14 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      *
      * @return 如果正在飞行返回 true
      */
-    public boolean isBirdFlying() {
+    public boolean isBirdFlyingOrLanding() {
         var timer = bird.getTickController().getTickTimer();
         BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
 
-        return timer.getBirdFlyingTicker().getTicks() > 0
-                || bird.isBirdLanding()
-                || !bird.onGround()
-                || bird.isInWater()
+        return timer.getBirdFlyingTicker().isRunning()
+                || timer.getBirdLandingTicker().isRunning()
                 || state == BirdBehaviorState.FLYING
-                || (state == BirdBehaviorState.FLEEING && !bird.onGround());
+                || state == BirdBehaviorState.FLEEING;
     }
 
     /**
@@ -90,7 +98,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      */
     public boolean isFlightInProgress() {
         var timer = bird.getTickController().getTickTimer();
-        return timer.getBirdFlyingTicker().getTicks() > 0 || bird.isBirdLanding();
+        return timer.getBirdFlyingTicker().isRunning();
     }
 
     /**
@@ -228,6 +236,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
         isEscapeFlightActive = false;
         isLandingFlight = false;
+        bird.getNavigation().stop();
         bird.setNoGravity(false);
         bird.setSilent(false);
         bird.noCulling = false;
@@ -244,9 +253,15 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
                 ? miscDatum.tameCooldownMin() + bird.getRandom().nextInt(miscDatum.tameCooldownVariance())
                 : miscDatum.wildCooldownMin() + bird.getRandom().nextInt(miscDatum.wildCooldownVariance())
         );
-        bird().getTickController().getTickTimer().getBirdLandingTicker().setTicks(cooldownTicks);
+        bird.getTickController().getTickTimer().getBirdLandingTicker().setTicks(cooldownTicks);
 
-        bird().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, cooldownTicks, 0, false, false));
+        bird.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, cooldownTicks, 0, false, false));
+
+        bird.setNoActionTime((int) (cooldownTicks * 1.2));
+
+        if (flyingTicker.enableLifecycleLog()) {
+            NeoGuanNiao.LOGGER.info("[Controller] Finish flight with cooldown ticks: {}", cooldownTicks);
+        }
 
         if (bird.getBehaviorStateController().getBehaviorState().isAirborne()) {
             bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, miscDatum.postFlightAlertTicks());
@@ -479,5 +494,107 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             }
         }
         return false;
+    }
+
+    public void processLanding() {
+
+        bird().setNoGravity(false);
+        // 获取当前鸟的移动速度向量
+        Vec3 currentDelta = bird().getDeltaMovement();
+        var landingTicker = bird().getTickController().getTickTimer().getBirdLandingTicker();
+        boolean enableLifecycleLog = landingTicker.enableLifecycleLog();
+
+        // 1. 平滑过渡处理：水平速度减慢，垂直下落加快
+        // 水平分量（x 和 z）乘以衰减系数，实现减速效果
+        double newX = currentDelta.x * 0.85;
+        double newZ = currentDelta.z * 0.85;
+
+        // 垂直分量（y）乘以加速系数，实现下落加快效果
+        double newY = currentDelta.y * 1.15;
+
+        // 2. 如果原来的垂直分量 >= -0.01，设置为一个 < 0 的小值
+        // 这确保了鸟儿在开始下落时有一个足够大的向下的初速度
+        if (currentDelta.y >= -0.01) {
+            newY = -0.01;
+        }
+
+        var pos = findDryLandingSurfaceInAir(bird().blockPosition(), 3);
+        boolean found = pos != null;
+
+        // 3. 如果降落到不对的地方，需要重新起飞
+        if (!found) {
+            if (enableLifecycleLog) {
+                NeoGuanNiao.LOGGER.info("[Controller] Flying: Bird land failed, restart flying");
+            }
+            landingTicker.setTicks(0);
+            startShortFlight(null, true);
+
+        }
+
+        if (bird().onGround()) {
+            newY = 0;
+        } else {
+            bird.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 0, false, false));
+        }
+
+        // 应用计算后的移动速度
+        bird().setDeltaMovement(new Vec3(newX, newY, newZ));
+
+    }
+
+
+    @SuppressWarnings("SameParameterValue")
+    private BlockPos findDryLandingSurfaceInAir(BlockPos center, int verticalRange) {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+        for (int yOffset = 0; yOffset >= -verticalRange; --yOffset) {
+            mutable.set(center.getX(), center.getY() + yOffset, center.getZ());
+            if (this.isSafeDryLandingOrAir(mutable)) {
+                return mutable.immutable();
+            }
+        }
+        return null;
+    }
+
+    private boolean isSafeDryLandingOrAir(BlockPos pos) {
+        Level level = bird().level();
+        if (!level.hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
+            return false;
+        }
+
+        BlockState below = level.getBlockState(pos.below());
+        BlockState feet = level.getBlockState(pos);
+        BlockState head = level.getBlockState(pos.above());
+
+        if (!feet.getCollisionShape(level, pos).isEmpty() || !head.getCollisionShape(level, pos.above()).isEmpty()) {
+            return false;
+        }
+
+        // 检查流体
+        if (level.getFluidState(pos).is(FluidTags.WATER)
+                || level.getFluidState(pos).is(FluidTags.LAVA)
+                || level.getFluidState(pos.below()).is(FluidTags.WATER)
+                || level.getFluidState(pos.below()).is(FluidTags.LAVA)) {
+            return false;
+        }
+
+        // 检查下方方块
+        if (below.is(Blocks.WATER) || below.is(Blocks.LAVA)) {
+            return false;
+        }
+
+        // 检查是否为可站立表面或空气
+        return below.isAir() || below.isFaceSturdy(level, pos.below(), Direction.UP)
+                || below.is(NeoGuanNiaoBlockTags.BIRD_PERCHES)
+                || below.is(BlockTags.FENCES)
+                || below.is(BlockTags.WALLS)
+                || below.is(BlockTags.LEAVES)
+                || below.is(BlockTags.DIRT)
+                || below.is(BlockTags.SAND)
+                || below.is(Blocks.FARMLAND)
+                || below.is(Blocks.GRASS_BLOCK)
+                || below.is(Blocks.PODZOL)
+                || below.is(Blocks.MYCELIUM)
+                || below.getBlock() instanceof FenceBlock
+                || below.getBlock() instanceof FenceGateBlock;
     }
 }

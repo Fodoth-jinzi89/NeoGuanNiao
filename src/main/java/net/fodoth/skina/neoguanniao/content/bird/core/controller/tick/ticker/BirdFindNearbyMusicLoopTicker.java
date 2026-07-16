@@ -16,7 +16,14 @@ public class BirdFindNearbyMusicLoopTicker<T extends AbstractBirdEntity<T>> exte
     }
 
     @Override
+    protected void updateFrozen() {
+        boolean shouldFreeze = bird().getRoutineController().isRoostTime();
+        setFrozen(shouldFreeze);
+    }
+
+    @Override
     protected void reset() {
+        super.reset();
         if (bird() instanceof BudgerigarEntity budgerigar) {
             setTicks(18 + budgerigar.getRandom().nextInt(14));
             BlockPos sourcePos = budgerigar.findNearbyJukebox();
@@ -31,6 +38,10 @@ public class BirdFindNearbyMusicLoopTicker<T extends AbstractBirdEntity<T>> exte
             }
 
         }
+    }
+
+    @Override
+    protected void onReset() {
     }
 
 }

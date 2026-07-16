@@ -136,7 +136,7 @@ public class BirdBehaviorStateController<T extends AbstractBirdEntity<T>> extend
      * 该方法不会读取 EntityData。
      * </p>
      */
-    public BirdBehaviorState behaviorState() {
+    public BirdBehaviorState getCachedBehaviorState() {
         return behaviorState;
     }
 }

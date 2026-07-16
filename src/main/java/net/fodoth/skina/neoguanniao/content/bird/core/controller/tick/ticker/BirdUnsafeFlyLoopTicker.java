@@ -1,6 +1,14 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * 鸟类不安全飞行循环处理器
@@ -54,9 +62,6 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
      *   <li>行为状态允许执行不安全飞行修正（{@code isUnsafeFlyEnabled()} 返回 true）</li>
      * </ol>
      *
-     * <p><strong>额外处理：</strong></p>
-     * <p>如果鸟儿不在地面上且行为状态允许不安全悬浮修正，则取消无重力状态，
-     * 防止鸟儿异常悬浮。</p>
      *
      * @see AbstractBirdTicker#setTicks(int)
      * @see AbstractBirdEntity#getFlyingController()
@@ -64,35 +69,101 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
      */
     @Override
     protected void reset() {
+        super.reset();
         // 设置检查间隔为 20 个游戏刻（约 1 秒），控制检查频率避免过度消耗性能
         setTicks(20);
+        processUnsafeFlying();
 
-        // 获取当前鸟类实体实例
+    }
+
+    private void processUnsafeFlying() {
         T bird = bird();
-
         // ---- 不安全飞行修正逻辑 ----
         // 检查鸟儿是否处于需要修正的异常悬空状态
-        boolean isUnsafeFlying = !bird.onGround()                                    // 不在地面
-                && !bird.getFlyingController().isBirdFlightActive()                  // 飞行未激活
-                && !bird.isPassenger()                                              // 不是乘客（未被骑乘）
-                && bird.getDeltaMovement().lengthSqr() > 1.0E-4                     // 有移动速度（正在移动）
-                && bird.getTickController().getTickTimer().getBirdLandingTicker().getTicks() == 0 // 着陆计时器为0（非着陆延迟状态）
-                && bird.getBehaviorStateController().getBehaviorState().isUnsafeFlyEnabled();     // 行为状态允许不安全飞行修正
-
-        // 如果满足所有条件，则启动短程飞行以修正位置
-        if (isUnsafeFlying) {
-            // 触发短程飞行，不指定目标位置（自动调整），且不强制持续飞行
-            bird.getFlyingController().startShortFlight(null, false);
+        boolean flag1 = !bird.onGround();
+        boolean flag2 = !bird.getFlyingController().isBirdFlightActive();
+        boolean flag3 = !bird.isPassenger();
+        boolean flag4 = bird.getTickController().getTickTimer().getBirdLandingTicker().getTicks() == 0;
+        boolean flag5 = bird.getBehaviorStateController().getBehaviorState().isUnsafeFlyTickerEnabled();
+        boolean isUnsafeFlying = flag1 && flag2 && flag3 && flag4 && flag5;
+        if (!isUnsafeFlying) {
+            if (enableLifecycleLog() && bird().getRandom().nextFloat() <= 0.1) {
+                NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Early Return with flags: {} {} {} {} {}", flag1, flag2, flag3, flag4, flag5);
+            }
+            return;
         }
 
-        // ---- 不安全悬浮修正逻辑 ----
-        // 检查是否需要处理异常悬浮状态
-        boolean isUnsafeFloating = !bird.onGround()
-                && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatEnabled();
-
-        if (isUnsafeFloating) {
-            // 取消无重力状态，防止鸟儿异常悬浮在半空中
-            bird.setNoGravity(false);
+        boolean roosting = bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.ROOSTING;
+        boolean stuckInAir = bird().getDeltaMovement().length() < 0.2;
+        if (roosting) {
+            if (!stuckInAir) {
+                if (enableLifecycleLog()) {
+                    NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Bird roosting properly with movement length: {}, skip check", bird().getDeltaMovement().length());
+                }
+            }
+            return;
         }
+        boolean sleeping = bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.SLEEPING;
+        boolean isSleepingPlaceStillValid = positionStillValid();
+        if (sleeping && isSleepingPlaceStillValid) {
+            if (enableLifecycleLog() && bird().getTickController().getTickTimer().getDebugLoopTicker().getTicks() < 5) {
+                NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Bird sleeping in valid place, raise alertness and skip check");
+            }
+            setTicks(Math.min(getTicks(), 5));
+            return;
+        }
+
+        BirdData birdData = bird.getbirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+
+        var dataTicks = flyingDatum.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.ambientAirCruiseRandomTicks());
+        var landingTicks = getTicks() + dataTicks;
+        // 触发短程飞行，不指定目标位置（自动调整），且不强制持续飞行
+
+        bird.getFlyingController().startShortFlight(null, false);
+
+        NeoGuanNiao.LOGGER.info("Unsafe Flying ticker with Data Ticks: {}, LandingTicks: {}", dataTicks, landingTicks);
+        setTicks(Math.min((int)(landingTicks * 2.5), dataTicks * 10));
     }
+
+    @Override
+    protected void onReset() {
+    }
+
+    /**
+     * 检查鸟的当前位置是否有效
+     * 规则：
+     * 1. 如果鸟躲在树叶里面，下方必须为空
+     * 2. 如果鸟在空气中，下方必须为实体方块（不能在空中悬浮）
+     * 3. 其他情况视为无效
+     *
+     * @return true 表示位置有效，false 表示位置无效
+     */
+
+    //TODO 兼容鸟巢，鸟浴盆等可以休息的方块
+    public boolean positionStillValid() {
+        BlockPos pos = bird().blockPosition();
+        BlockPos belowPos = pos.below();
+
+        BlockState currentState = bird().level().getBlockState(pos);
+        BlockState belowState = bird().level().getBlockState(belowPos);
+
+        // 判断是否为空气
+        boolean currentIsAir = currentState.isAir() || currentState.is(Blocks.AIR);
+        boolean belowIsAir = belowState.isAir() || belowState.is(Blocks.AIR);
+
+        // 情况1：站在树叶上 -> 下方必须为空气
+        if (currentState.getBlock() instanceof LeavesBlock) {
+            return belowIsAir;
+        }
+
+        // 情况2：站在空气中 -> 下方必须为实体方块（非空气）
+        if (currentIsAir) {
+            return !belowIsAir;
+        }
+
+        // 其他情况：站在非树叶的实体方块上 -> 无效
+        return false;
+    }
+
 }

@@ -27,6 +27,8 @@ public final class NeoGuanNiaoEntityTypes {
 
     public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity>> NEO_BUDGERIGAR;
 
+
+
     private NeoGuanNiaoEntityTypes() {
     }
 

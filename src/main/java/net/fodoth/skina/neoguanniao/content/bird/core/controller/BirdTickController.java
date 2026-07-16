@@ -2,6 +2,9 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.BirdTickTimer;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker.AbstractBirdTicker;
+
+import java.util.function.Consumer;
 
 /**
  * 鸟类 Tick 生命周期控制器
@@ -65,5 +68,14 @@ public class BirdTickController<T extends AbstractBirdEntity<T>> extends Abstrac
      */
     public BirdTickTimer<?> getTickTimer() {
         return TICK_TIMER;
+    }
+
+    /**
+     * 对所有已注册的 Ticker 执行指定操作。
+     *
+     * @param consumer Ticker 访问器
+     */
+    public void forEachTicker(Consumer<AbstractBirdTicker<T>> consumer) {
+        TICK_TIMER.forEachTicker(consumer);
     }
 }

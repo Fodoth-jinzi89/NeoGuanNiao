@@ -32,6 +32,7 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
      */
     @Override
     protected void onExpire() {
+        super.onExpire();
         var tickController = bird().getTickController();
         var timer = tickController.getTickTimer();
         var stateController = bird().getBehaviorStateController();
@@ -52,7 +53,6 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
 
         // 检查是否应该进入睡眠状态
         boolean shouldSleep = routineController.isRoostTime()
-                && bird().onGround()
                 && bird().getNavigation().isDone();
 
         if (shouldSleep) {

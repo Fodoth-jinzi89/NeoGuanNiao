@@ -1,5 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 
 /**
@@ -38,8 +39,18 @@ public class BirdLandingTicker<T extends AbstractBirdEntity<T>> extends Abstract
 
         T bird = bird();
 
-        if (bird.onGround()) {
+        boolean onGround = bird.onGround();
+        boolean isSleepingOrRoosting = bird().getRoutineController().isSleepingOrRoosting();
+
+        if (onGround || isSleepingOrRoosting) {
+            if (enableLifecycleLog()) {
+                NeoGuanNiao.LOGGER.info("[Ticker] Landing: Bird on ground = {}, sleeping or roosting = {}", onGround, isSleepingOrRoosting);
+            }
             setTicks(0);
+            bird.getTickController().getTickTimer().getBirdBehaviorStateTicker().setTicks(5);
+
+            return;
         }
+        bird().getFlyingController().processLanding();
     }
 }
