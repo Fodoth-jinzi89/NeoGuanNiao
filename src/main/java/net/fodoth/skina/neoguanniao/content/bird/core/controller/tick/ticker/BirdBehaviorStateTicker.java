@@ -38,14 +38,13 @@ public class BirdBehaviorStateTicker<T extends AbstractBirdEntity<T>> extends Ab
         var stateController = bird().getBehaviorStateController();
         var eatingController = bird().getEatingController();
         var routineController = bird().getRoutineController();
-        var birdData = bird().getbirdData();
+        var birdData = bird().getBirdData();
         var currentState = stateController.getBehaviorState();
         var postTameActionTicker = timer.getBirdPostTameActionTicker();
 
         // 只有在无特殊行为占用时才修正状态
         boolean hasNoSpecialState = postTameActionTicker.getTicks() <= 0
-                && !eatingController.isEating()
-                && !bird().isPassenger();
+                && !eatingController.isEating();
 
         if (!hasNoSpecialState) {
             return;

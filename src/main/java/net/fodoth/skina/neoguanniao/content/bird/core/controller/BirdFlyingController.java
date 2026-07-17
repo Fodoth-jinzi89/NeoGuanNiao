@@ -37,10 +37,15 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     public Vec3 flightTarget;
 
 
+
+    private boolean isLandingAdjusted;
+
+
     public BirdFlyingController() {
         this.isEscapeFlightActive = false;
         this.isLandingFlight = false;
         this.flightTarget = null;
+        this.isLandingAdjusted = false;
     }
 
 
@@ -48,7 +53,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     protected void onAttach() {
         super.onAttach();
 
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
 
         bird().setMoveControl(
@@ -111,7 +116,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         if (flyingTicker.getTicks() <= 0 && flyingTicker.flyingTime <= 0 && !isLandingFlight) {
@@ -140,7 +145,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 延迟 Tick 数
      */
     private int nextHoverRetargetDelay() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         return flyingDatum.hoverRetargetMinDelay() + bird.getRandom().nextInt(flyingDatum.hoverRetargetDelayVariance());
     }
@@ -153,7 +158,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     public void startFlybyFlight(Vec3 target) {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -191,7 +196,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      */
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
         if (standPosition != null && !isFlightInProgress()) {
-            BirdData birdData = bird.getbirdData();
+            BirdData birdData = bird.getBirdData();
             BirdFlyingDatum flyingDatum = birdData.flying();
             BirdMiscDatum miscDatum = birdData.misc();
 
@@ -224,7 +229,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     public void finishFlight() {
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -236,16 +241,10 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
         isEscapeFlightActive = false;
         isLandingFlight = false;
-        bird.getNavigation().stop();
         bird.setNoGravity(false);
         bird.setSilent(false);
         bird.noCulling = false;
 
-        bird.setDeltaMovement(bird.getDeltaMovement().multiply(
-                flyingDatum.flightLandingHorizontalDamping(),
-                flyingDatum.flightLandingVerticalDamping(),
-                flyingDatum.flightLandingHorizontalDamping()
-        ));
 
         int cooldownTicks = wasEscaping
                 ? miscDatum.escapeCooldownMin() + bird.getRandom().nextInt(miscDatum.escapeCooldownVariance())
@@ -277,7 +276,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             this.extendCruiseAfterUnsafeLanding();
         } else {
             var timer = bird.getTickController().getTickTimer();
-            BirdData birdData = bird.getbirdData();
+            BirdData birdData = bird.getBirdData();
             BirdFlyingDatum flyingDatum = birdData.flying();
 
             isLandingFlight = true;
@@ -295,7 +294,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      */
     public void extendCruiseAfterUnsafeLanding() {
         var timer = bird.getTickController().getTickTimer();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         isLandingFlight = false;
@@ -324,13 +323,13 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 巡航目标位置
      */
     public Vec3 findAirCruiseTarget(boolean fleeing) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         Vec3 direction;
 
-        if (fleeing && bird.getFrightController().frightSource != null) {
-            Vec3 away = bird.position().subtract(bird.getFrightController().frightSource);
+        if (fleeing && bird.getFrightController().getFrightSource() != null) {
+            Vec3 away = bird.position().subtract(bird.getFrightController().getFrightSource());
             direction = away.lengthSqr() > 0.01
                     ? new Vec3(away.x, 0, away.z).normalize()
                     : this.randomHorizontalDirection();
@@ -355,7 +354,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 降落目标；如果不存在返回 {@code null}
      */
     public Vec3 findLandingTarget() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         Vec3 sharedLanding = BirdFlightTargeting.findNearestDryLandingTarget(
@@ -424,7 +423,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 调整后的飞行目标
      */
     private Vec3 clampFlightTarget(Vec3 target) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         double y = Mth.clamp(
                 target.y,
@@ -471,7 +470,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param movement 飞行运动向量
      */
     public void faceFlightDirection(Vec3 movement) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         BirdFlightManager.faceMovement(bird, movement, flyingDatum.flightProfile().maxPitchDegrees());
     }
@@ -487,7 +486,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             if (!state.isAirborne() && state != BirdBehaviorState.EATING
                     && state != BirdBehaviorState.PREENING && state != BirdBehaviorState.DANCING
                     && state != BirdBehaviorState.SLEEPING && state != BirdBehaviorState.ROOSTING) {
-                BirdData birdData = bird.getbirdData();
+                BirdData birdData = bird.getBirdData();
                 BirdMiscDatum miscDatum = birdData.misc();
                 return bird.getDeltaMovement().lengthSqr() > miscDatum.walkingSpeedThreshold()
                         || !bird.getNavigation().isDone();
@@ -495,6 +494,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         }
         return false;
     }
+
 
     public void processLanding() {
 
@@ -504,19 +504,39 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         var landingTicker = bird().getTickController().getTickTimer().getBirdLandingTicker();
         boolean enableLifecycleLog = landingTicker.enableLifecycleLog();
 
+
         // 1. 平滑过渡处理：水平速度减慢，垂直下落加快
         // 水平分量（x 和 z）乘以衰减系数，实现减速效果
-        double newX = currentDelta.x * 0.85;
-        double newZ = currentDelta.z * 0.85;
+        double newX = currentDelta.x * 0.9995;
+        double newZ = currentDelta.z * 0.9995;
 
         // 垂直分量（y）乘以加速系数，实现下落加快效果
-        double newY = currentDelta.y * 1.15;
+        double newY = currentDelta.y * 1.08;
 
-        // 2. 如果原来的垂直分量 >= -0.01，设置为一个 < 0 的小值
-        // 这确保了鸟儿在开始下落时有一个足够大的向下的初速度
+        if (!isLandingAdjusted) {
+
+            var flyingDatum = bird().getBirdData().flying();
+            double damping = flyingDatum.flightLandingHorizontalDamping();
+            double vi = flyingDatum.flightLandingMinimumInitialSpeed();
+            double currentSpeed = Math.sqrt(newX * newX + newZ * newZ);
+
+            if (currentSpeed < vi) {
+                // 计算需要应用多少次阻尼
+                int n = (int) Math.ceil(Math.log(vi / currentSpeed) / Math.log(damping));
+                // 直接应用 n 次阻尼
+                double pow = Math.pow(damping, Math.min(n, 20));
+                newX *= pow;
+                newZ *= pow;
+            }
+
+
+            isLandingAdjusted = true;
+        }
+
         if (currentDelta.y >= -0.01) {
             newY = -0.01;
         }
+
 
         var pos = findDryLandingSurfaceInAir(bird().blockPosition(), 3);
         boolean found = pos != null;
@@ -533,6 +553,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
         if (bird().onGround()) {
             newY = 0;
+            landingTicker.setTicks(0);
         } else {
             bird.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 0, false, false));
         }
@@ -596,5 +617,13 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
                 || below.is(Blocks.MYCELIUM)
                 || below.getBlock() instanceof FenceBlock
                 || below.getBlock() instanceof FenceGateBlock;
+    }
+
+    public boolean isLandingAdjusted() {
+        return isLandingAdjusted;
+    }
+
+    public void setLandingAdjusted(boolean landingAdjusted) {
+        isLandingAdjusted = landingAdjusted;
     }
 }

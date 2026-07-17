@@ -39,11 +39,11 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
     protected void run() {
 
         var frightController = bird().getFrightController();
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
 
         bird().getNavigation().stop();
 
-        Vec3 sourcePos = frightController.pendingFrightSource;
+        Vec3 sourcePos = frightController.getPendingFrightSource();
         if (sourcePos != null) {
             double lookX = sourcePos.x;
             double lookY = sourcePos.y + birdData.fright().pendingFrightLookYOffset();
@@ -60,18 +60,15 @@ public class BirdPendingFrightTicker<T extends AbstractBirdEntity<T>> extends Ab
         super.onExpire();
         // 计时器即将归零，执行实际受惊行为
         var frightController = bird().getFrightController();
-        BirdData birdData = bird().getbirdData();
-        Vec3 sourcePos = frightController.pendingFrightSource != null
-                ? frightController.pendingFrightSource
+        BirdData birdData = bird().getBirdData();
+        Vec3 sourcePos = frightController.getPendingFrightSource() != null
+                ? frightController.getPendingFrightSource()
                 : bird().position();
 
         // 确定受惊持续时间
         int minDuration = birdData.fright().pendingFrightMinDuration();
         int duration = Math.max(minDuration, pendingFrightDuration);
 
-        // 清理待处理状态并触发受惊
-        frightController.pendingFrightSource = null;
-        pendingFrightDuration = 0;
         frightController.frightenFrom(sourcePos, duration);
 
     }

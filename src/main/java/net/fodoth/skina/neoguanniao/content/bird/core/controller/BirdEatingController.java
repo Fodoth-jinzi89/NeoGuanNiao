@@ -85,7 +85,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         }
 
         // 获取鸟类数据
-        BirdData data = bird().getbirdData();
+        BirdData data = bird().getBirdData();
         BirdTameDatum tameDatum = data.tame();
 
         // 检查驯服逻辑
@@ -108,7 +108,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      * @param bird       鸟类实体
      * @param itemEntity 掉落物实体
      */
-    public void consumeItemEntity(AbstractBirdEntity<T> bird, ItemEntity itemEntity) {
+    public void consumeItemEntity(AbstractBirdEntity<?> bird, ItemEntity itemEntity) {
         // 获取掉落物中的物品
         ItemStack stack = itemEntity.getItem();
 
@@ -127,7 +127,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         }
 
         // 获取鸟类数据
-        BirdData data = bird().getbirdData();
+        BirdData data = bird().getBirdData();
         BirdTameDatum tameDatum = data.tame();
         BirdMiscDatum miscDatum = data.misc();
 
@@ -155,7 +155,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         shareTrustNearby(nearbyTrustAmount);
     }
 
-    private void spawnFlyingFood(AbstractBirdEntity<T> bird, ItemEntity itemEntity, ItemStack food) {
+    private void spawnFlyingFood(AbstractBirdEntity<?> bird, ItemEntity itemEntity, ItemStack food) {
         ItemEntity flyingFood = new ItemEntity(bird.level(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), food.copy());
         flyingFood.setPickUpDelay(20);
         flyingFood.lifespan = 10;
@@ -177,7 +177,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      */
     public void shareTrustNearby(int amount) {
         // 获取鸟类数据
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
 
 
@@ -215,7 +215,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      */
     public void startEatingFood(ItemStack foodStack) {
         // 获取鸟类数据
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdEatingDatum eatingDatum = birdData.eating();
 
         // 计算进食参数（加上随机变化）
@@ -237,7 +237,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      */
     public void consumeBirdBathServing(BirdBathBlockEntity bath, BirdBathContentType contentType) {
         // 获取鸟类数据
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdEatingDatum eatingDatum = birdData.eating();
 
         // 计算进食参数（加上随机变化）
@@ -319,7 +319,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         bird().getBirdBrain().onEat(finalEatAmount);
 
         // 播放进食音效
-        bird().playSound(bird().getbirdData().sound().eatSound(), finalVolume, finalPitch);
+        bird().playSound(bird().getBirdData().sound().eatSound(), finalVolume, finalPitch);
     }
 
     /**
@@ -347,7 +347,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         bird().getNavigation().stop();
 
         // 获取鸟类数据
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdEatingDatum eatingDatum = birdData.eating();
 
         // 根据内容类型设置不同的行为状态

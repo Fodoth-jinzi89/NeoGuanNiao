@@ -29,7 +29,7 @@ public class BudgerigarFrightGoal extends Goal {
     @Override
     public void start() {
         this.fleeTicks = 60 + this.budgerigar.getRandom().nextInt(40);
-        Vec3 source = this.budgerigar.getFrightController().frightSource;
+        Vec3 source = this.budgerigar.getFrightController().getFrightSource();
         if (source != null) {
             Vec3 away = this.budgerigar.position().subtract(source);
             if (away.lengthSqr() > 0.01) {

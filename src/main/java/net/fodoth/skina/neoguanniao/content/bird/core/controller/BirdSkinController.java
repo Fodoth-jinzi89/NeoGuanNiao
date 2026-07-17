@@ -73,7 +73,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * @return 模型缩放配置
      */
     public BirdModelScaleProfile modelScaleProfile() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         return modelDatum.modelScaleProfile();
     }
@@ -103,7 +103,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * @return 皮肤变体索引
      */
     public int getSkinVariant() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         int skinCount = modelDatum.birdSkin().length;
         int variant = bird.getEntityData().get(SKIN_VARIANT);
@@ -120,7 +120,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * @param variant 皮肤变体索引
      */
     public void setSkinVariant(int variant) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         int skinCount = modelDatum.birdSkin().length;
         int clamped = Mth.clamp(variant, 0, skinCount - 1);
@@ -166,7 +166,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     // 完整版本 - 所有参数，基于权重随机
     public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
         var random = bird.getRandom();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         var skins = modelDatum.birdSkin();
 
@@ -263,7 +263,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
             AbstractBirdEntity<?> parent,
             AbstractBirdEntity<?> mate
     ) {
-        var birdData = bird.getbirdData();
+        var birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         BirdMiscDatum miscDatum = birdData.misc();
 
@@ -428,7 +428,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * 根据索引获取皮肤
      */
     private BirdSkin getSkinByIndex(int index) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         BirdSkin[] skins = modelDatum.birdSkin();
 
@@ -453,7 +453,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     }
 
     public ResourceLocation textureForVariant(int variant) {
-        var l = bird.getbirdData().model().birdSkin();
+        var l = bird.getBirdData().model().birdSkin();
         return variant >= 0 && variant < l.length
                 ? l[variant].location()
                 : l[0].location();

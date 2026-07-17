@@ -7,12 +7,14 @@ import net.fodoth.skina.neoguanniao.content.bird.core.controller.*;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTickController;
+import net.fodoth.skina.neoguanniao.content.bird.core.goal.goals.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.ScalableBirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.goal.*;
 import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -30,6 +32,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
@@ -48,6 +52,9 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extends TamableAnimal implements GeoEntity, FlyingAnimal, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
 
@@ -111,6 +118,33 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, 16.0F);
     }
 
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        int priority = 0;
+        for (Goal goal : buildGoals()) {
+            goalSelector.addGoal(priority, goal);
+            priority += 1;
+        }
+    }
+
+    protected List<Goal> buildGoals() {
+        List<Goal> goals = new ArrayList<>();
+
+        goals.add(new FloatGoal(this)); //0
+        goals.add(new BirdEatFoodGoal(this)); //1
+        goals.add(new BirdSentinelGoal(this)); //2
+        goals.add(new BirdWakeUpGoal(this)); //3
+        goals.add(new BirdRoostGoal(this)); //4
+        goals.add(new BirdFollowOwnerGoal(this)); //5
+        goals.add(new BirdFlockGoal(this));  //6
+        goals.add(new BirdCuriousFollowGoal(this)); //7
+        goals.add(new BirdIdleGoal(this)); //8
+        goals.add(new BirdRandomLookAroundGoal(this)); //9
+
+        return goals;
+    }
     /**
      * 生成规则由 {@link NeoGuanNiaoModEvents} 注册。
      */
@@ -394,13 +428,14 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                     return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("fly"));
                 }
 
+
                 // 地面移动逻辑
                 double deltaMovementSqr = this.getDeltaMovement().lengthSqr();
                 double walkingThreshold = BIRD_DATA.misc().walkingSpeedThreshold();
                 boolean isNavigationDone = this.getNavigation().isDone();
 
                 // 静止状态：移动速度低于阈值、导航结束且不是行走状态
-                if ((!(deltaMovementSqr > walkingThreshold) && isNavigationDone && state != BirdBehaviorState.WALKING)) {
+                if ((!(deltaMovementSqr > walkingThreshold) && isNavigationDone && state != BirdBehaviorState.WALKING && state != BirdBehaviorState.FORAGING)) {
 
                     // 梳理羽毛
                     if (state == BirdBehaviorState.PREENING) {
@@ -432,6 +467,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     protected SoundEvent getAmbientSound() {
+        if (getRoutineController().isSleeping()) {
+            return null; // 大多数鸟睡觉都不会打呼噜，对吧？
+        }
         return getSoundController().getAmbientSound();
     }
 
@@ -510,7 +548,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return BIRD_CONTROLLERS.birdAnimationController();
     }
 
-    public BirdData getbirdData() {
+    public BirdData getBirdData() {
         return BIRD_DATA;
     }
 
@@ -523,4 +561,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     }
 
 
+    public boolean isDancing() {
+        return this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
+                || this.getBirdControllers().getBirdBehaviorStateController().getBehaviorState() == BirdBehaviorState.DANCING;
+    }
 }

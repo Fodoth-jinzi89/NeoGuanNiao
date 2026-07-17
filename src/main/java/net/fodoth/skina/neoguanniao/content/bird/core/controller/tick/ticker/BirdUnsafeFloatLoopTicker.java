@@ -21,7 +21,7 @@ public class BirdUnsafeFloatLoopTicker<T extends AbstractBirdEntity<T>> extends 
         T bird = bird();
         // 检查鸟儿是否处于不安全悬浮状态：
 
-        boolean isUnsafeFloating = !bird.isFlying() && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled();
+        boolean isUnsafeFloating = !bird.onGround() && !bird.isFlying() && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled();
 
         if (enableLifecycleLog() && bird().getRandom().nextFloat() <= 0.1) {
             NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFloat: Bird unsafe floating check! NotFlying: {}, UnsafeFloatTickerEnabled: {}", !bird.isFlying(), bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled());
@@ -32,15 +32,20 @@ public class BirdUnsafeFloatLoopTicker<T extends AbstractBirdEntity<T>> extends 
             bird.setNoGravity(false);
 
             // 获取杂项数据，根据鸟儿是否驯服计算冷却时间
-            var miscDatum = bird().getbirdData().misc();
+            var miscDatum = bird().getBirdData().misc();
             int cooldownTicks = (bird.isTame()
                     ? miscDatum.tameCooldownMin() + bird.getRandom().nextInt(miscDatum.tameCooldownVariance())
                     : miscDatum.wildCooldownMin() + bird.getRandom().nextInt(miscDatum.wildCooldownVariance())
             );
 
+            // 防止滑步
+            bird.getFlyingController().setLandingAdjusted(true);
+
             // 计算着陆等待时间，并限制在合理范围内
             var landingTicks = getTicks() + cooldownTicks;
             bird.getTickController().getTickTimer().getBirdLandingTicker().setTicks(Math.min((int) (landingTicks * 1.2), cooldownTicks * 5));
+
+
 
         }
     }

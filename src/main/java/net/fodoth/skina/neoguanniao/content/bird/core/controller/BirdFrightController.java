@@ -20,28 +20,29 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BirdFrightController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
-    public Vec3 frightSource;
-    public Vec3 pendingFrightSource;
+    private Vec3 frightSource;
+    private Vec3 pendingFrightSource;
     /**
      * 处理受到伤害后的受惊行为
      *
      * @param source 伤害来源
      */
     public void processHurt(@NotNull DamageSource source) {
-        var stateController = bird.getBehaviorStateController();
-        var eatingController = bird.getEatingController();
-        var brain = bird.getBirdBrain();
-        BirdData birdData = bird.getbirdData();
+        var stateController = bird().getBehaviorStateController();
+        var eatingController = bird().getEatingController();
+        var brain = bird().getBirdBrain();
+        BirdData birdData = bird().getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();
 
         // 清理进食状态
         eatingController.clearEating();
-        bird.getTameController().setInterestedPlayerUUID(null);
+        bird().getTameController().setInterestedPlayerUUID(null);
 
         // 获取攻击者位置
         Entity attacker = source.getEntity();
-        Vec3 sourcePos = attacker == null ? bird.position() : attacker.position();
+        Vec3 sourcePos = attacker == null ? bird().position() : attacker.position();
+        setFrightSource(sourcePos);
         boolean isPlayer = attacker instanceof Player;
 
         // 处理受惊信任损失
@@ -51,9 +52,10 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         brain.onFrightened(trustLoss);
 
         // 停止移动
-        bird.getNavigation().stop();
+        bird().getNavigation().stop();
 
         // 设置为警戒状态
+
         int alertTicks = isPlayer
                 ? miscDatum.alertTicksPlayer()
                 : miscDatum.alertTicksOther();
@@ -62,11 +64,11 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         // 非玩家攻击时延迟触发受惊
         if (!isPlayer) {
             int delayTicks = frightDatum.frightDelayMin()
-                    + bird.getRandom().nextInt(frightDatum.frightDelayVariance());
+                    + bird().getRandom().nextInt(frightDatum.frightDelayVariance());
             queueFrightFrom(sourcePos, delayTicks);
         }
 
-        alertNearbyBirds();
+
     }
 
     /**
@@ -76,9 +78,13 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
      */
     public boolean shouldFlee() {
         var timer = bird.getTickController().getTickTimer();
-        return timer.getBirdExternalFrightTicker().getTicks() > 0 && frightSource != null;
+        return !timer.getBirdFrightTicker().isRunning() && !timer.getBirdPendingFrightTicker().isRunning() && frightSource != null;
     }
 
+
+    public void frightenFrom(int ticks) {
+        frightenFrom(frightSource, ticks);
+    }
     /**
      * 使鸟类受到惊吓
      *
@@ -89,18 +95,18 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
-        var flyingController = bird.getFlyingController();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFrightDatum frightDatum = birdData.fright();
 
         // 设置受惊源
         frightSource = sourcePos;
 
-        // 设置受惊计时器
-        var externalTicker = timer.getBirdExternalFrightTicker();
+        // 设置受惊计时器，定时清除恐惧目标
+        var frightTicker
+                = timer.getBirdFrightTicker();
         var pendingTicker = timer.getBirdPendingFrightTicker();
-        int currentTicks = externalTicker.getTicks();
-        externalTicker.setTicks(Math.max(currentTicks, ticks));
+        int currentTicks = frightTicker.getTicks();
+        frightTicker.setTicks(Math.max(currentTicks, ticks));
 
         // 清除待处理的受惊状态
         pendingTicker.setTicks(0);
@@ -110,6 +116,9 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         // 设置逃跑状态
         int frightLimit = Math.min(frightDatum.frightTicksLimit(), ticks);
         stateController.setBehaviorStateFor(BirdBehaviorState.FLEEING, frightLimit);
+
+        // 警告周围的鸟
+        alertNearbyBirds();
 
         // 如果在地面且未飞行，立即开始逃跑飞行
         if (timer.getBirdFlyingTicker().getTicks() <= 0 && bird.onGround()) {
@@ -123,7 +132,7 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
      * @param sourcePos 惊吓来源位置
      */
     protected void startEscapeFlight(Vec3 sourcePos) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 计算远离来源的方向
@@ -156,7 +165,7 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
      * 向附近鸟类传播警戒状态
      */
     public void alertNearbyBirds() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();
 
@@ -199,7 +208,7 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         var timer = tickController.getTickTimer();
         var stateController = bird.getBehaviorStateController();
         var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFrightDatum frightDatum = birdData.fright();
 
         // 如果正在进食，清除进食状态
@@ -227,5 +236,22 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         // 设置为警戒状态
         int alertLimit = Math.min(frightDatum.pendingFrightTicksLimit(), pendingTicker.getTicks() + 10);
         stateController.setBehaviorStateFor(BirdBehaviorState.ALERT, alertLimit);
+        alertNearbyBirds();
+    }
+
+    public Vec3 getFrightSource() {
+        return frightSource;
+    }
+
+    public void setFrightSource(Vec3 frightSource) {
+        this.frightSource = frightSource;
+    }
+
+    public Vec3 getPendingFrightSource() {
+        return pendingFrightSource;
+    }
+
+    public void setPendingFrightSource(Vec3 pendingFrightSource) {
+        this.pendingFrightSource = pendingFrightSource;
     }
 }

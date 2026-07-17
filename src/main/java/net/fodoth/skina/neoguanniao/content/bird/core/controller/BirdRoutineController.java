@@ -37,7 +37,7 @@ public class BirdRoutineController<T extends AbstractBirdEntity<T>> extends Abst
      * @return 当前是否为活动时间
      */
     public boolean isActiveTime() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         long activeStart = miscDatum.activeStartTime();
         long activeEnd = miscDatum.activeEndTime();
@@ -56,7 +56,7 @@ public class BirdRoutineController<T extends AbstractBirdEntity<T>> extends Abst
      * @return 当前是否为栖息时间
      */
     public boolean isRoostTime() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         long activeStart = miscDatum.activeStartTime();
         long activeEnd = miscDatum.activeEndTime();
@@ -83,5 +83,10 @@ public class BirdRoutineController<T extends AbstractBirdEntity<T>> extends Abst
     public boolean isSleeping() {
         BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
         return state == BirdBehaviorState.SLEEPING;
+    }
+
+    public boolean isRoosting() {
+        BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
+        return state == BirdBehaviorState.ROOSTING;
     }
 }

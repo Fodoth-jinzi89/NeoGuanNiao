@@ -43,6 +43,7 @@ public record BirdFlyingDatum(
         // 飞行结束
         double flightLandingHorizontalDamping,
         double flightLandingVerticalDamping,
+        double flightLandingMinimumInitialSpeed,
 
         // 降落
         int landingFlightMinDuration,
@@ -132,6 +133,7 @@ public record BirdFlyingDatum(
                 // 飞行结束 (1)
                 0.5D,
                 0.5D,
+                0.5D,
                 // 降落 (3)
                 160, 160, 180,
                 // 不安全降落 (3)
@@ -182,6 +184,7 @@ public record BirdFlyingDatum(
                 escapeFlightHeightVariance,
                 flightLandingHorizontalDamping,
                 flightLandingVerticalDamping,
+                flightLandingMinimumInitialSpeed,
                 landingFlightMinDuration,
                 landingFlightDurationVariance,
                 landingFlightStateTicks,

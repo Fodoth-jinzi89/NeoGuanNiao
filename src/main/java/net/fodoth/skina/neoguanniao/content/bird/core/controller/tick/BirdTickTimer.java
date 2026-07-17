@@ -25,7 +25,6 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     private final BirdFlyingTicker<T> birdFlyingTicker;
     private final BirdFoodTicker<T> birdFoodTicker;
     private final BirdPendingFrightTicker<T> birdPendingFrightTicker;
-    private final BirdExternalFrightTicker<T> birdExternalFrightTicker;
     private final BirdIdleAnimationTicker<T> birdIdleAnimationTicker;
     private final BirdPostTameActionSwapTicker<T> birdPostTameActionSwapTicker;
     private final BirdPostTameActionTicker<T> birdPostTameActionTicker;
@@ -35,7 +34,9 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     private final BirdLandingTicker<T> birdLandingTicker;
     private final BirdUnsafeFlyLoopTicker<T> birdUnsafeFlyLoopTicker;
     private final BirdUnsafeFloatLoopTicker<T> birdUnsafeFloatLoopTicker;
-
+    private final BirdFrightLoopTicker<T> birdFrightLoopTicker;
+    private final BirdFrightTicker<T> birdFrightTicker;
+    private final BirdSentinelTicker<T> birdSentinelTicker;
 
 
     private final DebugLoopTicker<T> debugLoopTicker;
@@ -64,9 +65,6 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
         birdPendingFrightTicker =
                 new BirdPendingFrightTicker<>();
 
-        birdExternalFrightTicker =
-                new BirdExternalFrightTicker<>();
-
         birdIdleAnimationTicker =
                 new BirdIdleAnimationTicker<>();
 
@@ -91,25 +89,40 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
 
         birdUnsafeFloatLoopTicker = new BirdUnsafeFloatLoopTicker<>();
 
+        birdFrightLoopTicker = new BirdFrightLoopTicker<>();
+
+        birdFrightTicker = new BirdFrightTicker<>();
+
+        birdSentinelTicker = new BirdSentinelTicker<>();
+
         debugLoopTicker = new DebugLoopTicker<>();
 
         List<AbstractBirdTicker<T>> tickers = new ArrayList<>(List.of(
                 birdBehaviorStateTicker,
-                birdCuriousTicker,
-                birdEatingTicker,
+
+
                 birdFlyingTicker,
-                birdFoodTicker,
-                birdPendingFrightTicker,
-                birdExternalFrightTicker,
-                birdIdleAnimationTicker,
-                birdPostTameActionSwapTicker,
-                birdPostTameActionTicker,
-                birdTrustTicker,
-                birdFindNearbyMusicLoopTicker,
-                birdMusicTicker,
                 birdLandingTicker,
                 birdUnsafeFlyLoopTicker,
-                birdUnsafeFloatLoopTicker
+                birdUnsafeFloatLoopTicker,
+
+                birdFrightTicker,
+                birdPendingFrightTicker,
+                birdFrightLoopTicker,
+
+                birdEatingTicker,
+                birdFoodTicker,
+                birdTrustTicker,
+                birdPostTameActionSwapTicker,
+                birdPostTameActionTicker,
+
+                birdCuriousTicker,
+                birdSentinelTicker,
+
+                birdIdleAnimationTicker,
+
+                birdFindNearbyMusicLoopTicker,
+                birdMusicTicker
         ));
 
         if (!FMLEnvironment.production) {
@@ -192,11 +205,6 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     }
 
 
-    public BirdExternalFrightTicker<T> getBirdExternalFrightTicker() {
-        return birdExternalFrightTicker;
-    }
-
-
     public BirdIdleAnimationTicker<T> getBirdIdleAnimationTicker() {
         return birdIdleAnimationTicker;
     }
@@ -236,6 +244,19 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     public BirdUnsafeFloatLoopTicker<T> getBirdUnsafeFloatLoopTicker() {
         return birdUnsafeFloatLoopTicker;
     }
+
+    public BirdFrightLoopTicker<T> getBirdFrightLoopTicker() {
+        return birdFrightLoopTicker;
+    }
+
+    public BirdFrightTicker<T> getBirdFrightTicker() {
+        return birdFrightTicker;
+    }
+
+    public BirdSentinelTicker<T> getBirdSentinelTicker() {
+        return birdSentinelTicker;
+    }
+
 
     public void forEachTicker(Consumer<AbstractBirdTicker<T>> consumer) {
         tickers.forEach(consumer);

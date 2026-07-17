@@ -37,7 +37,7 @@ public class BirdPostTameActionTicker<T extends AbstractBirdEntity<T>> extends A
         var timer = tickController.getTickTimer();
         var stateController = bird().getBehaviorStateController();
         var eatingController = bird().getEatingController();
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         var random = bird().getRandom();
 
         // 如果鸟被骑乘，不执行任何行为

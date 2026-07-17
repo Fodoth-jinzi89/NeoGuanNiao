@@ -100,7 +100,7 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasTame = bird.isTame();
@@ -167,7 +167,7 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
      */
     public void updateTrustedOwner(Player player) {
         var timer = bird.getTickController().getTickTimer();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdTameDatum tameDatum = birdData.tame();
 
         // 检查信任值是否达到驯服阈值
@@ -195,7 +195,7 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
         var stateController = bird.getBehaviorStateController();
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdTameDatum tameDatum = birdData.tame();
         var random = bird.getRandom();
 

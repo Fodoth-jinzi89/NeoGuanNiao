@@ -33,7 +33,7 @@ public class BirdTrustTicker<T extends AbstractBirdEntity<T>> extends AbstractBi
      * @param amount 增加的信任值
      */
     public void addTrust(int amount) {
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         int trustLimit = birdData.tame().trustTicksLimit();
         setTicks(Mth.clamp(getTicks() + amount, 0, trustLimit));
     }

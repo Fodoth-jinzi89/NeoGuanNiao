@@ -79,7 +79,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
 
         var tickController = bird.getTickController();
         var tickTimer = tickController.getTickTimer();
-        var birdData = bird.getbirdData();
+        var birdData = bird.getBirdData();
         var animationDatum = birdData.animation();
 
         int idleTicker = tickTimer.getBirdIdleAnimationTicker().getTicks();
@@ -187,7 +187,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
 
                 bird.getDeltaMovement(),
 
-                bird.getbirdData()
+                bird.getBirdData()
                         .flying()
                         .airborneGraceTicks()
         );
@@ -253,7 +253,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
             int curiousTicker
     ) {
 
-        var birdData = bird().getbirdData();
+        var birdData = bird().getBirdData();
         var animationDatum = birdData.animation();
 
 
@@ -274,7 +274,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
     ) {
 
         var animationDatum =
-                bird().getbirdData().animation();
+                bird().getBirdData().animation();
 
 
         return trustTicker <= animationDatum.trustTickerLimit()

@@ -51,6 +51,23 @@ public class BirdLandingTicker<T extends AbstractBirdEntity<T>> extends Abstract
 
             return;
         }
+
         bird().getFlyingController().processLanding();
+    }
+
+    @Override
+    public void setTicks(int ticks){
+        if (bird().onGround() && ticks > 0) {
+            if (enableLifecycleLog()) {
+                NeoGuanNiao.LOGGER.warn("[Ticker] Trying to set Landing on ground! Forbidden");
+            }
+            return;
+        }
+        super.setTicks(ticks);
+    }
+
+    @Override
+    protected void onExpire() {
+        bird().getFlyingController().setLandingAdjusted(false);
     }
 }

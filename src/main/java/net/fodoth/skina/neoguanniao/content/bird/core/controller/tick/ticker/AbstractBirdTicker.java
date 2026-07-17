@@ -164,6 +164,10 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
 
     }
 
+    public void setTicksWithVariance(int ticks, int variance) {
+        setTicks(ticks + bird().getRandom().nextInt(variance));
+    }
+
 
     /**
      * 客户端 Tick 开关

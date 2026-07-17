@@ -80,7 +80,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
 
         var flyingController = bird().getFlyingController();
         var stateController = bird().getBehaviorStateController();
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         var random = bird().getRandom();
 
@@ -135,7 +135,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
     private void tickFlight() {
         var flyingController = bird().getFlyingController();
         var stateController = bird().getBehaviorStateController();
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         // 飞行激活时的核心逻辑
@@ -258,7 +258,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
      * @return 期望移动速度向量
      */
     private @NotNull Vec3 getDesired(Vec3 toTarget, Vec3 horizontalDirection, double speed) {
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird().getFlyingController();
 
@@ -299,7 +299,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
      * @return 当前飞行速度
      */
     private double getSpeed(double horizontalDistance) {
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         var flyingController = bird().getFlyingController();
 
@@ -339,7 +339,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
             return;
         }
 
-        BirdData birdData = bird().getbirdData();
+        BirdData birdData = bird().getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
         int chance = bird().isTame()
                 ? flyingDatum.ambientAirCruiseChanceTame()

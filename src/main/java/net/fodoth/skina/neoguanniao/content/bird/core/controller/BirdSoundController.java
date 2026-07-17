@@ -36,7 +36,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 环境声音事件
      */
     public @Nullable SoundEvent getAmbientSound() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.ambientSound();
     }
@@ -48,7 +48,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 受伤声音事件
      */
     public @Nullable SoundEvent getHurtSound(DamageSource source) {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.hurtSound();
     }
@@ -59,7 +59,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 死亡声音事件
      */
     public @Nullable SoundEvent getDeathSound() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.deathSound();
     }
@@ -73,7 +73,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 声音音调倍率
      */
     public float getVoicePitch() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.voicePitch();
     }
@@ -88,7 +88,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 环境声音播放间隔
      */
     public int getAmbientSoundInterval() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.ambientSoundInterval();
     }
@@ -103,7 +103,7 @@ public class BirdSoundController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 交互声音事件
      */
     public @Nullable SoundEvent getInteractionSound() {
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdSoundDatum soundDatum = birdData.sound();
         return soundDatum.interactionSound();
     }

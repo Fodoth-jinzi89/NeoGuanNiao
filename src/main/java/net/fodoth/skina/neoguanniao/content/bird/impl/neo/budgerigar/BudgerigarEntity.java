@@ -6,6 +6,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
+import net.fodoth.skina.neoguanniao.content.bird.core.goal.goals.BirdMusicDanceGoal;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.species.BudgerigarProfile;
 import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.goal.*;
@@ -25,8 +26,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,6 +37,9 @@ import net.minecraft.world.level.block.JukeboxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
 
@@ -123,13 +126,11 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
 
     // ============ AI 注册 ============
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new BudgerigarFrightGoal(this));
-        this.goalSelector.addGoal(2, new BudgerigarMusicDanceGoal(this));
-        this.goalSelector.addGoal(3, new BudgerigarEatFoodGoal(this));
-        this.goalSelector.addGoal(4, new BudgerigarBathUseGoal<>(
+    protected List<Goal> buildGoals() {
+        List<Goal> goals = new ArrayList<>(super.buildGoals());
+
+        goals.add(1, new BirdMusicDanceGoal(this));
+        goals.add(2, new BudgerigarBathUseGoal<>(
                 this, 1.0, 11.0, 36,
                 BirdBathAttraction::isAttractiveToBudgerigar,
                 () -> this.getBirdControllers().getBirdGoalController().canStartFoodGoal(),
@@ -142,13 +143,8 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
                     }
                 }
         ));
-        this.goalSelector.addGoal(5, new BudgerigarSentinelGoal(this));
-        this.goalSelector.addGoal(6, new BudgerigarRoostGoal(this));
-        this.goalSelector.addGoal(7, new BudgerigarFollowOwnerGoal(this, 1.0, 2.5F, 8.5F));
-        this.goalSelector.addGoal(8, new BudgerigarFlockGoal(this));
-        this.goalSelector.addGoal(9, new BudgerigarCuriousFollowGoal(this));
-        this.goalSelector.addGoal(10, new BudgerigarIdleGoal(this));
-        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
+
+        return goals;
     }
 
     @Override
@@ -181,12 +177,6 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
     public boolean isBusyWithMusicOrSleep() {
         return this.isDancing() || this.getBirdControllers().getBirdRoutineController().isSleepingOrRoosting();
     }
-
-    public boolean isDancing() {
-        return this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
-                || this.getBirdControllers().getBirdBehaviorStateController().getBehaviorState() == BirdBehaviorState.DANCING;
-    }
-
 
     public void triggerMusic(int ticks) {
         this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().setTicks(

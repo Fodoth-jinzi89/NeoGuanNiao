@@ -90,5 +90,23 @@ public class DebugLoopTicker<T extends AbstractBirdEntity<T>> extends AbstractBi
 
     }
 
+    public void debugGoalStart(String... debugMessage) {
+        NeoGuanNiao.LOGGER.info(
+                "[Goal] Bird: {} ({}) Starting Goal: {}",
+                bird().getId(),
+                bird().getDisplayName().getString(),
+                debugMessage
+        );
+    }
+
+    public void debugGoalStop(String... debugMessage) {
+        NeoGuanNiao.LOGGER.info(
+                "[Goal] Bird: {} ({}) Stopping Goal: {}",
+                bird().getId(),
+                bird().getDisplayName().getString(),
+                debugMessage
+        );
+    }
+
 
 }

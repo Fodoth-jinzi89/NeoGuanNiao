@@ -295,6 +295,7 @@ public final class BirdFlightTargeting {
             return false;
         }
 
+        // TODO 标签，非原版方块兼容
         // 检查是否为可站立表面
         return below.isFaceSturdy(level, pos.below(), Direction.UP)
                 || below.is(NeoGuanNiaoBlockTags.BIRD_PERCHES)

@@ -113,7 +113,7 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
             return;
         }
 
-        BirdData birdData = bird.getbirdData();
+        BirdData birdData = bird.getBirdData();
         BirdFlyingDatum flyingDatum = birdData.flying();
 
         var dataTicks = flyingDatum.ambientAirCruiseMinTicks() + bird.getRandom().nextInt(flyingDatum.ambientAirCruiseRandomTicks());
@@ -122,7 +122,7 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
 
         bird.getFlyingController().startShortFlight(null, false);
 
-        NeoGuanNiao.LOGGER.info("Unsafe Flying ticker with Data Ticks: {}, LandingTicks: {}", dataTicks, landingTicks);
+        NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Start with Data Ticks: {}, LandingTicks: {}", dataTicks, landingTicks);
         setTicks(Math.min((int)(landingTicks * 2.5), dataTicks * 10));
     }
 
@@ -151,10 +151,11 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
         // 判断是否为空气
         boolean currentIsAir = currentState.isAir() || currentState.is(Blocks.AIR);
         boolean belowIsAir = belowState.isAir() || belowState.is(Blocks.AIR);
+        boolean belowIsLeaves = belowState.getBlock() instanceof LeavesBlock;
 
         // 情况1：站在树叶上 -> 下方必须为空气
         if (currentState.getBlock() instanceof LeavesBlock) {
-            return belowIsAir;
+            return belowIsAir || belowIsLeaves;
         }
 
         // 情况2：站在空气中 -> 下方必须为实体方块（非空气）
