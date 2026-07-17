@@ -8,7 +8,7 @@ public record BirdData(
         BirdFlyingDatum flying,
         BirdFrightDatum fright,
         BirdMiscDatum misc,
-        BirdModelAndTextureDatum model,
+        BirdSkinDatum model,
         BirdSoundDatum sound,
         BirdTameDatum tame
 ) {
@@ -19,7 +19,7 @@ public record BirdData(
                 BirdFlyingDatum.createDefault(),
                 BirdFrightDatum.createDefault(),
                 BirdMiscDatum.createDefault(),
-                BirdModelAndTextureDatum.createDefault(),
+                BirdSkinDatum.createDefault(),
                 BirdSoundDatum.createDefault(),
                 BirdTameDatum.createDefault()
         );
@@ -45,7 +45,7 @@ public record BirdData(
         return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
     }
 
-    public BirdData withModel(BirdModelAndTextureDatum model) {
+    public BirdData withModel(BirdSkinDatum model) {
         return new BirdData(animation, eating, flying, fright, misc, model, sound, tame);
     }
 

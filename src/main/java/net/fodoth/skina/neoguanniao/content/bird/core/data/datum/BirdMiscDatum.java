@@ -28,7 +28,11 @@ public record BirdMiscDatum(
         int alertTicksPlayer,
         int alertTicksOther,
         float frightenedTrustLossPlayer,
-        float frightenedTrustLossOther
+        float frightenedTrustLossOther,
+        float mutantP1Boost,
+        float mutantP2Boost,
+        float mutantL1Cap,
+        float mutantL2Cap
 ) {
     public static BirdMiscDatum createDefault() {
         return new BirdMiscDatum(
@@ -40,7 +44,11 @@ public record BirdMiscDatum(
                 160, 160, 180, 28, 55, 45,
                 50,
                 14.0D, 24, 45, 35, 55,
-                0.08F, 0.18F
+                0.08F, 0.18F,
+                5.0F,
+                10.0F,
+                0.70F,
+                0.95F
         );
     }
 }

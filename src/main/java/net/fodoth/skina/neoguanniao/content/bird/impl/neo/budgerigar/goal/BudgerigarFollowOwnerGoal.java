@@ -27,7 +27,7 @@ public class BudgerigarFollowOwnerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.budgerigar.isTame() && !this.budgerigar.getEatingController().isEating() && !this.budgerigar.isDancing()) {
+        if (this.budgerigar.isTame() && !this.budgerigar.getEatingController().isEating() && !this.budgerigar.isDancing() && !this.budgerigar.getRoutineController().isSleepingOrRoosting()) {
             this.owner = this.budgerigar.getOwner();
             return this.owner != null && this.owner.isAlive()
                     && this.budgerigar.distanceToSqr(this.owner) > this.startDistance * this.startDistance;
@@ -37,7 +37,7 @@ public class BudgerigarFollowOwnerGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.owner != null && this.owner.isAlive() && !this.budgerigar.getEatingController().isEating()
+        return this.owner != null && this.owner.isAlive() && !this.budgerigar.getRoutineController().isSleepingOrRoosting() && !this.budgerigar.getEatingController().isEating()
                 && !this.budgerigar.isDancing()
                 && (this.budgerigar.getFlyingController().isFlightInProgress()
                 || this.budgerigar.distanceToSqr(this.owner) > this.stopDistance * this.stopDistance);

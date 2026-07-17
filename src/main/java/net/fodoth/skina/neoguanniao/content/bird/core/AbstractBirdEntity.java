@@ -498,7 +498,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return BIRD_CONTROLLERS.birdSoundController();
     }
 
-    public BirdModelController<T> getModelController() {
+    public BirdSkinController<T> getModelController() {
         return BIRD_CONTROLLERS.birdModelController();
     }
 
