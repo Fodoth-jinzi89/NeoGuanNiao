@@ -1,5 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.bath;
 
+import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -201,7 +202,18 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
             if (!water && !this.contentType.isFood()) {
                 return false;
             }
-            --this.contentLevel;
+
+            boolean shouldConsume = true;
+            if (level instanceof ServerLevel serverLevel) {
+                if (serverLevel.getEntity(currentUser) instanceof AbstractBirdEntity<?> bird) {
+                    if (bird.getRandom().nextFloat() > bird.getBirdData().goal().bathUseConsumeChance()) {
+                        shouldConsume = false;
+                    }
+                }
+            }
+            if (shouldConsume) {
+                --this.contentLevel;
+            }
             if (this.contentLevel <= 0) {
                 this.contentType = BirdBathContentType.EMPTY;
                 this.spoiledContentType = BirdBathContentType.EMPTY;
@@ -262,7 +274,9 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
             BlockState state,
             BlockEntity blockEntity
     ) {
-        if (level.isClientSide()) { return; }
+        if (level.isClientSide()) {
+            return;
+        }
 
         ((BirdBathBlockEntity) blockEntity)
                 .serverTick((ServerLevel) level, pos, state);
@@ -280,7 +294,7 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
         long gameTime = level.getGameTime();
 
         if (Math.floorMod(
-                (int)(gameTime + environmentalTickOffset),
+                (int) (gameTime + environmentalTickOffset),
                 ENVIRONMENT_TICK_INTERVAL
         ) == 0) {
 

@@ -4,6 +4,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.AbstractGoalController;
 import net.fodoth.skina.neoguanniao.content.bird.core.goal.AbstractBirdGoal;
 
+
+
 public class BirdRoostGoal extends AbstractBirdGoal {
 
     public BirdRoostGoal(AbstractBirdEntity<?> bird) {

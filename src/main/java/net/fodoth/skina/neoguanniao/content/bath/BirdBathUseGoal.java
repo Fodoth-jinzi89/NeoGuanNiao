@@ -313,7 +313,6 @@ public class BirdBathUseGoal extends Goal {
 
         if (this.targetBath == null
                 || this.mountHopCooldown > 0) {
-
             return false;
         }
 
@@ -323,7 +322,7 @@ public class BirdBathUseGoal extends Goal {
 
         double horizontalDistanceSqr =
                 feet.subtract(standPosition)
-                        .multiply(1,0,1)
+                        .multiply(1, 0, 1)
                         .lengthSqr();
 
 
@@ -333,7 +332,6 @@ public class BirdBathUseGoal extends Goal {
 
         if (feetOffset >= TOP_MIN_FEET_Y_OFFSET
                 || horizontalDistanceSqr > TOP_MOUNT_RANGE_SQR) {
-
             return false;
         }
 
@@ -348,18 +346,14 @@ public class BirdBathUseGoal extends Goal {
 
         Vec3 horizontal =
                 standPosition.subtract(feet)
-                        .multiply(1,0,1);
+                        .multiply(1, 0, 1);
 
 
         if (horizontal.lengthSqr() <= 1.0E-4) {
-
             horizontal = Vec3.ZERO;
-
         } else {
-
-            horizontal =
-                    horizontal.normalize()
-                            .scale(0.27);
+            horizontal = horizontal.normalize()
+                    .scale(0.27);
         }
 
 
@@ -368,7 +362,7 @@ public class BirdBathUseGoal extends Goal {
 
         this.bird.setDeltaMovement(
                 horizontal.x,
-                0.66,
+                0.22,
                 horizontal.z
         );
 
@@ -379,8 +373,6 @@ public class BirdBathUseGoal extends Goal {
 
         return true;
     }
-
-
 
     private boolean trySettleOntoTop(Vec3 standPosition) {
 
@@ -394,7 +386,7 @@ public class BirdBathUseGoal extends Goal {
 
         double horizontalDistanceSqr =
                 feet.subtract(standPosition)
-                        .multiply(1,0,1)
+                        .multiply(1, 0, 1)
                         .lengthSqr();
 
 

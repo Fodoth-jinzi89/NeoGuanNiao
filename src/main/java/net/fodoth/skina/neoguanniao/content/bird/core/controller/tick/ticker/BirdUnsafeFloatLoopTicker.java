@@ -21,7 +21,7 @@ public class BirdUnsafeFloatLoopTicker<T extends AbstractBirdEntity<T>> extends 
         T bird = bird();
         // 检查鸟儿是否处于不安全悬浮状态：
 
-        boolean isUnsafeFloating = !bird.onGround() && !bird.isFlying() && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled();
+        boolean isUnsafeFloating = !bird.onGround() && !bird.isFlying() && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled() && !bird().getGoalController().getBirdBathUseGoalController().isRunning();
 
         if (enableLifecycleLog() && bird().getRandom().nextFloat() <= 0.1) {
             NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFloat: Bird unsafe floating check! NotFlying: {}, UnsafeFloatTickerEnabled: {}", !bird.isFlying(), bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled());

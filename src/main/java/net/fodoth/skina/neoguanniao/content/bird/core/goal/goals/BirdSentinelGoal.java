@@ -14,4 +14,12 @@ public class BirdSentinelGoal extends AbstractBirdGoal {
         return goalController().getBirdSentinelGoalController();
     }
 
+    @Override
+    protected void debugStart() {
+    }
+
+    @Override
+    protected void debugStop() {
+    }
+
 }

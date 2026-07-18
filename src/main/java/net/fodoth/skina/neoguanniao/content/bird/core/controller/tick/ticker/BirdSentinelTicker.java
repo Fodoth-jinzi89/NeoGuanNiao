@@ -32,6 +32,10 @@ public class BirdSentinelTicker<T extends AbstractBirdEntity<T>> extends Abstrac
         }
     }
 
+    @Override
+    protected void onSet(int ticksOld, int ticksNew) {
+    }
+
 
     private boolean defaultAdditionalPredicates() {
         return bird().getRoutineController().isActiveTime()

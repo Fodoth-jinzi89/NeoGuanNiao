@@ -30,4 +30,12 @@ public class BirdRandomLookAroundGoal extends AbstractBirdGoal {
         setRepathTicksWithVariance(goalDatum().randomLookAroundTicks(), goalDatum().randomLookAroundTicksVariance());
     }
 
+    @Override
+    protected void debugStart() {
+    }
+
+    @Override
+    protected void debugStop() {
+    }
+
 }

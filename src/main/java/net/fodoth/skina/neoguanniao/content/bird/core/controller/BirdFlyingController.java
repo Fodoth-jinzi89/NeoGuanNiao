@@ -34,8 +34,8 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
     public boolean isEscapeFlightActive;
     public boolean isLandingFlight;
+    public boolean isMountFlight;
     public Vec3 flightTarget;
-
 
 
     private boolean isLandingAdjusted;
@@ -46,6 +46,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         this.isLandingFlight = false;
         this.flightTarget = null;
         this.isLandingAdjusted = false;
+        this.isMountFlight = false;
     }
 
 
@@ -191,36 +192,75 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     /**
      * 开始飞向鸟浴盆
      *
-     * @param standPosition 鸟浴盆停留位置
      * @return 如果成功开始飞行返回 true
      */
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
-        if (standPosition != null && !isFlightInProgress()) {
-            BirdData birdData = bird.getBirdData();
-            BirdFlyingDatum flyingDatum = birdData.flying();
-            BirdMiscDatum miscDatum = birdData.misc();
-
-            Vec3 horizontal = standPosition.subtract(bird.position()).multiply(1.0, 0.0, 1.0);
-
-            if (horizontal.length() > 1.0E-4) {
-                horizontal = horizontal.normalize().scale(flyingDatum.birdBathMountHorizontalSpeed());
-            } else {
-                horizontal = Vec3.ZERO;
-            }
-
-            Vec3 movement = new Vec3(horizontal.x, flyingDatum.birdBathMountUpwardSpeed(), horizontal.z);
-
-            bird.getNavigation().stop();
-            bird.setNoGravity(false);
-            bird.setSilent(false);
-            bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.birdBathMountFlightTicks());
-            bird.setDeltaMovement(movement);
-            faceFlightDirection(movement);
-            bird.xxa = 0.0F;
-            bird.hasImpulse = true;
-            return true;
+        if (standPosition == null || isFlightInProgress()) {
+            return false;
         }
-        return false;
+
+        BirdData birdData = bird.getBirdData();
+        BirdFlyingDatum flyingDatum = birdData.flying();
+
+        var ticker = bird.getTickController()
+                .getTickTimer()
+                .getBirdFlyingTicker();
+
+
+        this.flightTarget = standPosition;
+        this.isMountFlight = true;
+        this.isLandingFlight = false;
+        this.isEscapeFlightActive = false;
+
+
+        ticker.setTicks(
+                flyingDatum.birdBathMountFlightTicks()
+        );
+
+        ticker.flyingTime = 0;
+        ticker.hoverRetargetTicks = 0;
+
+
+        bird.getNavigation().stop();
+
+        bird.setNoGravity(true);
+        bird.setSilent(false);
+
+
+        bird.getBehaviorStateController()
+                .setBehaviorStateFor(
+                        BirdBehaviorState.FLYING,
+                        flyingDatum.birdBathMountFlightTicks()
+                );
+
+
+        Vec3 direction =
+                standPosition.subtract(bird.position());
+
+        Vec3 movement =
+                direction.normalize()
+                        .scale(
+                                Math.min(
+                                        flyingDatum.birdBathMountHorizontalSpeed(),
+                                        direction.length()
+                                                / flyingDatum.birdBathMountFlightTicks()
+                                )
+                        )
+                        .add(
+                                0,
+                                flyingDatum.birdBathMountUpwardSpeed(),
+                                0
+                        );
+
+
+        bird.setDeltaMovement(movement);
+
+        faceFlightDirection(movement);
+
+        bird.xxa = 0;
+        bird.hasImpulse = true;
+
+        return true;
     }
 
     /**
@@ -230,7 +270,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         BirdData birdData = bird.getBirdData();
-        BirdFlyingDatum flyingDatum = birdData.flying();
         BirdMiscDatum miscDatum = birdData.misc();
 
         boolean wasEscaping = isEscapeFlightActive;
@@ -528,8 +567,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
                 newX *= pow;
                 newZ *= pow;
             }
-
-
             isLandingAdjusted = true;
         }
 
@@ -537,8 +574,13 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             newY = -0.01;
         }
 
+        BlockPos pos;
 
-        var pos = findDryLandingSurfaceInAir(bird().blockPosition(), 3);
+        if (isMountFlight) {
+            pos = findDryLandingSurfaceInAirWithBias(bird().blockPosition(), 3, 1);
+        } else {
+            pos = findDryLandingSurfaceInAirWithBias(bird().blockPosition(), 3, 0);
+        }
         boolean found = pos != null;
 
         // 3. 如果降落到不对的地方，需要重新起飞
@@ -547,12 +589,14 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
                 NeoGuanNiao.LOGGER.info("[Controller] Flying: Bird land failed, restart flying");
             }
             landingTicker.setTicks(0);
+            isMountFlight = false;
             startShortFlight(null, true);
 
         }
 
         if (bird().onGround()) {
             newY = 0;
+            isMountFlight = false;
             landingTicker.setTicks(0);
         } else {
             bird.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 0, false, false));
@@ -563,17 +607,61 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
     }
 
-
     @SuppressWarnings("SameParameterValue")
-    private BlockPos findDryLandingSurfaceInAir(BlockPos center, int verticalRange) {
+    private BlockPos findDryLandingSurfaceInAirWithBias(
+            BlockPos center,
+            int verticalRange,
+            int bias
+    ) {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
         for (int yOffset = 0; yOffset >= -verticalRange; --yOffset) {
-            mutable.set(center.getX(), center.getY() + yOffset, center.getZ());
+
+            // 中心点优先
+            mutable.set(
+                    center.getX(),
+                    center.getY() + yOffset,
+                    center.getZ()
+            );
+
             if (this.isSafeDryLandingOrAir(mutable)) {
                 return mutable.immutable();
             }
+
+
+            // 再搜索外围
+            for (int radius = 1; radius <= bias; radius++) {
+
+                for (int x = -radius; x <= radius; x++) {
+                    for (int z = -radius; z <= radius; z++) {
+
+                        if (Math.abs(x) != radius && Math.abs(z) != radius) {
+                            continue;
+                        }
+
+                        mutable.set(
+                                center.getX() + x,
+                                center.getY() + yOffset,
+                                center.getZ() + z
+                        );
+
+                        if (this.isSafeDryLandingOrAir(mutable)) {
+                            return mutable.immutable();
+                        }
+                    }
+                }
+            }
         }
+
         return null;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private BlockPos findDryLandingSurfaceInAir(
+            BlockPos center,
+            int verticalRange
+    ) {
+        return findDryLandingSurfaceInAirWithBias(center, verticalRange, 0);
     }
 
     private boolean isSafeDryLandingOrAir(BlockPos pos) {

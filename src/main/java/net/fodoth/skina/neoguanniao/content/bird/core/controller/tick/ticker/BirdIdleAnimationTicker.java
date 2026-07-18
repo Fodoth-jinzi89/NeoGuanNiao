@@ -20,4 +20,12 @@ public class BirdIdleAnimationTicker<T extends AbstractBirdEntity<T>> extends Ab
     public BirdIdleAnimationTicker() {
         super();
     }
+
+    @Override
+    protected void onSet(int ticksOld, int ticksNew) {
+    }
+
+    @Override
+    protected void onExpire() {
+    }
 }
