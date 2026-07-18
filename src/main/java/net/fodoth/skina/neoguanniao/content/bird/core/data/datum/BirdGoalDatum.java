@@ -63,7 +63,17 @@ public record BirdGoalDatum(
         float sentinelLookPitch,
         int sentinelLookAroundInterval,
         int randomLookAroundTicks,
-        int randomLookAroundTicksVariance) {
+        int randomLookAroundTicksVariance,
+        int curiousFollowChance,
+        int eatFoodChance,
+        int flockChance,
+        int followOwnerChance,
+        int idleChance,
+        int musicDanceChance,
+        int randomLookAroundChance,
+        int roostChance,
+        int sentinelChance,
+        int wakeUpChance) {
 
     public static BirdGoalDatum createDefault() {
         return new BirdGoalDatum(
@@ -129,7 +139,17 @@ public record BirdGoalDatum(
                 30.0F,
                 20,
                 20,
-                20
+                20,
+                20,
+                20,
+                50,
+                5,
+                10,
+                5,
+                5,
+                60,
+                120,
+                5
         );
     }
 }

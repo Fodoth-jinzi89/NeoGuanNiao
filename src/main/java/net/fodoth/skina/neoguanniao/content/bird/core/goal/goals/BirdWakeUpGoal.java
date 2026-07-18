@@ -1,23 +1,18 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.goal.goals;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.AbstractGoalController;
 import net.fodoth.skina.neoguanniao.content.bird.core.goal.AbstractBirdGoal;
 
 public class BirdWakeUpGoal extends AbstractBirdGoal {
 
     public BirdWakeUpGoal(AbstractBirdEntity<?> bird) {
-        super(bird, 5);
+        super(bird);
     }
 
     @Override
-    protected boolean usePredicates() {
-        return bird().getRoutineController().isSleeping() && bird().getRoutineController().isActiveTime();
-    }
-
-    @Override
-    protected boolean continuePredicates() {
-        return !bird().getRoutineController().isSleeping();
+    protected AbstractGoalController<?> individualGoalController() {
+        return goalController().getBirdWakeUpGoalController();
     }
 
     @Override
@@ -25,9 +20,4 @@ public class BirdWakeUpGoal extends AbstractBirdGoal {
         return bird().getRoutineController().isSleeping() || super.defaultContinuePredicates();
     }
 
-    @Override
-    protected void onStart() {
-        bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
-        bird().getNavigation().stop();
-    }
 }

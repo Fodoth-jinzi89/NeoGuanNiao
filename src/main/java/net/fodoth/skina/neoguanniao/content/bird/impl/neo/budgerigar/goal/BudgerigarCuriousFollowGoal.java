@@ -22,7 +22,7 @@ public class BudgerigarCuriousFollowGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.budgerigar.getGoalController().canStartSocialGoal() || this.budgerigar.getTickController().getTickTimer().getBirdCuriousTicker().getTicks() <= 0) {
+        if (!this.budgerigar.getGoalController().getBirdCuriousFollowGoalController().canStartSocialGoal() || this.budgerigar.getTickController().getTickTimer().getBirdCuriousTicker().getTicks() <= 0) {
             return false;
         }
 
@@ -45,7 +45,7 @@ public class BudgerigarCuriousFollowGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         return this.target != null && this.target.isAlive() && this.curiousTicks > 0
-                && this.budgerigar.getGoalController().canStartSocialGoal()
+                && this.budgerigar.getGoalController().getBirdCuriousFollowGoalController().canStartSocialGoal()
                 && this.budgerigar.distanceToSqr(this.target) < 64.0;
     }
 

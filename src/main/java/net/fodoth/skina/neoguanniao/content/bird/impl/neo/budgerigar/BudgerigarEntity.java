@@ -133,7 +133,7 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
         goals.add(2, new BudgerigarBathUseGoal<>(
                 this, 1.0, 11.0, 36,
                 BirdBathAttraction::isAttractiveToBudgerigar,
-                () -> this.getBirdControllers().getBirdGoalController().canStartFoodGoal(),
+                () -> this.getBirdControllers().getBirdGoalController().getBirdEatFoodGoalController().canUse(),
                 (bath) -> this.getBirdControllers().getBirdBehaviorStateController().setBehaviorState(BirdBehaviorState.FORAGING),
                 (bath, contentType) -> this.getBirdControllers().getBirdEatingController().consumeBirdBathServing(bath, contentType),
                 (bath, consumed) -> {

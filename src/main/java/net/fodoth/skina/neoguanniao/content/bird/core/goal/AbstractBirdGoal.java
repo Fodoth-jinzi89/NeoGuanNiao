@@ -1,6 +1,8 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.goal;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdGoalController;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.AbstractGoalController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdGoalDatum;
 import net.minecraft.world.entity.ai.goal.Goal;
 
@@ -11,22 +13,15 @@ public abstract class AbstractBirdGoal extends Goal {
     private final AbstractBirdEntity<?> bird;
     // 只有这个 ticks 应该在 goal 内部维护
     private int repathTicks;
-    // 越大触发概率越低
-    // 想要依据 BirdData 调整的话还得带泛型
-    private final int chance;
     private final int maxRepathTicks;
 
     public AbstractBirdGoal(AbstractBirdEntity<?> bird) {
-        this(bird, 60, 10);
+        this(bird, 10);
     }
 
-    public AbstractBirdGoal(AbstractBirdEntity<?> bird, int chance) {
-        this(bird, chance, 10);
-    }
 
-    public AbstractBirdGoal(AbstractBirdEntity<?> bird, int chance, int maxRepathTicks) {
+    public AbstractBirdGoal(AbstractBirdEntity<?> bird, int maxRepathTicks) {
         this.bird = bird;
-        this.chance = chance;
         this.maxRepathTicks = maxRepathTicks;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -88,14 +83,23 @@ public abstract class AbstractBirdGoal extends Goal {
     }
 
 
-    protected void onStart() {}
+    protected void onStart() {
+        individualGoalController().onStart();
+    }
 
-    protected void onTick() {}
+    protected void onTick() {
+        individualGoalController().onTick();
+    }
 
-    protected void onReset() {}
+    protected void onReset() {
+        individualGoalController().onReset();
+    }
 
-    protected void onStop() {}
+    protected void onStop() {
+        individualGoalController().onStop();
+    }
 
+    // 子类覆写需要保留在goal中
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean defaultUsePredicates() {
         return bird().isAddedToLevel() &&
@@ -105,19 +109,10 @@ public abstract class AbstractBirdGoal extends Goal {
                 !bird().isFullyFrozen() &&
                 !bird().isLeashed() &&
                 !bird().isRemoved() &&
-                bird().getRandom().nextInt(getChance()) == 0;
+                bird().getRandom().nextInt(individualGoalController().chance()) == 0;
     }
 
-    // 可选调用
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean defaultAdditionalPredicates() {
-        return bird().getRoutineController().isActiveTime()
-                && !bird().getEatingController().isEating()
-                && !bird().isDancing()
-                && !bird().getRoutineController().isSleepingOrRoosting()
-                && !bird().getBehaviorStateController().getBehaviorState().isEscape();
-    }
-
+    // 子类覆写需要保留在goal中
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean defaultContinuePredicates() {
         return !bird().getEatingController().isEating() &&
@@ -125,20 +120,22 @@ public abstract class AbstractBirdGoal extends Goal {
                 !bird().getRoutineController().isSleepingOrRoosting() && !bird().getBehaviorStateController().getBehaviorState().isEscape();
     }
 
+    // 子类一般无需覆写
     protected boolean usePredicates() {
-        return true;
+        if (individualGoalController().canUse()) {
+            return individualGoalController().onUse();
+        } else return false;
     };
 
+    // 子类一般无需覆写
     protected boolean continuePredicates() {
-        return true;
+        if (individualGoalController().canContinue()) {
+            return individualGoalController().onContinue();
+        } else return false;
     };
 
     public AbstractBirdEntity<?> bird() {
         return bird;
-    }
-
-    public int getChance() {
-        return chance;
     }
 
     public int getMaxRepathTicks() {
@@ -147,6 +144,14 @@ public abstract class AbstractBirdGoal extends Goal {
 
     protected BirdGoalDatum goalDatum() {
         return bird().getBirdData().goal();
+    }
+
+    protected BirdGoalController<?> goalController() {
+        return bird().getGoalController();
+    }
+
+    protected AbstractGoalController<?> individualGoalController() {
+        return null;
     }
 
     protected int getRepathTicks() {

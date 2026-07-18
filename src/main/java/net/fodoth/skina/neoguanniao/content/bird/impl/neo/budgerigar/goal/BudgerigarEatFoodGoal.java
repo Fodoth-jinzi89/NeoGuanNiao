@@ -20,7 +20,7 @@ public class BudgerigarEatFoodGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.budgerigar.getGoalController().canStartFoodGoal()) {
+        if (!this.budgerigar.getGoalController().getBirdEatFoodGoalController().canUse()) {
             return false;
         }
 
@@ -42,7 +42,7 @@ public class BudgerigarEatFoodGoal extends Goal {
     public boolean canContinueToUse() {
         return this.targetFood != null && this.targetFood.isAlive()
                 && !this.targetFood.getItem().isEmpty()
-                && this.budgerigar.getGoalController().canStartFoodGoal();
+                && this.budgerigar.getGoalController().getBirdEatFoodGoalController().canUse();
     }
 
     @Override
