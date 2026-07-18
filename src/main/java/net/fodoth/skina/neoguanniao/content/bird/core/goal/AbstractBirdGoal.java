@@ -52,12 +52,19 @@ public abstract class AbstractBirdGoal extends Goal {
 
     @Override
     public final void tick() {
+        if (!shouldTick()) {
+            return;
+        }
         onTick();
         if (--this.repathTicks <= 0) {
             debugReset();
             reset();
             onReset();
         }
+    }
+
+    protected boolean shouldTick() {
+        return individualGoalController().shouldTick();
     }
 
     protected void reset() {

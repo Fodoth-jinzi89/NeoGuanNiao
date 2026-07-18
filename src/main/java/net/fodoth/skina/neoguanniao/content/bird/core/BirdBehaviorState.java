@@ -17,7 +17,9 @@ public enum BirdBehaviorState {
     PREENING,
     CURIOUS,
     DANCING,
-    PERCHING;
+    PERCHING,
+    BATHING,
+    USING_BATH;
 
     public boolean isAirborne() {
         return this == FLYING || this == FLEEING;

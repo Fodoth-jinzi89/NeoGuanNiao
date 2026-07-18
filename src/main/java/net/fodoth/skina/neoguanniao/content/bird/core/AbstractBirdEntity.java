@@ -14,7 +14,6 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.ScalableBirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.goal.*;
 import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -133,15 +132,17 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         List<Goal> goals = new ArrayList<>();
 
         goals.add(new FloatGoal(this)); //0
+        // Subtypes should add from 1
         goals.add(new BirdEatFoodGoal(this)); //1
-        goals.add(new BirdSentinelGoal(this)); //2
-        goals.add(new BirdWakeUpGoal(this)); //3
-        goals.add(new BirdRoostGoal(this)); //4
-        goals.add(new BirdFollowOwnerGoal(this)); //5
-        goals.add(new BirdFlockGoal(this));  //6
-        goals.add(new BirdCuriousFollowGoal(this)); //7
-        goals.add(new BirdIdleGoal(this)); //8
-        goals.add(new BirdRandomLookAroundGoal(this)); //9
+        goals.add(new BirdBathUseGoal(this)); //2
+        goals.add(new BirdSentinelGoal(this)); //3
+        goals.add(new BirdWakeUpGoal(this)); //4
+        goals.add(new BirdRoostGoal(this)); //5
+        goals.add(new BirdFollowOwnerGoal(this)); //6
+        goals.add(new BirdFlockGoal(this));  //7
+        goals.add(new BirdCuriousFollowGoal(this)); //8
+        goals.add(new BirdIdleGoal(this)); //9
+        goals.add(new BirdRandomLookAroundGoal(this)); //10
 
         return goals;
     }

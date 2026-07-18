@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * 该计时器仅在服务端执行。
  * </p>
  */
-public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T>{
+public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T> {
 
     /**
      * 悬停重定向剩余 Tick 数
@@ -65,6 +65,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
         tickAmbientAirCruise();
         tickGroundMovementFacing();
     }
+
 
     /**
      * 处理落水逃离行为
@@ -176,14 +177,43 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
             }
         }
 
+        if (flyingController.isMountFlight) {
+
+            if (toTarget.length() <= 0.15) {
+
+                bird().setPos(
+                        flyingController.flightTarget
+                );
+
+                bird().setDeltaMovement(Vec3.ZERO);
+
+                flyingController.finishFlight();
+                return;
+            }
+        }
+
         // 飞行目标重定向
         double reachDistance = flyingDatum.flightTargetReachDistance();
-        if (toTarget.length() >= reachDistance && hoverRetargetTicks > 0) {
-            --hoverRetargetTicks;
-        } else {
-            flyingController.retargetAirCruise(flyingController.isEscapeFlightActive);
-            toTarget = flyingController.flightTarget.subtract(bird().position());
-            horizontalDistance = Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+        if (!flyingController.isMountFlight) {
+
+            if (toTarget.length() >= reachDistance && hoverRetargetTicks > 0) {
+                --hoverRetargetTicks;
+            } else {
+                flyingController.retargetAirCruise(
+                        flyingController.isEscapeFlightActive
+                );
+
+                toTarget =
+                        flyingController.flightTarget
+                                .subtract(bird().position());
+
+                horizontalDistance =
+                        Math.sqrt(
+                                toTarget.x * toTarget.x
+                                        +
+                                        toTarget.z * toTarget.z
+                        );
+            }
         }
 
         // 计算飞行方向

@@ -125,6 +125,34 @@ public final class BirdBathAttraction {
     }
 
 
+    public static Vec3 edgeStandPosition(
+            BirdBathBlockEntity bath,
+            Vec3 birdPosition
+    ) {
+
+        Vec3 center = topUsePosition(bath);
+
+        Vec3 horizontal = new Vec3(
+                birdPosition.x - center.x,
+                0,
+                birdPosition.z - center.z
+        );
+
+        if (horizontal.lengthSqr() <= 1.0E-4) {
+            horizontal = new Vec3(1, 0, 0);
+        } else {
+            horizontal = horizontal.normalize();
+        }
+
+
+        return new Vec3(
+                center.x + horizontal.x * 0.5,
+                center.y + 0.20,
+                center.z + horizontal.z * 0.5
+        );
+    }
+
+
     public static Vec3 edgeApproachPosition(
             BirdBathBlockEntity bath,
             Vec3 birdPosition

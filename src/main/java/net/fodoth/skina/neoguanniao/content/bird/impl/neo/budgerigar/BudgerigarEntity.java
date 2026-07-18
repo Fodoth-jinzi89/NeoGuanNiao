@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bath.BirdBathAttraction;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
@@ -9,7 +8,6 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.goal.goals.BirdMusicDanceGoal;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.species.BudgerigarProfile;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.goal.*;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -128,22 +126,7 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
     @Override
     protected List<Goal> buildGoals() {
         List<Goal> goals = new ArrayList<>(super.buildGoals());
-
         goals.add(1, new BirdMusicDanceGoal(this));
-        goals.add(2, new BudgerigarBathUseGoal<>(
-                this, 1.0, 11.0, 36,
-                BirdBathAttraction::isAttractiveToBudgerigar,
-                () -> this.getBirdControllers().getBirdGoalController().getBirdEatFoodGoalController().canUse(),
-                (bath) -> this.getBirdControllers().getBirdBehaviorStateController().setBehaviorState(BirdBehaviorState.FORAGING),
-                (bath, contentType) -> this.getBirdControllers().getBirdEatingController().consumeBirdBathServing(bath, contentType),
-                (bath, consumed) -> {
-                    if (!this.getBirdControllers().getBirdEatingController().isEating()
-                            && this.getBirdControllers().getBirdBehaviorStateController().getBehaviorState() == BirdBehaviorState.FORAGING) {
-                        this.getBirdControllers().getBirdBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
-                    }
-                }
-        ));
-
         return goals;
     }
 

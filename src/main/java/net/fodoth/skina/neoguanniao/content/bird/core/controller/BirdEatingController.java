@@ -35,6 +35,11 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         return currentState == BirdBehaviorState.EATING;
     }
 
+    public boolean isForagingOrEating() {
+        BirdBehaviorState currentState = bird.getBehaviorStateController().getBehaviorState();
+        return currentState == BirdBehaviorState.EATING || currentState == BirdBehaviorState.FORAGING;
+    }
+
     /**
      * 处理玩家喂食交互
      *

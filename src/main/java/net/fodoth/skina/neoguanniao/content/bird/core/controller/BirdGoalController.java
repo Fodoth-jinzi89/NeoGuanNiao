@@ -25,6 +25,7 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
     private final BirdRoostGoalController<T> birdRoostGoalController;
     private final BirdSentinelGoalController<T> birdSentinelGoalController;
     private final BirdWakeUpGoalController<T> birdWakeUpGoalController;
+    private final BirdBathUseGoalController<T> birdBathUseGoalController;
 
     private final List<AbstractGoalController<T>> controllers;
 
@@ -41,6 +42,7 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
         this.birdRoostGoalController = new BirdRoostGoalController<>();
         this.birdSentinelGoalController = new BirdSentinelGoalController<>();
         this.birdWakeUpGoalController = new BirdWakeUpGoalController<>();
+        this.birdBathUseGoalController = new BirdBathUseGoalController<>();
 
         List<AbstractGoalController<T>> controllers = new ArrayList<>(List.of(
                 birdCuriousFollowGoalController,
@@ -52,7 +54,8 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
                 birdRandomLookAroundGoalController,
                 birdRoostGoalController,
                 birdSentinelGoalController,
-                birdWakeUpGoalController
+                birdWakeUpGoalController,
+                birdBathUseGoalController
         ));
 
         this.controllers = List.copyOf(controllers);
@@ -105,6 +108,10 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
 
     public BirdWakeUpGoalController<T> getBirdWakeUpGoalController() {
         return birdWakeUpGoalController;
+    }
+
+    public BirdBathUseGoalController<T> getBirdBathUseGoalController() {
+        return birdBathUseGoalController;
     }
 
 }

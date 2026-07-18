@@ -7,6 +7,8 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+
+// TODO 兼容原版Sleeping系统，鸟可以睡在书架啦床啦之类的方块，可以占用床，搞个标签
 public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
     private BlockPos roostPos;
     @Override

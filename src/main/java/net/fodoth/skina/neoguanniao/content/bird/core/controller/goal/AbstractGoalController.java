@@ -29,6 +29,10 @@ public abstract class AbstractGoalController<T extends AbstractBirdEntity<T>> ex
     public void onStart() {
     }
 
+    public boolean shouldTick() {
+        return true;
+    }
+
     public void onTick() {
     }
 
