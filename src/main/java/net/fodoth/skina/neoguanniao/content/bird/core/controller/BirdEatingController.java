@@ -10,11 +10,16 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdTameDatum;
 import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 /**
  * 鸟类进食控制器
@@ -50,6 +55,16 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         // 获取玩家手中的物品
         ItemStack stack = player.getItemInHand(hand);
+
+
+        // 优先检查繁育
+        InteractionResult breedResult =
+                bird().getBreedController()
+                        .mobInteract(player, hand);
+
+        if (breedResult.consumesAction()) {
+            return breedResult;
+        }
 
         // 检查物品是否可食用
         // 用 CONSUME 防止客户端看不到
@@ -104,7 +119,37 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 开始进食动画
         startEatingFood(eaten);
 
+        // 幼鸟喂食额外缩短10%成长时间
+        accelerateBabyGrowth();
+
         return InteractionResult.SUCCESS;
+    }
+
+    private void accelerateBabyGrowth() {
+        if (bird().isBaby()) {
+            int age = bird().getAge();
+
+            if (age < 0) {
+                int growth = (int) (-age * 0.1F);
+                bird().setAge(age + growth);
+
+                if (bird().level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(
+                            ParticleTypes.HAPPY_VILLAGER,
+                            bird().getX(),
+                            bird().getY() + bird().getBbHeight() * 0.5,
+                            bird().getZ(),
+                            5,
+                            0.2,
+                            0.2,
+                            0.2,
+                            0.02
+                    );
+                }
+            }
+
+
+        }
     }
 
     /**
@@ -161,8 +206,23 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
     }
 
     private void spawnFlyingFood(AbstractBirdEntity<?> bird, ItemEntity itemEntity, ItemStack food) {
-        ItemEntity flyingFood = new ItemEntity(bird.level(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), food.copy());
-        flyingFood.setPickUpDelay(20);
+        ItemStack flyingStack = food.copy();
+        // 添加唯一标记，防止和普通掉落物合并
+        flyingStack.set(
+                DataComponents.CUSTOM_DATA,
+                CustomData.of(new CompoundTag() {{
+                    putBoolean("NeoGuanNiaoFlyingFood", true);
+                }})
+        );
+
+        ItemEntity flyingFood = new ItemEntity(
+                bird.level(),
+                itemEntity.getX(),
+                itemEntity.getY(),
+                itemEntity.getZ(),
+                flyingStack
+        );
+        flyingFood.setNeverPickUp();
         flyingFood.lifespan = 10;
         double dx = bird.getX() - flyingFood.getX();
         double dy = bird.getY() + 0.5 * bird.getBbHeight() - flyingFood.getY();

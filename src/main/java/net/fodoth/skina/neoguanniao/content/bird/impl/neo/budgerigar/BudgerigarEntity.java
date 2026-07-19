@@ -116,12 +116,7 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
                 NeoGuanNiaoBirdData.BUDGERIGAR.get()
         );
     }
-
-    @Override
-    protected @Nullable BudgerigarEntity createChild(ServerLevel level) {
-        return NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get().create(level);
-    }
-
+    
     // ============ AI 注册 ============
     @Override
     protected List<Goal> buildGoals() {

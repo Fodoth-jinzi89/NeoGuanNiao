@@ -59,25 +59,62 @@ public final class NeoGuanNiaoBirdData {
                                             .withFlightProfile(BirdFlightProfile.BUDGERIGAR)
                             )
                             .withModel(
-                                    new BirdSkinDatum(
-                                            resource("geo/budgerigar.geo.json"),
-                                            new BirdSkin[]{
-                                                    BirdSkin.createDefault().withId("budgerigar").withLocation(resource("textures/entity/budgerigar/budgerigar.png")),
-                                                    BirdSkin.createDefault().withId("white_lark").withLocation(resource("textures/entity/budgerigar/white_lark.png")),
-                                                    BirdSkin.createDefault().withId("mystery_green").withLocation(resource("textures/entity/budgerigar/mystery_green.png")),
-                                                    BirdSkin.createDefault().withId("blue_lark").withLocation(resource("textures/entity/budgerigar/blue_lark.png")),
-                                                    BirdSkin.createDefault().withId("blue_porcelain").withLocation(resource("textures/entity/budgerigar/blue_porcelain.png")),
-                                                    BirdSkin.createDefault().withId("yellow_lark").withLocation(resource("textures/entity/budgerigar/yellow_lark.png")),
-                                                    BirdSkin.createDefault().withId("yellow").withLocation(resource("textures/entity/budgerigar/yellow.png")),
-                                                    BirdSkin.createDefault().withId("yellow_2").withLocation(resource("textures/entity/budgerigar/yellow_2.png")),
-                                                    BirdSkin.createDefault().withId("yellow_black").withLocation(resource("textures/entity/budgerigar/yellow_black.png")),
-                                                    BirdSkin.createDefault().withId("black_white").withLocation(resource("textures/entity/budgerigar/black_white.png")),
-                                                    BirdSkin.createDefault().withId("golden").withBreed(false).withUnique(true).withRarity(BirdSkinRarity.UNIQUE).withLocation(resource("textures/entity/budgerigar/golden.png"))}
-                                            ,
-                                            BirdModelScaleProfile.BUDGERIGAR,
-                                            0.12F,
-                                            1.0F
-                                    )
+                                    BirdSkinDatum.createDefault()
+                                            .withModelLocation(resource("geo/budgerigar.geo.json"))
+                                            .withBirdSkin(new BirdSkin[]{
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("budgerigar"))
+                                                            .withLocation(resource("textures/entity/budgerigar/budgerigar.png")).withRarity(BirdSkinRarity.COMMON),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("yellow"))
+                                                            .withLocation(resource("textures/entity/budgerigar/yellow.png")).withRarity(BirdSkinRarity.COMMON),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("yellow_2"))
+                                                            .withLocation(resource("textures/entity/budgerigar/yellow_2.png")).withRarity(BirdSkinRarity.COMMON),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("white_lark"))
+                                                            .withLocation(resource("textures/entity/budgerigar/white_lark.png")).withRarity(BirdSkinRarity.RARE),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("blue_lark"))
+                                                            .withLocation(resource("textures/entity/budgerigar/blue_lark.png")).withRarity(BirdSkinRarity.RARE),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("yellow_lark"))
+                                                            .withLocation(resource("textures/entity/budgerigar/yellow_lark.png")).withRarity(BirdSkinRarity.RARE),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("yellow_black"))
+                                                            .withLocation(resource("textures/entity/budgerigar/yellow_black.png")).withRarity(BirdSkinRarity.RARE),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("mystery_green"))
+                                                            .withLocation(resource("textures/entity/budgerigar/mystery_green.png"))
+                                                            .withRarity(BirdSkinRarity.EPIC).withNatureSpawn(false),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("blue_porcelain"))
+                                                            .withLocation(resource("textures/entity/budgerigar/blue_porcelain.png")).withRarity(BirdSkinRarity.EPIC).withNatureSpawn(false),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("black_white"))
+                                                            .withLocation(resource("textures/entity/budgerigar/black_white.png")).withRarity(BirdSkinRarity.LEGENDARY).withNatureSpawn(false),
+
+                                                    BirdSkin.createDefault()
+                                                            .withId(resource("golden"))
+                                                            .withLocation(resource("textures/entity/budgerigar/golden.png"))
+                                                            .withBreed(false)
+                                                            .withNatureSpawn(false)
+                                                            .withUnique(true)
+                                                            .withRarity(BirdSkinRarity.UNIQUE)
+                                            })
+                                            .withModelScaleProfile(BirdModelScaleProfile.BUDGERIGAR)
+                                            .withShadowRadius(0.12F)
+                                            .withGlobalScale(1.0F)
+                                            .withBabyScale(0.75F)
                             )
                             .withAnimation(
                                     BirdAnimationDatum.withAnimationIdAndMap(

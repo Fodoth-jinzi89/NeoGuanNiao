@@ -20,6 +20,10 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
     private final BirdBehaviorStateController<T> birdBehaviorStateController;
 
 
+
+    private final BirdBreedController<T> birdBreedController;
+
+
     private final List<AbstractBirdController<T>> controllers;
 
 
@@ -36,6 +40,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         this.birdAnimationController = builder.birdAnimationController;
         this.birdSkinController = builder.birdSkinController;
         this.birdBehaviorStateController = builder.birdBehaviorStateController;
+        this.birdBreedController = builder.birdBreedController;
 
 
         this.controllers = List.of(
@@ -49,7 +54,8 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
                 birdSoundController,
                 birdAnimationController,
                 birdSkinController,
-                birdBehaviorStateController
+                birdBehaviorStateController,
+                birdBreedController
         );
     }
 
@@ -83,6 +89,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         private BirdAnimationController<T> birdAnimationController = new BirdAnimationController<>();
         private BirdSkinController<T> birdSkinController = new BirdSkinController<>();
         private BirdBehaviorStateController<T> birdBehaviorStateController = new BirdBehaviorStateController<>();
+        private BirdBreedController<T> birdBreedController = new BirdBreedController<>();
 
 
         public Builder<T> birdFlyingController(BirdFlyingController<T> controller) {
@@ -140,6 +147,11 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
             return this;
         }
 
+        public Builder<T> birdBreedController(BirdBreedController<T> controller) {
+            this.birdBreedController = controller;
+            return this;
+        }
+
         public BirdControllers<T> build() {
             return new BirdControllers<>(this);
         }
@@ -183,7 +195,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         return birdAnimationController;
     }
 
-    public BirdSkinController<T> getBirdModelController() {
+    public BirdSkinController<T> getBirdSkinController() {
         return birdSkinController;
     }
 
@@ -191,9 +203,17 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         return birdBehaviorStateController;
     }
 
+    public BirdBreedController<T> getBirdBreedController() {
+        return birdBreedController;
+    }
+
+
+
     public List<AbstractBirdController<T>> getControllers() {
         return controllers;
     }
+
+
 
 
     // 便捷方法（与 getter 相同）
@@ -233,11 +253,15 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         return birdAnimationController;
     }
 
-    public BirdSkinController<T> birdModelController() {
+    public BirdSkinController<T> birdSkinController() {
         return birdSkinController;
     }
 
     public BirdBehaviorStateController<T> birdBehaviorStateController() {
         return birdBehaviorStateController;
+    }
+
+    public BirdBreedController<T> birdBreedController() {
+        return birdBreedController;
     }
 }

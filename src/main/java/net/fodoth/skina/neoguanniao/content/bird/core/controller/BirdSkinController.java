@@ -43,9 +43,13 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * </p>
      */
     public void randomizeModelScale() {
+        this.randomizeModelScale(false);
+    }
+
+    public void randomizeModelScale(boolean isBaby) {
         var random = bird.getRandom();
         var profile = bird.modelScaleProfile();
-        float scale = BirdModelScale.randomIndividualScale(random, profile);
+        float scale = BirdModelScale.randomIndividualScale(random, profile, isBaby);
         setIndividualModelScale(scale);
     }
 
@@ -93,6 +97,12 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
         return BirdModelScale.sanitize(scale, profile);
     }
 
+    public float getRenderModelScale() {
+        var profile = this.modelScaleProfile();
+        float scale = bird.getEntityData().get(MODEL_SCALE);
+        return BirdModelScale.renderScale(profile, scale);
+    }
+
     /**
      * 获取当前鸟的皮肤变体编号
      * <p>
@@ -128,6 +138,34 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     }
 
     /**
+     * 根据皮肤ID设置皮肤
+     */
+    public void setSkinVariant(ResourceLocation skinId) {
+
+        BirdSkin[] skins =
+                bird.getBirdData()
+                        .model()
+                        .birdSkin();
+
+
+        for (int i = 0; i < skins.length; i++) {
+
+            if (skins[i].id().equals(skinId)) {
+                setSkinVariant(i);
+                return;
+            }
+        }
+
+
+        // 找不到则使用默认皮肤
+        setSkinVariant(0);
+    }
+
+
+    public void randomizeSkinVariant() {
+        setSkinVariant(getRandomizeSkinVariant());
+    }
+    /**
      * 随机选择一个皮肤变体
      * <p>
      * 用于鸟生成时初始化外观，
@@ -135,36 +173,37 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * </p>
      */
     // 完全随机 - 使用所有默认值
-    public void randomizeSkinVariant() {
-        randomizeSkinVariant(null, true, true, true, false);
+    public ResourceLocation getRandomizeSkinVariant() {
+        return getRandomizeSkinVariant(null, true, true, true, false);
     }
 
     // 只指定稀有度，其他使用默认值
-    public void randomizeSkinVariant(BirdSkinRarity rarity) {
-        randomizeSkinVariant(rarity, true, true, true, false);
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity) {
+        return getRandomizeSkinVariant(rarity, true, true, true, false);
     }
 
     // 指定稀有度和是否自然生成
-    public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn) {
-        randomizeSkinVariant(rarity, natureSpawn, true, true, false);
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn) {
+        return getRandomizeSkinVariant(rarity, natureSpawn, true, true, false);
     }
 
     // 指定稀有度、自然生成和是否可繁殖
-    public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed) {
-        randomizeSkinVariant(rarity, natureSpawn, breed, true, false);
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed) {
+        return getRandomizeSkinVariant(rarity, natureSpawn, breed, true, false);
     }
 
-    public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby) {
-        randomizeSkinVariant(rarity, natureSpawn, breed, baby, false, false);
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby) {
+        return getRandomizeSkinVariant(rarity, natureSpawn, breed, baby, false, false);
     }
 
     // 指定稀有度、自然生成、可繁殖和是否独特
-    public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique) {
-        randomizeSkinVariant(rarity, natureSpawn, breed, baby, unique, false);
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique) {
+        return getRandomizeSkinVariant(rarity, natureSpawn, breed, baby, unique, false);
     }
 
     // 完整版本 - 所有参数，基于权重随机
-    public void randomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
+    @SuppressWarnings("all")
+    public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
         var random = bird.getRandom();
         BirdData birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
@@ -173,29 +212,36 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
         // 过滤匹配的皮肤
         List<BirdSkin> matchingSkins = new ArrayList<>();
         for (BirdSkin skin : skins) {
-            boolean matches = rarity == null || skin.rarity() == rarity;
-
-            if (matches && skin.natureSpawn() != natureSpawn) {
-                matches = false;
+            // 稀有度必须先匹配（传入null表示匹配所有）
+            boolean rarityMatches = rarity == null || skin.rarity() == rarity;
+            if (!rarityMatches) {
+                continue; // 稀有度不匹配，直接跳过
             }
 
-            if (matches && skin.breed() != breed) {
-                matches = false;
+            // 其他参数是"或"的关系，至少满足一个
+            boolean otherMatches = false;
+
+            if (skin.natureSpawn() == natureSpawn) {
+                otherMatches = true;
             }
 
-            if (matches && skin.baby() != baby) {
-                matches = false;
+            if (skin.breed() == breed) {
+                otherMatches = true;
             }
 
-            if (matches && skin.unique() != unique) {
-                matches = false;
+            if (skin.baby() == baby) {
+                otherMatches = true;
             }
 
-            if (matches && skin.hidden() != hidden) {
-                matches = false;
+            if (skin.unique() == unique) {
+                otherMatches = true;
             }
 
-            if (matches) {
+            if (skin.hidden() == hidden) {
+                otherMatches = true;
+            }
+
+            if (otherMatches) {
                 matchingSkins.add(skin);
             }
         }
@@ -208,15 +254,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
         BirdSkin selectedSkin = selectSkinByWeight(matchingSkins, random);
 
         // 找到原始数组中的索引
-        int index = -1;
-        for (int i = 0; i < skins.length; i++) {
-            if (skins[i].id().equals(selectedSkin.id())) {
-                index = i;
-                break;
-            }
-        }
-
-        setSkinVariant(index);
+        return selectedSkin.location();
     }
 
     // 辅助方法：根据权重选择皮肤
@@ -259,7 +297,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * @param parent 父母之一
      * @param mate   父母之二
      */
-    public void inheritSkinVariant(
+    public ResourceLocation inheritSkinVariant(
             AbstractBirdEntity<?> parent,
             AbstractBirdEntity<?> mate
     ) {
@@ -272,18 +310,16 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
 
         // 如果没有多种皮肤，直接设置为0
         if (variants <= 1) {
-            setSkinVariant(0);
-            return;
+            return modelDatum.birdSkin()[0].id();
         }
 
         // 获取父母皮肤
-        BirdSkin parentSkin = getSkinByIndex(parent.getModelController().getSkinVariant());
-        BirdSkin mateSkin = getSkinByIndex(mate.getModelController().getSkinVariant());
+        BirdSkin parentSkin = getSkinByIndex(parent.getSkinController().getSkinVariant());
+        BirdSkin mateSkin = getSkinByIndex(mate.getSkinController().getSkinVariant());
 
         // 如果父母皮肤为null，直接随机
         if (parentSkin == null || mateSkin == null) {
-            randomizeSkinVariant(null, false, true, true, false);
-            return;
+            return getRandomizeSkinVariant(null, false, true, true, false);
         }
 
         // 获取父母稀有度的数值
@@ -398,18 +434,17 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
 
         // 如果还是没有可用皮肤，直接设置为0并返回
         if (availableSkins.isEmpty()) {
-            setSkinVariant(0);
-            return;
+            return modelDatum.birdSkin()[0].id();
         }
 
         // 从可用皮肤中随机选择一个
         BirdSkin selectedSkin = availableSkins.get(random.nextInt(availableSkins.size()));
-        setSkinVariantBySkin(selectedSkin, modelDatum.birdSkin());
+        return selectedSkin.id();
     }
 
     private static float getActualMutantChance(BirdSkin parentSkin, BirdSkin mateSkin, BirdMiscDatum miscDatum) {
-        boolean parentIsBreed = parentSkin.breed();
-        boolean mateIsBreed = mateSkin.breed();
+        boolean parentIsBreed = !parentSkin.natureSpawn() && parentSkin.breed();
+        boolean mateIsBreed = !mateSkin.natureSpawn() && mateSkin.breed();
 
         // 计算变异概率倍数
         float mutantMultiplier = 1.0f;

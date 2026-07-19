@@ -8,14 +8,19 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTickController;
 import net.fodoth.skina.neoguanniao.content.bird.core.goal.goals.*;
+import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.flight.*;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.feature.scale.ScalableBirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
+import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
+import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -31,13 +36,17 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -131,21 +140,22 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     protected List<Goal> buildGoals() {
         List<Goal> goals = new ArrayList<>();
 
-        goals.add(new FloatGoal(this)); //0
-        // Subtypes should add from 1
-        goals.add(new BirdEatFoodGoal(this)); //1
-        goals.add(new BirdBathUseGoal(this)); //2
-        goals.add(new BirdSentinelGoal(this)); //3
-        goals.add(new BirdWakeUpGoal(this)); //4
-        goals.add(new BirdRoostGoal(this)); //5
-        goals.add(new BirdFollowOwnerGoal(this)); //6
-        goals.add(new BirdFlockGoal(this));  //7
-        goals.add(new BirdCuriousFollowGoal(this)); //8
-        goals.add(new BirdIdleGoal(this)); //9
-        goals.add(new BirdRandomLookAroundGoal(this)); //10
+        goals.add(new FloatGoal(this));//0
+        goals.add(new BreedGoal(this, 1.0));//1
+        goals.add(new BirdEatFoodGoal(this)); //2
+        goals.add(new BirdBathUseGoal(this)); //3
+        goals.add(new BirdSentinelGoal(this)); //4
+        goals.add(new BirdWakeUpGoal(this)); //5
+        goals.add(new BirdRoostGoal(this)); //6
+        goals.add(new BirdFollowOwnerGoal(this)); //7
+        goals.add(new BirdFlockGoal(this));  //8
+        goals.add(new BirdCuriousFollowGoal(this)); //9
+        goals.add(new BirdIdleGoal(this)); //10
+        goals.add(new BirdRandomLookAroundGoal(this)); //11
 
         return goals;
     }
+
     /**
      * 生成规则由 {@link NeoGuanNiaoModEvents} 注册。
      */
@@ -170,16 +180,48 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return entities.size() <= birdData.misc().spawnRarity();
     }
 
+    @Override
+    public void spawnChildFromBreeding(
+            @NotNull ServerLevel level,
+            @NotNull Animal mate
+    ) {
+
+        spawnEgg(level, mate);
 
 
+        // 繁育冷却
+        this.setAge(6000);
+        mate.setAge(6000);
 
-    protected abstract @Nullable T createChild(ServerLevel level);
 
-    protected void initializeChild(T child) {
+        // 清除爱心状态
+        this.resetLove();
+        mate.resetLove();
+
+
+        // 播放一次爱心效果
+        level.broadcastEntityEvent(this, (byte) 18);
+
+
+        // 经验球
+        if (level.getGameRules()
+                .getBoolean(GameRules.RULE_DOMOBLOOT)) {
+
+            level.addFreshEntity(
+                    new ExperienceOrb(
+                            level,
+                            this.getX(),
+                            this.getY(),
+                            this.getZ(),
+                            this.getRandom().nextInt(7) + 1
+                    )
+            );
+        }
     }
 
+
     public ResourceLocation getTextureResource() {
-        return getModelController().textureForVariant(getModelController().getSkinVariant());
+        return getSkinController().textureForVariant(getSkinController().getSkinVariant());
     }
 
     @Override
@@ -194,8 +236,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 spawnGroupData
         );
 
-        getModelController().randomizeSkinVariant();
-        getModelController().randomizeModelScale();
+        getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), false));
+        getSkinController().randomizeModelScale(isBaby());
 
         return data;
     }
@@ -214,36 +256,66 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             @NotNull ServerLevel level,
             @NotNull AgeableMob mate
     ) {
-        T child = this.createChild(level);
+        return null;
+    }
 
-        if (child != null) {
-            this.initializeChild(child);
+    protected void spawnEgg(ServerLevel level, AgeableMob mate) {
 
-            if (mate instanceof AbstractBirdEntity<?> other) {
-                child.getModelController().inheritSkinVariant(
-                        this,
-                        other
-                );
-            } else {
-                child.getModelController().randomizeSkinVariant();
-            }
+        BirdEggData eggData = createEggData(mate);
+
+        ItemStack eggStack = new ItemStack(
+                NeoGuanNiaoItems.BIRD_EGG.get()
+        );
+
+        BirdEggItem.setEggData(
+                eggStack,
+                eggData
+        );
 
 
-            float mateScale = mate instanceof AbstractBirdEntity<?> other
-                    ? other.getIndividualModelScale()
-                    : this.getIndividualModelScale();
+        ItemEntity entity = new ItemEntity(
+                level,
+                getX(),
+                getY() + 0.2,
+                getZ(),
+                eggStack
+        );
 
-            child.setIndividualModelScale(
-                    BirdModelScale.inheritIndividualScale(
-                            child.getRandom(),
-                            this.getIndividualModelScale(),
-                            mateScale,
-                            child.modelScaleProfile()
-                    )
-            );
-        }
+        entity.setDefaultPickUpDelay();
 
-        return child;
+        level.addFreshEntity(entity);
+    }
+
+    protected BirdEggData createEggData(AgeableMob mate) {
+
+        AbstractBirdEntity<?> other =
+                mate instanceof AbstractBirdEntity<?> bird
+                        ? bird
+                        : this;
+
+
+        return BirdEggData.create(
+                BuiltInRegistries.ENTITY_TYPE
+                        .getKey(this.getType()),
+
+                getModelResource(),
+
+                getSkinController().inheritSkinVariant(this, other),
+
+                BirdModelScale.inheritIndividualScale(
+                        this.getRandom(),
+                        this.getIndividualModelScale(),
+                        other.getIndividualModelScale(),
+                        modelScaleProfile()
+                ),
+
+                20 * 60,
+                true
+        );
+    }
+
+    protected ResourceLocation getModelResource() {
+        return getBirdData().model().modelLocation();
     }
 
     @Override
@@ -305,7 +377,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         birdBrain.save(compoundTag);
         compoundTag.putInt("BirdTrustTicks", getTickController().getTickTimer().getBirdTrustTicker().getTicks());
         compoundTag.putInt("BirdCuriousTicks", getTickController().getTickTimer().getBirdCuriousTicker().getTicks());
-        compoundTag.putInt("BirdSkinVariant", getModelController().getSkinVariant());
+        compoundTag.putInt("BirdSkinVariant", getSkinController().getSkinVariant());
         BirdModelScale.save(compoundTag, this.getIndividualModelScale(), this.modelScaleProfile());
         if (getTameController().getInterestedPlayerUUID() != null) {
             compoundTag.putUUID("BirdInterestedPlayer", getTameController().getInterestedPlayerUUID());
@@ -319,14 +391,14 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         getTickController().getTickTimer().getBirdTrustTicker().setTicks(compoundTag.getInt("BirdTrustTicks"));
         getTickController().getTickTimer().getBirdCuriousTicker().setTicks(compoundTag.getInt("BirdCuriousTicks"));
         if (compoundTag.contains("BirdSkinVariant", CompoundTag.TAG_INT)) {
-            getModelController().setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
+            getSkinController().setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
         } else {
-            getModelController().randomizeSkinVariant();
+            getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), false));
         }
         if (compoundTag.contains("BirdModelScale", CompoundTag.TAG_FLOAT)) {
             this.setIndividualModelScale(BirdModelScale.load(compoundTag, this.modelScaleProfile()));
         } else {
-            getModelController().randomizeModelScale();
+            getSkinController().randomizeModelScale(isBaby());
         }
         if (compoundTag.hasUUID("BirdInterestedPlayer")) {
             getTameController().setInterestedPlayerUUID(compoundTag.getUUID("BirdInterestedPlayer"));
@@ -356,17 +428,17 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     public BirdModelScaleProfile modelScaleProfile() {
-        return getModelController().modelScaleProfile();
+        return getSkinController().modelScaleProfile();
     }
 
     @Override
     public float getIndividualModelScale() {
-        return getModelController().getIndividualModelScale();
+        return getSkinController().getIndividualModelScale();
     }
 
     @Override
     public void setIndividualModelScale(float scale) {
-        getModelController().setIndividualModelScale(scale);
+        getSkinController().setIndividualModelScale(scale);
     }
 
     @Override
@@ -537,8 +609,12 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return BIRD_CONTROLLERS.birdSoundController();
     }
 
-    public BirdSkinController<T> getModelController() {
-        return BIRD_CONTROLLERS.birdModelController();
+    public BirdSkinController<T> getSkinController() {
+        return BIRD_CONTROLLERS.birdSkinController();
+    }
+
+    public BirdBreedController<T> getBreedController() {
+        return BIRD_CONTROLLERS.birdBreedController();
     }
 
     public BirdBehaviorStateController<T> getBehaviorStateController() {
@@ -565,5 +641,16 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public boolean isDancing() {
         return this.getBirdControllers().getBirdTickController().getTickTimer().getBirdMusicTicker().getTicks() > 0
                 || this.getBirdControllers().getBirdBehaviorStateController().getBehaviorState() == BirdBehaviorState.DANCING;
+    }
+
+    public void applyEggData(BirdEggData data) {
+
+        getSkinController().setSkinVariant(
+                (data.skin())
+        );
+
+        setIndividualModelScale(
+                data.size()
+        );
     }
 }

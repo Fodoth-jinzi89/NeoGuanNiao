@@ -28,13 +28,14 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<T>> extends 
         var routineController = bird.getRoutineController();
         var stateController = bird.getBehaviorStateController();
 
-        boolean hasNoFoodTicks = timer.getBirdFoodTicker().getTicks() <= 0;
+        boolean hasNoFoodTicks = !timer.getBirdFoodTicker().isRunning();
         boolean isNotEating = !eatingController.isEating();
         boolean isNotPassenger = !bird.isPassenger();
         boolean isNotSleepingOrRoosting = !routineController.isSleepingOrRoosting();
         boolean isNotEscaping = !stateController.getBehaviorState().isEscape();
+        boolean isMature = !bird().isBaby();
 
-        return hasNoFoodTicks && isNotEating && isNotPassenger
+        return isMature && hasNoFoodTicks && isNotEating && isNotPassenger
                 && isNotSleepingOrRoosting && isNotEscaping;
     }
 

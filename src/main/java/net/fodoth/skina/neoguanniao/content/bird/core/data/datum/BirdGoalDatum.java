@@ -117,7 +117,7 @@ public record BirdGoalDatum(
                 20.0F,
                 20.0F,
                 0.6D,
-                1.0D,
+                1.5D,
                 12.0D,
                 2,
                 9.0D,

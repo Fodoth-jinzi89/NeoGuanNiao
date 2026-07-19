@@ -61,7 +61,7 @@ public final class NeoGuanNiaoClientModEvents {
 
         event.registerEntityRenderer(
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
-                (context -> new BirdModelRenderer<>(context, NeoGuanNiaoBirdData.BUDGERIGAR.get()))
+                BirdModelRenderer::new
         );
 
         event.registerBlockEntityRenderer(

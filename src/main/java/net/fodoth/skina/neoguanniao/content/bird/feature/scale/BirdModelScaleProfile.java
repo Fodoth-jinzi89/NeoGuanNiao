@@ -27,7 +27,7 @@ public final class BirdModelScaleProfile {
     /**
      * 虎皮鹦鹉缩放配置 - 小型鸟类，基础缩放较小，个体变化较大
      */
-    public static final BirdModelScaleProfile BUDGERIGAR = new BirdModelScaleProfile(0.6F, 0.84F, 1.16F);
+    public static final BirdModelScaleProfile BUDGERIGAR = new BirdModelScaleProfile(0.6F, 0.42F, 1.16F);
 
     /**
      * 鸽类缩放配置 - 中型鸟类，个体变化较小

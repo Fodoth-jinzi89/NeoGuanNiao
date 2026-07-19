@@ -121,7 +121,8 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         alertNearbyBirds();
 
         // 如果在地面且未飞行，立即开始逃跑飞行
-        if (timer.getBirdFlyingTicker().getTicks() <= 0 && bird.onGround()) {
+        // 幼鸟不会飞
+        if (!bird().isBaby() && timer.getBirdFlyingTicker().getTicks() <= 0 && bird().onGround()) {
             startEscapeFlight(sourcePos);
         }
     }

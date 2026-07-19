@@ -17,7 +17,7 @@ public class BirdFollowOwnerGoalController<T extends AbstractBirdEntity<T>> exte
 
     @Override
     public boolean onUse() {
-        if (bird().isTame()) {
+        if (!bird().isBaby() && bird().isTame()) {
             this.owner = bird().getOwner();
             return isOwnerValid(true);
         }
