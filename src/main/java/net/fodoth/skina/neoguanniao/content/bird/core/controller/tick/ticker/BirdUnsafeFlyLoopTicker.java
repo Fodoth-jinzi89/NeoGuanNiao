@@ -86,10 +86,11 @@ public class BirdUnsafeFlyLoopTicker<T extends AbstractBirdEntity<T>> extends Ab
         boolean flag4 = bird.getTickController().getTickTimer().getBirdLandingTicker().getTicks() == 0;
         boolean flag5 = bird.getBehaviorStateController().getBehaviorState().isUnsafeFlyTickerEnabled();
         boolean flag6 = bird.getGoalController().getBirdBathUseGoalController().isRunning();
-        boolean isUnsafeFlying = flag1 && flag2 && flag3 && flag4 && flag5 && flag6;
+        boolean flag7 = bird.isBaby();
+        boolean isUnsafeFlying = flag1 && flag2 && flag3 && flag4 && flag5 && flag6 && flag7;
         if (!isUnsafeFlying) {
             if (enableLifecycleLog() && bird().getRandom().nextFloat() <= 0.1) {
-                NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Early Return with flags: {} {} {} {} {} {}", flag1, flag2, flag3, flag4, flag5, flag6);
+                NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFly: Early Return with flags: {} {} {} {} {} {} {}", flag1, flag2, flag3, flag4, flag5, flag6, flag7);
             }
             return;
         }

@@ -62,7 +62,7 @@ public class BirdBathUseGoalController<T extends AbstractBirdEntity<T>> extends 
             return false;
         }
         // 委托给进食控制器判断是否可进食
-        return bird().getGoalController()
+        return !bird().isBaby() && bird().getGoalController()
                 .getBirdEatFoodGoalController()
                 .canUse();
     }

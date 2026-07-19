@@ -154,5 +154,32 @@
   "gui.neoguanniao.bird_guide.layout_edit_on": "Layout edit mode on",
   "gui.neoguanniao.bird_guide.layout_edit_off": "Layout edit mode off",
   "gui.neoguanniao.bird_guide.layout_reloaded": "Layout reloaded from item",
-  "block.neoguanniao.breadcrumbs": "Breadcrumbs"
+  "block.neoguanniao.breadcrumbs": "Breadcrumbs",
+  "item.neoguanniao.bird_egg": "§aBird Egg§r",
+  "tooltip.neoguanniao.empty_egg": "§aUnknown Bird Egg§r",
+  "tooltip.neoguanniao.bird_type": "§6Bird Type: §r",
+  "tooltip.neoguanniao.model": "§6Model: §r",
+  "tooltip.neoguanniao.skin": "§6Skin: §r",
+  "tooltip.neoguanniao.size": "§6Size: §r%s",
+  "tooltip.neoguanniao.hatch_time": "§6Hatch Time: §r%s ticks",
+  "tooltip.neoguanniao.alive": "§6Status:§r §aAlive§r",
+  "tooltip.neoguanniao.dead": "§6Status:§r §cDead§r",
+  "model.neoguanniao.budgerigar": "§7Budgerigar§r",
+  "skin.neoguanniao.budgerigar": "Light Green",
+  "skin.neoguanniao.white_lark": "White Lark",
+  "skin.neoguanniao.mystery_green": "Mystery Green",
+  "skin.neoguanniao.blue_lark": "Blue Lark",
+  "skin.neoguanniao.blue_porcelain": "Blue Porcelain",
+  "skin.neoguanniao.yellow_lark": "Yellow Lark",
+  "skin.neoguanniao.yellow": "Yellow",
+  "skin.neoguanniao.yellow_2": "Blue White",
+  "skin.neoguanniao.yellow_black": "Yellow Black",
+  "skin.neoguanniao.black_white": "Black White",
+  "skin.neoguanniao.golden": "Golden",
+
+  "item.neoguanniao.bird_food_bag": "Bird Food Bag",
+  "item.neoguanniao.bird_food_bag_seed": "Bird Food Bag (Seed)",
+  "item.neoguanniao.bird_food_bag_fish": "Bird Food Bag (Fish)",
+
+  "tag.neoguanniao.bird_food": "Bird Food"
 }

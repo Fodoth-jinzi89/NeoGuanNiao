@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 // TODO 兼容原版Sleeping系统，鸟可以睡在书架啦床啦之类的方块，可以占用床，搞个标签
 public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
     private BlockPos roostPos;
+
     @Override
     public int chance() {
         return goalDatum().randomLookAroundChance();
@@ -22,7 +23,8 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
             return false;
         }
 
-        if (bird().getRoutineController().isSleeping() && !isGoodRoostPosition(true, bird().blockPosition())) {
+        // 幼鸟不会飞，也不会选择更好的栖息地
+        if (bird().getRoutineController().isSleeping() && ( bird().isBaby() || isGoodRoostPosition(true, bird().blockPosition()))) {
             return false;
         }
 
@@ -40,10 +42,21 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
         if (!shouldRoost()) {
             return false;
         }
+        // 幼鸟不会飞，只能睡在地上
+        if (bird().isBaby()) {
+            return false;
+        }
         if (bird().getRoutineController().isSleeping() && isGoodRoostPosition(false, bird().blockPosition())) {
             return false;
         }
         return this.roostPos != null;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean shouldRoost() {
+        return bird().getRoutineController().isRoostTime() && !bird().getEatingController().isEating()
+                && !bird().isDancing()
+                && !bird().getBehaviorStateController().getBehaviorState().isEscape();
     }
 
     @Override
@@ -63,7 +76,7 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
         if (distance < goalDatum().roostGoalRange()) {
             // 到达栖息位置
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
-            bird().setPos(this.roostPos.getX() + 0.5, this.roostPos.getY(), this.roostPos.getZ() + 0.5);
+            bird().setPos(this.roostPos.getX() + 0.5, this.roostPos.getY() - 0.5, this.roostPos.getZ() + 0.5);
             bird().setNoGravity(true);
             return;
         }
@@ -104,15 +117,6 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
     }
 
 
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean shouldRoost() {
-        if (bird().getRoutineController().isRoostTime()) {
-            return true;
-        }
-        return defaultAdditionalPredicates();
-    }
-
     private BlockPos findRoostPosition() {
         BlockPos origin = bird().blockPosition();
 
@@ -152,8 +156,8 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
             if (state.getBlock() instanceof LeavesBlock) {
                 var block = bird().level().getBlockState(pos.below());
                 return block.isAir() || block.getBlock() instanceof LeavesBlock;
-            }
-        } else return false;
+            } else return false;
+        }
 
         if (state.isAir()) {
             return !bird().level().getBlockState(pos.below()).isAir();

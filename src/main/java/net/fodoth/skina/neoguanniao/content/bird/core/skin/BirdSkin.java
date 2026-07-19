@@ -16,12 +16,12 @@ import net.minecraft.resources.ResourceLocation;
  * @param unique       是否可通过独特方式获取
  * @param hidden       是否可通过隐藏方式获取
  */
-public record BirdSkin(String id, ResourceLocation location, BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
+public record BirdSkin(ResourceLocation id, ResourceLocation location, BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
 
     // 创建默认实例的静态方法
     public static BirdSkin createDefault() {
         return new BirdSkin(
-                "default",
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "default"),
                 ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "default_skin"),
                 BirdSkinRarity.COMMON,
                 true,
@@ -32,7 +32,7 @@ public record BirdSkin(String id, ResourceLocation location, BirdSkinRarity rari
         );
     }
 
-    public BirdSkin withId(String id) {
+    public BirdSkin withId(ResourceLocation id) {
         return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
     }
 

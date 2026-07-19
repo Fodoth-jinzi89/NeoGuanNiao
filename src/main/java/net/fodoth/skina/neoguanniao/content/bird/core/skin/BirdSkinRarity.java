@@ -1,20 +1,23 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.skin;
 
+import net.minecraft.ChatFormatting;
+
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public enum BirdSkinRarity {
-    COMMON(0),
-    UNCOMMON(1),
-    RARE(2),
-    EPIC(3),
-    LEGENDARY(4),
-    ANCIENT(5),
-    UNIQUE(6),
-    HIDDEN(999);
+    COMMON(0, ChatFormatting.GRAY),
+    UNCOMMON(1, ChatFormatting.GREEN),
+    RARE(2, ChatFormatting.BLUE),
+    EPIC(3, ChatFormatting.DARK_PURPLE),
+    LEGENDARY(4, ChatFormatting.GOLD),
+    ANCIENT(5, ChatFormatting.RED),
+    UNIQUE(6, ChatFormatting.LIGHT_PURPLE),
+    HIDDEN(999, ChatFormatting.YELLOW);
 
     private final int RARITY;
+    private final ChatFormatting COLOR;
 
     // 默认权重Map
     private static final Map<BirdSkinRarity, Integer> DEFAULT_WEIGHTS = new EnumMap<>(BirdSkinRarity.class);
@@ -42,9 +45,16 @@ public enum BirdSkinRarity {
         }
     }
 
-    BirdSkinRarity(int rarity) {
+    BirdSkinRarity(int rarity, ChatFormatting color) {
         this.RARITY = rarity;
+        this.COLOR = color;
     }
+
+
+    public ChatFormatting getChatColor() {
+        return COLOR;
+    }
+
 
     public int getRarity() {
         return RARITY;

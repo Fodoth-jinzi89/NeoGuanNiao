@@ -7,6 +7,10 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonDefinit
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveDefinition;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
+import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
+import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagFishItem;
+import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagItem;
+import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagSeedItem;
 import net.fodoth.skina.neoguanniao.content.feed.BreadcrumbItem;
 import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
 import net.minecraft.world.entity.EntityType;
@@ -44,7 +48,13 @@ public final class NeoGuanNiaoItems {
     public static final DeferredItem<Item> STONE_BIRD_BATH_2;
     public static final DeferredItem<Item> BIRD_BATH_2;
 
-    private NeoGuanNiaoItems() {}
+    public static final DeferredItem<Item> BIRD_EGG;
+    public static final DeferredItem<Item> BIRD_FOOD_BAG;
+    public static final DeferredItem<Item> BIRD_FOOD_BAG_SEED;
+    public static final DeferredItem<Item> BIRD_FOOD_BAG_FISH;
+
+    private NeoGuanNiaoItems() {
+    }
 
     private static DeferredItem<Item> registerSpawnEgg(
             String id,
@@ -143,5 +153,27 @@ public final class NeoGuanNiaoItems {
         WOODEN_BIRD_BATH_2 = registerBirdBathItem(BirdBathVariant.WOODEN_BIRD_BATH_2, NeoGuanNiaoBlocks.WOODEN_BIRD_BATH_2);
         STONE_BIRD_BATH_2 = registerBirdBathItem(BirdBathVariant.STONE_BIRD_BATH_2, NeoGuanNiaoBlocks.STONE_BIRD_BATH_2);
         BIRD_BATH_2 = registerBirdBathItem(BirdBathVariant.BIRD_BATH_2, NeoGuanNiaoBlocks.BIRD_BATH_2);
+
+        BIRD_EGG =
+                ITEMS.registerItem(
+                        "bird_egg",
+                        BirdEggItem::new,
+                        new Item.Properties()
+                );
+
+        BIRD_FOOD_BAG =
+                ITEMS.registerItem("bird_food_bag",
+                        BirdFoodBagItem::new,
+                        new Item.Properties());
+
+        BIRD_FOOD_BAG_SEED =
+                ITEMS.registerItem("bird_food_bag_seed",
+                        BirdFoodBagSeedItem::new,
+                        new Item.Properties());
+
+        BIRD_FOOD_BAG_FISH =
+                ITEMS.registerItem("bird_food_bag_fish",
+                        BirdFoodBagFishItem::new,
+                        new Item.Properties());
     }
 }
