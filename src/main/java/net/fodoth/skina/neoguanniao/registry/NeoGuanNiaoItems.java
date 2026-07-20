@@ -13,11 +13,14 @@ import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagItem;
 import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagSeedItem;
 import net.fodoth.skina.neoguanniao.content.feed.BreadcrumbItem;
 import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
+import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -52,6 +55,8 @@ public final class NeoGuanNiaoItems {
     public static final DeferredItem<Item> BIRD_FOOD_BAG;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_SEED;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_FISH;
+
+    public static final DeferredItem<Item> BIRD_NEST;
 
     private NeoGuanNiaoItems() {
     }
@@ -175,5 +180,12 @@ public final class NeoGuanNiaoItems {
                 ITEMS.registerItem("bird_food_bag_fish",
                         BirdFoodBagFishItem::new,
                         new Item.Properties());
+
+        BIRD_NEST =
+                ITEMS.register("bird_nest",
+                        () -> new BirdNestItem(
+                                NeoGuanNiaoBlocks.BIRD_NEST.get(),
+                                new Item.Properties()
+                        ));
     }
 }

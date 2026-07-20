@@ -32,6 +32,7 @@
   "subtitles.neoguanniao.entity.spotted_dove.mate": "Spotted dove courtship call",
   "subtitles.neoguanniao.entity.pigeon.ambient": "Pigeon coos",
   "itemGroup.neoguanniao.main": "Bird Watching",
+  "itemGroup.neoguanniao.eggs": "Bird Egg",
   "advancements.neoguanniao.husbandry.chirpy_partner.title": "Chirpy Partner",
   "advancements.neoguanniao.husbandry.chirpy_partner.description": "Trade a seed for a lively new friend.",
   "gui.neoguanniao.bird_guide.title": "Bird Guide",
@@ -161,6 +162,9 @@
   "tooltip.neoguanniao.model": "§6Model: §r",
   "tooltip.neoguanniao.skin": "§6Skin: §r",
   "tooltip.neoguanniao.size": "§6Size: §r%s",
+  "tooltip.neoguanniao.male": "§6Gender:§r §bMale§r",
+  "tooltip.neoguanniao.female": "§6Gender:§d §dFemale§r",
+  "tooltip.neoguanniao.egg_count": "§6Egg Count:§d §e%d§r",
   "tooltip.neoguanniao.hatch_time": "§6Hatch Time: §r",
   "tooltip.neoguanniao.alive": "§6Status:§r §aAlive§r",
   "tooltip.neoguanniao.dead": "§6Status:§r §cDead§r",
@@ -168,14 +172,14 @@
   "tooltip.neoguanniao.time.minute": "%s m",
   "tooltip.neoguanniao.time.second": "%s s",
   "model.neoguanniao.budgerigar": "§7Budgerigar§r",
-  "skin.neoguanniao.budgerigar": "Light Green",
+  "skin.neoguanniao.green": "Light Green",
   "skin.neoguanniao.white_lark": "White Lark",
   "skin.neoguanniao.mystery_green": "Mystery Green",
   "skin.neoguanniao.blue_lark": "Blue Lark",
   "skin.neoguanniao.blue_porcelain": "Blue Porcelain",
   "skin.neoguanniao.yellow_lark": "Yellow Lark",
   "skin.neoguanniao.yellow": "Yellow",
-  "skin.neoguanniao.yellow_2": "Blue White",
+  "skin.neoguanniao.blue_white": "Blue White",
   "skin.neoguanniao.yellow_black": "Yellow Black",
   "skin.neoguanniao.black_white": "Black White",
   "skin.neoguanniao.golden": "Golden",
@@ -185,5 +189,7 @@
   "item.neoguanniao.bird_food_bag_fish": "Bird Food Bag (Fish)",
 
   "tag.neoguanniao.bird_food": "Bird Food",
-  "tag.neoguanniao.bird_breed_food": "Bird Breed Food"
+  "tag.neoguanniao.bird_breed_food": "Bird Breed Food",
+
+  "block.neoguanniao.bird_nest": "Bird Nest"
 }

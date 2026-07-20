@@ -22,7 +22,8 @@ public record BirdSkinDatum(
         BirdModelScaleProfile modelScaleProfile,
         float shadowRadius,
         float globalScale,
-        float babyScale
+        float babyScale,
+        float maleScale
 ) {
     /**
      * 创建默认的皮肤数据实例
@@ -36,7 +37,8 @@ public record BirdSkinDatum(
                 null,
                 0.12F,
                 1.0F,
-                0.5F
+                0.3F,
+                1.1F
         );
     }
 
@@ -49,7 +51,7 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withModelLocation(ResourceLocation modelLocation) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 
     /**
@@ -59,7 +61,7 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withBirdSkin(BirdSkin[] birdSkin) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 
     /**
@@ -69,7 +71,7 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withModelScaleProfile(BirdModelScaleProfile modelScaleProfile) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 
     /**
@@ -79,7 +81,7 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withShadowRadius(float shadowRadius) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 
     /**
@@ -89,7 +91,7 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withGlobalScale(float globalScale) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 
     /**
@@ -99,6 +101,10 @@ public record BirdSkinDatum(
      * @return 返回修改后的新BirdSkinDatum实例
      */
     public BirdSkinDatum withBabyScale(float babyScale) {
-        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale);
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
+    }
+
+    public BirdSkinDatum withMaleScale(float maleScale) {
+        return new BirdSkinDatum(modelLocation, birdSkin, modelScaleProfile, shadowRadius, globalScale, babyScale, maleScale);
     }
 }

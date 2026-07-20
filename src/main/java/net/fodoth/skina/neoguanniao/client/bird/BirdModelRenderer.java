@@ -29,6 +29,10 @@ public class BirdModelRenderer<T extends AbstractBirdEntity<?>> extends GeoEntit
             shadowRadius *= modelData.babyScale();
             scale *= modelData.babyScale();
         }
+        if (animatable.isMale()) {
+            shadowRadius *= modelData.maleScale();
+            scale *= modelData.maleScale();
+        }
         this.shadowRadius = shadowRadius;
         this.withScale(scale);
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender,

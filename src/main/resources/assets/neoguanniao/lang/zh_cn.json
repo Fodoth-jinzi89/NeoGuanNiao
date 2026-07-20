@@ -30,8 +30,9 @@
   "subtitles.neoguanniao.entity.spotted_dove.hurt": "珠颈斑鸠受伤",
   "subtitles.neoguanniao.entity.spotted_dove.death": "珠颈斑鸠死亡",
   "subtitles.neoguanniao.entity.spotted_dove.mate": "珠颈斑鸠求偶鸣叫",
-  "subtitles.neoguanniao.entity.pigeon.ambient": "\u9e3d\u5b50\u5495\u5495\u53eb",
-  "itemGroup.neoguanniao.main": "观鸟",
+  "subtitles.neoguanniao.entity.pigeon.ambient": "鸽子鸣叫",
+  "itemGroup.neoguanniao.main": "观鸟丨核心",
+  "itemGroup.neoguanniao.eggs": "观鸟丨鸟蛋",
   "advancements.neoguanniao.husbandry.chirpy_partner.title": "叽喳合伙人",
   "advancements.neoguanniao.husbandry.chirpy_partner.description": "用种子换来一位热闹的新朋友",
   "gui.neoguanniao.bird_guide.title": "观鸟图鉴",
@@ -161,6 +162,9 @@
   "tooltip.neoguanniao.model": "§6模型: §r",
   "tooltip.neoguanniao.skin": "§6皮肤: §r",
   "tooltip.neoguanniao.size": "§6大小: §r%s",
+  "tooltip.neoguanniao.male": "§6性别:§r §b雄性♂§r",
+  "tooltip.neoguanniao.female": "§6性别:§d §d雌性♀§r",
+  "tooltip.neoguanniao.egg_count": "§6生蛋数:§d §e%d§r",
   "tooltip.neoguanniao.hatch_time": "§6孵化时间: §r",
   "tooltip.neoguanniao.alive": "§6状态:§r §a存活§r",
   "tooltip.neoguanniao.dead": "§6状态:§r §c死亡§r",
@@ -168,14 +172,14 @@
   "tooltip.neoguanniao.time.minute": "%s分",
   "tooltip.neoguanniao.time.second": "%s秒",
   "model.neoguanniao.budgerigar": "§7虎皮鹦鹉§r",
-  "skin.neoguanniao.budgerigar": "原始绿",
+  "skin.neoguanniao.green": "原始绿",
   "skin.neoguanniao.white_lark": "灰白",
   "skin.neoguanniao.mystery_green": "深绿",
   "skin.neoguanniao.blue_lark": "灰蓝",
   "skin.neoguanniao.blue_porcelain": "灰钴蓝",
   "skin.neoguanniao.yellow_lark": "灰黄",
   "skin.neoguanniao.yellow": "原始黄",
-  "skin.neoguanniao.yellow_2": "原始蓝",
+  "skin.neoguanniao.blue_white": "原始蓝",
   "skin.neoguanniao.yellow_black": "黄黑",
   "skin.neoguanniao.black_white": "炭黑",
   "skin.neoguanniao.golden": "金子89",
@@ -185,5 +189,7 @@
   "item.neoguanniao.bird_food_bag_fish": "鸟食袋（鱼）",
 
   "tag.neoguanniao.bird_food": "鸟食",
-  "tag.neoguanniao.bird_breed_food": "鸟类繁殖食物"
+  "tag.neoguanniao.bird_breed_food": "鸟类繁殖食物",
+
+  "block.neoguanniao.bird_nest": "鸟巢"
 }

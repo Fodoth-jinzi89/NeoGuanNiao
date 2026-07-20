@@ -6,8 +6,10 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathVariant;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlock;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
 import net.fodoth.skina.neoguanniao.content.feed.BreadcrumbPileBlock;
+import net.fodoth.skina.neoguanniao.content.nest.BirdNestBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -30,6 +32,8 @@ public final class NeoGuanNiaoBlocks {
     public static final DeferredBlock<Block> WOODEN_BIRD_BATH_2;
     public static final DeferredBlock<Block> STONE_BIRD_BATH_2;
     public static final DeferredBlock<Block> BIRD_BATH_2;
+
+    public static final DeferredBlock<Block> BIRD_NEST;
 
     private NeoGuanNiaoBlocks() {
     }
@@ -86,5 +90,16 @@ public final class NeoGuanNiaoBlocks {
         WOODEN_BIRD_BATH_2 = registerBirdBath(BirdBathVariant.WOODEN_BIRD_BATH_2);
         STONE_BIRD_BATH_2 = registerBirdBath(BirdBathVariant.STONE_BIRD_BATH_2);
         BIRD_BATH_2 = registerBirdBath(BirdBathVariant.BIRD_BATH_2);
+
+        BIRD_NEST =
+                BLOCKS.register("bird_nest",
+                        () -> new BirdNestBlock(
+                                BlockBehaviour.Properties.of()
+                                        .strength(0.5F)
+                                        .sound(SoundType.GRASS)
+                                        .noOcclusion()
+                                        .isSuffocating((state, level, pos) -> false)
+                                        .isViewBlocking((state, level, pos) -> false)
+                        ));
     }
 }

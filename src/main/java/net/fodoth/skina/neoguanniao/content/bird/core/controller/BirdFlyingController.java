@@ -590,8 +590,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             }
             landingTicker.setTicks(0);
             isMountFlight = false;
-            startShortFlight(null, true);
-
+            if (!bird().isBaby()) {
+                startShortFlight(null, true);
+            }
         }
 
         if (bird().onGround()) {

@@ -6,12 +6,13 @@ import net.fodoth.skina.neoguanniao.client.bath.BirdBathRenderer;
 import net.fodoth.skina.neoguanniao.client.bird.BirdModelRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageItemRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
+import net.fodoth.skina.neoguanniao.client.nest.BirdNestItemRenderer;
+import net.fodoth.skina.neoguanniao.client.nest.BirdNestRenderer;
 import net.fodoth.skina.neoguanniao.client.old.budgerigar.BudgerigarRenderer;
 import net.fodoth.skina.neoguanniao.client.old.columbid.PigeonRenderer;
 import net.fodoth.skina.neoguanniao.client.old.columbid.SpottedDoveRenderer;
 import net.fodoth.skina.neoguanniao.client.old.nightheron.NightHeronRenderer;
 import net.fodoth.skina.neoguanniao.client.old.sparrow.SparrowRenderer;
-import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -72,6 +73,11 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(),
                 BirdBathRenderer::new
+        );
+
+        event.registerBlockEntityRenderer(
+                NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(),
+                BirdNestRenderer::new
         );
     }
 
@@ -134,5 +140,12 @@ public final class NeoGuanNiaoClientModEvents {
                 NeoGuanNiaoItems.LARGE_BIRD_CAGE.get(),
                 BirdCageItemRenderer::new
         );
+
+        ClientExtensionHelper.registerGeoItemRenderer(
+                event,
+                NeoGuanNiaoItems.BIRD_NEST.get(),
+                BirdNestItemRenderer::new
+        );
+
     }
 }

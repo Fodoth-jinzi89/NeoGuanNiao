@@ -6,11 +6,13 @@
     "#minecraft:walls",
     "#minecraft:fences",
     "#minecraft:fence_gates",
+    "#minecraft:beds",
     "neoguanniao:wooden_bird_bath",
     "neoguanniao:wooden_bird_bath_2",
     "neoguanniao:stone_bird_bath",
     "neoguanniao:stone_bird_bath_2",
     "neoguanniao:bird_bath",
-    "neoguanniao:bird_bath_2"
+    "neoguanniao:bird_bath_2",
+    "neoguanniao:bird_nest"
   ]
 }

@@ -1,14 +1,12 @@
 package net.fodoth.skina.neoguanniao.registry;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdSkinDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -51,7 +49,17 @@ public final class NeoGuanNiaoCreativeTabs {
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_SEED.get());
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_FISH.get());
 
+                                output.accept(NeoGuanNiaoItems.BIRD_NEST.get());
+                            })
+                            .build()
+            );
 
+    public static final Supplier<CreativeModeTab> EGG_TAB =
+            CREATIVE_MODE_TABS.register("eggs", () ->
+                    CreativeModeTab.builder()
+                            .title(Component.translatable("itemGroup.neoguanniao.eggs"))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get()))
+                            .displayItems((parameters, output) -> {
                                 generateBirdEggs(output);
                             })
                             .build()
@@ -60,44 +68,21 @@ public final class NeoGuanNiaoCreativeTabs {
     private NeoGuanNiaoCreativeTabs() {
     }
 
-    private static void generateBirdEggs(
-            CreativeModeTab.Output output
-    ) {
-
+    private static void generateBirdEggs(CreativeModeTab.Output output) {
         for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
-
-            BirdData birdData = holder.get();
-
-            // 鸟种类
-            ResourceLocation birdType = holder.getId();
-
-
-            BirdSkinDatum modelDatum = birdData.model();
-
-
+            BirdSkinDatum modelDatum = holder.get().model();
             for (BirdSkin skin : modelDatum.birdSkin()) {
-
-
-                ItemStack egg =
-                        new ItemStack(
-                                NeoGuanNiaoItems.BIRD_EGG.get()
-                        );
-
-
-                BirdEggItem.setEggData(
-                        egg,
-                        BirdEggData.create(
-                                birdType,
-                                modelDatum.modelLocation(),
-                                skin.id(),
-                                1.0F,
-                                6000,
-                                true
-                        )
-                );
-
-
-                output.accept(egg);
+                for (boolean gender : new boolean[]{true, false}) {
+                    // 如果皮肤是雄性，生成雄性蛋；如果是雌性，生成雌性蛋；如果是通用皮肤，则生成两种
+                    if ((skin.male() && gender) || (skin.female() && !gender)) {
+                        ItemStack egg = new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get());
+                        BirdEggItem.setEggData(egg, BirdEggData.create(
+                                holder.getId(), modelDatum.modelLocation(), skin.id(),
+                                gender, 1, 1.0F, 20, true
+                        ));
+                        output.accept(egg);
+                    }
+                }
             }
         }
     }

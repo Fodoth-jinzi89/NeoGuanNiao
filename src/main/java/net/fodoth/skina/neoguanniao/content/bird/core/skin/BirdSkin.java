@@ -13,10 +13,14 @@ import net.minecraft.resources.ResourceLocation;
  * @param natureSpawn  是否可通过自然生成获取
  * @param breed        是否可通过繁殖获取
  * @param baby         是否可通过幼年状态获取
+ * @param male         是否可通过雄性状态获取
+ * @param female       是否可通过雌性状态获取
  * @param unique       是否可通过独特方式获取
  * @param hidden       是否可通过隐藏方式获取
  */
-public record BirdSkin(ResourceLocation id, ResourceLocation location, BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean unique, boolean hidden) {
+public record BirdSkin(ResourceLocation id, ResourceLocation location, BirdSkinRarity rarity,
+                       boolean natureSpawn, boolean breed, boolean baby,
+                       boolean male, boolean female, boolean unique, boolean hidden) {
 
     // 创建默认实例的静态方法
     public static BirdSkin createDefault() {
@@ -24,43 +28,53 @@ public record BirdSkin(ResourceLocation id, ResourceLocation location, BirdSkinR
                 ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "default"),
                 ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "default_skin"),
                 BirdSkinRarity.COMMON,
-                true,
-                true,
-                true,
-                false,
-                false
+                true,  // natureSpawn
+                true,  // breed
+                true,  // baby
+                true,  // male
+                true,  // female
+                false, // unique
+                false  // hidden
         );
     }
 
     public BirdSkin withId(ResourceLocation id) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withLocation(ResourceLocation location) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withRarity(BirdSkinRarity rarity) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withNatureSpawn(boolean natureSpawn) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withBreed(boolean breed) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withBaby(boolean baby) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+    }
+
+    public BirdSkin withMale(boolean male) {
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+    }
+
+    public BirdSkin withFemale(boolean female) {
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withUnique(boolean unique) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 
     public BirdSkin withHidden(boolean hidden) {
-        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, unique, hidden);
+        return new BirdSkin(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
     }
 }

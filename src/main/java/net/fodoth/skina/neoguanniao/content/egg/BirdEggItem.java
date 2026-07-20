@@ -65,9 +65,24 @@ public class BirdEggItem extends Item {
 
         // 皮肤（带稀有度颜色）
         BirdSkinRarity rarity = getSkinRarity(data);
-        Component skinText = ((MutableComponent) translateResource("skin", data.skin()))
+        String skinId = data.skin().getPath();
+        // 移除 _male 和 _female 后缀
+        skinId = skinId.replaceAll("_(male|female)$", "");
+        ResourceLocation cleanedSkinId = ResourceLocation.fromNamespaceAndPath(
+                data.skin().getNamespace(),
+                skinId
+        );
+        Component skinText = ((MutableComponent) translateResource("skin", cleanedSkinId))
                 .withStyle(rarity.getChatColor());
         tooltip.add(Component.translatable("tooltip.neoguanniao.skin").append(skinText));
+
+        // 性别
+        tooltip.add(Component.translatable(data.gender() ? "tooltip.neoguanniao.male"
+                : "tooltip.neoguanniao.female"));
+
+        // 蛋数量
+        tooltip.add(Component.translatable("tooltip.neoguanniao.egg_count",
+                data.eggCount()));
 
         // 体型大小
         tooltip.add(Component.translatable("tooltip.neoguanniao.size",

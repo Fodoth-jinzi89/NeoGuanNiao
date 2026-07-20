@@ -6,6 +6,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoCapabilities;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -126,6 +128,13 @@ public final class NeoGuanNiaoModEvents {
             event.accept(NeoGuanNiaoItems.SPOTTED_DOVE_SPAWN_EGG.get());
             event.accept(NeoGuanNiaoItems.PIGEON_SPAWN_EGG.get());
         }
+    }
+
+    @SubscribeEvent
+    public static void registerCapabilities(
+            RegisterCapabilitiesEvent event
+    ) {
+        NeoGuanNiaoCapabilities.register(event);
     }
 
 

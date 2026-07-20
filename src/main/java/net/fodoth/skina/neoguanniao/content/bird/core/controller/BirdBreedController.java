@@ -1,12 +1,17 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.*;
 
 /**
  * 鸟类繁殖控制器，处理玩家与鸟类的繁育交互
@@ -63,4 +68,68 @@ public class BirdBreedController<T extends AbstractBirdEntity<T>> extends Abstra
     protected void startBreeding(ItemStack eaten, Player player) {
         bird().setInLove(player);
     }
+
+    public void setGender(boolean isMale) {
+        bird().getEntityData().set(GENDER, isMale);
+    }
+
+    public boolean getGender() {
+        return bird().getEntityData().get(GENDER);
+    }
+
+    public void randomizeGender() {
+        setGender(bird().getRandom().nextBoolean());
+    }
+
+    public boolean getRandomGender() {
+        return bird().getRandom().nextBoolean();
+    }
+
+    public void setEggCount(int eggCount) {
+        BirdData birdData = bird().getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        bird().getEntityData().set(EGG_COUNT, Mth.clamp(eggCount, miscDatum.eggCountMin(), miscDatum.eggCountMin() + miscDatum.eggCountVariance()));
+    }
+
+    public int getEggCount() {
+        BirdData birdData = bird().getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        int eggCount = bird().getEntityData().get(EGG_COUNT);
+        return Mth.clamp(eggCount, miscDatum.eggCountMin(), miscDatum.eggCountMin() + miscDatum.eggCountVariance());
+    }
+
+    public void randomizeEggCount() {
+        BirdData birdData = bird().getBirdData();
+        BirdMiscDatum miscDatum = birdData.misc();
+        setEggCount(miscDatum.eggCountMin() + bird().getRandom().nextInt(miscDatum.eggCountVariance()));
+    }
+
+    public int inheritEggCount(AbstractBirdEntity<?> parent,
+                               AbstractBirdEntity<?> mate) {
+        int parentEggCount = parent.getEggCount();
+        int mateEggCount = mate.getEggCount();
+
+        // 计算平均值作为正态分布的中心值
+        double mean = (parentEggCount + mateEggCount) / 2.0;
+
+        // 标准差设定为1.5，使得大部分值分布在均值附近
+        // 约68%的值在 mean±1.5 范围内，95%在 mean±3.0 范围内
+        double stdDev = 1.5;
+
+        // 使用随机数生成器生成正态分布的值
+        double value = mean + stdDev * parent.getRandom().nextGaussian();
+
+        // 四舍五入到最接近的整数
+        int result = (int) Math.round(value);
+
+        BirdMiscDatum misc = parent.getBirdData().misc();
+        BirdMiscDatum misc1 = mate.getBirdData().misc();
+        int min = Math.min(misc.eggCountMin(), misc1.eggCountMin());
+        int max = Math.min(misc.eggCountMin() + misc.eggCountVariance(), misc1.eggCountMin() + misc1.eggCountVariance());
+
+        result = Math.clamp(result, min, max);
+
+        return result;
+    }
+
 }

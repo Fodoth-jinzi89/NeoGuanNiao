@@ -73,6 +73,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Float> MODEL_SCALE =
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Boolean> GENDER =
+            SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> EGG_COUNT =
+            SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
 
     // ==================== 常量 ========================
     protected final BirdData BIRD_DATA;
@@ -104,9 +108,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (BIRD_CONTROLLERS != null) {
             BIRD_CONTROLLERS.attach(getSelf());
         }
-
-        // 用于兼容坐垫之类的
-        getBirdControllers().getBirdTickController().getTickTimer().getBirdLandingTicker().setTicks(100);
     }
 
     public BirdControllers<T> getBirdControllers() {
@@ -236,8 +237,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 spawnGroupData
         );
 
-        getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), false));
+        getBreedController().randomizeGender();
+        getBreedController().randomizeEggCount();
+        getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), isMale(), !isMale(), false));
         getSkinController().randomizeModelScale(isBaby());
+
 
         return data;
     }
@@ -302,6 +306,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
                 getSkinController().inheritSkinVariant(this, other),
 
+                getBreedController().getRandomGender(),
+
+                getBreedController().inheritEggCount(this, other),
+
                 BirdModelScale.inheritIndividualScale(
                         this.getRandom(),
                         this.getIndividualModelScale(),
@@ -309,7 +317,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                         modelScaleProfile()
                 ),
 
-                20 * 60,
+                24000,
                 true
         );
     }
@@ -324,6 +332,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         builder.define(BEHAVIOR_STATE, BirdBehaviorState.IDLE.ordinal());
         builder.define(SKIN_VARIANT, 0);
         builder.define(MODEL_SCALE, 1.0F);
+        builder.define(GENDER, true);
+        builder.define(EGG_COUNT, 1);
     }
 
     @Override
@@ -379,6 +389,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         compoundTag.putInt("BirdCuriousTicks", getTickController().getTickTimer().getBirdCuriousTicker().getTicks());
         compoundTag.putInt("BirdSkinVariant", getSkinController().getSkinVariant());
         BirdModelScale.save(compoundTag, this.getIndividualModelScale(), this.modelScaleProfile());
+        compoundTag.putBoolean("BirdGender", getBreedController().getGender());
+        compoundTag.putInt("BirdEggCount", getBreedController().getEggCount());
         if (getTameController().getInterestedPlayerUUID() != null) {
             compoundTag.putUUID("BirdInterestedPlayer", getTameController().getInterestedPlayerUUID());
         }
@@ -393,7 +405,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (compoundTag.contains("BirdSkinVariant", CompoundTag.TAG_INT)) {
             getSkinController().setSkinVariant(compoundTag.getInt("BirdSkinVariant"));
         } else {
-            getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), false));
+            getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), isMale(), !isMale(), false));
         }
         if (compoundTag.contains("BirdModelScale", CompoundTag.TAG_FLOAT)) {
             this.setIndividualModelScale(BirdModelScale.load(compoundTag, this.modelScaleProfile()));
@@ -403,6 +415,17 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (compoundTag.hasUUID("BirdInterestedPlayer")) {
             getTameController().setInterestedPlayerUUID(compoundTag.getUUID("BirdInterestedPlayer"));
         }
+        if (compoundTag.contains("BirdGender", CompoundTag.TAG_BYTE)) {
+            getBreedController().setGender(compoundTag.getBoolean("BirdGender"));
+        } else {
+            getBreedController().randomizeGender();
+        }
+        if (compoundTag.contains("BirdEggCount", CompoundTag.TAG_INT)) {
+            getBreedController().setEggCount(compoundTag.getInt("BirdEggCount"));
+        } else {
+            getBreedController().randomizeEggCount();
+        }
+
     }
 
 
@@ -644,13 +667,17 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     }
 
     public void applyEggData(BirdEggData data) {
+        getBreedController().setGender(data.gender());
+        getBreedController().setEggCount(data.eggCount());
+        getSkinController().setSkinVariant(data.skin());
+        setIndividualModelScale(data.size());
+    }
 
-        getSkinController().setSkinVariant(
-                (data.skin())
-        );
+    public boolean isMale() {
+        return getBreedController().getGender();
+    }
 
-        setIndividualModelScale(
-                data.size()
-        );
+    public int getEggCount() {
+        return getBreedController().getEggCount();
     }
 }

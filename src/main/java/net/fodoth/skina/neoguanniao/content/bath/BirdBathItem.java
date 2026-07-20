@@ -1,17 +1,9 @@
 package net.fodoth.skina.neoguanniao.content.bath;
 
-import net.fodoth.skina.neoguanniao.client.bath.BirdBathItemRenderer;
-
-import java.util.function.Consumer;
-
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
