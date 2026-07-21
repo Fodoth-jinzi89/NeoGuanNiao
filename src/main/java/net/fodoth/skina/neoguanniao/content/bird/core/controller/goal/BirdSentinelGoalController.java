@@ -4,7 +4,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.minecraft.world.phys.Vec3;
 
-public class BirdSentinelGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdSentinelGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
 
     @Override
     public int chance() {

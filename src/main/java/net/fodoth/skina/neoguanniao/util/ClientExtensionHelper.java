@@ -1,4 +1,4 @@
-package net.fodoth.skina.neoguanniao.client;
+package net.fodoth.skina.neoguanniao.util;
 
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;

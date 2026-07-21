@@ -77,8 +77,8 @@ public final class NeoGuanNiaoCreativeTabs {
                     if ((skin.male() && gender) || (skin.female() && !gender)) {
                         ItemStack egg = new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get());
                         BirdEggItem.setEggData(egg, BirdEggData.create(
-                                holder.getId(), modelDatum.modelLocation(), skin.id(),
-                                gender, 1, 1.0F, 20, true
+                                holder.getId(), gender, modelDatum.modelLocation(), skin.id(),
+                                 1, 1.0F, 20, true
                         ));
                         output.accept(egg);
                     }

@@ -34,7 +34,12 @@ public record BirdMiscDatum(
         float mutantL1Cap,
         float mutantL2Cap,
         int eggCountMin,
-        int eggCountVariance
+        int eggCountVariance,
+        int layEggRange,
+        int layEggExp,
+        int layEggExpVariance,
+        int breedCooldown,
+        int eggDefaultHatchTime
 ) {
     public static BirdMiscDatum createDefault() {
         return new BirdMiscDatum(
@@ -52,7 +57,12 @@ public record BirdMiscDatum(
                 0.70F,
                 0.95F,
                 1,
-                2
+                2,
+                5,
+                1,
+                7,
+                6000,
+                24000
         );
     }
 }

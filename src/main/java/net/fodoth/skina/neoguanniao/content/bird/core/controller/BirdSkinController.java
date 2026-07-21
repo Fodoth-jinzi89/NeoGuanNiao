@@ -43,13 +43,9 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * </p>
      */
     public void randomizeModelScale() {
-        this.randomizeModelScale(false);
-    }
-
-    public void randomizeModelScale(boolean isBaby) {
         var random = bird.getRandom();
         var profile = bird.modelScaleProfile();
-        float scale = BirdModelScale.randomIndividualScale(random, profile, isBaby);
+        float scale = BirdModelScale.randomIndividualScale(random, profile);
         setIndividualModelScale(scale);
     }
 
@@ -306,15 +302,19 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
 
     /**
      * 遗传父母皮肤
-     * 基于父母稀有度的平均值，使用正态分布决定后代稀有度
+     * 基于父母稀有度平均值，使用正态分布决定后代稀有度
+     * 根据后代性别筛选可用皮肤
      *
      * @param parent 父母之一
      * @param mate   父母之二
+     * @param gender 后代性别 true=雄性 false=雌性
      */
     public ResourceLocation inheritSkinVariant(
             AbstractBirdEntity<?> parent,
-            AbstractBirdEntity<?> mate
+            AbstractBirdEntity<?> mate,
+            boolean gender
     ) {
+
         var birdData = bird.getBirdData();
         BirdSkinDatum modelDatum = birdData.model();
         BirdMiscDatum miscDatum = birdData.misc();
@@ -322,139 +322,310 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
         int variants = modelDatum.birdSkin().length;
         var random = bird.getRandom();
 
-        // 如果没有多种皮肤，直接设置为0
+
+        // 没有变体
         if (variants <= 1) {
             return modelDatum.birdSkin()[0].id();
         }
 
-        // 获取父母皮肤
-        BirdSkin parentSkin = getSkinByIndex(parent.getSkinController().getSkinVariant());
-        BirdSkin mateSkin = getSkinByIndex(mate.getSkinController().getSkinVariant());
 
-        // 如果父母皮肤为null，直接随机
+        // 获取父母皮肤
+        BirdSkin parentSkin =
+                getSkinByIndex(parent.getSkinController().getSkinVariant());
+
+        BirdSkin mateSkin =
+                getSkinByIndex(mate.getSkinController().getSkinVariant());
+
+
+        // 父母皮肤异常，随机选择符合性别的皮肤
         if (parentSkin == null || mateSkin == null) {
-            boolean male = bird().getBreedController().getGender();
-            return getRandomizeSkinVariant(null, false, true, true, male, !male, false);
+
+            List<BirdSkin> skins = new ArrayList<>();
+
+            for (BirdSkin skin : modelDatum.birdSkin()) {
+
+                if (gender && !skin.male()) {
+                    continue;
+                }
+
+                if (!gender && !skin.female()) {
+                    continue;
+                }
+
+                if (!skin.breed()) {
+                    continue;
+                }
+
+                skins.add(skin);
+            }
+
+            if (!skins.isEmpty()) {
+                return skins.get(random.nextInt(skins.size())).id();
+            }
+
+            return modelDatum.birdSkin()[0].id();
         }
 
-        // 获取父母稀有度的数值
-        int parentRarityValue = parentSkin.rarity().getRarity();
-        int mateRarityValue = mateSkin.rarity().getRarity();
 
-        // 计算平均值（作为分布中心）
-        double baseMean = (parentRarityValue + mateRarityValue) / 2.0;
+        // 父母稀有度
+        int parentRarityValue =
+                parentSkin.rarity().getRarity();
 
-        // 检查父母是否为繁殖专用皮肤
-        float actualMutantChance = getActualMutantChance(parentSkin, mateSkin, miscDatum);
+        int mateRarityValue =
+                mateSkin.rarity().getRarity();
 
-        // 判断是否变异
-        boolean isMutant = random.nextFloat() < actualMutantChance;
 
-        // 计算目标稀有度
+        // 平均稀有度
+        double baseMean =
+                (parentRarityValue + mateRarityValue) / 2.0;
+
+
+        // 变异概率
+        float actualMutantChance =
+                getActualMutantChance(
+                        parentSkin,
+                        mateSkin,
+                        miscDatum
+                );
+
+
+        boolean isMutant =
+                random.nextFloat() < actualMutantChance;
+
+
         int targetRarityInt;
-        if (isMutant) {
-            // 变异：偏向更高稀有度
-            // 基础平均值
 
-            // 随机偏移：有概率向更高稀有度偏移
-            double offsetFactor = random.nextDouble();
+
+        if (isMutant) {
+
+            double offsetFactor =
+                    random.nextDouble();
+
             double targetMean;
+
+
             if (offsetFactor < miscDatum.mutantL1Cap()) {
+
                 targetMean = baseMean;
+
             } else if (offsetFactor < miscDatum.mutantL2Cap()) {
+
                 targetMean = baseMean + 1.0;
+
             } else {
+
                 targetMean = baseMean + 2.0;
             }
 
-            // 限制最高到5（ANCIENT）
+
             targetMean = Math.min(targetMean, 5.0);
 
-            // 使用较小的标准差，让变异皮肤更集中
-            double stdDev = Math.abs(parentRarityValue - mateRarityValue) / 4.0 + 0.3;
+
+            double stdDev =
+                    Math.abs(
+                            parentRarityValue - mateRarityValue
+                    ) / 4.0 + 0.3;
+
+
             stdDev = Math.max(stdDev, 0.3);
 
-            // 使用Box-Muller变换生成正态分布随机数
+
             double u1 = random.nextDouble();
             double u2 = random.nextDouble();
-            double z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
 
-            double targetValue = targetMean + z * stdDev;
-            targetRarityInt = (int) Math.round(targetValue);
+
+            double z =
+                    Math.sqrt(-2.0 * Math.log(u1))
+                            * Math.cos(
+                            2.0 * Math.PI * u2
+                    );
+
+
+            targetRarityInt =
+                    (int) Math.round(
+                            targetMean + z * stdDev
+                    );
+
+
         } else {
-            // 正常遗传：使用正态分布
-            // 标准差：基于父母稀有度的差距，差距越大，标准差越大
-            double stdDev = Math.abs(parentRarityValue - mateRarityValue) / 2.0 + 0.5;
+
+
+            double stdDev =
+                    Math.abs(
+                            parentRarityValue - mateRarityValue
+                    ) / 2.0 + 0.5;
+
+
             stdDev = Math.max(stdDev, 0.5);
 
-            // 使用Box-Muller变换生成正态分布随机数
+
             double u1 = random.nextDouble();
             double u2 = random.nextDouble();
-            double z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
 
-            double targetValue = baseMean + z * stdDev;
-            targetRarityInt = (int) Math.round(targetValue);
+
+            double z =
+                    Math.sqrt(-2.0 * Math.log(u1))
+                            * Math.cos(
+                            2.0 * Math.PI * u2
+                    );
+
+
+            targetRarityInt =
+                    (int) Math.round(
+                            baseMean + z * stdDev
+                    );
         }
 
-        // 限制范围：0-5 (COMMON到ANCIENT)，排除UNIQUE和HIDDEN
-        targetRarityInt = Math.clamp(targetRarityInt, 0, 5);
 
-        // 获取对应的稀有度枚举
-        BirdSkinRarity targetRarity = BirdSkinRarity.fromValue(targetRarityInt);
+        // 限制 COMMON - ANCIENT
+        targetRarityInt =
+                Math.clamp(targetRarityInt, 0, 5);
 
-        // 获取该稀有度下可用的皮肤列表
-        List<BirdSkin> availableSkins = new ArrayList<>();
+
+        BirdSkinRarity targetRarity =
+                BirdSkinRarity.fromValue(targetRarityInt);
+
+
+
+        /*
+         * 第一轮：
+         * 精确稀有度匹配
+         */
+        List<BirdSkin> availableSkins =
+                new ArrayList<>();
+
+
         for (BirdSkin skin : modelDatum.birdSkin()) {
-            if (skin.rarity() == targetRarity) {
-                // 如果是变异，只选择可繁殖的皮肤
-                if (skin.breed()) {
-                    availableSkins.add(skin);
-                }
+
+
+            if (skin.rarity() != targetRarity) {
+                continue;
             }
+
+
+            // 性别过滤
+            if (gender && !skin.male()) {
+                continue;
+            }
+
+            if (!gender && !skin.female()) {
+                continue;
+            }
+
+
+            // 繁殖资格过滤
+            if (!skin.breed()) {
+                continue;
+            }
+
+
+            availableSkins.add(skin);
         }
 
-        // 如果没有可用的皮肤，尝试扩大范围：先找相邻稀有度
+
+
+        /*
+         * 第二轮：
+         * 扩大稀有度范围
+         */
         if (availableSkins.isEmpty()) {
-            // 向相邻稀有度扩展
+
+
             for (int offset = 1; offset <= 3; offset++) {
-                int lowerValue = targetRarityInt - offset;
-                int upperValue = targetRarityInt + offset;
 
-                // 检查下限
-                if (lowerValue >= 0) {
-                    BirdSkinRarity lowerRarity = BirdSkinRarity.fromValue(lowerValue);
+
+                int[] values = {
+                        targetRarityInt - offset,
+                        targetRarityInt + offset
+                };
+
+
+                for (int value : values) {
+
+
+                    if (value < 0 || value > 5) {
+                        continue;
+                    }
+
+
+                    BirdSkinRarity rarity =
+                            BirdSkinRarity.fromValue(value);
+
+
+
                     for (BirdSkin skin : modelDatum.birdSkin()) {
-                        if (skin.rarity() == lowerRarity && skin.breed()) {
-                            availableSkins.add(skin);
+
+
+                        if (skin.rarity() != rarity) {
+                            continue;
                         }
+
+
+                        // 性别过滤
+                        if (gender && !skin.male()) {
+                            continue;
+                        }
+
+                        if (!gender && !skin.female()) {
+                            continue;
+                        }
+
+
+                        // 繁殖资格过滤
+                        if (!skin.breed()) {
+                            continue;
+                        }
+
+
+                        availableSkins.add(skin);
                     }
                 }
 
-                // 检查上限
-                if (upperValue <= 5) {
-                    BirdSkinRarity upperRarity = BirdSkinRarity.fromValue(upperValue);
-                    for (BirdSkin skin : modelDatum.birdSkin()) {
-                        if (skin.rarity() == upperRarity && skin.breed()) {
-                            availableSkins.add(skin);
-                        }
-                    }
-                }
 
-                // 如果找到了任何皮肤，停止扩展
                 if (!availableSkins.isEmpty()) {
                     break;
                 }
             }
         }
 
-        // 如果还是没有可用皮肤，直接设置为0并返回
+
+
+        /*
+         * 最终保险：
+         * 找任意符合性别的可繁殖皮肤
+         */
         if (availableSkins.isEmpty()) {
+
+
+            for (BirdSkin skin : modelDatum.birdSkin()) {
+
+
+                if (!skin.breed()) {
+                    continue;
+                }
+
+
+                if (gender && skin.male()) {
+                    return skin.id();
+                }
+
+
+                if (!gender && skin.female()) {
+                    return skin.id();
+                }
+            }
+
+
             return modelDatum.birdSkin()[0].id();
         }
 
-        // 从可用皮肤中随机选择一个
-        BirdSkin selectedSkin = availableSkins.get(random.nextInt(availableSkins.size()));
-        return selectedSkin.id();
+
+
+        return availableSkins.get(
+                random.nextInt(
+                        availableSkins.size()
+                )
+        ).id();
     }
 
     private static float getActualMutantChance(BirdSkin parentSkin, BirdSkin mateSkin, BirdMiscDatum miscDatum) {

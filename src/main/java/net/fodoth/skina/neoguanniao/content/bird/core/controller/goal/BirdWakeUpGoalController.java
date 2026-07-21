@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 
-public class BirdWakeUpGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T>  {
+public class BirdWakeUpGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T>  {
 
     @Override
     public int chance() {

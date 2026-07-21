@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private BlockPos roostPos;
 
     @Override
@@ -55,7 +55,9 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<T>> extends Ab
     private boolean shouldRoost() {
         return bird().getRoutineController().isRoostTime() && !bird().getEatingController().isEating()
                 && !bird().isDancing()
-                && !bird().getBehaviorStateController().getBehaviorState().isEscape();
+                && !bird().getBehaviorStateController().getBehaviorState().isEscape()
+                && !bird().getTickController().getTickTimer().getBirdFrightTicker().isRunning()
+                && !bird().getTickController().getTickTimer().getBirdPendingFrightTicker().isRunning();
     }
 
     @Override

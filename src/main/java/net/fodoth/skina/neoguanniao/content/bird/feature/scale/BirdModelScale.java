@@ -31,12 +31,6 @@ public final class BirdModelScale {
         return Mth.lerp(random.nextFloat(), profile.minIndividualScale(), profile.maxIndividualScale());
     }
 
-    public static float randomIndividualScale(RandomSource random, BirdModelScaleProfile profile, boolean isBaby) {
-        float end = (profile.minIndividualScale() + profile.maxIndividualScale()) / 2.0F;
-        if (!isBaby) return Mth.lerp(random.nextFloat(), end, profile.maxIndividualScale());
-        return Mth.lerp(random.nextFloat(), profile.minIndividualScale(), end);
-    }
-
     /**
      * 继承父母的个体缩放值（带随机变异）
      *

@@ -19,6 +19,7 @@ import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.
  */
 public class BirdBreedController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T> {
 
+
     /**
      * 处理玩家交互（右键点击）
      * @param player 玩家

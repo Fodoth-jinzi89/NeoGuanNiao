@@ -6,7 +6,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTarget
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
-public class BirdIdleGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdIdleGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private BlockPos targetPos;
 
     @Override

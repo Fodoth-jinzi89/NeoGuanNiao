@@ -17,9 +17,12 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.scale.ScalableBirdModel
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
+import net.fodoth.skina.neoguanniao.content.nest.BirdNestBlockEntity;
 import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockTags;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -36,7 +39,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -62,6 +64,7 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extends TamableAnimal implements GeoEntity, FlyingAnimal, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
@@ -142,7 +145,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         List<Goal> goals = new ArrayList<>();
 
         goals.add(new FloatGoal(this));//0
-        goals.add(new BreedGoal(this, 1.0));//1
+        goals.add(new BirdBreedGoal(this));//1
         goals.add(new BirdEatFoodGoal(this)); //2
         goals.add(new BirdBathUseGoal(this)); //3
         goals.add(new BirdSentinelGoal(this)); //4
@@ -167,7 +170,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 || below.is(BlockTags.SAND)
                 || below.is(Blocks.GRASS_BLOCK)
                 || below.is(Blocks.DIRT_PATH)
-                || below.is(Blocks.FARMLAND);
+                || below.is(Blocks.FARMLAND)
+                || below.is(NeoGuanNiaoBlockTags.BIRD_PERCHES);
 
         if (!validGround) {
             return false;
@@ -187,12 +191,20 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             @NotNull Animal mate
     ) {
 
-        spawnEgg(level, mate);
+        if (mate instanceof AbstractBirdEntity<?> bird) {
+
+            int remainingEggs = tryLayEggInNest(bird, this);
+
+            // 巢放不下的蛋，在雌鸟处生成
+            for (int i = 0; i < remainingEggs; i++) {
+                spawnEgg(bird);
+            }
+        }
 
 
         // 繁育冷却
-        this.setAge(6000);
-        mate.setAge(6000);
+        this.setAge(getBirdData().misc().breedCooldown());
+        mate.setAge(getBirdData().misc().breedCooldown());
 
 
         // 清除爱心状态
@@ -200,11 +212,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         mate.resetLove();
 
 
-        // 播放一次爱心效果
+        // 爱心效果
         level.broadcastEntityEvent(this, (byte) 18);
 
 
-        // 经验球
+        // 经验
         if (level.getGameRules()
                 .getBoolean(GameRules.RULE_DOMOBLOOT)) {
 
@@ -214,10 +226,158 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                             this.getX(),
                             this.getY(),
                             this.getZ(),
-                            this.getRandom().nextInt(7) + 1
+                            getEggCount() * (
+                                    this.getRandom().nextInt(getBirdData().misc().layEggExpVariance()) + getBirdData().misc().layEggExp())
                     )
             );
         }
+    }
+
+    private int tryLayEggInNest(
+            AbstractBirdEntity<?> male,
+            AbstractBirdEntity<?> female
+    ) {
+
+        BlockPos center = female.blockPosition();
+
+        int range = getBirdData()
+                .misc()
+                .layEggRange();
+
+
+        List<BirdNestBlockEntity> nests = new ArrayList<>();
+
+
+        for (BlockPos pos :
+                BlockPos.betweenClosed(
+                        center.offset(-range, -range, -range),
+                        center.offset(range, range, range)
+                )) {
+
+
+            if (female.level()
+                    .getBlockEntity(pos)
+                    instanceof BirdNestBlockEntity nest) {
+
+                if (nest.hasEmptySlot()) {
+                    nests.add(nest);
+                }
+            }
+        }
+
+
+        // 最近优先
+        nests.sort(
+                Comparator.comparingDouble(
+                        nest -> center.distSqr(
+                                nest.getBlockPos()
+                        )
+                )
+        );
+
+
+        int remainingEggs = getEggCount();
+
+
+        List<BirdNestBlockEntity> usedNests =
+                new ArrayList<>();
+
+
+        // 依次填充附近巢穴
+        for (BirdNestBlockEntity nest : nests) {
+
+
+            if (remainingEggs <= 0) {
+                break;
+            }
+
+
+            boolean added = false;
+
+
+            while (
+                    remainingEggs > 0
+                            &&
+                            nest.hasEmptySlot()
+            ) {
+
+                nest.addEgg(
+                        createEgg(male)
+                );
+
+                remainingEggs--;
+                added = true;
+            }
+
+
+            if (added) {
+                usedNests.add(nest);
+            }
+        }
+
+
+        // 粒子效果
+        if (female.level() instanceof ServerLevel serverLevel) {
+
+            for (BirdNestBlockEntity nest : usedNests) {
+
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        nest.getBlockPos().getX() + 0.5,
+                        nest.getBlockPos().getY() + 0.375,
+                        nest.getBlockPos().getZ() + 0.5,
+                        5,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.02
+                );
+            }
+        }
+
+
+        return remainingEggs;
+    }
+
+    protected ItemStack createEgg(AbstractBirdEntity<?> male) {
+
+        BirdEggData eggData = createEggData(male);
+
+        ItemStack eggStack = new ItemStack(
+                NeoGuanNiaoItems.BIRD_EGG.get()
+        );
+
+        BirdEggItem.setEggData(
+                eggStack,
+                eggData
+        );
+
+        return eggStack;
+    }
+
+    protected BirdEggData createEggData(AbstractBirdEntity<?> mate) {
+
+        boolean gender = getBreedController().getRandomGender();
+
+        return BirdEggData.create(
+                BuiltInRegistries.ENTITY_TYPE.getKey(this.getType()),
+                gender,
+                getModelResource(),
+                getSkinController().inheritSkinVariant(
+                        mate,
+                        this,
+                        gender
+                ),
+                getBreedController().inheritEggCount(mate, this),
+                BirdModelScale.inheritIndividualScale(
+                        this.getRandom(),
+                        mate.getIndividualModelScale(),
+                        this.getIndividualModelScale(),
+                        modelScaleProfile()
+                ),
+                getBirdData().misc().eggDefaultHatchTime(),
+                true
+        );
     }
 
 
@@ -240,7 +400,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         getBreedController().randomizeGender();
         getBreedController().randomizeEggCount();
         getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), isMale(), !isMale(), false));
-        getSkinController().randomizeModelScale(isBaby());
+        getSkinController().randomizeModelScale();
 
 
         return data;
@@ -263,22 +423,13 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return null;
     }
 
-    protected void spawnEgg(ServerLevel level, AgeableMob mate) {
 
-        BirdEggData eggData = createEggData(mate);
+    protected void spawnEgg(AbstractBirdEntity<?> mate) {
 
-        ItemStack eggStack = new ItemStack(
-                NeoGuanNiaoItems.BIRD_EGG.get()
-        );
-
-        BirdEggItem.setEggData(
-                eggStack,
-                eggData
-        );
-
+        ItemStack eggStack = createEgg(mate);
 
         ItemEntity entity = new ItemEntity(
-                level,
+                mate.level(),
                 getX(),
                 getY() + 0.2,
                 getZ(),
@@ -287,40 +438,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
         entity.setDefaultPickUpDelay();
 
-        level.addFreshEntity(entity);
+        mate.level().addFreshEntity(entity);
     }
 
-    protected BirdEggData createEggData(AgeableMob mate) {
-
-        AbstractBirdEntity<?> other =
-                mate instanceof AbstractBirdEntity<?> bird
-                        ? bird
-                        : this;
-
-
-        return BirdEggData.create(
-                BuiltInRegistries.ENTITY_TYPE
-                        .getKey(this.getType()),
-
-                getModelResource(),
-
-                getSkinController().inheritSkinVariant(this, other),
-
-                getBreedController().getRandomGender(),
-
-                getBreedController().inheritEggCount(this, other),
-
-                BirdModelScale.inheritIndividualScale(
-                        this.getRandom(),
-                        this.getIndividualModelScale(),
-                        other.getIndividualModelScale(),
-                        modelScaleProfile()
-                ),
-
-                24000,
-                true
-        );
-    }
 
     protected ResourceLocation getModelResource() {
         return getBirdData().model().modelLocation();
@@ -410,7 +530,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (compoundTag.contains("BirdModelScale", CompoundTag.TAG_FLOAT)) {
             this.setIndividualModelScale(BirdModelScale.load(compoundTag, this.modelScaleProfile()));
         } else {
-            getSkinController().randomizeModelScale(isBaby());
+            getSkinController().randomizeModelScale();
         }
         if (compoundTag.hasUUID("BirdInterestedPlayer")) {
             getTameController().setInterestedPlayerUUID(compoundTag.getUUID("BirdInterestedPlayer"));

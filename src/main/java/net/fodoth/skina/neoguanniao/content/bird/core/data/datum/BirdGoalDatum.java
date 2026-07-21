@@ -88,6 +88,13 @@ public record BirdGoalDatum(
         float bathUseJumpDownChance,
         int bathUseJumpDownTicks,
         float bathUseConsumeChance,
+        double breedPartnerTargetingRange,
+        double breedPartnerLostRange,
+        int breedMaxLoveTime,
+        float breedLookYaw,
+        double breedDistance,
+        double breedMoveSpeed,
+        double breedHeartParticleYOffset,
         int curiousFollowChance,
         int eatFoodChance,
         int flockChance,
@@ -98,7 +105,8 @@ public record BirdGoalDatum(
         int roostChance,
         int sentinelChance,
         int wakeUpChance,
-        int bathUseChance) {
+        int bathUseChance,
+        int breedChance) {
 
     public static BirdGoalDatum createDefault() {
         return new BirdGoalDatum(
@@ -189,6 +197,13 @@ public record BirdGoalDatum(
                 0.5F,
                 40,
                 0.3F,
+                8.0D,
+                16.0D,
+                60,
+                10.0F,
+                1.0D,
+                1.0D,
+                1.0D,
                 20,
                 20,
                 50,
@@ -199,7 +214,8 @@ public record BirdGoalDatum(
                 60,
                 120,
                 5,
-                36
+                36,
+                5
         );
     }
 }

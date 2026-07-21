@@ -6,7 +6,7 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTarget
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
-public class BirdFollowOwnerGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdFollowOwnerGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private LivingEntity owner;
 
     @Override

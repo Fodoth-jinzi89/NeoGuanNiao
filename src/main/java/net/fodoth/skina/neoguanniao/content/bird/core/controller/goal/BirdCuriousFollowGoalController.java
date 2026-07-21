@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
-public class BirdCuriousFollowGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdCuriousFollowGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private LivingEntity curiousFollowTarget;
 
     @Override

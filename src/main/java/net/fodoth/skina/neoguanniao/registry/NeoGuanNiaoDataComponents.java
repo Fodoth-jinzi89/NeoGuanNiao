@@ -23,6 +23,7 @@ public final class NeoGuanNiaoDataComponents {
                     "bird_egg_data",
                     builder -> builder
                             .persistent(BirdEggData.CODEC)
+                            .networkSynchronized(BirdEggData.STREAM_CODEC)
             );
 
 }

@@ -6,7 +6,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 
 import java.util.List;
 
-public class BirdEatFoodGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private ItemEntity targetFood;
 
 

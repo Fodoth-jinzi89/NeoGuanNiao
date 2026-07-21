@@ -4,7 +4,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.AbstractBirdController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdGoalDatum;
 
-public abstract class AbstractGoalController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T> {
+public abstract class AbstractGoalController<T extends AbstractBirdEntity<?>> extends AbstractBirdController<T> {
 
     public int chance() {
         return 60;

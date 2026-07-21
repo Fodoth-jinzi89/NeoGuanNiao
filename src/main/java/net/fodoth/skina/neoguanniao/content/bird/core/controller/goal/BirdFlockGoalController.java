@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class BirdFlockGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdFlockGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
     private Vec3 flockTarget;
 
     @Override

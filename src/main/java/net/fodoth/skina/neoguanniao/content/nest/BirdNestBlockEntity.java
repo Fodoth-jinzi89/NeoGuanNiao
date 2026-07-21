@@ -122,10 +122,10 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
     // ==================== 网络同步 ====================
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
-        CompoundTag tag = super.getUpdateTag(provider);
-        tag.put("Inventory", inventory.serializeNBT(provider));
-        return tag;
+    public @NotNull CompoundTag getUpdateTag(
+            HolderLookup.@NotNull Provider provider
+    ) {
+        return saveWithoutMetadata(provider);
     }
 
     @Override
@@ -219,5 +219,32 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
 
         // 通知客户端更新
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    public boolean hasEmptySlot() {
+        for (int i = 0; i < inventory.getSlots(); i++) {
+            if (inventory.getStackInSlot(i).isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    @SuppressWarnings("all")
+    public boolean addEgg(ItemStack egg) {
+
+        for (int i = 0; i < inventory.getSlots(); i++) {
+
+            if (inventory.getStackInSlot(i).isEmpty()) {
+
+                inventory.setStackInSlot(i, egg);
+                setChanged();
+                return true;
+            }
+        }
+
+        return false;
     }
 }

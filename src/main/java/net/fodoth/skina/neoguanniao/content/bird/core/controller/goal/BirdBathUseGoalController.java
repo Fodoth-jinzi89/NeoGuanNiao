@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @param <T> 鸟实体类型
  */
-public class BirdBathUseGoalController<T extends AbstractBirdEntity<T>> extends AbstractGoalController<T> {
+public class BirdBathUseGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
 
     // 目标浴盆实体
     private BirdBathBlockEntity targetBath;

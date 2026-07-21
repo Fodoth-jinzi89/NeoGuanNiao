@@ -2,15 +2,17 @@ package net.fodoth.skina.neoguanniao.content.egg;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 鸟类蛋数据记录，存储蛋的所有属性信息
  * @param birdType  鸟类实体注册名
+ * @param gender    性别（true为雄性，false为雌性）
  * @param model     模型资源路径
  * @param skin      皮肤资源路径
- * @param gender    性别（true为雄性，false为雌性）
  * @param eggCount  蛋的数量
  * @param size      体型大小
  * @param hatchTime 剩余孵化时间（刻）
@@ -18,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public record BirdEggData(
         ResourceLocation birdType,
+        boolean gender,
         ResourceLocation model,
         ResourceLocation skin,
-        boolean gender,
         int eggCount,
         float size,
         int hatchTime,
@@ -33,9 +35,9 @@ public record BirdEggData(
     public static final Codec<BirdEggData> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     ResourceLocation.CODEC.fieldOf("bird_type").forGetter(BirdEggData::birdType),
+                    Codec.BOOL.fieldOf("gender").forGetter(BirdEggData::gender),
                     ResourceLocation.CODEC.fieldOf("model").forGetter(BirdEggData::model),
                     ResourceLocation.CODEC.fieldOf("skin").forGetter(BirdEggData::skin),
-                    Codec.BOOL.fieldOf("gender").forGetter(BirdEggData::gender),
                     Codec.INT.fieldOf("egg_count").forGetter(BirdEggData::eggCount),
                     Codec.FLOAT.fieldOf("size").forGetter(BirdEggData::size),
                     Codec.INT.fieldOf("hatch_time").forGetter(BirdEggData::hatchTime),
@@ -43,19 +45,44 @@ public record BirdEggData(
             ).apply(instance, BirdEggData::new)
     );
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, BirdEggData> STREAM_CODEC =
+            StreamCodec.of(
+                    (buf, data) -> {
+                        ResourceLocation.STREAM_CODEC.encode(buf, data.birdType());
+                        buf.writeBoolean(data.gender());
+                        ResourceLocation.STREAM_CODEC.encode(buf, data.model());
+                        ResourceLocation.STREAM_CODEC.encode(buf, data.skin());
+                        buf.writeInt(data.eggCount());
+                        buf.writeFloat(data.size());
+                        buf.writeInt(data.hatchTime());
+                        buf.writeBoolean(data.alive());
+                    },
+
+                    buf -> new BirdEggData(
+                            ResourceLocation.STREAM_CODEC.decode(buf),
+                            buf.readBoolean(),
+                            ResourceLocation.STREAM_CODEC.decode(buf),
+                            ResourceLocation.STREAM_CODEC.decode(buf),
+                            buf.readInt(),
+                            buf.readFloat(),
+                            buf.readInt(),
+                            buf.readBoolean()
+                    )
+            );
+
     // ======================== 工厂方法 ========================
 
     /** 创建一个蛋 */
-    public static BirdEggData create(ResourceLocation birdType, ResourceLocation model,
-                                     ResourceLocation skin, boolean gender, int eggCount,
-                                     float size, int hatchTime, boolean alive) {
-        return new BirdEggData(birdType, model, skin, gender, eggCount, size, hatchTime, alive);
+    public static BirdEggData create(ResourceLocation birdType, boolean gender,
+                                     ResourceLocation model, ResourceLocation skin,
+                                     int eggCount, float size, int hatchTime, boolean alive) {
+        return new BirdEggData(birdType, gender, model, skin, eggCount, size, hatchTime, alive);
     }
 
     /** 创建默认的蛋（简化版本） */
     public static BirdEggData createDefault(ResourceLocation birdType, ResourceLocation model,
                                             ResourceLocation skin, float size) {
-        return new BirdEggData(birdType, model, skin, true, 1, size, 6000, true);
+        return new BirdEggData(birdType, true, model, skin, 1, size, 6000, true);
     }
 
     // ======================== 状态查询 ========================
@@ -86,9 +113,9 @@ public record BirdEggData(
     public BirdEggData tickDown() {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 eggCount,
                 size,
                 Math.max(0, hatchTime - 1), // 最小为0，防止负数
@@ -100,9 +127,9 @@ public record BirdEggData(
     public BirdEggData withHatchTime(int newHatchTime) {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 eggCount,
                 size,
                 Math.max(0, newHatchTime),
@@ -114,9 +141,9 @@ public record BirdEggData(
     public BirdEggData withAlive(boolean newAlive) {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 eggCount,
                 size,
                 hatchTime,
@@ -128,9 +155,9 @@ public record BirdEggData(
     public BirdEggData withEggCount(int newEggCount) {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 Math.max(0, newEggCount),
                 size,
                 hatchTime,
@@ -142,9 +169,9 @@ public record BirdEggData(
     public BirdEggData withGender(boolean newGender) {
         return new BirdEggData(
                 birdType,
+                newGender,
                 model,
                 skin,
-                newGender,
                 eggCount,
                 size,
                 hatchTime,
@@ -156,9 +183,9 @@ public record BirdEggData(
     public BirdEggData withSize(float newSize) {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 eggCount,
                 Math.max(0.1f, newSize),
                 hatchTime,
@@ -170,16 +197,16 @@ public record BirdEggData(
 
     @Override
     public @NotNull String toString() {
-        return String.format("BirdEggData{birdType=%s, gender=%s, eggCount=%d, size=%.2f, hatchTime=%d, alive=%s}",
-                birdType, gender ? "male" : "female", eggCount, size, hatchTime, alive);
+        return String.format("BirdEggData{birdType=%s, gender=%s, model=%s, skin=%s, eggCount=%d, size=%.2f, hatchTime=%d, alive=%s}",
+                birdType, gender ? "male" : "female", model, skin, eggCount, size, hatchTime, alive);
     }
 
     public BirdEggData tickDown(int ticks) {
         return new BirdEggData(
                 birdType,
+                gender,
                 model,
                 skin,
-                gender,
                 eggCount,
                 size,
                 Math.max(0, hatchTime - ticks),
