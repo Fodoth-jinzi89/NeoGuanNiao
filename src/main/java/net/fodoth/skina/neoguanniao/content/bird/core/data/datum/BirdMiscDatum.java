@@ -41,7 +41,11 @@ public record BirdMiscDatum(
         int layEggExp,
         int layEggExpVariance,
         int breedCooldown,
-        int eggDefaultHatchTime
+        int eggDefaultHatchTime,
+        int featherCountMin,
+        int featherCountVariance,
+        int featherIntervalMiddle,
+        int featherIntervalVariance
 ) {
     public static BirdMiscDatum createDefault() {
         return new BirdMiscDatum(
@@ -66,7 +70,11 @@ public record BirdMiscDatum(
                 1,
                 7,
                 6000,
-                24000
+                24000,
+                1,
+                10,
+                24000,
+                36000
         );
     }
 
@@ -112,7 +120,11 @@ public record BirdMiscDatum(
                 layEggExp,
                 layEggExpVariance,
                 breedCooldown,
-                eggDefaultHatchTime
+                eggDefaultHatchTime,
+                featherCountMin,
+                featherCountVariance,
+                featherIntervalMiddle,
+                featherIntervalVariance
         );
     }
 }

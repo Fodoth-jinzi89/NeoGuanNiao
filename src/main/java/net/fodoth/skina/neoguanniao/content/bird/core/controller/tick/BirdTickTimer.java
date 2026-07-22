@@ -37,6 +37,7 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     private final BirdFrightLoopTicker<T> birdFrightLoopTicker;
     private final BirdFrightTicker<T> birdFrightTicker;
     private final BirdSentinelTicker<T> birdSentinelTicker;
+    private final BirdFeatherLoopTicker<T> birdFeatherLoopTicker;
 
 
     private final DebugLoopTicker<T> debugLoopTicker;
@@ -95,6 +96,8 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
 
         birdSentinelTicker = new BirdSentinelTicker<>();
 
+        birdFeatherLoopTicker = new BirdFeatherLoopTicker<>();
+
         debugLoopTicker = new DebugLoopTicker<>();
 
         List<AbstractBirdTicker<T>> tickers = new ArrayList<>(List.of(
@@ -122,7 +125,9 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
                 birdIdleAnimationTicker,
 
                 birdFindNearbyMusicLoopTicker,
-                birdMusicTicker
+                birdMusicTicker,
+
+                birdFeatherLoopTicker
         ));
 
         if (!FMLEnvironment.production) {
@@ -255,6 +260,10 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
 
     public BirdSentinelTicker<T> getBirdSentinelTicker() {
         return birdSentinelTicker;
+    }
+
+    public BirdFeatherLoopTicker<T> getBirdFeatherLoopTicker() {
+        return birdFeatherLoopTicker;
     }
 
 

@@ -1,0 +1,281 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neoguanniao:item/bird_feather/bird_feather_budgerigar_common"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 0,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_budgerigar_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 1,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_night_heron_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 2,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 3,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_pigeon_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 4,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_hidden"
+    }
+  ]
+}

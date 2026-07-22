@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_uncommon"
+  }
+}

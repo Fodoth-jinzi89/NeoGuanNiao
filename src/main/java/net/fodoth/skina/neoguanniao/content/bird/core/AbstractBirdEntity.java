@@ -87,6 +87,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> EGG_COUNT =
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> FEATHER_COUNT =
+            SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> FEATHER_INTERVAL =
+            SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
 
     // ==================== 常量 ========================
     protected final BirdData BIRD_DATA;
@@ -382,6 +386,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                         gender
                 ),
                 getBreedController().inheritEggCount(mate, this),
+                getFeatherController().inheritFeatherCount(mate, this),
+                getFeatherController().inheritFeatherInterval(mate, this),
                 BirdModelScale.inheritIndividualScale(
                         this.getRandom(),
                         mate.getIndividualModelScale(),
@@ -416,6 +422,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
         getBreedController().randomizeGender();
         getBreedController().randomizeEggCount();
+        getFeatherController().randomizeFeatherCount();
+        getFeatherController().randomizeFeatherInterval();
         getModelController().setModelVariant(getModelController().getRandomizeModelVariant(BirdModelRarity.COMMON, true, false, isBaby(), isMale(), !isMale(), false));
         getSkinController().setSkinVariant(getSkinController().getRandomizeSkinVariant(BirdSkinRarity.COMMON, true, false, isBaby(), isMale(), !isMale(), false));
         getModelController().randomizeModelScale();
@@ -471,6 +479,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         builder.define(MODEL_VARIANT, 0);
         builder.define(MODEL_SCALE, 1.0F);
         builder.define(EGG_COUNT, 1);
+        builder.define(FEATHER_COUNT, 1);
+        builder.define(FEATHER_INTERVAL, 24000);
     }
 
     @Override
@@ -529,6 +539,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         compoundTag.putInt("BirdSkinVariant", getSkinController().getSkinVariant());
         BirdModelScale.save(compoundTag, this.getIndividualModelScale(), this.modelScaleProfile());
         compoundTag.putInt("BirdEggCount", getBreedController().getEggCount());
+        compoundTag.putInt("BirdFeatherCount", getFeatherController().getFeatherCount());
+        compoundTag.putInt("BirdFeatherInterval", getFeatherController().getFeatherInterval());
         if (getTameController().getInterestedPlayerUUID() != null) {
             compoundTag.putUUID("BirdInterestedPlayer", getTameController().getInterestedPlayerUUID());
         }
@@ -567,6 +579,16 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             getBreedController().setEggCount(compoundTag.getInt("BirdEggCount"));
         } else {
             getBreedController().randomizeEggCount();
+        }
+        if (compoundTag.contains("BirdFeatherCount", CompoundTag.TAG_INT)) {
+            getFeatherController().setFeatherCount(compoundTag.getInt("BirdFeatherCount"));
+        } else {
+            getFeatherController().randomizeFeatherCount();
+        }
+        if (compoundTag.contains("BirdFeatherInterval", CompoundTag.TAG_INT)) {
+            getFeatherController().setFeatherInterval(compoundTag.getInt("BirdFeatherInterval"));
+        } else {
+            getFeatherController().randomizeFeatherInterval();
         }
 
     }
@@ -789,6 +811,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return BIRD_CONTROLLERS.birdSkinController();
     }
 
+    public BirdFeatherController<T> getFeatherController() {
+        return BIRD_CONTROLLERS.birdFeatherController();
+    }
+
     public BirdModelController<T> getModelController() {
         return BIRD_CONTROLLERS.birdModelController();
     }
@@ -826,6 +852,8 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     public void applyEggData(BirdEggData data) {
         getBreedController().setGender(data.gender());
         getBreedController().setEggCount(data.eggCount());
+        getFeatherController().setFeatherCount(data.featherCount());
+        getFeatherController().setFeatherInterval(data.featherInterval());
         getModelController().setModelVariant(data.model());
         getSkinController().setSkinVariant(data.skin());
         setIndividualModelScale(data.size());
@@ -837,6 +865,14 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     public int getEggCount() {
         return getBreedController().getEggCount();
+    }
+
+    public int getFeatherCount() {
+        return getFeatherController().getFeatherCount();
+    }
+
+    public int getFeatherInterval() {
+        return getFeatherController().getFeatherInterval();
     }
 
     public BirdSkin getSkin() {

@@ -39,5 +39,25 @@ public class NeoGuanNiaoItemProperties {
                         )
         );
 
+        ItemProperties.register(
+                NeoGuanNiaoItems.BIRD_FEATHER.get(),
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "bird_type"),
+                (stack, level, entity, seed) ->
+                        (float) stack.getOrDefault(
+                                NeoGuanNiaoDataComponents.BIRD_FEATHER_BIRD_TYPE.get(),
+                                0
+                        )
+        );
+
+        ItemProperties.register(
+                NeoGuanNiaoItems.BIRD_FEATHER.get(),
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "rarity"),
+                (stack, level, entity, seed) ->
+                        (float) stack.getOrDefault(
+                                NeoGuanNiaoDataComponents.BIRD_FEATHER_SKIN_RARITY.get(),
+                                0
+                        )
+        );
+
     }
 }

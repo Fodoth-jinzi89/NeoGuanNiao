@@ -8,6 +8,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveDe
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
+import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagFishItem;
 import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagItem;
 import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagSeedItem;
@@ -50,6 +51,7 @@ public final class NeoGuanNiaoItems {
     public static final DeferredItem<Item> BIRD_BATH_2;
 
     public static final DeferredItem<Item> BIRD_EGG;
+    public static final DeferredItem<Item> BIRD_FEATHER;
     public static final DeferredItem<Item> BIRD_FOOD_BAG;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_SEED;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_FISH;
@@ -161,6 +163,13 @@ public final class NeoGuanNiaoItems {
                 ITEMS.registerItem(
                         "bird_egg",
                         BirdEggItem::new,
+                        new Item.Properties()
+                );
+
+        BIRD_FEATHER =
+                ITEMS.registerItem(
+                        "bird_feather",
+                        BirdFeatherItem::new,
                         new Item.Properties()
                 );
 

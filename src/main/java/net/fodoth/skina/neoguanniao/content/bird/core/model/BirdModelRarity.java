@@ -1,9 +1,12 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.model;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public enum BirdModelRarity {
@@ -134,10 +137,26 @@ public enum BirdModelRarity {
         return Map.copyOf(customWeights != null ? customWeights : DEFAULT_WEIGHTS);
     }
 
+
+    private static final Int2ObjectMap<BirdModelRarity> BY_ID = new Int2ObjectOpenHashMap<>();
+
+    static {
+        for (BirdModelRarity rarity : values()) {
+            BY_ID.put(rarity.getRarity(), rarity);
+        }
+    }
+
+    public static BirdModelRarity byRarity(int rarity) {
+        return BY_ID.getOrDefault(rarity, COMMON);
+    }
     /**
      * 获取默认权重Map（只读）
      */
     public static Map<BirdModelRarity, Integer> getDefaultWeights() {
         return Map.copyOf(DEFAULT_WEIGHTS);
+    }
+
+    public String getTranslationKey() {
+        return this.name().toLowerCase(Locale.ROOT);
     }
 }

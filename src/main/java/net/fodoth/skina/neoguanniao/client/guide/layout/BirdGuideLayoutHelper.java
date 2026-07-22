@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.guide.layout;
 
-import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoComponents;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedHashMap;
@@ -25,7 +25,7 @@ public final class BirdGuideLayoutHelper {
             return null;
         }
 
-        BirdGuideLayoutData data = stack.get(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get());
+        BirdGuideLayoutData data = stack.get(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get());
         if (data == null || !data.isValid()) {
             return null;
         }
@@ -58,7 +58,7 @@ public final class BirdGuideLayoutHelper {
                 config.rects()
         );
 
-        stack.set(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get(), data);
+        stack.set(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get(), data);
         return true;
     }
 
@@ -73,7 +73,7 @@ public final class BirdGuideLayoutHelper {
             return false;
         }
 
-        return stack.remove(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get()) != null;
+        return stack.remove(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get()) != null;
     }
 
     /**
@@ -86,7 +86,7 @@ public final class BirdGuideLayoutHelper {
         if (stack == null || stack.isEmpty()) {
             return false;
         }
-        return stack.has(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get());
+        return stack.has(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get());
     }
 
     /**
@@ -99,7 +99,7 @@ public final class BirdGuideLayoutHelper {
         if (stack == null || stack.isEmpty()) {
             return null;
         }
-        return stack.get(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get());
+        return stack.get(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get());
     }
 
     /**
@@ -114,12 +114,12 @@ public final class BirdGuideLayoutHelper {
             return false;
         }
 
-        BirdGuideLayoutData data = fromStack.get(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get());
+        BirdGuideLayoutData data = fromStack.get(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get());
         if (data == null || !data.isValid()) {
             return false;
         }
 
-        toStack.set(NeoGuanNiaoComponents.BIRD_GUIDE_LAYOUT.get(), data);
+        toStack.set(NeoGuanNiaoDataComponents.BIRD_GUIDE_LAYOUT.get(), data);
         return true;
     }
 

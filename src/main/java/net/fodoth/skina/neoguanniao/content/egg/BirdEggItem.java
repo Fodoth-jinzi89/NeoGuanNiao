@@ -1,10 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.egg;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
-import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
-import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdModels;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdSkins;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
@@ -38,7 +35,9 @@ public class BirdEggItem extends Item {
 
     // ======================== 数据操作 ========================
 
-    /** 将蛋数据设置到物品栈中 */
+    /**
+     * 将蛋数据设置到物品栈中
+     */
     public static void setEggData(ItemStack stack, BirdEggData data) {
         stack.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), data);
         stack.set(BIRD_EGG_RARITY.get(), NeoGuanNiaoBirdSkins.get(data.skin()).rarity().getRarity());
@@ -46,7 +45,9 @@ public class BirdEggItem extends Item {
         stack.set(BIRD_EGG_GENDER.get(), data.gender() ? 0 : 1);
     }
 
-    /** 从物品栈中获取蛋数据 */
+    /**
+     * 从物品栈中获取蛋数据
+     */
     public static BirdEggData getEggData(ItemStack stack) {
         return stack.get(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get());
     }
@@ -96,15 +97,17 @@ public class BirdEggItem extends Item {
         tooltip.add(Component.translatable("tooltip.neoguanniao.egg_count",
                 data.eggCount()));
 
+        tooltip.add(Component.translatable("tooltip.neoguanniao.feather_count",
+                data.featherCount()));
+
+        tooltip.add(Component.translatable("tooltip.neoguanniao.feather_interval").append(formatTime(data.featherInterval())));
+
         // 体型大小
         tooltip.add(Component.translatable("tooltip.neoguanniao.size",
                 String.format("%.4f", data.size())));
 
         // 孵化时间
-        tooltip.add(
-                Component.translatable("tooltip.neoguanniao.hatch_time")
-                        .append(formatHatchTime(data.hatchTime()))
-        );
+        tooltip.add(Component.translatable("tooltip.neoguanniao.hatch_time").append(formatTime(data.hatchTime())));
 
         // 存活状态
         tooltip.add(Component.translatable(data.alive() ? "tooltip.neoguanniao.alive"
@@ -179,26 +182,10 @@ public class BirdEggItem extends Item {
         return InteractionResult.CONSUME;
     }
 
-    // ======================== 工具方法 ========================
-
-    /** 根据蛋数据获取皮肤稀有度 */
-    public static BirdSkinRarity getSkinRarity(BirdEggData data) {
-        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
-            if (!holder.getId().equals(data.birdType())) continue;
-            BirdData birdData = holder.get();
-            for (BirdSkin skin : birdData.model().birdSkin()) {
-                if (skin.id().equals(data.skin())) {
-                    return skin.rarity();
-                }
-            }
-        }
-        return BirdSkinRarity.COMMON;
-    }
-
     /**
      * 将 Minecraft tick 转换为 时:分:秒
      */
-    private static Component formatHatchTime(int ticks) {
+    private static Component formatTime(int ticks) {
         int totalSeconds = ticks / 20;
 
         int hours = totalSeconds / 3600;

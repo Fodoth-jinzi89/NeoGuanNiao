@@ -3,10 +3,10 @@ package net.fodoth.skina.neoguanniao.content.bird.core.skin;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public enum BirdSkinRarity {
@@ -154,5 +154,9 @@ public enum BirdSkinRarity {
 
     public static BirdSkinRarity byRarity(int rarity) {
         return BY_ID.getOrDefault(rarity, COMMON);
+    }
+
+    public String getTranslationKey() {
+        return this.name().toLowerCase(Locale.ROOT);
     }
 }

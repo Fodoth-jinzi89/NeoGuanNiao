@@ -213,5 +213,20 @@
   "tag.neoguanniao.bird_food_fish": "Bird Food (Fish)",
   "tag.neoguanniao.bird_breed_food_fish": "Bird Breed Food (Fish)",
 
-  "block.neoguanniao.bird_nest": "Bird Nest"
+  "block.neoguanniao.bird_nest": "Bird Nest",
+  "tooltip.neoguanniao.rarity": "§6Rarity:§r ",
+  "tooltip.neoguanniao.empty_feather": "Empty Feather",
+  "tooltip.neoguanniao.rarity.common": "Common",
+  "tooltip.neoguanniao.rarity.uncommon": "Uncommon",
+  "tooltip.neoguanniao.rarity.rare": "Rare",
+  "tooltip.neoguanniao.rarity.epic": "Epic",
+  "tooltip.neoguanniao.rarity.legendary": "Legendary",
+  "tooltip.neoguanniao.rarity.ancient": "Ancient",
+  "tooltip.neoguanniao.rarity.unique": "Unique",
+  "tooltip.neoguanniao.rarity.hidden": "Hidden",
+  "itemGroup.neoguanniao.feathers": "Bird Feathers",
+  "item.neoguanniao.bird_feather": "Bird Feather",
+
+  "tooltip.neoguanniao.feather_count": "§6Feather Count:§r §e%d§r",
+  "tooltip.neoguanniao.feather_interval": "§6Feather Interval:§r "
 }

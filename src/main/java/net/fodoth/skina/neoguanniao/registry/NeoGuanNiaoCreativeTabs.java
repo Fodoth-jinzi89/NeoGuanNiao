@@ -6,12 +6,16 @@ import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
+import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherData;
+import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public final class NeoGuanNiaoCreativeTabs {
@@ -66,6 +70,17 @@ public final class NeoGuanNiaoCreativeTabs {
                             .build()
             );
 
+    public static final Supplier<CreativeModeTab> FEATHER_TAB =
+            CREATIVE_MODE_TABS.register("feathers", () ->
+                    CreativeModeTab.builder()
+                            .title(Component.translatable("itemGroup.neoguanniao.feathers"))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_FEATHER.get()))
+                            .displayItems((parameters, output) -> {
+                                generateBirdFeathers(output);
+                            })
+                            .build()
+            );
+
     private NeoGuanNiaoCreativeTabs() {
     }
 
@@ -86,7 +101,9 @@ public final class NeoGuanNiaoCreativeTabs {
                                     gender,
                                     model.id(),
                                     skin.id(),
-                                    1,
+                                    2,
+                                    3,
+                                    24000,
                                     1.0F,
                                     20,
                                     true
@@ -95,6 +112,36 @@ public final class NeoGuanNiaoCreativeTabs {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private static void generateBirdFeathers(CreativeModeTab.Output output) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+            BirdModelSkinDatum modelDatum = holder.get().model();
+
+            // 用于记录当前鸟类已经生成过的稀有度
+            Set<Integer> generatedRarities = new HashSet<>();
+
+            // 遍历所有皮肤
+            for (BirdSkin skin : modelDatum.birdSkin()) {
+                int rarityValue = skin.rarity().getRarity();
+
+                // 如果这个稀有度已经生成过了，跳过
+                if (generatedRarities.contains(rarityValue)) {
+                    continue;
+                }
+
+                // 记录这个稀有度
+                generatedRarities.add(rarityValue);
+
+                // 生成羽毛
+                ItemStack feather = new ItemStack(NeoGuanNiaoItems.BIRD_FEATHER.get());
+                BirdFeatherItem.setFeatherData(feather, BirdFeatherData.create(
+                        holder.getId(),
+                        rarityValue
+                ));
+                output.accept(feather);
             }
         }
     }
