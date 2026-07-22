@@ -131,7 +131,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
             flyingTicker.hoverRetargetTicks = nextHoverRetargetDelay();
 
             bird.setNoGravity(true);
-            bird.setSilent(true);
             bird.getNavigation().stop();
 
             int stateTicks = fleeing ? flyingDatum.shortFleeTicks() : flyingDatum.shortFlyTicks();
@@ -174,7 +173,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
 
         bird.getNavigation().stop();
         bird.setNoGravity(true);
-        bird.setSilent(false);
         bird.getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.FLYING, flyingDatum.minimumFlightTicks());
 
         Vec3 direction = bird.getFlyingController().flightTarget.subtract(bird.position()).multiply(1.0, 0.0, 1.0);
@@ -224,7 +222,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         bird.getNavigation().stop();
 
         bird.setNoGravity(true);
-        bird.setSilent(false);
 
 
         bird.getBehaviorStateController()
@@ -281,7 +278,6 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         isEscapeFlightActive = false;
         isLandingFlight = false;
         bird.setNoGravity(false);
-        bird.setSilent(false);
         bird.noCulling = false;
 
 

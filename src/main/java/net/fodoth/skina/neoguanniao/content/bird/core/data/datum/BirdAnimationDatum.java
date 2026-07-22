@@ -18,7 +18,8 @@ public record BirdAnimationDatum(
         int trustTickerMaxLimit,
         int trustTickerLimit,
         int maxCuriousAndTrustingIndex,
-        int minCuriousAndTrustingIndex
+        int minCuriousAndTrustingIndex,
+        float mainIdleAnimationChance
 ) {
 
     public BirdAnimationDatum {
@@ -38,7 +39,8 @@ public record BirdAnimationDatum(
                 800,
                 400,
                 9,
-                5
+                5,
+                0.9F
         );
     }
 
@@ -55,6 +57,43 @@ public record BirdAnimationDatum(
                 800,
                 400,
                 9,
-                5);
+                5,
+                0.9F);
+    }
+
+    public BirdAnimationDatum withCuriousAndTrustingIndexRange(int maxCuriousAndTrustingIndex, int minCuriousAndTrustingIndex) {
+        return new BirdAnimationDatum(
+                animationId,
+                animationMap,
+                preenDuration,
+                preenDurationVariance,
+                idleDuration,
+                idleDurationVariance,
+                otherDuration,
+                otherDurationVariance,
+                trustTickerMaxLimit,
+                trustTickerLimit,
+                maxCuriousAndTrustingIndex,
+                minCuriousAndTrustingIndex,
+                mainIdleAnimationChance
+        );
+    }
+
+    public BirdAnimationDatum withMainIdleAnimationChance(int mainIdleAnimationChance) {
+        return new BirdAnimationDatum(
+                animationId,
+                animationMap,
+                preenDuration,
+                preenDurationVariance,
+                idleDuration,
+                idleDurationVariance,
+                otherDuration,
+                otherDurationVariance,
+                trustTickerMaxLimit,
+                trustTickerLimit,
+                maxCuriousAndTrustingIndex,
+                minCuriousAndTrustingIndex,
+                mainIdleAnimationChance
+        );
     }
 }

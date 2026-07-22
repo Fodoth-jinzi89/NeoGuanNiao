@@ -61,7 +61,7 @@ public class BirdBreedController<T extends AbstractBirdEntity<T>> extends Abstra
     // ======================== 子类可重写方法 ========================
 
     /** 判断物品是否为繁育食物（默认使用标签） */
-    protected boolean isBreedingFood(ItemStack stack) {
+    public boolean isBreedingFood(ItemStack stack) {
         return !stack.isEmpty() && stack.is(NeoGuanNiaoItemTags.BIRD_BREED_FOOD);
     }
 

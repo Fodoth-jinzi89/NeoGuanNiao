@@ -1,6 +1,1026 @@
 {
-  "parent": "item/generated",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "neoguanniao:item/bird_egg"
-  }
+    "layer0": "neoguanniao:item/bird_egg/bird_egg_common",
+    "layer1": "neoguanniao:item/bird_egg/rarity/common",
+    "layer2": "neoguanniao:item/bird_egg/gender/male"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 0,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_common_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 1,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_uncommon_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 2,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_rare_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 3,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_epic_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 4,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_legendary_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 5,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_ancient_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 6,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_unique_hidden_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_common_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 0,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_common_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_uncommon_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 1,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_uncommon_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_rare_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 2,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_rare_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_epic_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 3,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_epic_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_legendary_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 4,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_legendary_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_ancient_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 5,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_ancient_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_unique_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 6,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_unique_female"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 0
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_hidden_male"
+    },
+    {
+      "predicate": {
+        "neoguanniao:rarity": 999,
+        "neoguanniao:model_rarity": 999,
+        "neoguanniao:gender": 1
+      },
+      "model": "neoguanniao:item/bird_egg/bird_egg_hidden_hidden_female"
+    }
+  ]
 }

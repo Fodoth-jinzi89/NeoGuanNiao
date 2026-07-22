@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "neoguanniao:bird_food_bag_seed",
-    "neoguanniao:bird_food_bag_fish",
     {
       "id": "#goldentweaks:bird_breed_food",
       "required": false

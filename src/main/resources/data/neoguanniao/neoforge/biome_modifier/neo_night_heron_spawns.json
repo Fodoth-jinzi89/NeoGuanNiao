@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#neoguanniao:night_heron_habitat",
+  "spawners": {
+    "type": "neoguanniao:neo_night_heron",
+    "weight": 12,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

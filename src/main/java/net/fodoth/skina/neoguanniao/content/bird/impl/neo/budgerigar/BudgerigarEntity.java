@@ -10,7 +10,6 @@ import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.species.BudgerigarProfile;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -181,26 +180,4 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
         }
         return null;
     }
-
-    @Override
-    protected void applyTamingSideEffects() {
-        super.applyTamingSideEffects();
-
-        for (int i = 0; i < 9; ++i) {
-            double xOffset = this.getRandom().nextGaussian() * 0.03;
-            double yOffset = this.getRandom().nextGaussian() * 0.04;
-            double zOffset = this.getRandom().nextGaussian() * 0.03;
-
-            this.level().addParticle(
-                    ParticleTypes.HEART,
-                    this.getX(0.7),
-                    this.getY() + 0.22,
-                    this.getZ(0.7),
-                    xOffset,
-                    yOffset + 0.035,
-                    zOffset
-            );
-        }
-    }
-
 }

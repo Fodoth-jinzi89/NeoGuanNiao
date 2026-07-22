@@ -80,7 +80,12 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
 
         double distance = bird().distanceToSqr(this.targetFood);
 
+        if (distance > 0.8 * goalDatum().eatFoodConsumeDistance()) {
+            bird().getNavigation().moveTo(this.targetFood, goalDatum().eatFoodMoveSpeed());
+        }
+
         if (distance < goalDatum().eatFoodConsumeDistance()) {
+            bird().getNavigation().stop();
             bird().getEatingController().consumeItemEntity(bird(), this.targetFood);
             this.targetFood = null;
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
@@ -88,14 +93,6 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
         }
         bird().getLookControl().setLookAt(this.targetFood, goalDatum().eatFoodLookYaw(), goalDatum().eatFoodLookPitch());
 
-    }
-
-    @Override
-    public void onReset() {
-        if (this.targetFood == null || !this.targetFood.isAlive()) {
-            return;
-        }
-        bird().getNavigation().moveTo(this.targetFood, goalDatum().eatFoodMoveSpeed());
     }
 
     @Override

@@ -5,6 +5,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdModels;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdSkins;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents.*;
+
 /**
  * 鸟类蛋物品，用于存储和孵化鸟类数据
  */
@@ -37,6 +41,9 @@ public class BirdEggItem extends Item {
     /** 将蛋数据设置到物品栈中 */
     public static void setEggData(ItemStack stack, BirdEggData data) {
         stack.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), data);
+        stack.set(BIRD_EGG_RARITY.get(), NeoGuanNiaoBirdSkins.get(data.skin()).rarity().getRarity());
+        stack.set(BIRD_EGG_MODEL_RARITY.get(), NeoGuanNiaoBirdModels.get(data.model()).rarity().getRarity());
+        stack.set(BIRD_EGG_GENDER.get(), data.gender() ? 0 : 1);
     }
 
     /** 从物品栈中获取蛋数据 */
@@ -57,14 +64,19 @@ public class BirdEggItem extends Item {
 
         // 鸟类类型
         tooltip.add(Component.translatable("tooltip.neoguanniao.bird_type")
-                .append(translateResource("entity", data.birdType())));
+                .append(translateResource("entity", data.birdType(), data.birdType())));
 
         // 模型
         tooltip.add(Component.translatable("tooltip.neoguanniao.model")
-                .append(translateResource("model", data.model())));
+                .append(translateResource("model", data.model(), data.birdType())));
 
         // 皮肤（带稀有度颜色）
-        BirdSkinRarity rarity = getSkinRarity(data);
+        int rarityId = stack.getOrDefault(
+                BIRD_EGG_RARITY.get(),
+                BirdSkinRarity.COMMON.getRarity()
+        );
+
+        BirdSkinRarity rarity = BirdSkinRarity.byRarity(rarityId);
         String skinId = data.skin().getPath();
         // 移除 _male 和 _female 后缀
         skinId = skinId.replaceAll("_(male|female)$", "");
@@ -72,7 +84,7 @@ public class BirdEggItem extends Item {
                 data.skin().getNamespace(),
                 skinId
         );
-        Component skinText = ((MutableComponent) translateResource("skin", cleanedSkinId))
+        Component skinText = ((MutableComponent) translateResource("skin", cleanedSkinId, data.birdType()))
                 .withStyle(rarity.getChatColor());
         tooltip.add(Component.translatable("tooltip.neoguanniao.skin").append(skinText));
 
@@ -99,16 +111,33 @@ public class BirdEggItem extends Item {
                 : "tooltip.neoguanniao.dead"));
     }
 
-    /** 翻译资源路径（去除目录和后缀） */
-    private static Component translateResource(String prefix, ResourceLocation id) {
+    /**
+     * 翻译资源路径（去除目录和后缀）
+     * 生成：
+     * entity.neoguanniao.budgerigar
+     * model.neoguanniao.budgerigar.default
+     * skin.neoguanniao.budgerigar.yellow
+     */
+    private static Component translateResource(String prefix, ResourceLocation id, ResourceLocation birdType) {
         String path = id.getPath();
         path = path.substring(path.lastIndexOf('/') + 1); // 去目录
+
         if (path.endsWith(".geo.json")) {
             path = path.substring(0, path.length() - ".geo.json".length());
         } else if (path.endsWith(".png")) {
             path = path.substring(0, path.length() - ".png".length());
         }
-        return Component.translatable(prefix + "." + id.getNamespace() + "." + path);
+
+        String entityName = birdType.getPath();
+
+        // entity 本身不重复添加实体名
+        if ("entity".equals(prefix)) {
+            return Component.translatable(prefix + "." + id.getNamespace() + "." + entityName);
+        }
+
+        return Component.translatable(
+                prefix + "." + id.getNamespace() + "." + entityName + "." + path
+        );
     }
 
     // ======================== 交互（孵化） ========================
@@ -153,7 +182,7 @@ public class BirdEggItem extends Item {
     // ======================== 工具方法 ========================
 
     /** 根据蛋数据获取皮肤稀有度 */
-    private BirdSkinRarity getSkinRarity(BirdEggData data) {
+    public static BirdSkinRarity getSkinRarity(BirdEggData data) {
         for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
             if (!holder.getId().equals(data.birdType())) continue;
             BirdData birdData = holder.get();

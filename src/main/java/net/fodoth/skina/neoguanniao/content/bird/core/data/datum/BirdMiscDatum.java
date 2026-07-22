@@ -3,7 +3,9 @@ package net.fodoth.skina.neoguanniao.content.bird.core.data.datum;
 // ============ 杂项数据 ============
 public record BirdMiscDatum(
         int spawnRarity,
+        int waterSearchRadius,
         double walkingSpeedThreshold,
+        double runningSpeedThreshold,
         double followingDistanceThreshold,
         long activeStartTime,
         long activeEndTime,
@@ -44,7 +46,9 @@ public record BirdMiscDatum(
     public static BirdMiscDatum createDefault() {
         return new BirdMiscDatum(
                 8,
+                8,
                 0.0025D,
+                0.018D,
                 9.0D, 23000L, 11500L, 10, 0.05F,
                 120, 120, 60, 60,
                 10.0D, 0.5F,
@@ -63,6 +67,52 @@ public record BirdMiscDatum(
                 7,
                 6000,
                 24000
+        );
+    }
+
+    // 链式调用的便利方法（同时设置两个）
+    public BirdMiscDatum withActiveTime(long activeStartTime, long activeEndTime) {
+        return new BirdMiscDatum(
+                spawnRarity,
+                waterSearchRadius,
+                walkingSpeedThreshold,
+                runningSpeedThreshold,
+                followingDistanceThreshold,
+                activeStartTime,
+                activeEndTime,
+                maxTurns,
+                mutantChance,
+                curiousTicksLimitForBath,
+                curiousTicksLimitForSharedTrust,
+                curiousTicksLimitForAlert,
+                curiousTicksLimitForTame,
+                trustShareRange,
+                droppedItemTrustMultiplier,
+                escapeCooldownMin,
+                escapeCooldownVariance,
+                tameCooldownMin,
+                tameCooldownVariance,
+                wildCooldownMin,
+                wildCooldownVariance,
+                postFlightAlertTicks,
+                alertNearbyRange,
+                alertTicks,
+                alertTicksVariant,
+                alertTicksPlayer,
+                alertTicksOther,
+                frightenedTrustLossPlayer,
+                frightenedTrustLossOther,
+                mutantP1Boost,
+                mutantP2Boost,
+                mutantL1Cap,
+                mutantL2Cap,
+                eggCountMin,
+                eggCountVariance,
+                layEggRange,
+                layEggExp,
+                layEggExpVariance,
+                breedCooldown,
+                eggDefaultHatchTime
         );
     }
 }

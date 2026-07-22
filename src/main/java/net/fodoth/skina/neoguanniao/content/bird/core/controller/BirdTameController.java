@@ -95,8 +95,9 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
      * @param eaten          用于驯服的食物
      * @param addTrust       增加的信任值
      * @param addTrustNearby 附近鸟类获得的额外信任值
+     * @param shouldTame     是否应当触发驯服
      */
-    public void checkTame(Player player, ItemStack eaten, int addTrust, int addTrustNearby) {
+    public void checkTame(Player player, ItemStack eaten, int addTrust, int addTrustNearby, boolean shouldTame) {
         var tickController = bird.getTickController();
         var timer = tickController.getTickTimer();
         var eatingController = bird.getEatingController();
@@ -111,8 +112,9 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
         // 开始进食
         eatingController.startEatingFood(eaten);
 
-        // 增加信任值
-        timer.getBirdTrustTicker().addTrust(addTrust);
+        // 增加信任值，幼鸟双倍
+        int trust = bird().isBaby()? addTrust * 2 : addTrust;
+        timer.getBirdTrustTicker().addTrust(trust);
 
         // 设置好奇计时器
         int currentCuriousTicks = timer.getBirdCuriousTicker().getTicks();
@@ -123,6 +125,10 @@ public class BirdTameController<T extends AbstractBirdEntity<T>> extends Abstrac
         eatingController.shareTrustNearby(addTrustNearby);
 
         // 更新驯服状态和主人信息
+        if (!shouldTame) {
+            return;
+        }
+
         updateTrustedOwner(player);
 
         // 触发驯服成功或失败事件

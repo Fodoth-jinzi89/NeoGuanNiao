@@ -20,6 +20,7 @@ import net.fodoth.skina.neoguanniao.util.ClientExtensionHelper;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
@@ -32,6 +33,13 @@ public final class NeoGuanNiaoClientModEvents {
     private NeoGuanNiaoClientModEvents() {
     }
 
+
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(
+                NeoGuanNiaoClient::init
+        );
+    }
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -63,6 +71,11 @@ public final class NeoGuanNiaoClientModEvents {
 
         event.registerEntityRenderer(
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
+                BirdModelRenderer::new
+        );
+
+        event.registerEntityRenderer(
+                NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(),
                 BirdModelRenderer::new
         );
 

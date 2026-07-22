@@ -27,6 +27,8 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
     private final BirdWakeUpGoalController<T> birdWakeUpGoalController;
     private final BirdBathUseGoalController<T> birdBathUseGoalController;
     private final BirdBreedGoalController<T> birdBreedGoalController;
+    private final BirdSkinValidateGoalController<T> birdSkinValidateGoalController;
+    private final BirdModelValidateGoalController<T> birdModelValidateGoalController;
 
     private final List<AbstractGoalController<T>> controllers;
 
@@ -45,6 +47,8 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
         this.birdWakeUpGoalController = new BirdWakeUpGoalController<>();
         this.birdBathUseGoalController = new BirdBathUseGoalController<>();
         this.birdBreedGoalController = new BirdBreedGoalController<>();
+        this.birdSkinValidateGoalController = new BirdSkinValidateGoalController<>();
+        this.birdModelValidateGoalController = new BirdModelValidateGoalController<>();
 
         List<AbstractGoalController<T>> controllers = new ArrayList<>(List.of(
                 birdCuriousFollowGoalController,
@@ -58,7 +62,9 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
                 birdSentinelGoalController,
                 birdWakeUpGoalController,
                 birdBathUseGoalController,
-                birdBreedGoalController
+                birdBreedGoalController,
+                birdSkinValidateGoalController,
+                birdModelValidateGoalController
         ));
 
         this.controllers = List.copyOf(controllers);
@@ -119,6 +125,14 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
 
     public BirdBreedGoalController<T> getBirdBreedGoalController() {
         return birdBreedGoalController;
+    }
+
+    public BirdSkinValidateGoalController<T> getBirdSkinValidateGoalController() {
+        return birdSkinValidateGoalController;
+    }
+
+    public BirdModelValidateGoalController<T> getBirdModelValidateGoalController() {
+        return birdModelValidateGoalController;
     }
 
 

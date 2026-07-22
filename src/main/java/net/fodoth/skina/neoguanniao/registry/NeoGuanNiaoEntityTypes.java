@@ -26,6 +26,7 @@ public final class NeoGuanNiaoEntityTypes {
 
 
     public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity>> NEO_BUDGERIGAR;
+    public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity>> NEO_NIGHT_HERON;
 
 
 
@@ -51,7 +52,7 @@ public final class NeoGuanNiaoEntityTypes {
                 "night_heron",
                 NightHeronEntity::new,
                 0.8F,
-                1.9F
+                0.9F
         );
 
         SPARROW = registerCreature(
@@ -87,6 +88,13 @@ public final class NeoGuanNiaoEntityTypes {
                 net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity::new,
                 0.4F,
                 0.54F
+        );
+
+        NEO_NIGHT_HERON = registerCreature(
+                "neo_night_heron",
+                net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity::new,
+                0.8F,
+                0.9F
         );
 
     }

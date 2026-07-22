@@ -27,6 +27,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoComponents.DATA_COMPONENTS.register(modEventBus);
         NeoGuanNiaoBirdData.BIRD_DATA.register(modEventBus);
         NeoGuanNiaoDataComponents.DATA_COMPONENTS.register(modEventBus);
+
     }
 
     public static ResourceLocation resource(String path) {

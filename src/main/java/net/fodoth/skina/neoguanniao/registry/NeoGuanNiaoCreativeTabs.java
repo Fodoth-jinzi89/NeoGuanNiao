@@ -1,7 +1,8 @@
 package net.fodoth.skina.neoguanniao.registry;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdSkinDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelSkinDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
@@ -70,17 +71,28 @@ public final class NeoGuanNiaoCreativeTabs {
 
     private static void generateBirdEggs(CreativeModeTab.Output output) {
         for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
-            BirdSkinDatum modelDatum = holder.get().model();
-            for (BirdSkin skin : modelDatum.birdSkin()) {
-                for (boolean gender : new boolean[]{true, false}) {
-                    // 如果皮肤是雄性，生成雄性蛋；如果是雌性，生成雌性蛋；如果是通用皮肤，则生成两种
-                    if ((skin.male() && gender) || (skin.female() && !gender)) {
-                        ItemStack egg = new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get());
-                        BirdEggItem.setEggData(egg, BirdEggData.create(
-                                holder.getId(), gender, modelDatum.modelLocation(), skin.id(),
-                                 1, 1.0F, 20, true
-                        ));
-                        output.accept(egg);
+            BirdModelSkinDatum modelDatum = holder.get().model();
+
+            // 遍历所有模型
+            for (BirdModel model : modelDatum.birdModel()) {
+                // 遍历所有皮肤
+                for (BirdSkin skin : modelDatum.birdSkin()) {
+                    for (boolean gender : new boolean[]{true, false}) {
+                        // 如果皮肤是雄性，生成雄性蛋；如果是雌性，生成雌性蛋；如果是通用皮肤，则生成两种
+                        if ((skin.male() && gender) || (skin.female() && !gender)) {
+                            ItemStack egg = new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get());
+                            BirdEggItem.setEggData(egg, BirdEggData.create(
+                                    holder.getId(),
+                                    gender,
+                                    model.id(),
+                                    skin.id(),
+                                    1,
+                                    1.0F,
+                                    20,
+                                    true
+                            ));
+                            output.accept(egg);
+                        }
                     }
                 }
             }

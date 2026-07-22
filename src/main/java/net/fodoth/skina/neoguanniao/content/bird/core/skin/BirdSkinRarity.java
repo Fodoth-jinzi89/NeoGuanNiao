@@ -1,6 +1,9 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.skin;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -139,5 +142,17 @@ public enum BirdSkinRarity {
      */
     public static Map<BirdSkinRarity, Integer> getDefaultWeights() {
         return Map.copyOf(DEFAULT_WEIGHTS);
+    }
+
+    private static final Int2ObjectMap<BirdSkinRarity> BY_ID = new Int2ObjectOpenHashMap<>();
+
+    static {
+        for (BirdSkinRarity rarity : values()) {
+            BY_ID.put(rarity.getRarity(), rarity);
+        }
+    }
+
+    public static BirdSkinRarity byRarity(int rarity) {
+        return BY_ID.getOrDefault(rarity, COMMON);
     }
 }

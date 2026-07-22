@@ -113,7 +113,8 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
                 player,
                 eaten,
                 tameDatum.addTrustValue(),
-                tameDatum.addTrustNearbyValue()
+                tameDatum.addTrustNearbyValue(),
+                true
         );
 
         // 开始进食动画
@@ -193,6 +194,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
 
         // 增加信任值（使用掉落物信任倍率）
         int trustAmount = (int) (tameDatum.addTrustValue() * miscDatum.droppedItemTrustMultiplier());
+        trustAmount *= bird().isBaby() ? 2 : 1;
         timer.getBirdTrustTicker().addTrust(trustAmount);
 
         // 设置好奇计时器（使用掉落物好奇时长限制）
@@ -394,7 +396,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      * @return 是否为可食用食物
      */
     public boolean isEdibleFood(ItemStack stack) {
-
         return stack.is(NeoGuanNiaoItemTags.BIRD_FOOD);
     }
 

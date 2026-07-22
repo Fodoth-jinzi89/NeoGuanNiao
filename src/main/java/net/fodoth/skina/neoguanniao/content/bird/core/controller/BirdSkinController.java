@@ -2,21 +2,16 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdSkinDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelSkinDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.MODEL_SCALE;
 import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.SKIN_VARIANT;
 
 /**
@@ -35,69 +30,6 @@ import static net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity.
  */
 public class BirdSkinController<T extends AbstractBirdEntity<T>> extends AbstractBirdController<T>{
 
-    /**
-     * 随机生成并设置当前鸟个体的模型缩放比例
-     * <p>
-     * 缩放值会根据当前鸟种的 {@link BirdModelScaleProfile}
-     * 进行随机生成，并自动限制在合法范围内。
-     * </p>
-     */
-    public void randomizeModelScale() {
-        var random = bird.getRandom();
-        var profile = bird.modelScaleProfile();
-        float scale = BirdModelScale.randomIndividualScale(random, profile);
-        setIndividualModelScale(scale);
-    }
-
-    /**
-     * 设置当前鸟个体的模型缩放比例
-     * <p>
-     * 传入的缩放值会经过 {@link BirdModelScale#sanitize(float, BirdModelScaleProfile)}
-     * 处理，避免超出当前鸟种允许范围。
-     * </p>
-     *
-     * @param scale 目标模型缩放比例
-     */
-    public void setIndividualModelScale(float scale) {
-        var profile = bird.modelScaleProfile();
-        float sanitizedScale = BirdModelScale.sanitize(scale, profile);
-        bird.getEntityData().set(MODEL_SCALE, sanitizedScale);
-    }
-
-    /**
-     * 获取当前鸟种的模型缩放配置
-     * <p>
-     * 不同鸟种可以通过配置文件定义不同的体型变化范围。
-     * </p>
-     *
-     * @return 模型缩放配置
-     */
-    public BirdModelScaleProfile modelScaleProfile() {
-        BirdData birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        return modelDatum.modelScaleProfile();
-    }
-
-    /**
-     * 获取当前鸟个体的模型缩放比例
-     * <p>
-     * 读取实体同步数据后，会再次进行合法性校验，
-     * 防止存档数据异常导致模型比例错误。
-     * </p>
-     *
-     * @return 当前个体模型缩放比例
-     */
-    public float getIndividualModelScale() {
-        var profile = this.modelScaleProfile();
-        float scale = bird.getEntityData().get(MODEL_SCALE);
-        return BirdModelScale.sanitize(scale, profile);
-    }
-
-    public float getRenderModelScale() {
-        var profile = this.modelScaleProfile();
-        float scale = bird.getEntityData().get(MODEL_SCALE);
-        return BirdModelScale.renderScale(profile, scale);
-    }
 
     /**
      * 获取当前鸟的皮肤变体编号
@@ -110,8 +42,9 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      */
     public int getSkinVariant() {
         BirdData birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        int skinCount = modelDatum.birdSkin().length;
+        BirdModelSkinDatum modelDatum = birdData.model();
+        List<BirdSkin> skins = modelDatum.birdSkin();
+        int skinCount = skins.size();
         int variant = bird.getEntityData().get(SKIN_VARIANT);
         return Mth.clamp(variant, 0, skinCount - 1);
     }
@@ -127,8 +60,9 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      */
     public void setSkinVariant(int variant) {
         BirdData birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        int skinCount = modelDatum.birdSkin().length;
+        BirdModelSkinDatum modelDatum = birdData.model();
+        List<BirdSkin> skins = modelDatum.birdSkin();
+        int skinCount = skins.size();
         int clamped = Mth.clamp(variant, 0, skinCount - 1);
         bird.getEntityData().set(SKIN_VARIANT, clamped);
     }
@@ -137,30 +71,30 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * 根据皮肤ID设置皮肤
      */
     public void setSkinVariant(ResourceLocation skinId) {
+        List<BirdSkin> skins = bird.getBirdData().model().birdSkin();
 
-        BirdSkin[] skins =
-                bird.getBirdData()
-                        .model()
-                        .birdSkin();
-
-
-        for (int i = 0; i < skins.length; i++) {
-
-            if (skins[i].id().equals(skinId)) {
-                setSkinVariant(i);
-                return;
+        // 使用List的indexOf方法查找匹配的皮肤
+        int index = -1;
+        for (int i = 0; i < skins.size(); i++) {
+            if (skins.get(i).id().equals(skinId)) {
+                index = i;
+                break;
             }
         }
 
-
-        // 找不到则使用默认皮肤
-        setSkinVariant(0);
+        if (index != -1) {
+            setSkinVariant(index);
+        } else {
+            // 找不到则使用默认皮肤
+            setSkinVariant(0);
+        }
     }
 
 
     public void randomizeSkinVariant() {
         setSkinVariant(getRandomizeSkinVariant());
     }
+
     /**
      * 随机选择一个皮肤变体
      * <p>
@@ -168,7 +102,7 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      * 根据当前鸟种支持的纹理数量随机选择皮肤。
      * </p>
      */
-// 完全随机 - 使用所有默认值
+    // 完全随机 - 使用所有默认值
     public ResourceLocation getRandomizeSkinVariant() {
         return getRandomizeSkinVariant(null, true, true, true, true, true, false, false);
     }
@@ -208,76 +142,45 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     public ResourceLocation getRandomizeSkinVariant(BirdSkinRarity rarity, boolean natureSpawn, boolean breed, boolean baby, boolean male, boolean female, boolean unique, boolean hidden) {
         var random = bird.getRandom();
         BirdData birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        var skins = modelDatum.birdSkin();
+        BirdModelSkinDatum modelDatum = birdData.model();
+        List<BirdSkin> skins = modelDatum.birdSkin();
 
-        // 过滤匹配的皮肤
-        List<BirdSkin> matchingSkins = new ArrayList<>();
-        for (BirdSkin skin : skins) {
-            // 稀有度必须先匹配（传入null表示匹配所有）
-            boolean rarityMatches = rarity == null || skin.rarity() == rarity;
-            if (!rarityMatches) {
-                continue; // 稀有度不匹配，直接跳过
-            }
+        // 过滤匹配的皮肤 - 使用Stream API
+        List<BirdSkin> matchingSkins = skins.stream()
+                .filter(skin -> {
+                    // 稀有度必须先匹配（传入null表示匹配所有）
+                    if (rarity != null && skin.rarity() != rarity) {
+                        return false;
+                    }
 
-            // 其他参数是"或"的关系，至少满足一个
-            boolean otherMatches = false;
-
-            if (skin.natureSpawn() == natureSpawn) {
-                otherMatches = true;
-            }
-
-            if (skin.breed() == breed) {
-                otherMatches = true;
-            }
-
-            if (skin.baby() == baby) {
-                otherMatches = true;
-            }
-
-            if (skin.male() == male) {
-                otherMatches = true;
-            }
-
-            if (skin.female() == female) {
-                otherMatches = true;
-            }
-
-            if (skin.unique() == unique) {
-                otherMatches = true;
-            }
-
-            if (skin.hidden() == hidden) {
-                otherMatches = true;
-            }
-
-            if (otherMatches) {
-                matchingSkins.add(skin);
-            }
-        }
+                    // 其他参数是"或"的关系，至少满足一个
+                    return skin.natureSpawn() == natureSpawn ||
+                            skin.breed() == breed ||
+                            skin.baby() == baby ||
+                            skin.male() == male ||
+                            skin.female() == female ||
+                            skin.unique() == unique ||
+                            skin.hidden() == hidden;
+                })
+                .toList();
 
         // 如果还是没有匹配的，使用第一个
         if (matchingSkins.isEmpty()) {
-            matchingSkins = Collections.singletonList(skins[0]);
+            matchingSkins = Collections.singletonList(skins.getFirst());
         }
 
         BirdSkin selectedSkin = selectSkinByWeight(matchingSkins, random);
 
-        // 找到原始数组中的索引
-        return selectedSkin.location();
+        // 返回选中的皮肤ID
+        return selectedSkin.id();
     }
 
     // 辅助方法：根据权重选择皮肤
     private BirdSkin selectSkinByWeight(List<BirdSkin> skins, RandomSource random) {
         // 计算总权重
-        int totalWeight = 0;
-        List<Integer> weights = new ArrayList<>();
-
-        for (BirdSkin skin : skins) {
-            int weight = skin.rarity().getWeight();
-            weights.add(weight);
-            totalWeight += weight;
-        }
+        int totalWeight = skins.stream()
+                .mapToInt(skin -> skin.rarity().getWeight())
+                .sum();
 
         // 如果所有权重为0，则等概率随机
         if (totalWeight == 0) {
@@ -288,10 +191,10 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
         int randomValue = random.nextInt(totalWeight);
         int cumulativeWeight = 0;
 
-        for (int i = 0; i < skins.size(); i++) {
-            cumulativeWeight += weights.get(i);
+        for (BirdSkin skin : skins) {
+            cumulativeWeight += skin.rarity().getWeight();
             if (randomValue < cumulativeWeight) {
-                return skins.get(i);
+                return skin;
             }
         }
 
@@ -301,331 +204,101 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
 
 
     /**
-     * 遗传父母皮肤
-     * 基于父母稀有度平均值，使用正态分布决定后代稀有度
-     * 根据后代性别筛选可用皮肤
-     *
-     * @param parent 父母之一
-     * @param mate   父母之二
-     * @param gender 后代性别 true=雄性 false=雌性
+     * 遗传父母皮肤 - 基于父母稀有度正态分布决定后代稀有度
      */
     public ResourceLocation inheritSkinVariant(
             AbstractBirdEntity<?> parent,
             AbstractBirdEntity<?> mate,
             boolean gender
     ) {
-
         var birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        BirdMiscDatum miscDatum = birdData.misc();
+        BirdModelSkinDatum modelDatum = birdData.model();
+        List<BirdSkin> skins = modelDatum.birdSkin();
 
-        int variants = modelDatum.birdSkin().length;
+        if (skins.size() <= 1) return skins.getFirst().id();
+
         var random = bird.getRandom();
+        BirdSkin parentSkin = getSkinByIndex(parent.getSkinController().getSkinVariant());
+        BirdSkin mateSkin = getSkinByIndex(mate.getSkinController().getSkinVariant());
 
-
-        // 没有变体
-        if (variants <= 1) {
-            return modelDatum.birdSkin()[0].id();
-        }
-
-
-        // 获取父母皮肤
-        BirdSkin parentSkin =
-                getSkinByIndex(parent.getSkinController().getSkinVariant());
-
-        BirdSkin mateSkin =
-                getSkinByIndex(mate.getSkinController().getSkinVariant());
-
-
-        // 父母皮肤异常，随机选择符合性别的皮肤
+        // 父母皮肤异常或不可繁殖 → 随机筛选
         if (parentSkin == null || mateSkin == null) {
-
-            List<BirdSkin> skins = new ArrayList<>();
-
-            for (BirdSkin skin : modelDatum.birdSkin()) {
-
-                if (gender && !skin.male()) {
-                    continue;
-                }
-
-                if (!gender && !skin.female()) {
-                    continue;
-                }
-
-                if (!skin.breed()) {
-                    continue;
-                }
-
-                skins.add(skin);
-            }
-
-            if (!skins.isEmpty()) {
-                return skins.get(random.nextInt(skins.size())).id();
-            }
-
-            return modelDatum.birdSkin()[0].id();
+            return randomSelectSkin(skins, gender, random);
         }
 
+        int targetRarity = calcTargetRarity(parentSkin, mateSkin, birdData.misc(), random);
+        BirdSkin selected = selectSkinByRarity(skins, targetRarity, gender);
 
-        // 父母稀有度
-        int parentRarityValue =
-                parentSkin.rarity().getRarity();
+        return selected != null ? selected.id() : fallbackSkin(skins, gender);
+    }
 
-        int mateRarityValue =
-                mateSkin.rarity().getRarity();
+    /** 随机选择符合性别且可繁殖的皮肤 */
+    private ResourceLocation randomSelectSkin(List<BirdSkin> skins, boolean gender, RandomSource random) {
+        List<BirdSkin> filtered = skins.stream()
+                .filter(s -> s.breed() && (gender ? s.male() : s.female()))
+                .toList();
+        return filtered.isEmpty() ? skins.getFirst().id() : filtered.get(random.nextInt(filtered.size())).id();
+    }
 
+    /** 计算目标稀有度（含变异逻辑） */
+    private int calcTargetRarity(BirdSkin parent, BirdSkin mate, BirdMiscDatum misc, RandomSource random) {
+        int pRarity = parent.rarity().getRarity();
+        int mRarity = mate.rarity().getRarity();
+        double baseMean = (pRarity + mRarity) / 2.0;
 
-        // 平均稀有度
-        double baseMean =
-                (parentRarityValue + mateRarityValue) / 2.0;
-
-
-        // 变异概率
-        float actualMutantChance =
-                getActualMutantChance(
-                        parentSkin,
-                        mateSkin,
-                        miscDatum
-                );
-
-
-        boolean isMutant =
-                random.nextFloat() < actualMutantChance;
-
-
-        int targetRarityInt;
-
+        boolean isMutant = random.nextFloat() < getActualMutantChance(parent, mate, misc);
 
         if (isMutant) {
-
-            double offsetFactor =
-                    random.nextDouble();
-
-            double targetMean;
-
-
-            if (offsetFactor < miscDatum.mutantL1Cap()) {
-
-                targetMean = baseMean;
-
-            } else if (offsetFactor < miscDatum.mutantL2Cap()) {
-
-                targetMean = baseMean + 1.0;
-
-            } else {
-
-                targetMean = baseMean + 2.0;
-            }
-
-
-            targetMean = Math.min(targetMean, 5.0);
-
-
-            double stdDev =
-                    Math.abs(
-                            parentRarityValue - mateRarityValue
-                    ) / 4.0 + 0.3;
-
-
-            stdDev = Math.max(stdDev, 0.3);
-
-
-            double u1 = random.nextDouble();
-            double u2 = random.nextDouble();
-
-
-            double z =
-                    Math.sqrt(-2.0 * Math.log(u1))
-                            * Math.cos(
-                            2.0 * Math.PI * u2
-                    );
-
-
-            targetRarityInt =
-                    (int) Math.round(
-                            targetMean + z * stdDev
-                    );
-
-
+            double offset = random.nextDouble();
+            double mean = offset < misc.mutantL1Cap() ? baseMean :
+                    offset < misc.mutantL2Cap() ? baseMean + 1.0 : baseMean + 2.0;
+            mean = Math.min(mean, 5.0);
+            double stdDev = Math.max(Math.abs(pRarity - mRarity) / 4.0 + 0.3, 0.3);
+            return (int) Math.round(mean + gaussianZ(random) * stdDev);
         } else {
-
-
-            double stdDev =
-                    Math.abs(
-                            parentRarityValue - mateRarityValue
-                    ) / 2.0 + 0.5;
-
-
-            stdDev = Math.max(stdDev, 0.5);
-
-
-            double u1 = random.nextDouble();
-            double u2 = random.nextDouble();
-
-
-            double z =
-                    Math.sqrt(-2.0 * Math.log(u1))
-                            * Math.cos(
-                            2.0 * Math.PI * u2
-                    );
-
-
-            targetRarityInt =
-                    (int) Math.round(
-                            baseMean + z * stdDev
-                    );
+            double stdDev = Math.max(Math.abs(pRarity - mRarity) / 2.0 + 0.5, 0.5);
+            return (int) Math.round(baseMean + gaussianZ(random) * stdDev);
         }
+    }
 
+    /** Box-Muller 生成标准正态分布随机数 */
+    private double gaussianZ(RandomSource random) {
+        double u1 = random.nextDouble(), u2 = random.nextDouble();
+        return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+    }
 
-        // 限制 COMMON - ANCIENT
-        targetRarityInt =
-                Math.clamp(targetRarityInt, 0, 5);
+    /** 按稀有度筛选皮肤，支持 ±3 范围扩大 */
+    private BirdSkin selectSkinByRarity(List<BirdSkin> skins, int target, boolean gender) {
+        target = Math.clamp(target, 0, 5);
 
-
-        BirdSkinRarity targetRarity =
-                BirdSkinRarity.fromValue(targetRarityInt);
-
-
-
-        /*
-         * 第一轮：
-         * 精确稀有度匹配
-         */
-        List<BirdSkin> availableSkins =
-                new ArrayList<>();
-
-
-        for (BirdSkin skin : modelDatum.birdSkin()) {
-
-
-            if (skin.rarity() != targetRarity) {
-                continue;
-            }
-
-
-            // 性别过滤
-            if (gender && !skin.male()) {
-                continue;
-            }
-
-            if (!gender && !skin.female()) {
-                continue;
-            }
-
-
-            // 繁殖资格过滤
-            if (!skin.breed()) {
-                continue;
-            }
-
-
-            availableSkins.add(skin);
-        }
-
-
-
-        /*
-         * 第二轮：
-         * 扩大稀有度范围
-         */
-        if (availableSkins.isEmpty()) {
-
-
-            for (int offset = 1; offset <= 3; offset++) {
-
-
-                int[] values = {
-                        targetRarityInt - offset,
-                        targetRarityInt + offset
-                };
-
-
-                for (int value : values) {
-
-
-                    if (value < 0 || value > 5) {
-                        continue;
-                    }
-
-
-                    BirdSkinRarity rarity =
-                            BirdSkinRarity.fromValue(value);
-
-
-
-                    for (BirdSkin skin : modelDatum.birdSkin()) {
-
-
-                        if (skin.rarity() != rarity) {
-                            continue;
-                        }
-
-
-                        // 性别过滤
-                        if (gender && !skin.male()) {
-                            continue;
-                        }
-
-                        if (!gender && !skin.female()) {
-                            continue;
-                        }
-
-
-                        // 繁殖资格过滤
-                        if (!skin.breed()) {
-                            continue;
-                        }
-
-
-                        availableSkins.add(skin);
+        for (int offset = 0; offset <= 3; offset++) {
+            List<BirdSkin> candidates = new ArrayList<>();
+            for (int delta = -offset; delta <= offset; delta += offset == 0 ? 1 : (delta < 0 ? 1 : 2 * offset)) {
+                int rarity = target + delta;
+                if (rarity < 0 || rarity > 5) continue;
+                BirdSkinRarity r = BirdSkinRarity.fromValue(rarity);
+                for (BirdSkin skin : skins) {
+                    if (skin.rarity() == r && skin.breed() && skin.baby()
+                            && (gender ? skin.male() : skin.female())) {
+                        candidates.add(skin);
                     }
                 }
-
-
-                if (!availableSkins.isEmpty()) {
-                    break;
-                }
+            }
+            if (!candidates.isEmpty()) {
+                return candidates.get(bird.getRandom().nextInt(candidates.size()));
             }
         }
+        return null;
+    }
 
+    /** 最终保底：任意符合性别的可繁殖皮肤 */
+    private ResourceLocation fallbackSkin(List<BirdSkin> skins, boolean gender) {
+        // 使用Stream API查找符合条件的第一项
+        Optional<BirdSkin> skin = skins.stream()
+                .filter(s -> s.breed() && (gender ? s.male() : s.female()))
+                .findFirst();
 
-
-        /*
-         * 最终保险：
-         * 找任意符合性别的可繁殖皮肤
-         */
-        if (availableSkins.isEmpty()) {
-
-
-            for (BirdSkin skin : modelDatum.birdSkin()) {
-
-
-                if (!skin.breed()) {
-                    continue;
-                }
-
-
-                if (gender && skin.male()) {
-                    return skin.id();
-                }
-
-
-                if (!gender && skin.female()) {
-                    return skin.id();
-                }
-            }
-
-
-            return modelDatum.birdSkin()[0].id();
-        }
-
-
-
-        return availableSkins.get(
-                random.nextInt(
-                        availableSkins.size()
-                )
-        ).id();
+        return skin.map(BirdSkin::id).orElse(skins.getFirst().id());
     }
 
     private static float getActualMutantChance(BirdSkin parentSkin, BirdSkin mateSkin, BirdMiscDatum miscDatum) {
@@ -650,11 +323,11 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
      */
     private BirdSkin getSkinByIndex(int index) {
         BirdData birdData = bird.getBirdData();
-        BirdSkinDatum modelDatum = birdData.model();
-        BirdSkin[] skins = modelDatum.birdSkin();
+        BirdModelSkinDatum modelDatum = birdData.model();
+        List<BirdSkin> skins = modelDatum.birdSkin();
 
-        if (index >= 0 && index < skins.length) {
-            return skins[index];
+        if (index >= 0 && index < skins.size()) {
+            return skins.get(index);
         }
         return null;
     }
@@ -662,9 +335,10 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     /**
      * 根据皮肤对象设置变异体
      */
-    private void setSkinVariantBySkin(BirdSkin skin, BirdSkin[] allSkins) {
-        for (int i = 0; i < allSkins.length; i++) {
-            if (allSkins[i].id().equals(skin.id())) {
+    private void setSkinVariantBySkin(BirdSkin skin, List<BirdSkin> allSkins) {
+        // 使用List的indexOf或遍历查找
+        for (int i = 0; i < allSkins.size(); i++) {
+            if (allSkins.get(i).id().equals(skin.id())) {
                 setSkinVariant(i);
                 return;
             }
@@ -674,9 +348,9 @@ public class BirdSkinController<T extends AbstractBirdEntity<T>> extends Abstrac
     }
 
     public ResourceLocation textureForVariant(int variant) {
-        var l = bird.getBirdData().model().birdSkin();
-        return variant >= 0 && variant < l.length
-                ? l[variant].location()
-                : l[0].location();
+        List<BirdSkin> skins = bird.getBirdData().model().birdSkin();
+        return variant >= 0 && variant < skins.size()
+                ? skins.get(variant).location()
+                : skins.getFirst().location();
     }
 }

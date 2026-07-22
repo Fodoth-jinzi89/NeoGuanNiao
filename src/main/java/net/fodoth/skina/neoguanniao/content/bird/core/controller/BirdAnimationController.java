@@ -8,6 +8,8 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
+
 /**
  * 鸟类动画控制器
  *
@@ -97,36 +99,23 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
             int roll = bird.getRandom().nextInt(randomMax);
 
 
-            if (roll == 0) {
+            if (roll > 1
+                    || shouldUseIdleAnimation(
+                    trustTicker,
+                    curiousTicker
+            )) {
 
-                this.currentIdleAnimation =
-                        animationDatum.animationMap().get("preen");
+                String selectedKey = randomizeIdleAnimationKey();
+                this.currentIdleAnimation = animationDatum.animationMap().get(selectedKey);
 
-                int duration =
-                        animationDatum.preenDuration()
-                                + bird.getRandom()
-                                .nextInt(animationDatum.preenDurationVariance());
-
-                tickTimer.getBirdIdleAnimationTicker()
-                        .setTicks(duration);
-
-
-            } else if (
-                    roll > 2
-                            || shouldUseIdleAnimation(
-                            trustTicker,
-                            curiousTicker
-                    )
-            ) {
-
-                this.currentIdleAnimation =
-                        animationDatum.animationMap().get("idle");
-
-
-                int duration =
-                        animationDatum.idleDuration()
-                                + bird.getRandom()
-                                .nextInt(animationDatum.idleDurationVariance());
+                int duration;
+                if (selectedKey.equals("preen")) {
+                    duration = animationDatum.preenDuration()
+                            + bird.getRandom().nextInt(animationDatum.preenDurationVariance());
+                } else {
+                    duration = animationDatum.idleDuration()
+                            + bird.getRandom().nextInt(animationDatum.idleDurationVariance());
+                }
 
 
                 tickTimer.getBirdIdleAnimationTicker()
@@ -150,6 +139,33 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         return currentIdleAnimation;
     }
 
+    private String randomizeIdleAnimationKey() {
+        var animationDatum = bird().getBirdData().animation();
+        var animationMap = animationDatum.animationMap();
+
+        List<String> idleKeys = animationMap.keySet().stream()
+                .filter(key -> key.startsWith("idle") || key.equals("preen"))
+                .toList();
+
+        if (idleKeys.isEmpty()) {
+            return "idle";
+        }
+
+        String mainIdleKey = "idle";
+        List<String> otherIdleKeys = idleKeys.stream()
+                .filter(key -> !key.equals(mainIdleKey))
+                .toList();
+
+        if (bird().getRandom().nextFloat() < animationDatum.mainIdleAnimationChance()) {
+            return mainIdleKey;
+        }
+
+        if (otherIdleKeys.isEmpty()) {
+            return mainIdleKey;
+        }
+
+        return otherIdleKeys.get(bird().getRandom().nextInt(otherIdleKeys.size()));
+    }
 
     /**
      * 注册 GeckoLib 动画控制器
@@ -293,5 +309,9 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
 
     public AnimatableInstanceCache getCache() {
         return cache;
+    }
+
+    public RawAnimation pickFlyAnimation() {
+        return bird().getBirdData().animation().animationMap().get("fly");
     }
 }
