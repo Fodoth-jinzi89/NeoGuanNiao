@@ -16,7 +16,7 @@ public class BirdCuriousFollowGoalController<T extends AbstractBirdEntity<?>> ex
 
     @Override
     public boolean canUse() {
-        return !bird().isBaby() && canStartSocialGoal() && bird().getTickController().getTickTimer().getBirdCuriousTicker().isRunning();
+        return !bird().isBaby() && !bird().isTame() && !bird().isLeashed() && canStartSocialGoal() && bird().getTickController().getTickTimer().getBirdCuriousTicker().isRunning();
     }
 
     @Override

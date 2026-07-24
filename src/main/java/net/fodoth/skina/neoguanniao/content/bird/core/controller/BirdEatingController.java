@@ -8,7 +8,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdEatingDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdTameDatum;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -78,7 +78,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         }
 
         // 鹦鹉跳舞也不吃东西
-        if (bird() instanceof BudgerigarEntity budgerigar) {
+        if (bird() instanceof NeoBudgerigarEntity budgerigar) {
             if (budgerigar.isBusyWithMusicOrSleep()) {
                 return InteractionResult.CONSUME;
             }
@@ -86,6 +86,10 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
 
         // 睡觉不吃东西
         if (bird().getRoutineController().isSleepingOrRoosting()) {
+            return InteractionResult.CONSUME;
+        }
+
+        if (bird().getFlyingController().isBirdFlightActive()) {
             return InteractionResult.CONSUME;
         }
 
@@ -225,11 +229,11 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
                 flyingStack
         );
         flyingFood.setNeverPickUp();
-        flyingFood.lifespan = 10;
+        flyingFood.lifespan = 15;
         double dx = bird.getX() - flyingFood.getX();
         double dy = bird.getY() + 0.5 * bird.getBbHeight() - flyingFood.getY();
         double dz = bird.getZ() - flyingFood.getZ();
-        double speed = 0.18;
+        double speed = 0.24;
         double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (distance > 0) {
             flyingFood.setDeltaMovement((dx / distance) * speed, (dy / distance) * speed, (dz / distance) * speed);

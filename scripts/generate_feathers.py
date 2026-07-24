@@ -21,7 +21,7 @@ SKIN_RARITIES = {
 BIRD_TYPES = {
     0: "budgerigar",
     1: "night_heron",
-    2: "spotted_dove",
+    2: "dove",
     3: "pigeon",
     4: "sparrow"
 }

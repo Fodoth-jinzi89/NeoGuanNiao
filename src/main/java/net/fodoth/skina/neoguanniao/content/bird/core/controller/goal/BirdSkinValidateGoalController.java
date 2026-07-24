@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 
 /**
@@ -25,6 +26,11 @@ public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>> ext
      */
     private boolean isSkinValid() {
         BirdSkin skin = bird().getSkin();
+        BirdModel model = bird().getModel();
+
+        // 首先检查皮肤是否在模型的白名单/黑名单中
+        if (!model.supportsSkin(skin.id())) return false;
+
         String family = getSkinFamily(skin.id().getPath());
 
         // 幼年变体验证：有幼年变体的家族必须匹配当前年龄状态
@@ -69,11 +75,13 @@ public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>> ext
      */
     private BirdSkin findReplacement(BirdSkin current) {
         String family = getSkinFamily(current.id().getPath());
+        BirdModel model = bird().getModel();
         BirdSkin best = null;
 
         for (BirdSkin skin : bird().getBirdData().model().birdSkin()) {
             if (!getSkinFamily(skin.id().getPath()).equals(family)) continue;
             if (!isSkinAvailable(skin)) continue;
+            if (!model.supportsSkin(skin.id())) continue; // 检查黑白名单
 
             best = skin;
             if (skin.id().equals(current.id())) return skin; // 优先返回完全相同ID
@@ -115,9 +123,10 @@ public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>> ext
      * 检查指定家族是否存在幼年变体皮肤
      */
     private boolean hasBabyVariant(String family) {
+        BirdModel model = bird().getModel();
         for (BirdSkin skin : bird().getBirdData().model().birdSkin()) {
             String skinFamily = getSkinFamily(skin.id().getPath());
-            if (skinFamily.equals(family) && skin.baby()) return true;
+            if (skinFamily.equals(family) && skin.baby() && model.supportsSkin(skin.id())) return true;
         }
         return false;
     }
@@ -126,11 +135,13 @@ public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>> ext
      * 检查指定家族是否同时存在雄性和雌性变体皮肤
      */
     private boolean hasGenderVariant(String family) {
+        BirdModel model = bird().getModel();
         boolean male = false, female = false;
 
         for (BirdSkin skin : bird().getBirdData().model().birdSkin()) {
             String skinFamily = getSkinFamily(skin.id().getPath());
             if (!skinFamily.equals(family)) continue;
+            if (!model.supportsSkin(skin.id())) continue;
 
             if (skin.male()) male = true;
             if (skin.female()) female = true;

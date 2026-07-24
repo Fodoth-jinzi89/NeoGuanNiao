@@ -81,6 +81,9 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
         double distance = bird().distanceToSqr(this.targetFood);
 
         if (distance > 0.8 * goalDatum().eatFoodConsumeDistance()) {
+            if (bird().getY() >= targetFood.getY()) {
+                bird().getNavigation().setCanFloat(false);
+            }
             bird().getNavigation().moveTo(this.targetFood, goalDatum().eatFoodMoveSpeed());
         }
 

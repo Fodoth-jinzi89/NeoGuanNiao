@@ -1,5 +1,10 @@
 package net.fodoth.skina.neoguanniao.registry;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoDoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoPigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NeoNightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.sparrow.NeoSparrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
@@ -25,8 +30,11 @@ public final class NeoGuanNiaoEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<PigeonEntity>> PIGEON;
 
 
-    public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity>> NEO_BUDGERIGAR;
-    public static final DeferredHolder<EntityType<?>, EntityType<net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity>> NEO_NIGHT_HERON;
+    public static final DeferredHolder<EntityType<?>, EntityType<NeoBudgerigarEntity>> NEO_BUDGERIGAR;
+    public static final DeferredHolder<EntityType<?>, EntityType<NeoNightHeronEntity>> NEO_NIGHT_HERON;
+    public static final DeferredHolder<EntityType<?>, EntityType<NeoPigeonEntity>> NEO_PIGEON;
+    public static final DeferredHolder<EntityType<?>, EntityType<NeoDoveEntity>> NEO_DOVE;
+    public static final DeferredHolder<EntityType<?>, EntityType<NeoSparrowEntity>> NEO_SPARROW;
 
 
 
@@ -85,16 +93,37 @@ public final class NeoGuanNiaoEntityTypes {
 
         NEO_BUDGERIGAR = registerCreature(
                 "neo_budgerigar",
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity::new,
+                NeoBudgerigarEntity::new,
                 0.4F,
                 0.54F
         );
 
         NEO_NIGHT_HERON = registerCreature(
                 "neo_night_heron",
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity::new,
+                NeoNightHeronEntity::new,
                 0.8F,
                 0.9F
+        );
+
+        NEO_PIGEON = registerCreature(
+                "neo_pigeon",
+                NeoPigeonEntity::new,
+                0.4F,
+                0.54F
+        );
+
+        NEO_DOVE = registerCreature(
+                "neo_dove",
+                NeoDoveEntity::new,
+                0.4F,
+                0.54F
+        );
+
+        NEO_SPARROW = registerCreature(
+                "neo_sparrow",
+                NeoSparrowEntity::new,
+                0.32F,
+                0.38F
         );
 
     }

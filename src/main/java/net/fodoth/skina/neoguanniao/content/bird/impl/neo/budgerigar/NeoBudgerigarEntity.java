@@ -4,7 +4,7 @@ import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.goal.goals.BirdMusicDanceGoal;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.species.BudgerigarProfile;
@@ -35,18 +35,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
+public class NeoBudgerigarEntity extends AbstractBirdEntity<NeoBudgerigarEntity> {
 
     private static final ResourceLocation CHIRPY_PARTNER_ADVANCEMENT =
             ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "husbandry/chirpy_partner");
 
-    public BudgerigarEntity(EntityType<BudgerigarEntity> entityType, Level level) {
+    public NeoBudgerigarEntity(EntityType<NeoBudgerigarEntity> entityType, Level level) {
         super(
                 entityType,
                 level,
                 NeoGuanNiaoBirdData.BUDGERIGAR.get(),
                 // 使用 Builder 传入自定义的 BirdTameController
-                BirdControllers.<BudgerigarEntity>builder()
+                BirdControllers.<NeoBudgerigarEntity>builder()
                         .birdTameController(new BirdTameController<>() {
                             @Override
                             public void triggerTameSideEffects(Player player) {
@@ -69,7 +69,7 @@ public class BudgerigarEntity extends AbstractBirdEntity<BudgerigarEntity> {
 
 
     @Override
-    protected BudgerigarEntity getSelf() {
+    protected NeoBudgerigarEntity getSelf() {
         return this;
     }
 

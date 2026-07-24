@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#neoguanniao:pigeon_habitat",
+  "spawners": {
+    "type": "neoguanniao:neo_pigeon",
+    "weight": 12,
+    "minCount": 2,
+    "maxCount": 6
+  }
+}

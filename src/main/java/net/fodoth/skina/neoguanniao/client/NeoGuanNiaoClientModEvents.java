@@ -79,6 +79,21 @@ public final class NeoGuanNiaoClientModEvents {
                 BirdModelRenderer::new
         );
 
+        event.registerEntityRenderer(
+                NeoGuanNiaoEntityTypes.NEO_PIGEON.get(),
+                BirdModelRenderer::new
+        );
+
+        event.registerEntityRenderer(
+                NeoGuanNiaoEntityTypes.NEO_DOVE.get(),
+                BirdModelRenderer::new
+        );
+
+        event.registerEntityRenderer(
+                NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
+                BirdModelRenderer::new
+        );
+
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),
                 BirdCageRenderer::new

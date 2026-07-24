@@ -3,6 +3,8 @@ package net.fodoth.skina.neoguanniao.content.bird.core.model;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Set;
+
 /**
  * 鸟类模型记录类
  * 定义了一个鸟类模型的所有属性，包括标识符、资源位置、稀有度以及各种获取方式的标志
@@ -20,7 +22,8 @@ import net.minecraft.resources.ResourceLocation;
  */
 public record BirdModel(ResourceLocation id, ResourceLocation location, BirdModelRarity rarity,
                         boolean natureSpawn, boolean breed, boolean baby,
-                        boolean male, boolean female, boolean unique, boolean hidden) {
+                        boolean male, boolean female, boolean unique, boolean hidden,
+                        Set<ResourceLocation> whiteList, Set<ResourceLocation> blackList) {
 
     // 创建默认实例的静态方法
     public static BirdModel createDefault() {
@@ -34,47 +37,64 @@ public record BirdModel(ResourceLocation id, ResourceLocation location, BirdMode
                 true,  // male
                 true,  // female
                 false, // unique
-                false  // hidden
+                false,  // hidden
+                Set.of(), // 空集合表示无限制
+                Set.of()
         );
     }
 
+    public boolean supportsSkin(ResourceLocation skinId) {
+        if (!whiteList.isEmpty()) {
+            return whiteList.contains(skinId);
+        }
+        return !blackList.contains(skinId);
+    }
+
     public BirdModel withId(ResourceLocation id) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden, whiteList, blackList);
     }
 
     public BirdModel withLocation(ResourceLocation location) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden, whiteList, blackList);
     }
 
     public BirdModel withRarity(BirdModelRarity rarity) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden, whiteList, blackList);
     }
 
     public BirdModel withNatureSpawn(boolean natureSpawn) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withBreed(boolean breed) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withBaby(boolean baby) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withMale(boolean male) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withFemale(boolean female) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withUnique(boolean unique) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
     }
 
     public BirdModel withHidden(boolean hidden) {
-        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden);
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden,  whiteList, blackList);
+    }
+
+    public BirdModel withWhiteList(Set<ResourceLocation> skins) {
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden, Set.copyOf(skins), blackList);
+    }
+
+    public BirdModel withBlackList(Set<ResourceLocation> skins) {
+        return new BirdModel(id, location, rarity, natureSpawn, breed, baby, male, female, unique, hidden, whiteList, Set.copyOf(skins));
     }
 }

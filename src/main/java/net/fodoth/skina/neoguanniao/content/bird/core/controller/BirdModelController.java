@@ -419,4 +419,11 @@ public class BirdModelController<T extends AbstractBirdEntity<T>> extends Abstra
                 ? models.get(variant).location()
                 : models.getFirst().location();
     }
+
+    public ResourceLocation modelForVariantId(int variant) {
+        List<BirdModel> models = bird().getBirdData().model().birdModel();
+        return variant >= 0 && variant < models.size()
+                ? models.get(variant).id()
+                : models.getFirst().id();
+    }
 }

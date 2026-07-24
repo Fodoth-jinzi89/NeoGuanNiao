@@ -103,7 +103,7 @@ public class BirdBathUseGoalController<T extends AbstractBirdEntity<?>> extends 
         this.targetBath = bath;
         this.bathStandPosition = BirdBathAttraction.edgeStandPosition(
                 this.targetBath,
-                bird().position());
+                bird().position().add(0, bird().getBbHeight() * 0.5, 0));
         return true;
     }
 
@@ -151,6 +151,7 @@ public class BirdBathUseGoalController<T extends AbstractBirdEntity<?>> extends 
 
         // 必须未消耗食物、未超时、浴盆可用且被当前鸟占用或可占用
         return !this.consumed
+                && bathExists()
                 && this.totalTicks < goalDatum().bathUseTotalTicks()
                 && this.canUseBath(this.targetBath)
                 && (this.targetBath.isOccupiedBy(bird().getUUID())

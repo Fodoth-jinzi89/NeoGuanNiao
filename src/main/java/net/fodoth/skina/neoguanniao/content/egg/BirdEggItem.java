@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.egg;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdModels;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdSkins;
@@ -68,8 +69,21 @@ public class BirdEggItem extends Item {
                 .append(translateResource("entity", data.birdType(), data.birdType())));
 
         // 模型
-        tooltip.add(Component.translatable("tooltip.neoguanniao.model")
-                .append(translateResource("model", data.model(), data.birdType())));
+        int rarityId1 = stack.getOrDefault(
+                BIRD_EGG_MODEL_RARITY.get(),
+                BirdModelRarity.COMMON.getRarity()
+        );
+
+        BirdModelRarity rarity1 = BirdModelRarity.byRarity(rarityId1);
+        String modelId = data.model().getPath();
+        modelId = modelId.replaceAll("_(male|female)$", "");
+        ResourceLocation cleanedModelId = ResourceLocation.fromNamespaceAndPath(
+                data.model().getNamespace(),
+                modelId
+        );
+        Component modelText = ((MutableComponent) translateResource("model", cleanedModelId, data.birdType()))
+                .withStyle(rarity1.getChatColor());
+        tooltip.add(Component.translatable("tooltip.neoguanniao.model").append(modelText));
 
         // 皮肤（带稀有度颜色）
         int rarityId = stack.getOrDefault(

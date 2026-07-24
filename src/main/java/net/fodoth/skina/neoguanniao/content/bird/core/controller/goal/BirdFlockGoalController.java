@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -19,8 +19,8 @@ public class BirdFlockGoalController<T extends AbstractBirdEntity<?>> extends Ab
     @Override
     public boolean onUse() {
         var goalDatum = bird().getBirdData().goal();
-        List<BudgerigarEntity> flock = bird().level().getEntitiesOfClass(
-                BudgerigarEntity.class,
+        List<NeoBudgerigarEntity> flock = bird().level().getEntitiesOfClass(
+                NeoBudgerigarEntity.class,
                 bird().getBoundingBox().inflate(goalDatum.flockSearchRange()),
                 e -> e != bird() && !e.isPassenger()
         );
@@ -31,7 +31,7 @@ public class BirdFlockGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
         // 计算 flock 中心
         Vec3 center = Vec3.ZERO;
-        for (BudgerigarEntity member : flock) {
+        for (NeoBudgerigarEntity member : flock) {
             center = center.add(member.position());
         }
         center = center.scale(1.0 / flock.size());

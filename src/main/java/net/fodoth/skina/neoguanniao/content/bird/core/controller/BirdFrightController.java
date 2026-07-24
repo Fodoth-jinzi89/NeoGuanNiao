@@ -42,20 +42,20 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         // 获取攻击者位置
         Entity attacker = source.getEntity();
         Vec3 sourcePos = attacker == null ? bird().position() : attacker.position();
-        setFrightSource(sourcePos);
         boolean isPlayer = attacker instanceof Player;
-
-        // 处理受惊信任损失
-        float trustLoss = isPlayer
-                ? miscDatum.frightenedTrustLossPlayer()
-                : miscDatum.frightenedTrustLossOther();
-        brain.onFrightened(trustLoss);
+        if (!(bird().isTame() && bird().getOwner() != null && attacker != null && bird().getOwner().getUUID() == attacker.getUUID()))
+        {
+            setFrightSource(sourcePos);
+            float trustLoss = isPlayer
+                    ? miscDatum.frightenedTrustLossPlayer()
+                    : miscDatum.frightenedTrustLossOther();
+            brain.onFrightened(trustLoss);
+        }
 
         // 停止移动
         bird().getNavigation().stop();
 
         // 设置为警戒状态
-
         int alertTicks = isPlayer
                 ? miscDatum.alertTicksPlayer()
                 : miscDatum.alertTicksOther();

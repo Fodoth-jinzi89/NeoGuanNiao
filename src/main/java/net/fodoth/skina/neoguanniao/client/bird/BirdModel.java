@@ -22,6 +22,6 @@ public class BirdModel<T extends AbstractBirdEntity<?>> extends GeoModel<T> {
 
     @Override
     public @NotNull ResourceLocation getAnimationResource(@NotNull T animatable) {
-        return animatable.getBirdData().animation().animationId();
+        return animatable.getBirdData().animation().modelAnimationMap().get(animatable.getModelId());
     }
 }

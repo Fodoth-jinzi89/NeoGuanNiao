@@ -92,6 +92,9 @@ public final class NeoGuanNiaoCreativeTabs {
             for (BirdModel model : modelDatum.birdModel()) {
                 // 遍历所有皮肤
                 for (BirdSkin skin : modelDatum.birdSkin()) {
+                    // 检查皮肤是否被当前模型支持
+                    if (!model.supportsSkin(skin.id())) continue;
+
                     for (boolean gender : new boolean[]{true, false}) {
                         // 如果皮肤是雄性，生成雄性蛋；如果是雌性，生成雌性蛋；如果是通用皮肤，则生成两种
                         if ((skin.male() && gender) || (skin.female() && !gender)) {

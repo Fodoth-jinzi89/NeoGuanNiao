@@ -101,30 +101,31 @@ public class BirdFeatherController<T extends AbstractBirdEntity<T>> extends Abst
         int mateFeatherCount = mate.getFeatherCount();
         var miscDatum = parent.getBirdData().misc();
 
-        // 计算平均值作为中心值
-        double mean = (parentFeatherCount + mateFeatherCount) / 2.0;
-
-        // 偏斜分布：偏向更高值（使用指数偏斜）
-        // 生成一个0-1之间的随机数，平方后使得结果偏向更高值
-        double skewFactor = parent.getRandom().nextDouble();
-        // 使用平方使分布偏向1（更高值）
-        double skewed = skewFactor * skewFactor;
-        // 将偏斜因子映射到范围：从平均值到最大值之间
-        int max = Math.max(parentFeatherCount, mateFeatherCount);
-        // 结果在 mean 和 max 之间偏向 max
-        int result = (int) Math.round(mean + (max - mean) * skewed);
-
-        result = Math.clamp(result, miscDatum.featherCountMin(), miscDatum.featherCountMin() + miscDatum.featherCountVariance());
-
+        // 获取全局范围
         BirdMiscDatum misc = parent.getBirdData().misc();
         BirdMiscDatum misc1 = mate.getBirdData().misc();
-        int min = Math.min(misc.featherCountMin(), misc1.featherCountMin());
-        int maxLimit = Math.min(
+        int globalMin = Math.min(misc.featherCountMin(), misc1.featherCountMin());
+        int globalMax = Math.min(
                 misc.featherCountMin() + misc.featherCountVariance(),
                 misc1.featherCountMin() + misc1.featherCountVariance()
         );
 
-        result = Math.clamp(result, min, maxLimit);
+        // 计算父母本的平均值作为中心
+        double mean = (parentFeatherCount + mateFeatherCount) / 2.0;
+
+        // 计算变异范围：至少为1，确保有变异空间
+        int range = Math.max(1, (int)((globalMax - globalMin) * 0.3)); // 30%的全局范围作为变异幅度
+
+        // 随机变异：在平均值附近波动，可以超出父母本范围
+        double randomOffset = (parent.getRandom().nextDouble() * 2 - 1) * range; // -range 到 +range
+
+        // 偏斜因子（可选）：让结果偏向更高值
+        double skewFactor = parent.getRandom().nextDouble();
+        double skewed = skewFactor * skewFactor;
+        double resultDouble = mean + randomOffset * (0.5 + 0.5 * skewed); // 有偏斜的变异
+
+        int result = (int) Math.round(resultDouble);
+        result = Math.clamp(result, globalMin, globalMax);
 
         return result;
     }
@@ -132,36 +133,33 @@ public class BirdFeatherController<T extends AbstractBirdEntity<T>> extends Abst
     public int inheritFeatherInterval(AbstractBirdEntity<?> parent, AbstractBirdEntity<?> mate) {
         int parentFeatherInterval = parent.getFeatherInterval();
         int mateFeatherInterval = mate.getFeatherInterval();
-        var miscDatum = parent.getBirdData().misc();
 
-        // 计算平均值作为中心值
-        double mean = (parentFeatherInterval + mateFeatherInterval) / 2.0;
-
-        // 偏斜分布：偏向更低值（使用指数偏斜）
-        // 生成一个0-1之间的随机数，平方后使得结果偏向更低值（取反）
-        double skewFactor = parent.getRandom().nextDouble();
-        // 使用平方使分布偏向0（更低值），然后取反映射到范围
-        double skewed = 1.0 - (skewFactor * skewFactor);
-        // 将偏斜因子映射到范围：从最小值到平均值之间
-        int min = Math.min(parentFeatherInterval, mateFeatherInterval);
-        // 结果在 min 和 mean 之间偏向 min
-        int result = (int) Math.round(min + (mean - min) * skewed);
-
-        // 确保在合理范围内
-        result = Math.clamp(result, miscDatum.featherIntervalMiddle() - (miscDatum.featherIntervalVariance() / 2), miscDatum.featherIntervalMiddle() + (miscDatum.featherIntervalVariance() / 2));
-
+        // 获取全局范围
         BirdMiscDatum misc = parent.getBirdData().misc();
         BirdMiscDatum misc1 = mate.getBirdData().misc();
-        int minLimit = Math.min(
+        int globalMin = Math.min(
                 misc.featherIntervalMiddle() - misc.featherIntervalVariance() / 2,
                 misc1.featherIntervalMiddle() - misc1.featherIntervalVariance() / 2
         );
-        int maxLimit = Math.min(
+        int globalMax = Math.min(
                 misc.featherIntervalMiddle() + misc.featherIntervalVariance() / 2,
                 misc1.featherIntervalMiddle() + misc1.featherIntervalVariance() / 2
         );
 
-        result = Math.clamp(result, minLimit, maxLimit);
+        // 计算父母本的平均值作为中心
+        double mean = (parentFeatherInterval + mateFeatherInterval) / 2.0;
+
+        // 计算变异范围
+        int range = Math.max(1, (int)((globalMax - globalMin) * 0.3));
+
+        // 随机变异 + 偏向更低值
+        double randomOffset = (parent.getRandom().nextDouble() * 2 - 1) * range;
+        double skewFactor = parent.getRandom().nextDouble();
+        double skewed = 1.0 - (skewFactor * skewFactor); // 偏向低值
+        double resultDouble = mean + randomOffset * (0.5 + 0.5 * skewed);
+
+        int result = (int) Math.round(resultDouble);
+        result = Math.clamp(result, globalMin, globalMax);
 
         return result;
     }

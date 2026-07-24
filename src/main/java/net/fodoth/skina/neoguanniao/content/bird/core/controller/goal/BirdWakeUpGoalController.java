@@ -24,5 +24,8 @@ public class BirdWakeUpGoalController<T extends AbstractBirdEntity<?>> extends A
     public void onStart() {
         bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
         bird().getNavigation().stop();
+        if (!bird().isBaby() && !bird().isTame() && !bird().isLeashed()) {
+            bird().getFlyingController().startShortFlight(null ,false);
+        }
     }
 }

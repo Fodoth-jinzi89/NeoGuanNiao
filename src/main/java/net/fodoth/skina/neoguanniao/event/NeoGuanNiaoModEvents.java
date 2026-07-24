@@ -4,6 +4,11 @@ import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoDoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoPigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NeoNightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.sparrow.NeoSparrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
@@ -83,12 +88,27 @@ public final class NeoGuanNiaoModEvents {
 
         event.put(
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity.createAttributes().build()
+                NeoBudgerigarEntity.createAttributes().build()
         );
 
         event.put(
                 NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(),
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity.createAttributes().build()
+                NeoNightHeronEntity.createAttributes().build()
+        );
+
+        event.put(
+                NeoGuanNiaoEntityTypes.NEO_PIGEON.get(),
+                NeoPigeonEntity.createAttributes().build()
+        );
+
+        event.put(
+                NeoGuanNiaoEntityTypes.NEO_DOVE.get(),
+                NeoDoveEntity.createAttributes().build()
+        );
+
+        event.put(
+                NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
+                NeoSparrowEntity.createAttributes().build()
         );
     }
 
@@ -140,7 +160,7 @@ public final class NeoGuanNiaoModEvents {
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity::canSpawn,
+                NeoBudgerigarEntity::canSpawn,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
@@ -148,7 +168,31 @@ public final class NeoGuanNiaoModEvents {
                 NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(),
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NightHeronEntity::canSpawn,
+                NeoNightHeronEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        event.register(
+                NeoGuanNiaoEntityTypes.NEO_PIGEON.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                NeoPigeonEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        event.register(
+                NeoGuanNiaoEntityTypes.NEO_DOVE.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                NeoDoveEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        event.register(
+                NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                NeoSparrowEntity::canSpawn,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
     }

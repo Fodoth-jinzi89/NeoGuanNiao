@@ -7,7 +7,7 @@ import java.util.Map;
 
 // ============ 动画数据 ============
 public record BirdAnimationDatum(
-        ResourceLocation animationId,
+        Map<ResourceLocation, ResourceLocation> modelAnimationMap,
         Map<String, RawAnimation> animationMap,
         int preenDuration,
         int preenDurationVariance,
@@ -44,9 +44,9 @@ public record BirdAnimationDatum(
         );
     }
 
-    public static BirdAnimationDatum withAnimationIdAndMap(ResourceLocation id, Map<String, RawAnimation> animationMap) {
+    public static BirdAnimationDatum withAnimationIdAndMap(Map<ResourceLocation, ResourceLocation> animationId, Map<String, RawAnimation> animationMap) {
         return new BirdAnimationDatum(
-                id,
+                animationId,
                 animationMap,
                 45,
                 45,
@@ -63,7 +63,7 @@ public record BirdAnimationDatum(
 
     public BirdAnimationDatum withCuriousAndTrustingIndexRange(int maxCuriousAndTrustingIndex, int minCuriousAndTrustingIndex) {
         return new BirdAnimationDatum(
-                animationId,
+                modelAnimationMap,
                 animationMap,
                 preenDuration,
                 preenDurationVariance,
@@ -81,7 +81,7 @@ public record BirdAnimationDatum(
 
     public BirdAnimationDatum withMainIdleAnimationChance(int mainIdleAnimationChance) {
         return new BirdAnimationDatum(
-                animationId,
+                modelAnimationMap,
                 animationMap,
                 preenDuration,
                 preenDurationVariance,

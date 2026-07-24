@@ -1,7 +1,6 @@
-package net.fodoth.skina.neoguanniao.content.bird.core.data;
+package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.*;
 
 import java.util.List;
 
@@ -86,7 +85,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         private BirdRoutineController<T> birdRoutineController = new BirdRoutineController<>();
         private BirdEatingController<T> birdEatingController = new BirdEatingController<>();
         private BirdTameController<T> birdTameController = new BirdTameController<>();
-        private BirdGoalController<T> birdGoalController = new BirdGoalController<>();
+        private BirdGoalController<T> birdGoalController = BirdGoalController.<T>builder().build();
         private BirdFrightController<T> birdFrightController = new BirdFrightController<>();
         private BirdSoundController<T> birdSoundController = new BirdSoundController<>();
         private BirdAnimationController<T> birdAnimationController = new BirdAnimationController<>();

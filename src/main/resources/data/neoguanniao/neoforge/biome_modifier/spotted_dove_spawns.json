@@ -3,7 +3,7 @@
   "biomes": "#neoguanniao:spotted_dove_habitat",
   "spawners": {
     "type": "neoguanniao:spotted_dove",
-    "weight": 10,
+    "weight": 8,
     "minCount": 1,
     "maxCount": 2
   }

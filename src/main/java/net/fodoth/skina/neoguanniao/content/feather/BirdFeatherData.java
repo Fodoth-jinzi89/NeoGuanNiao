@@ -86,7 +86,7 @@ public record BirdFeatherData(
         return switch (birdType().getPath()) {
             case "neo_budgerigar" -> 0;
             case "neo_night_heron" -> 1;
-            case "neo_spotted_dove" -> 2;
+            case "neo_dove" -> 2;
             case "neo_pigeon" -> 3;
             case "neo_sparrow" -> 4;
             default -> -1;

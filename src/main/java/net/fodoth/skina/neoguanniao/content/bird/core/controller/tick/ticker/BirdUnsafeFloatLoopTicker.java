@@ -2,6 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 
 public class BirdUnsafeFloatLoopTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T> {
 
@@ -21,13 +22,17 @@ public class BirdUnsafeFloatLoopTicker<T extends AbstractBirdEntity<T>> extends 
         T bird = bird();
         // 检查鸟儿是否处于不安全悬浮状态：
 
-        boolean isUnsafeFloating = !bird.onGround() && !bird.isFlying() && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled() && !bird().getGoalController().getBirdBathUseGoalController().isRunning();
+        boolean isUnsafeFloating =
+                !bird.onGround()
+                        && !bird.isFlying()
+                        && bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled()
+                        && !bird().getGoalController().getBirdBathUseGoalController().isRunning();
 
         if (enableLifecycleLog() && bird().getRandom().nextFloat() <= 0.1) {
             NeoGuanNiao.LOGGER.info("[Ticker] UnsafeFloat: Bird unsafe floating check! NotFlying: {}, UnsafeFloatTickerEnabled: {}", !bird.isFlying(), bird.getBehaviorStateController().getBehaviorState().isUnsafeFloatTickerEnabled());
         }
 
-        if (isUnsafeFloating) {
+        if (isUnsafeFloating || bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.FOLLOWING && bird().getDeltaMovement().length() < 1.0E-4) {
             // 取消无重力状态，防止鸟儿异常悬浮在半空中
             bird.setNoGravity(false);
 

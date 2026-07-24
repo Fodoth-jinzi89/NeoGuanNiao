@@ -2,8 +2,9 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightTargeting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class BirdIdleGoalController<T extends AbstractBirdEntity<?>> extends AbstractGoalController<T> {
@@ -16,13 +17,17 @@ public class BirdIdleGoalController<T extends AbstractBirdEntity<?>> extends Abs
 
     @Override
     public boolean canUse() {
-        return super.canUse() && !bird().getFlyingController().isFlightInProgress();
+        return super.canUse() && !bird().getFlyingController().isFlightInProgress() && !bird().isBaby();
     }
 
     @Override
     public boolean onUse() {
-        if (bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.IDLE
-                && bird().getRandom().nextInt(goalDatum().idleRetargetChance()) != 0) {
+        if (bird().getRandom().nextInt(goalDatum().idleRetargetChance()) != 0) {
+            return false;
+        }
+
+        var state = bird().getBehaviorStateController().getBehaviorState();
+        if (state != BirdBehaviorState.IDLE && state != BirdBehaviorState.SENTINEL) {
             return false;
         }
 
@@ -62,6 +67,9 @@ public class BirdIdleGoalController<T extends AbstractBirdEntity<?>> extends Abs
         if (this.targetPos == null) {
             return;
         }
+        if (bird().getY() >= targetPos.getY()) {
+            bird().getNavigation().setCanFloat(false);
+        }
         bird().getNavigation().moveTo(
                 this.targetPos.getX() + 0.5,
                 this.targetPos.getY(),
@@ -84,23 +92,51 @@ public class BirdIdleGoalController<T extends AbstractBirdEntity<?>> extends Abs
     private boolean findTargetPosition() {
         BlockPos origin = bird().blockPosition();
 
+        int xRange = goalDatum().idleFindTargetXRange();
+        int yRange = goalDatum().idleFindTargetYRange();
+        int zRange = goalDatum().idleFindTargetZRange();
+
+        int minY = origin.getY() - yRange / 2;
+        int maxY = origin.getY() + yRange / 2;
+
         for (int attempt = 0; attempt < goalDatum().idleFindTargetMaxAttempts(); attempt++) {
-            int x = origin.getX() + bird().getRandom().nextInt(goalDatum().idleFindTargetXRange()) - (goalDatum().idleFindTargetXRange() / 2);
-            int z = origin.getZ() + bird().getRandom().nextInt(goalDatum().idleFindTargetZRange()) - (goalDatum().idleFindTargetZRange() / 2);
-            int y = origin.getY() + bird().getRandom().nextInt(goalDatum().idleFindTargetYRange()) - (goalDatum().idleFindTargetYRange() / 2);
 
-            BlockPos pos = new BlockPos(x, y, z);
+            int x = origin.getX() + randomOffset(bird().getRandom(), xRange, goalDatum().idleFindTargetMinRange());
+            int z = origin.getZ() + randomOffset(bird().getRandom(), zRange, goalDatum().idleFindTargetMinRange());
 
-            // 检查位置是否可到达
-            if (bird().getNavigation().isStableDestination(pos)) {
-                // 检查是否安全
-                if (BirdFlightTargeting.isSafeDryLanding(bird(), pos)) {
-                    this.targetPos = pos;
-                    return true;
+
+            // 从上向下扫描这一列
+            for (int y = maxY; y >= minY; y--) {
+
+                BlockPos groundPos = new BlockPos(x, y, z);
+                BlockState state = bird().level().getBlockState(groundPos);
+
+                // 找到第一个具有碰撞箱的方块
+                if (state.getCollisionShape(bird().level(), groundPos).isEmpty()) {
+                    continue;
                 }
+
+                BlockPos targetPos = groundPos.above();
+
+                if (!bird().getFlyingController().isSafeDryLandingOrAir(targetPos)) {
+                    continue;
+                }
+
+                this.targetPos = targetPos;
+                return true;
             }
         }
 
         return false;
+    }
+
+    private int randomOffset(RandomSource random, int range, int minDistance) {
+        int half = range / 2;
+
+        if (random.nextBoolean()) {
+            return -half + random.nextInt(half - minDistance + 1);
+        } else {
+            return minDistance + random.nextInt(half - minDistance + 1);
+        }
     }
 }

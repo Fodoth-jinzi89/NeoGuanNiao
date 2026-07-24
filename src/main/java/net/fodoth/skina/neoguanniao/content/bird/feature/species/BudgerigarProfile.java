@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.feature.species;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSenses;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdSpeciesProfile;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
@@ -90,7 +90,7 @@ public final class BudgerigarProfile extends BirdSpeciesProfile {
 
     @Override
     public boolean isTemptingPlayer(Player player, PathfinderMob bird) {
-        if (bird instanceof BudgerigarEntity b) {
+        if (bird instanceof NeoBudgerigarEntity b) {
             return b.getEatingController().isEdibleFood(player.getMainHandItem())
                     || b.getEatingController().isEdibleFood(player.getOffhandItem());
         }
@@ -153,7 +153,7 @@ public final class BudgerigarProfile extends BirdSpeciesProfile {
         PathfinderMob bird = brain.bird();
 
         // 虎皮鹦鹉在音乐或睡眠时不觅食
-        if (bird instanceof BudgerigarEntity budgerigar) {
+        if (bird instanceof NeoBudgerigarEntity budgerigar) {
             if (budgerigar.isBusyWithMusicOrSleep()) {
                 return false;
             }

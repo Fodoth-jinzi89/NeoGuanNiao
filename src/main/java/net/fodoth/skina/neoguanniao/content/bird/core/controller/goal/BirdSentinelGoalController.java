@@ -30,4 +30,9 @@ public class BirdSentinelGoalController<T extends AbstractBirdEntity<?>> extends
         );
         bird().getLookControl().setLookAt(lookAt.x, lookAt.y, lookAt.z, goalDatum().sentinelLookYaw(), goalDatum().sentinelLookPitch());
     }
+
+    @Override
+    public void onStop() {
+        bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
+    }
 }

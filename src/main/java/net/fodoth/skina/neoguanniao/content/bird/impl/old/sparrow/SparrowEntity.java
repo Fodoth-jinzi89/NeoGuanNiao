@@ -83,12 +83,12 @@ public class SparrowEntity extends TamableAnimal implements GeoEntity, ScalableB
     static final Ingredient TAMING_ITEMS = Ingredient.of(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS, Items.TORCHFLOWER_SEEDS, Items.PITCHER_POD);
 
     // ============ 动画定义 ============
-    protected static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.idle");
-    protected static final RawAnimation TAIL_ANIMATION = RawAnimation.begin().thenPlay("animation.idle_diff_1").thenLoop("animation.idle");
-    protected static final RawAnimation PECK_ANIMATION = RawAnimation.begin().thenPlay("animation.idle_diff_2").thenLoop("animation.idle");
-    protected static final RawAnimation LOOK_AROUND_ANIMATION = RawAnimation.begin().thenPlay("animation.idle_diff_3").thenLoop("animation.idle");
-    protected static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("animation.walk");
-    protected static final RawAnimation FLY_ANIMATION = RawAnimation.begin().thenLoop("animation.fly");
+    protected static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+    protected static final RawAnimation TAIL_ANIMATION = RawAnimation.begin().thenPlay("idle_diff_1").thenLoop("idle");
+    protected static final RawAnimation PECK_ANIMATION = RawAnimation.begin().thenPlay("idle_diff_2").thenLoop("idle");
+    protected static final RawAnimation LOOK_AROUND_ANIMATION = RawAnimation.begin().thenPlay("idle_diff_3").thenLoop("idle");
+    protected static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+    protected static final RawAnimation FLY_ANIMATION = RawAnimation.begin().thenLoop("fly");
 
     // ============ 常量 ============
     private static final double WALKING_SPEED_THRESHOLD = 0.0018;

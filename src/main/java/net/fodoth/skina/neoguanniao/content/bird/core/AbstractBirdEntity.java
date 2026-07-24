@@ -4,7 +4,7 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathContentType;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathFeedingAnimatable;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathMountable;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.*;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTickController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelSkinDatum;
@@ -155,20 +155,20 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     protected List<Goal> buildGoals() {
         List<Goal> goals = new ArrayList<>();
 
-        goals.add(new FloatGoal(this));
-        goals.add(new BirdBreedGoal(this));
-        goals.add(new BirdEatFoodGoal(this));
-        goals.add(new BirdBathUseGoal(this));
-        goals.add(new BirdSentinelGoal(this));
-        goals.add(new BirdWakeUpGoal(this));
-        goals.add(new BirdRoostGoal(this));
-        goals.add(new BirdFollowOwnerGoal(this));
-        goals.add(new BirdFlockGoal(this));
-        goals.add(new BirdCuriousFollowGoal(this));
-        goals.add(new BirdIdleGoal(this));
-        goals.add(new BirdRandomLookAroundGoal(this));
-        goals.add(new BirdSkinValidateGoal(this));
-        goals.add(new BirdModelValidateGoal(this));
+        goals.add(new FloatGoal(this)); //0
+        goals.add(new BirdBreedGoal(this)); //1
+        goals.add(new BirdEatFoodGoal(this));  //2
+        goals.add(new BirdBathUseGoal(this)); //3
+        goals.add(new BirdSentinelGoal(this)); //4
+        goals.add(new BirdWakeUpGoal(this)); //5
+        goals.add(new BirdRoostGoal(this)); //6
+        goals.add(new BirdFollowOwnerGoal(this)); //7
+        goals.add(new BirdFlockGoal(this)); //8
+        goals.add(new BirdCuriousFollowGoal(this));  //9
+        goals.add(new BirdIdleGoal(this)); //10
+        goals.add(new BirdRandomLookAroundGoal(this)); //11
+        goals.add(new BirdSkinValidateGoal(this)); //12
+        goals.add(new BirdModelValidateGoal(this)); //13
 
         return goals;
     }
@@ -406,6 +406,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     public ResourceLocation getModelResource() {
         return getModelController().modelForVariant(getModelController().getModelVariant());
+    }
+
+    public ResourceLocation getModelId() {
+        return getModelController().modelForVariantId(getModelController().getModelVariant());
     }
 
     @Override
@@ -693,6 +697,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 // 地面移动逻辑
                 double deltaMovementSqr = this.getDeltaMovement().lengthSqr();
                 double walkingThreshold = BIRD_DATA.misc().walkingSpeedThreshold();
+                double runningSpeedThreshold = BIRD_DATA.misc().runningSpeedThreshold();
                 boolean isNavigationDone = this.getNavigation().isDone();
 
                 // 静止状态：移动速度低于阈值、导航结束且不是行走状态
@@ -709,8 +714,18 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                         return animationState.setAndContinue(getAnimationController().pickIdleAnimation());
                     }
 
+                    var animation = BIRD_DATA.animation().animationMap().get("curious");
                     // 好奇动画（默认的静止状态动画）
-                    return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get("curious"));
+                    if (animation != null) {
+                        return animationState.setAndContinue(animation);
+                    } else return animationState.setAndContinue(getAnimationController().pickIdleAnimation());
+                }
+
+                if (deltaMovementSqr > runningSpeedThreshold) {
+                    var animation = BIRD_DATA.animation().animationMap().get("run");
+                    if (animation != null) {
+                        return animationState.setAndContinue(animation);
+                    }
                 }
 
                 // 行走动画（移动中）

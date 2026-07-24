@@ -40,7 +40,7 @@ public record BirdModelSkinDatum(
                 null,
                 0.12F,
                 1.0F,
-                0.3F,
+                0.75F,
                 1.1F
         );
     }

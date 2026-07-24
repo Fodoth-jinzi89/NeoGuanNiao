@@ -16,7 +16,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 0
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_common"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_common"
     },
     {
       "predicate": {
@@ -51,7 +51,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 1
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_uncommon"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_uncommon"
     },
     {
       "predicate": {
@@ -86,7 +86,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 2
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_rare"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_rare"
     },
     {
       "predicate": {
@@ -121,7 +121,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 3
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_epic"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_epic"
     },
     {
       "predicate": {
@@ -156,7 +156,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 4
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_legendary"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_legendary"
     },
     {
       "predicate": {
@@ -191,7 +191,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 5
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_ancient"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_ancient"
     },
     {
       "predicate": {
@@ -226,7 +226,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 6
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_unique"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_unique"
     },
     {
       "predicate": {
@@ -261,7 +261,7 @@
         "neoguanniao:bird_type": 2,
         "neoguanniao:rarity": 999
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_spotted_dove_hidden"
+      "model": "neoguanniao:item/bird_feather/bird_feather_dove_hidden"
     },
     {
       "predicate": {

@@ -1,10 +1,14 @@
 package net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron;
 
+import net.fodoth.skina.neoguanniao.content.bath.BirdBathAttraction;
+import net.fodoth.skina.neoguanniao.content.bath.BirdBathBlockEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdAnimationController;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdBreedController;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdEatingController;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdControllers;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdGoalController;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.BirdBathUseGoalController;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdControllers;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
 import net.fodoth.skina.neoguanniao.content.bird.feature.species.NightHeronProfile;
@@ -30,6 +34,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -37,50 +42,71 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NightHeronEntity extends AbstractBirdEntity<NightHeronEntity> {
+public class NeoNightHeronEntity extends AbstractBirdEntity<NeoNightHeronEntity> {
 
     private static final EntityDataAccessor<ItemStack> HELD_FISH =
-            SynchedEntityData.defineId(NightHeronEntity.class, EntityDataSerializers.ITEM_STACK);
+            SynchedEntityData.defineId(NeoNightHeronEntity.class, EntityDataSerializers.ITEM_STACK);
 
     static final Ingredient TEMPT_ITEMS = Ingredient.of(Items.COD, Items.SALMON, Items.COOKED_COD, Items.COOKED_SALMON);
 
-    public NightHeronEntity(EntityType<NightHeronEntity> entityType, Level level) {
+    public NeoNightHeronEntity(EntityType<NeoNightHeronEntity> entityType, Level level) {
         super(
                 entityType,
                 level,
                 NeoGuanNiaoBirdData.NIGHT_HERON.get(),
-                BirdControllers.<NightHeronEntity>builder().birdEatingController(new BirdEatingController<>(){
+                BirdControllers.<NeoNightHeronEntity>builder().birdEatingController(new BirdEatingController<>() {
                     @Override
                     public boolean isEdibleFood(ItemStack stack) {
                         return stack.is(NeoGuanNiaoItemTags.BIRD_FOOD_FISH);
                     }
-                }).birdBreedController(new BirdBreedController<>(){
+                }).birdBreedController(new BirdBreedController<>() {
                     @Override
                     public boolean isBreedingFood(ItemStack stack) {
                         return !stack.isEmpty() && stack.is(NeoGuanNiaoItemTags.BIRD_BREED_FOOD_FISH);
                     }
-                }).birdAnimationController(new BirdAnimationController<>(){
+                }).birdAnimationController(new BirdAnimationController<>() {
                     @Override
                     public RawAnimation pickFlyAnimation() {
                         var animationMap = bird().getBirdData().animation().animationMap();
                         if (bird().getDeltaMovement().y() > 0.05) {
                             return animationMap.get("fly");
                         }
+                        // 距离地面的高度
+                        ClipContext context = new ClipContext(
+                                bird().position(),
+                                bird().position().subtract(0, 5, 0),
+                                ClipContext.Block.COLLIDER,
+                                ClipContext.Fluid.NONE,
+                                bird()
+                        );
+
+                        BlockHitResult hit = bird().level().clip(context);
+
+                        if (hit.getType() != HitResult.Type.MISS) {
+                            return animationMap.get("fly");
+                        }
                         return animationMap.get("fly_glide");
                     }
-                }).build()
+                }).birdGoalController(BirdGoalController.<NeoNightHeronEntity>builder().birdBathUseGoalController(new BirdBathUseGoalController<>() {
+                    @Override
+                    public boolean canUseBathPredicates(BirdBathBlockEntity bath) {
+                        return BirdBathAttraction.isAttractiveToNightHeron(bath);
+                    }
+                }).build()).build()
         );
         initControllers();
     }
 
     @Override
-    protected NightHeronEntity getSelf() {
+    protected NeoNightHeronEntity getSelf() {
         return this;
     }
 
@@ -90,11 +116,6 @@ public class NightHeronEntity extends AbstractBirdEntity<NightHeronEntity> {
                 this,
                 NightHeronProfile.INSTANCE
         );
-    }
-
-    @Override
-    protected void initControllers() {
-        super.initControllers();
     }
 
     @Override
@@ -235,9 +256,9 @@ public class NightHeronEntity extends AbstractBirdEntity<NightHeronEntity> {
 
     public static AttributeSupplier.Builder createAttributes() {
         return TamableAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 14.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.60)
-                .add(Attributes.FLYING_SPEED, 0.68)
+                .add(Attributes.MAX_HEALTH, 16.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.32)
+                .add(Attributes.FLYING_SPEED, 0.65)
                 .add(Attributes.FOLLOW_RANGE, 32.0)
                 .add(Attributes.ATTACK_DAMAGE, 2.0);
     }
@@ -288,8 +309,6 @@ public class NightHeronEntity extends AbstractBirdEntity<NightHeronEntity> {
     public boolean hasHeldFishForRendering() {
         return !this.getHeldFishForRendering().isEmpty();
     }
-
-
 
 
 }

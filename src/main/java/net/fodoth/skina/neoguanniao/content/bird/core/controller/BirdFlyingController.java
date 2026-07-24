@@ -114,6 +114,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param fleeing 是否为逃跑飞行
      */
     public void startShortFlight(Vec3 target, boolean fleeing) {
+        if (bird().isLeashed()) {
+            return;
+        }
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         var stateController = bird.getBehaviorStateController();
@@ -156,6 +159,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param target 飞行目标，为 {@code null} 时自动寻找目标
      */
     public void startFlybyFlight(Vec3 target) {
+        if (bird().isLeashed()) {
+            return;
+        }
         var timer = bird.getTickController().getTickTimer();
         var flyingTicker = timer.getBirdFlyingTicker();
         BirdData birdData = bird.getBirdData();
@@ -193,7 +199,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 如果成功开始飞行返回 true
      */
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
-        if (standPosition == null || isFlightInProgress()) {
+        if (standPosition == null || isFlightInProgress() || bird().isLeashed()) {
             return false;
         }
 
@@ -661,7 +667,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
         return findDryLandingSurfaceInAirWithBias(center, verticalRange, 0);
     }
 
-    private boolean isSafeDryLandingOrAir(BlockPos pos) {
+    public boolean isSafeDryLandingOrAir(BlockPos pos) {
         Level level = bird().level();
         if (!level.hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
             return false;
