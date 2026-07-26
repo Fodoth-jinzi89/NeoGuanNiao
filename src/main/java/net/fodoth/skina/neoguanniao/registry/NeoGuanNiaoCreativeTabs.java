@@ -54,6 +54,25 @@ public final class NeoGuanNiaoCreativeTabs {
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_SEED.get());
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_FISH.get());
 
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_GROWTH.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_REJUVENATE.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_STOP.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_TRANSMUTE.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_ADD.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_MINUS.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_FAST.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_SLOW.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_SIZE_UP.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_SIZE_DOWN.get());
+
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_UPGRADE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_DOWNGRADE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_UNIQUE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_EGG_ADD.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_EGG_MINUS.get());
+
                                 output.accept(NeoGuanNiaoItems.BIRD_NEST.get());
                             })
                             .build()

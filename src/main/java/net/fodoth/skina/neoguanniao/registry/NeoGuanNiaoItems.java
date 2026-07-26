@@ -9,10 +9,7 @@ import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
-import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagFishItem;
-import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagItem;
-import net.fodoth.skina.neoguanniao.content.feed.BirdFoodBagSeedItem;
-import net.fodoth.skina.neoguanniao.content.feed.BreadcrumbItem;
+import net.fodoth.skina.neoguanniao.content.feed.*;
 import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
 import net.minecraft.world.entity.EntityType;
@@ -55,6 +52,25 @@ public final class NeoGuanNiaoItems {
     public static final DeferredItem<Item> BIRD_FOOD_BAG;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_SEED;
     public static final DeferredItem<Item> BIRD_FOOD_BAG_FISH;
+
+    public static final DeferredItem<Item> GREEN_FOOD_BAG;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_GROWTH;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_REJUVENATE;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_STOP;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_TRANSMUTE;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_FEATHER_ADD;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_FEATHER_MINUS;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_FEATHER_FAST;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_FEATHER_SLOW;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_SIZE_UP;
+    public static final DeferredItem<Item> GREEN_FOOD_BAG_SIZE_DOWN;
+
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG;
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG_UPGRADE;
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG_DOWNGRADE;
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG_EGG_ADD;
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG_EGG_MINUS;
+    public static final DeferredItem<Item> GOLDEN_FOOD_BAG_UNIQUE;
 
     public static final DeferredItem<Item> BIRD_NEST;
 
@@ -187,6 +203,92 @@ public final class NeoGuanNiaoItems {
                 ITEMS.registerItem("bird_food_bag_fish",
                         BirdFoodBagFishItem::new,
                         new Item.Properties());
+
+        GREEN_FOOD_BAG =
+                ITEMS.registerItem("green_food_bag",
+                        GreenFoodBagItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_GROWTH =
+                ITEMS.registerItem("green_food_bag_growth",
+                        GreenFoodBagGrowthItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_REJUVENATE =
+                ITEMS.registerItem("green_food_bag_rejuvenate",
+                        GreenFoodBagRejuvenateItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_STOP =
+                ITEMS.registerItem("green_food_bag_stop",
+                        GreenFoodBagStopItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_TRANSMUTE =
+                ITEMS.registerItem("green_food_bag_transmute",
+                        GreenFoodBagTransmuteItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_FEATHER_ADD =
+                ITEMS.registerItem("green_food_bag_feather_add",
+                        GreenFoodBagFeatherAddItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_FEATHER_MINUS =
+                ITEMS.registerItem("green_food_bag_feather_minus",
+                        GreenFoodBagFeatherMinusItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_FEATHER_FAST =
+                ITEMS.registerItem("green_food_bag_feather_fast",
+                        GreenFoodBagFeatherFastItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_FEATHER_SLOW =
+                ITEMS.registerItem("green_food_bag_feather_slow",
+                        GreenFoodBagFeatherSlowItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_SIZE_UP =
+                ITEMS.registerItem("green_food_bag_size_up",
+                        GreenFoodBagSizeUpItem::new,
+                        new Item.Properties());
+
+        GREEN_FOOD_BAG_SIZE_DOWN =
+                ITEMS.registerItem("green_food_bag_size_down",
+                        GreenFoodBagSizeDownItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG =
+                ITEMS.registerItem("golden_food_bag",
+                        GoldenFoodBagItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG_UPGRADE =
+                ITEMS.registerItem("golden_food_bag_upgrade",
+                        GoldenFoodBagUpgradeItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG_DOWNGRADE =
+                ITEMS.registerItem("golden_food_bag_downgrade",
+                        GoldenFoodBagDowngradeItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG_UNIQUE =
+                ITEMS.registerItem("golden_food_bag_unique",
+                        GoldenFoodBagUniqueItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG_EGG_ADD =
+                ITEMS.registerItem("golden_food_bag_egg_add",
+                        GoldenFoodBagEggAddItem::new,
+                        new Item.Properties());
+
+        GOLDEN_FOOD_BAG_EGG_MINUS =
+                ITEMS.registerItem("golden_food_bag_egg_minus",
+                        GoldenFoodBagEggMinusItem::new,
+                        new Item.Properties());
+
 
         BIRD_NEST =
                 ITEMS.register("bird_nest",

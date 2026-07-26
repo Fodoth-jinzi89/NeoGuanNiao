@@ -20,6 +20,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
     private final BirdFeatherController<T> birdFeatherController;
     private final BirdModelController<T> birdModelController;
     private final BirdBreedController<T> birdBreedController;
+    private final BirdFoodBagController<T> birdFoodBagController;
 
     private final List<AbstractBirdController<T>> controllers;
 
@@ -40,6 +41,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         this.birdFeatherController = builder.birdFeatherController;
         this.birdModelController = builder.birdModelController;
         this.birdBreedController = builder.birdBreedController;
+        this.birdFoodBagController = builder.birdFoodBagController;
 
 
 
@@ -57,7 +59,8 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
                 birdBehaviorStateController,
                 birdFeatherController,
                 birdBreedController,
-                birdModelController
+                birdModelController,
+                birdFoodBagController
         );
     }
 
@@ -94,6 +97,7 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
         private BirdFeatherController<T> birdFeatherController = new BirdFeatherController<>();
         private BirdBreedController<T> birdBreedController = new BirdBreedController<>();
         private BirdModelController<T> birdModelController = new BirdModelController<>();
+        private BirdFoodBagController<T> birdFoodBagController = new BirdFoodBagController<>();
 
 
         public Builder<T> birdFlyingController(BirdFlyingController<T> controller) {
@@ -166,6 +170,11 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
             return this;
         }
 
+        public Builder<T> birdFoodBagController(BirdFoodBagController<T> controller) {
+            this.birdFoodBagController = controller;
+            return this;
+        }
+
         public BirdControllers<T> build() {
             return new BirdControllers<>(this);
         }
@@ -227,6 +236,10 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
     public BirdModelController<T> getBirdModelController() {
         return birdModelController;
     }
+    public BirdFoodBagController<T> getBirdFoodBagController() {
+        return birdFoodBagController;
+    }
+
 
 
 
@@ -293,6 +306,10 @@ public final class BirdControllers<T extends AbstractBirdEntity<T>> {
     public BirdModelController<T> birdModelController() {
         return birdModelController;
     }
+    public BirdFoodBagController<T> birdFoodBagController() {
+        return birdFoodBagController;
+    }
+
 
 
 }

@@ -91,6 +91,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> FEATHER_INTERVAL =
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> GROWTH_STOPPED =
+            SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.BOOLEAN);
+    private boolean growthStopped = false;
+
+
 
     // ==================== 常量 ========================
     protected final BirdData BIRD_DATA;
@@ -485,6 +490,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         builder.define(EGG_COUNT, 1);
         builder.define(FEATHER_COUNT, 1);
         builder.define(FEATHER_INTERVAL, 24000);
+        builder.define(GROWTH_STOPPED, false);
     }
 
     @Override
@@ -495,6 +501,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         super.onSyncedDataUpdated(key);
     }
 
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -503,6 +510,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         } else {
             birdBrain.tick();
             getTickController().tick();
+            if (growthStopped && this.getAge() < 0) {
+                this.setAge(this.getAge() - 1);
+            }
         }
     }
 
@@ -545,6 +555,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         compoundTag.putInt("BirdEggCount", getBreedController().getEggCount());
         compoundTag.putInt("BirdFeatherCount", getFeatherController().getFeatherCount());
         compoundTag.putInt("BirdFeatherInterval", getFeatherController().getFeatherInterval());
+        compoundTag.putBoolean("BirdGrowthStopped", isGrowthStopped());
         if (getTameController().getInterestedPlayerUUID() != null) {
             compoundTag.putUUID("BirdInterestedPlayer", getTameController().getInterestedPlayerUUID());
         }
@@ -594,6 +605,12 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         } else {
             getFeatherController().randomizeFeatherInterval();
         }
+        if (compoundTag.contains("BirdGrowthStopped", CompoundTag.TAG_BYTE)) {
+            setGrowthStopped(compoundTag.getBoolean("BirdGrowthStopped"));
+        } else {
+            setGrowthStopped(false);
+        }
+
 
     }
 
@@ -846,6 +863,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return BIRD_CONTROLLERS.birdAnimationController();
     }
 
+    public BirdFoodBagController<T> getFoodBagController() {
+        return BIRD_CONTROLLERS.birdFoodBagController();
+    }
+
     public BirdData getBirdData() {
         return BIRD_DATA;
     }
@@ -878,16 +899,33 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return getBreedController().getGender();
     }
 
+    public void setMale(boolean male) {
+        getBreedController().setGender(male);
+    }
+
     public int getEggCount() {
         return getBreedController().getEggCount();
+    }
+
+    public void setEggCount(int i) {
+        getBreedController().setEggCount(i);
     }
 
     public int getFeatherCount() {
         return getFeatherController().getFeatherCount();
     }
 
+    public void setFeatherCount(int i) {
+        getFeatherController().setFeatherCount(i);
+    }
+
     public int getFeatherInterval() {
         return getFeatherController().getFeatherInterval();
+    }
+
+    public void setFeatherInterval(int i)
+    {
+        getFeatherController().setFeatherInterval(i);
     }
 
     public BirdSkin getSkin() {
@@ -922,4 +960,13 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             );
         }
     }
+
+    public boolean isGrowthStopped() {
+        return growthStopped;
+    }
+
+    public void setGrowthStopped(boolean growthStopped) {
+        this.growthStopped = growthStopped;
+    }
+
 }

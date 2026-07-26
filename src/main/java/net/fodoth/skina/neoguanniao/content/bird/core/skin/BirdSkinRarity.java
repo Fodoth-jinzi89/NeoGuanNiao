@@ -54,6 +54,7 @@ public enum BirdSkinRarity {
     }
 
 
+
     public ChatFormatting getChatColor() {
         return COLOR;
     }
@@ -158,5 +159,30 @@ public enum BirdSkinRarity {
 
     public String getTranslationKey() {
         return this.name().toLowerCase(Locale.ROOT);
+    }
+
+    public static BirdSkinRarity getNextRarityBeforeAncient(BirdSkinRarity rarity) {
+
+        return switch (rarity) {
+            case COMMON -> BirdSkinRarity.UNCOMMON;
+            case UNCOMMON -> BirdSkinRarity.RARE;
+            case RARE -> BirdSkinRarity.EPIC;
+            case EPIC -> BirdSkinRarity.LEGENDARY;
+            case LEGENDARY -> BirdSkinRarity.ANCIENT;
+            default -> null;
+        };
+    }
+
+    public static BirdSkinRarity getPreviousRarityBeforeAncient(
+            BirdSkinRarity rarity
+    ) {
+        return switch (rarity) {
+            case ANCIENT -> LEGENDARY;
+            case LEGENDARY -> EPIC;
+            case EPIC -> RARE;
+            case RARE -> UNCOMMON;
+            case UNCOMMON -> COMMON;
+            default -> null;
+        };
     }
 }

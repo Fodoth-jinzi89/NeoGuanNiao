@@ -62,15 +62,15 @@ public final class BudgerigarDefinition {
     static {
         TEXTURE_VARIANTS = new ResourceLocation[]{
                 TEXTURE,
-                resource("textures/entity/budgerigar/white_lark.png"),
-                resource("textures/entity/budgerigar/mystery_green.png"),
-                resource("textures/entity/budgerigar/blue_lark.png"),
-                resource("textures/entity/budgerigar/blue_porcelain.png"),
-                resource("textures/entity/budgerigar/yellow_lark.png"),
-                resource("textures/entity/budgerigar/yellow.png"),
-                resource("textures/entity/budgerigar/yellow_2.png"),
-                resource("textures/entity/budgerigar/yellow_black.png"),
-                resource("textures/entity/budgerigar/black_white.png")
+                resource("textures/entity/budgerigar/white_lark_male.png"),
+                resource("textures/entity/budgerigar/mystery_green_female.png"),
+                resource("textures/entity/budgerigar/blue_lark_male.png"),
+                resource("textures/entity/budgerigar/blue_porcelain_female.png"),
+                resource("textures/entity/budgerigar/yellow_lark_male.png"),
+                resource("textures/entity/budgerigar/yellow_female.png"),
+                resource("textures/entity/budgerigar/blue_white_male.png"),
+                resource("textures/entity/budgerigar/yellow_black_female.png"),
+                resource("textures/entity/budgerigar/black_white_male.png")
         };
     }
 }

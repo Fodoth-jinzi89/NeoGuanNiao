@@ -5,6 +5,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdGoalControl
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.AbstractGoalController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdGoalDatum;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 import java.util.EnumSet;
 
@@ -44,9 +45,11 @@ public abstract class AbstractBirdGoal extends Goal {
     }
 
     protected void debugStart() {
-        var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
-        if (debugTicker.enableLifecycleLog()) {
-            debugTicker.debugGoalStart(this.getClass().getSimpleName());
+        if (!FMLEnvironment.production) {
+            var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
+            if (debugTicker.enableLifecycleLog()) {
+                debugTicker.debugGoalStart(this.getClass().getSimpleName());
+            }
         }
     }
 
@@ -79,9 +82,11 @@ public abstract class AbstractBirdGoal extends Goal {
     }
 
     protected void debugStop() {
-        var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
-        if (debugTicker.enableLifecycleLog()) {
-            debugTicker.debugGoalStop(this.getClass().getSimpleName());
+        if (!FMLEnvironment.production) {
+            var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
+            if (debugTicker.enableLifecycleLog()) {
+                debugTicker.debugGoalStop(this.getClass().getSimpleName());
+            }
         }
     }
 

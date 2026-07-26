@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "neoguanniao.refmap.json",
   "mixins": [
-    "BlockStateBaseMixin"
+    "BlockStateBaseMixin",
+    "MerchantOfferMixin"
   ],
   "client": [],
   "server": [],

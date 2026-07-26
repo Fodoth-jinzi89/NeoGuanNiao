@@ -27,8 +27,18 @@ public class BirdBreedController<T extends AbstractBirdEntity<T>> extends Abstra
      * @return 交互结果
      */
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+
         ItemStack stack = player.getItemInHand(hand);
 
+
+        // 优先检查
+        InteractionResult foodBagResult =
+                bird().getFoodBagController()
+                        .mobInteract(player, hand);
+
+        if (foodBagResult.consumesAction()) {
+            return foodBagResult;
+        }
         // ----- 前置检查 -----
         if (!isBreedingFood(stack)) return InteractionResult.PASS; // 不是繁育食物
         if (bird().isBaby()) return InteractionResult.PASS;        // 幼年禁止繁殖

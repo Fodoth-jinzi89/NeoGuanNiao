@@ -11,6 +11,7 @@ public class NeoGuanNiaoItemTags {
     public static final TagKey<Item> BIRD_FOOD_FISH;
     public static final TagKey<Item> BIRD_BREED_FOOD;
     public static final TagKey<Item> BIRD_BREED_FOOD_FISH;
+    public static final TagKey<Item> FILLED_FOOD_BAG;
 
     static {
         BIRD_FOOD = TagKey.create(
@@ -28,6 +29,10 @@ public class NeoGuanNiaoItemTags {
         BIRD_BREED_FOOD_FISH = TagKey.create(
                 Registries.ITEM,
                 ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "bird_breed_food_fish")
+        );
+        FILLED_FOOD_BAG = TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "filled_food_bag")
         );
     }
 
