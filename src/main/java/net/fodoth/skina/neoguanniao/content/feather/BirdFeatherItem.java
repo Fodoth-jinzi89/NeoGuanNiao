@@ -21,14 +21,18 @@ public class BirdFeatherItem extends Item {
 
     // ======================== 数据操作 ========================
 
-    /** 将羽毛数据设置到物品栈中 */
+    /**
+     * 将羽毛数据设置到物品栈中
+     */
     public static void setFeatherData(ItemStack stack, BirdFeatherData data) {
         stack.set(NeoGuanNiaoDataComponents.BIRD_FEATHER_DATA.get(), data);
         stack.set(NeoGuanNiaoDataComponents.BIRD_FEATHER_BIRD_TYPE.get(), data.toTypeInt());
         stack.set(NeoGuanNiaoDataComponents.BIRD_FEATHER_SKIN_RARITY.get(), data.rarity());
     }
 
-    /** 从物品栈中获取羽毛数据 */
+    /**
+     * 从物品栈中获取羽毛数据
+     */
     public static BirdFeatherData getFeatherData(ItemStack stack) {
         return stack.get(NeoGuanNiaoDataComponents.BIRD_FEATHER_DATA.get());
     }
@@ -54,4 +58,19 @@ public class BirdFeatherItem extends Item {
                 .withStyle(rarity.getChatColor());
         tooltip.add(Component.translatable("tooltip.neoguanniao.rarity").append(rarityText));
     }
+
+    @Override
+    public @NotNull Component getName(@NotNull ItemStack stack) {
+        Component name = super.getName(stack);
+
+        BirdFeatherData data = getFeatherData(stack);
+        if (data == null) {
+            return name;
+        }
+
+        BirdSkinRarity rarity = BirdSkinRarity.fromValue(data.rarity());
+
+        return name.copy().withStyle(rarity.getChatColor());
+    }
+
 }

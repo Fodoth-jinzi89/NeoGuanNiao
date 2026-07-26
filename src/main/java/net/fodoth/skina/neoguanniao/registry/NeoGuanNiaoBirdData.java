@@ -443,7 +443,7 @@ public final class NeoGuanNiaoBirdData {
                             .withAnimation(
                                     BirdAnimationDatum.withAnimationIdAndMap(
                                             Map.of(
-                                                    resource("columbid"),
+                                                    resource("pigeon"),
                                                     resource("animations/columbid.animation.json")),
                                             Map.ofEntries(
                                                     Map.entry("idle", RawAnimation.begin().thenLoop("idle")),
@@ -520,7 +520,7 @@ public final class NeoGuanNiaoBirdData {
                             .withAnimation(
                                     BirdAnimationDatum.withAnimationIdAndMap(
                                             Map.of(
-                                                    resource("columbid"),
+                                                    resource("dove"),
                                                     resource("animations/columbid.animation.json")),
                                             Map.ofEntries(
                                                     Map.entry("idle", RawAnimation.begin().thenLoop("idle")),

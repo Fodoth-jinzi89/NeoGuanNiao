@@ -160,8 +160,8 @@
   "gui.neoguanniao.bird_guide.layout_edit_off": "Layout edit mode off",
   "gui.neoguanniao.bird_guide.layout_reloaded": "Layout reloaded from item",
   "block.neoguanniao.breadcrumbs": "Breadcrumbs",
-  "item.neoguanniao.bird_egg": "§aBird Egg§r",
-  "tooltip.neoguanniao.empty_egg": "§aUnknown Bird Egg§r",
+  "item.neoguanniao.bird_egg": "Bird Egg",
+  "tooltip.neoguanniao.empty_egg": "Unknown Bird Egg",
   "tooltip.neoguanniao.bird_type": "§6Bird Type: §r",
   "tooltip.neoguanniao.model": "§6Model: §r",
   "tooltip.neoguanniao.skin": "§6Skin: §r",
@@ -226,6 +226,7 @@
   "tag.neoguanniao.bird_breed_food": "Bird Breed Food",
   "tag.neoguanniao.bird_food_fish": "Bird Food (Fish)",
   "tag.neoguanniao.bird_breed_food_fish": "Bird Breed Food (Fish)",
+  "tag.neoguanniao.filled_foog_bag": "Filled Food Bag",
 
   "block.neoguanniao.bird_nest": "Bird Nest",
   "tooltip.neoguanniao.rarity": "§6Rarity:§r ",
@@ -241,6 +242,48 @@
   "itemGroup.neoguanniao.feathers": "Bird Feathers",
   "item.neoguanniao.bird_feather": "Bird Feather",
 
+  "item.neoguanniao.green_food_bag": "Green Food Bag",
+  "item.neoguanniao.green_food_bag_growth": "Growth Food Bag",
+  "item.neoguanniao.green_food_bag_rejuvenate": "Rejuvenate Food Bag",
+  "item.neoguanniao.green_food_bag_stop": "Stop Food Bag",
+  "item.neoguanniao.green_food_bag_transmute": "Transmute Food Bag",
+  "item.neoguanniao.green_food_bag_feather_add": "Feather Increase Food Bag",
+  "item.neoguanniao.green_food_bag_feather_minus": "Feather Decrease Food Bag",
+  "item.neoguanniao.green_food_bag_feather_fast": "Feather Speed Up Food Bag",
+  "item.neoguanniao.green_food_bag_feather_slow": "Feather Slow Down Food Bag",
+  "item.neoguanniao.green_food_bag_size_up": "Size Up Food Bag",
+  "item.neoguanniao.green_food_bag_size_down": "Size Down Food Bag",
+
+  "item.neoguanniao.golden_food_bag_egg_add": "Egg Increase Food Bag",
+  "item.neoguanniao.golden_food_bag_egg_minus": "Egg Decrease Food Bag",
+
+
+  "item.neoguanniao.golden_food_bag": "Golden Food Bag",
+  "item.neoguanniao.golden_food_bag_upgrade": "Upgrade Food Bag",
+  "item.neoguanniao.golden_food_bag_downgrade": "Downgrade Food Bag",
+  "item.neoguanniao.golden_food_bag_unique": "Unique Food Bag",
+
+
   "tooltip.neoguanniao.feather_count": "§6Feather Count:§r §e%d§r",
-  "tooltip.neoguanniao.feather_interval": "§6Feather Interval:§r "
+  "tooltip.neoguanniao.feather_interval": "§6Feather Interval:§r ",
+
+  "entity.minecraft.villager.neoguanniao.bird_keeper": "Bird Keeper",
+  "entity.minecraft.villager.bird_keeper": "Bird Keeper",
+  "message.neoguanniao.bird_food_bag.adult_failed": "Usage Failed: The bird is already mature.",
+  "message.neoguanniao.bird_food_bag.baby_failed": "Usage Failed: The bird is not mature.",
+  "message.neoguanniao.bird_food_bag.stop_failed": "Usage Failed: The bird is already mature.",
+  "message.neoguanniao.bird_food_bag.growth_resumed": "Bird growth resumed!",
+  "message.neoguanniao.bird_food_bag.growth_stopped": "Bird growth stopped!",
+  "message.neoguanniao.bird_food_bag.transmute_failed": "Usage Failed: No available skin for another gender.",
+  "message.neoguanniao.golden_food_bag.upgrade_failed": "Usage Failed: No available upgrade skin.",
+  "message.neoguanniao.golden_food_bag.downgrade_failed": "Usage Failed: No available downgrade skin.",
+  "message.neoguanniao.golden_food_bag.unique_failed": "Usage Failed: No available unique skin.",
+  "message.neoguanniao.bird_food_bag.feather_added_failed": "Usage Failed: Already reached maximum feather count.",
+  "message.neoguanniao.bird_food_bag.feather_minus_failed": "Usage Failed: Already reached minimum feather count.",
+  "message.neoguanniao.bird_food_bag.feather_interval_fasten_failed": "Usage Failed: Already reached minimum feather interval.",
+  "message.neoguanniao.bird_food_bag.feather_interval_slow_failed": "Usage Failed: Already reached maximum feather interval.",
+  "message.neoguanniao.bird_food_bag.egg_added_failed": "Usage Failed: Already reached maximum egg count.",
+  "message.neoguanniao.bird_food_bag.egg_minus_failed": "Usage Failed: Already reached minimum egg count.",
+  "message.neoguanniao.bird_food_bag.size_up_failed": "Usage Failed: Already reached maximum scale.",
+  "message.neoguanniao.bird_food_bag.size_down_failed": "Usage Failed: Already reached minimum scale."
 }

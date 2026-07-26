@@ -237,4 +237,20 @@ public class BirdEggItem extends Item {
 
         return result;
     }
+
+    @Override
+    public @NotNull Component getName(@NotNull ItemStack stack) {
+        Component name = super.getName(stack);
+
+        BirdEggData data = getEggData(stack);
+        if (data == null) {
+            return name;
+        }
+
+        BirdSkinRarity rarity = NeoGuanNiaoBirdSkins
+                .get(data.skin())
+                .rarity();
+
+        return name.copy().withStyle(rarity.getChatColor());
+    }
 }

@@ -1,8 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.feed;
 
-import net.minecraft.world.item.Item;
-
-public class BirdFoodBagSeedItem extends Item {
+public class BirdFoodBagSeedItem extends BirdFoodBagItem {
 
     public BirdFoodBagSeedItem(Properties properties) {
         super(properties);
