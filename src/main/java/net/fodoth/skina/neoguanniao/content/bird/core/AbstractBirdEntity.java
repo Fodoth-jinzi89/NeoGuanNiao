@@ -24,6 +24,7 @@ import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestBlockEntity;
 import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockTags;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoCriteriaTriggers;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -34,6 +35,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
@@ -213,10 +215,14 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
             int remainingEggs = tryLayEggInNest(bird, this);
 
-            // 巢放不下的蛋，在雌鸟处生成
-            for (int i = 0; i < remainingEggs; i++) {
-                spawnEgg(bird);
+            if (remainingEggs > 0) {
+                triggerBreedEggAdvancement(bird);
+                // 巢放不下的蛋，在雌鸟处生成
+                for (int i = 0; i < remainingEggs; i++) {
+                    spawnEgg(bird);
+                }
             }
+
         }
 
 
@@ -301,17 +307,15 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 new ArrayList<>();
 
 
-        // 依次填充附近巢穴
+        boolean eggLaid = false;
+
         for (BirdNestBlockEntity nest : nests) {
 
-
-            if (remainingEggs <= 0) {
+            if (remainingEggs <= 0)
                 break;
-            }
 
 
             boolean added = false;
-
 
             while (
                     remainingEggs > 0
@@ -319,9 +323,16 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                             nest.hasEmptySlot()
             ) {
 
-                nest.addEgg(
-                        createEgg(male)
-                );
+                nest.addEgg(createEgg(male));
+
+                if (!eggLaid) {
+
+                    triggerBreedEggAdvancement(
+                            female
+                    );
+
+                    eggLaid = true;
+                }
 
                 remainingEggs--;
                 added = true;
@@ -402,6 +413,27 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                 getBirdData().misc().eggDefaultHatchTime(),
                 true
         );
+    }
+
+    private void triggerBreedEggAdvancement(
+            AbstractBirdEntity<?> female
+    ) {
+
+        if (!(female.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+
+        serverLevel.getEntitiesOfClass(
+                ServerPlayer.class,
+                female.getBoundingBox().inflate(16)
+        ).forEach(player -> {
+
+            NeoGuanNiaoCriteriaTriggers.BIRD_EGG_BREED
+                    .get()
+                    .trigger(player);
+
+        });
     }
 
 

@@ -15,9 +15,15 @@ public class BirdFlockGoalController<T extends AbstractBirdEntity<?>> extends Ab
         return goalDatum().flockChance();
     }
 
+    @Override
+    public boolean canUse() {
+        return super.canUse() && !bird().getFlyingController().isFlightInProgress() && !bird().isBaby();
+    }
 
     @Override
     public boolean onUse() {
+
+
         var goalDatum = bird().getBirdData().goal();
         List<NeoBudgerigarEntity> flock = bird().level().getEntitiesOfClass(
                 NeoBudgerigarEntity.class,

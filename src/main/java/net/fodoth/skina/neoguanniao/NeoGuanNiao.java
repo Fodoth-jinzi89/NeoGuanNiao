@@ -29,6 +29,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register(
                 modEventBus
         );
+        NeoGuanNiaoCriteriaTriggers.register(modEventBus);
 
     }
 

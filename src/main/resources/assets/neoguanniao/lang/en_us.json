@@ -226,7 +226,7 @@
   "tag.neoguanniao.bird_breed_food": "Bird Breed Food",
   "tag.neoguanniao.bird_food_fish": "Bird Food (Fish)",
   "tag.neoguanniao.bird_breed_food_fish": "Bird Breed Food (Fish)",
-  "tag.neoguanniao.filled_foog_bag": "Filled Food Bag",
+  "tag.neoguanniao.filled_food_bag": "Filled Food Bag",
 
   "block.neoguanniao.bird_nest": "Bird Nest",
   "tooltip.neoguanniao.rarity": "§6Rarity:§r ",
@@ -267,8 +267,8 @@
   "tooltip.neoguanniao.feather_count": "§6Feather Count:§r §e%d§r",
   "tooltip.neoguanniao.feather_interval": "§6Feather Interval:§r ",
 
-  "entity.minecraft.villager.neoguanniao.bird_keeper": "Bird Keeper",
-  "entity.minecraft.villager.bird_keeper": "Bird Keeper",
+  "entity.minecraft.villager.neoguanniao.bird_keeper": "Bird Researcher",
+  "entity.minecraft.villager.bird_keeper": "Bird Researcher",
   "message.neoguanniao.bird_food_bag.adult_failed": "Usage Failed: The bird is already mature.",
   "message.neoguanniao.bird_food_bag.baby_failed": "Usage Failed: The bird is not mature.",
   "message.neoguanniao.bird_food_bag.stop_failed": "Usage Failed: The bird is already mature.",
@@ -285,5 +285,53 @@
   "message.neoguanniao.bird_food_bag.egg_added_failed": "Usage Failed: Already reached maximum egg count.",
   "message.neoguanniao.bird_food_bag.egg_minus_failed": "Usage Failed: Already reached minimum egg count.",
   "message.neoguanniao.bird_food_bag.size_up_failed": "Usage Failed: Already reached maximum scale.",
-  "message.neoguanniao.bird_food_bag.size_down_failed": "Usage Failed: Already reached minimum scale."
+  "message.neoguanniao.bird_food_bag.size_down_failed": "Usage Failed: Already reached minimum scale.",
+
+  "advancements.neoguanniao.bird_observation.root.title":
+  "Bird Observation",
+
+  "advancements.neoguanniao.bird_observation.root.description":
+  "Record the birds that inhabit the world",
+
+  "advancements.neoguanniao.spyglass_at_night_heron.title":
+  "A Gaze in the Night",
+
+  "advancements.neoguanniao.spyglass_at_night_heron.description":
+  "Observe a Night Heron through a spyglass",
+
+  "advancements.neoguanniao.is_that_duck.title":
+  "Is That a Duck?",
+
+  "advancements.neoguanniao.is_that_duck.description":
+  "Observe a Night Heron with a spyglass in a river biome",
+
+  "advancements.neoguanniao.is_that_penguin.title":
+  "Is That a Penguin?",
+
+  "advancements.neoguanniao.is_that_penguin.description":
+  "Observe a Night Heron with a spyglass in a snowy biome",
+
+  "advancements.neoguanniao.is_that_cockroach.title":
+  "Is That a Cockroach?",
+
+  "advancements.neoguanniao.is_that_cockroach.description":
+  "Observe a Night Heron with two breeding feathers using a spyglass",
+
+  "advancements.neoguanniao.first_egg.title":
+  "Which Came First, the Bird or the Egg?",
+
+  "advancements.neoguanniao.first_egg.description":
+  "Breed birds with bird food bag",
+
+  "advancements.neoguanniao.hatch_first_bird.title":
+  "I Came from an Egg",
+
+  "advancements.neoguanniao.hatch_first_bird.description":
+  "Witness a baby bird hatch from an egg",
+
+  "advancements.neoguanniao.walking_dandelion.title":
+  "Walking Dandelion",
+
+  "advancements.neoguanniao.walking_dandelion.description":
+  "Pick up a bird feather"
 }

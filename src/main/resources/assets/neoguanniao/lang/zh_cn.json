@@ -224,7 +224,7 @@
   "tag.neoguanniao.bird_breed_food": "鸟类繁殖食物（种子）",
   "tag.neoguanniao.bird_food_fish": "鸟食（鱼类）",
   "tag.neoguanniao.bird_breed_food_fish": "鸟类繁殖食物（鱼类）",
-  "tag.neoguanniao.filled_foog_bag": "装满的鸟食袋",
+  "tag.neoguanniao.filled_food_bag": "装满的鸟食袋",
   "block.neoguanniao.bird_nest": "鸟巢",
   "tooltip.neoguanniao.rarity": "§6稀有度：§r",
   "tooltip.neoguanniao.empty_feather": "未知的鸟羽",
@@ -257,8 +257,8 @@
   "item.neoguanniao.golden_food_bag_unique": "鸟食袋（独特皮肤）",
   "tooltip.neoguanniao.feather_count": "§6掉毛数：§r§e%d§r",
   "tooltip.neoguanniao.feather_interval": "§6掉毛间隔：§r",
-  "entity.minecraft.villager.neoguanniao.bird_keeper": "养鸟人",
-  "entity.minecraft.villager.bird_keeper": "养鸟人",
+  "entity.minecraft.villager.neoguanniao.bird_keeper": "鸟类研究者",
+  "entity.minecraft.villager.bird_keeper": "鸟类研究者",
   "message.neoguanniao.bird_food_bag.adult_failed": "使用失败：鸟儿已经成年。",
   "message.neoguanniao.bird_food_bag.baby_failed": "使用失败：鸟儿尚未成年。",
   "message.neoguanniao.bird_food_bag.stop_failed": "使用失败：只有幼鸟可以停止生长。",
@@ -275,5 +275,27 @@
   "message.neoguanniao.bird_food_bag.egg_added_failed": "使用失败：生蛋数已达最大值。",
   "message.neoguanniao.bird_food_bag.egg_minus_failed": "使用失败：生蛋数已达最小值。",
   "message.neoguanniao.bird_food_bag.size_up_failed": "使用失败：体型已达最大值。",
-  "message.neoguanniao.bird_food_bag.size_down_failed": "使用失败：体型已达最小值。"
+  "message.neoguanniao.bird_food_bag.size_down_failed": "使用失败：体型已达最小值。",
+  "advancements.neoguanniao.bird_observation.root.title": "观鸟",
+  "advancements.neoguanniao.bird_observation.root.description": "那些翱翔、歌唱与栖息于世界各处的生命",
+  "advancements.neoguanniao.spyglass_at_night_heron.title": "夜幕中的凝视",
+  "advancements.neoguanniao.spyglass_at_night_heron.description": "使用望远镜观察一只夜鹭",
+  "advancements.neoguanniao.is_that_duck.title": "那是鸭子吗？",
+  "advancements.neoguanniao.is_that_duck.description": "在河流群系用望远镜观察一只夜鹭",
+  "advancements.neoguanniao.is_that_penguin.title": "那是企鹅吗？",
+  "advancements.neoguanniao.is_that_penguin.description": "在会下雪的群系用望远镜观察一只夜鹭",
+  "advancements.neoguanniao.is_that_cockroach.title": "那是蟑螂吗？",
+  "advancements.neoguanniao.is_that_cockroach.description": "用望远镜观察一只具有两根繁殖羽的夜鹭",
+  "advancements.neoguanniao.first_egg.title":
+  "先有鸟还是先有蛋",
+  "advancements.neoguanniao.first_egg.description":
+  "用鸟食袋繁殖鸟类",
+  "advancements.neoguanniao.hatch_first_bird.title":
+  "我从蛋里来",
+  "advancements.neoguanniao.hatch_first_bird.description":
+  "见证一只幼鸟从蛋中孵化",
+  "advancements.neoguanniao.walking_dandelion.title":
+  "行走的蒲公英",
+  "advancements.neoguanniao.walking_dandelion.description":
+  "捡起一根鸟羽"
 }

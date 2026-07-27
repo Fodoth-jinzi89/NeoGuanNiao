@@ -4,6 +4,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoCriteriaTriggers;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
@@ -11,10 +12,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
@@ -213,12 +217,35 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
         // 生成到世界
         level.addFreshEntity(bird);
 
+        triggerHatchEggAdvancement();
+
         // 清除该格的蛋
         inventory.setStackInSlot(slot, ItemStack.EMPTY);
         setChanged();
 
         // 通知客户端更新
         level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    private void triggerHatchEggAdvancement() {
+
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+
+        serverLevel.getEntitiesOfClass(
+                ServerPlayer.class,
+                new AABB(
+                        worldPosition
+                ).inflate(16)
+        ).forEach(player -> {
+
+            NeoGuanNiaoCriteriaTriggers.HATCH_BIRD_EGG
+                    .get()
+                    .trigger(player);
+
+        });
     }
 
     public boolean hasEmptySlot() {
