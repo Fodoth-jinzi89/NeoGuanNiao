@@ -71,8 +71,8 @@ public record BirdMiscDatum(
                 7,
                 6000,
                 24000,
-                1,
-                9,
+                0,
+                10,
                 24000,
                 36000
         );
