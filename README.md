@@ -297,11 +297,11 @@ GPL-3.0-only 授予：
 
 GitHub:
 
-https://github.com/Fodoth-jinzi89
+[https://github.com/Fodoth-jinzi89](https://github.com/Fodoth-jinzi89)
 
-Issue:
+Issue Tracker:
 
-https://github.com/fodoth/neoguanniao/issues
+[https://github.com/Fodoth-jinzi89/NeoGuanNiao/issues](https://github.com/Fodoth-jinzi89/NeoGuanNiao/issues)
 
 
 ---
