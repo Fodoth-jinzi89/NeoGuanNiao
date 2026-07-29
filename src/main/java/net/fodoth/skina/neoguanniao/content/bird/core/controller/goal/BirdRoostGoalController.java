@@ -74,11 +74,13 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
         double distance = bird().distanceToSqr(Vec3.atCenterOf(this.roostPos));
 
-        if (distance < goalDatum().roostGoalRange()) {
+        if (bird().isBaby() || distance < goalDatum().roostGoalRange()) {
             // 到达栖息位置
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
             bird().setPos(this.roostPos.getX() + 0.5, this.roostPos.getY() - 0.5, this.roostPos.getZ() + 0.5);
-            bird().setNoGravity(true);
+            if (!bird().isBaby()) {
+                bird().setNoGravity(true);
+            }
             return;
         }
 
@@ -93,7 +95,7 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
     @Override
     public void onReset() {
-        if (this.roostPos == null) {
+        if (this.roostPos == null || bird().isBaby()) {
             return;
         }
         bird().getNavigation().moveTo(
@@ -108,7 +110,7 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
     public void onStop() {
         this.roostPos = null;
         if (bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.ROOSTING) {
-            if (bird().getRoutineController().isRoosting()) {
+            if (bird().getRoutineController().isRoosting() || bird().isBaby()) {
                 bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
             } else {
                 bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);

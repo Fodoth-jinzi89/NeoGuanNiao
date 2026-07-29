@@ -3,8 +3,8 @@
   "biomes": "#neoguanniao:pigeon_habitat",
   "spawners": {
     "type": "neoguanniao:pigeon",
-    "weight": 7,
+    "weight": 1,
     "minCount": 1,
-    "maxCount": 4
+    "maxCount": 1
   }
 }

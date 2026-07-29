@@ -9,8 +9,10 @@ import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -178,7 +180,7 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
 
             if (newData.canHatch()) {
                 // 孵化条件满足 → 生成小鸟
-                hatchEgg(i, newData);
+                hatchEgg(i, egg, newData);
             } else {
                 // 更新蛋的NBT数据
                 egg.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), newData);
@@ -192,7 +194,7 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
      * @param slot 鸟蛋所在的格子
      * @param data 鸟蛋数据（包含鸟类类型、皮肤、性别等信息）
      */
-    private void hatchEgg(int slot, BirdEggData data) {
+    private void hatchEgg(int slot, ItemStack egg, BirdEggData data) {
         if (level == null) return;
 
         // 根据鸟类类型ID获取实体类型
@@ -213,6 +215,14 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
 
         // 设置为幼年（-24000 tick = 20分钟成长时间）
         bird.setAge(-24000);
+
+        // 如果鸟蛋被铁砧改过名，则继承名字
+        Component name = egg.get(DataComponents.CUSTOM_NAME);
+
+        if (name != null) {
+            bird.setCustomName(name);
+            bird.setCustomNameVisible(true);
+        }
 
         // 生成到世界
         level.addFreshEntity(bird);

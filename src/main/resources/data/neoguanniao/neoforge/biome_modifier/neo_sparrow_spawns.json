@@ -3,7 +3,7 @@
   "biomes": "#neoguanniao:sparrow_habitat",
   "spawners": {
     "type": "neoguanniao:neo_sparrow",
-    "weight": 14,
+    "weight": 3,
     "minCount": 4,
     "maxCount": 8
   }

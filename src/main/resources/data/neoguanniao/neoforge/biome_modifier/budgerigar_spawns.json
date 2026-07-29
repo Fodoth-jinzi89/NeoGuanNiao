@@ -3,8 +3,8 @@
   "biomes": "#neoguanniao:budgerigar_habitat",
   "spawners": {
     "type": "neoguanniao:budgerigar",
-    "weight": 6,
-    "minCount": 2,
-    "maxCount": 6
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
   }
 }
