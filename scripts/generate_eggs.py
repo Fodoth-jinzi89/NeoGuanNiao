@@ -32,8 +32,8 @@ MODEL_RARITIES = {
 
 
 GENDERS = {
-    0: "male",
-    1: "female"
+    0: "female",
+    1: "male"
 }
 
 
@@ -146,7 +146,7 @@ def generate_main():
 
             "layer2":
                 texture(
-                    "gender/male"
+                    "gender/female"
                 )
         },
 

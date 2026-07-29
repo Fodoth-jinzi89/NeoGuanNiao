@@ -8,7 +8,10 @@ import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinUtils;
 /**
  * 鸟类皮肤校验目标控制器
  * <p>
- * 负责检查并修正鸟类实体皮肤与年龄/性别状态的匹配性
+ * 负责检查并修正鸟类皮肤是否符合：
+ * - 模型支持
+ * - 年龄限制
+ * - 性别限制
  */
 public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>>
         extends AbstractGoalController<T> {
@@ -27,62 +30,26 @@ public class BirdSkinValidateGoalController<T extends AbstractBirdEntity<?>>
 
 
     /**
-     * 检查当前皮肤是否符合实体状态
+     * 检查当前皮肤是否合法
      */
     private boolean isSkinValid() {
 
         BirdSkin skin = bird().getSkin();
+
         BirdModel model = bird().getModel();
 
 
-        // 模型不支持该皮肤
+        // 模型不支持
         if (!model.supportsSkin(skin.id())) {
             return false;
         }
 
 
-        String family = BirdSkinUtils.getSkinFamily(
-                skin.id().getPath()
+        // 年龄和性别限制
+        return BirdSkinUtils.isSkinAvailable(
+                bird(),
+                skin
         );
-
-
-        /*
-         * 如果该家族存在幼年变体，
-         * 则必须匹配当前年龄
-         */
-        if (BirdSkinUtils.hasBabyVariant(
-                bird(),
-                family
-        )) {
-
-            if (bird().isBaby() && !skin.baby()) {
-                return false;
-            }
-
-            if (!bird().isBaby() && skin.baby()) {
-                return false;
-            }
-        }
-
-
-        /*
-         * 如果该家族存在性别变体，
-         * 则必须匹配当前性别
-         */
-        if (BirdSkinUtils.hasGenderVariant(
-                bird(),
-                family
-        )) {
-
-            if (bird().isMale() && !skin.male()) {
-                return false;
-            }
-
-            return bird().isMale() || skin.female();
-        }
-
-
-        return true;
     }
 
 

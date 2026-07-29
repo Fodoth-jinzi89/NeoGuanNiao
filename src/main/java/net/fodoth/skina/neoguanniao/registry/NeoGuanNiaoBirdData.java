@@ -276,7 +276,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_0_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_0_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withBaby(true),
+                                                                    .withRarity(BirdSkinRarity.COMMON).withMature(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_1"))
@@ -285,7 +285,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_1_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_1_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withBaby(true),
+                                                                    .withRarity(BirdSkinRarity.COMMON).withMature(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_2"))
@@ -294,7 +294,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_2_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_2_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withBaby(true),
+                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withMature(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_3"))
@@ -303,7 +303,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_3_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_3_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withBaby(true),
+                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withMature(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_4"))
@@ -312,7 +312,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_4_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_4_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.RARE).withBaby(true).withNatureSpawn(false),
+                                                                    .withRarity(BirdSkinRarity.RARE).withMature(false).withNatureSpawn(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_5"))
@@ -321,7 +321,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_5_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_5_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.EPIC).withBaby(true).withNatureSpawn(false),
+                                                                    .withRarity(BirdSkinRarity.EPIC).withMature(false).withNatureSpawn(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_6"))
@@ -330,7 +330,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_6_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_6_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.LEGENDARY).withBaby(true).withNatureSpawn(false),
+                                                                    .withRarity(BirdSkinRarity.LEGENDARY).withMature(false).withNatureSpawn(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_7"))
@@ -339,7 +339,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_7_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_7_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.ANCIENT).withBaby(true).withNatureSpawn(false),
+                                                                    .withRarity(BirdSkinRarity.ANCIENT).withMature(false).withNatureSpawn(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_golden"))
@@ -348,7 +348,7 @@ public final class NeoGuanNiaoBirdData {
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("night_heron_golden_baby"))
                                                                     .withLocation(resource("textures/entity/night_heron/night_heron_golden_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNIQUE).withUnique(true).withBaby(true).withNatureSpawn(false),
+                                                                    .withRarity(BirdSkinRarity.UNIQUE).withUnique(true).withMature(false).withNatureSpawn(false),
 
                                                             BirdSkin.createDefault()
                                                                     .withId(resource("cheng_he_guang"))

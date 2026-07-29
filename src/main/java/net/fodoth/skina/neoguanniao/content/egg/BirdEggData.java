@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 鸟类蛋数据记录，存储蛋的所有属性信息
  * @param birdType        鸟类实体注册名
- * @param gender          性别（true为雄性，false为雌性）
+ * @param gender          性别（true 1 为雄性，false 0 为雌性）
  * @param model           模型资源路径
  * @param skin            皮肤资源路径
  * @param eggCount        蛋的数量

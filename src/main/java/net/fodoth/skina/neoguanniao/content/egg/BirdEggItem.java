@@ -43,7 +43,7 @@ public class BirdEggItem extends Item {
         stack.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), data);
         stack.set(BIRD_EGG_RARITY.get(), NeoGuanNiaoBirdSkins.get(data.skin()).rarity().getRarity());
         stack.set(BIRD_EGG_MODEL_RARITY.get(), NeoGuanNiaoBirdModels.get(data.model()).rarity().getRarity());
-        stack.set(BIRD_EGG_GENDER.get(), data.gender() ? 0 : 1);
+        stack.set(BIRD_EGG_GENDER.get(), data.gender() ? 1 : 0);
     }
 
     /**

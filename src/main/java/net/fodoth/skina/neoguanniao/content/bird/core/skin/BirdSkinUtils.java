@@ -45,7 +45,7 @@ public final class BirdSkinUtils {
      */
     private static boolean isModifier(String part) {
         return switch (part) {
-            case "baby", "male", "female" -> true;
+            case "mature", "baby", "male", "female" -> true;
             default -> false;
         };
     }
@@ -92,59 +92,86 @@ public final class BirdSkinUtils {
 
     /**
      * 判断皮肤是否适合当前鸟类的年龄和性别
+     * <p>
+     * skin.baby():
+     * true  -> 幼鸟和成鸟均可使用
+     * false -> 仅成鸟可使用
+     * <p>
+     * skin.male()/female():
+     * true -> 对应性别可使用
      *
-     * @param bird 鸟类实体
-     * @param skin 皮肤
-     * @param <T>  鸟类类型
-     * @return true=可用
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static <T extends AbstractBirdEntity<?>> boolean isSkinAvailable(T bird, BirdSkin skin) {
-        // 幼年检查
+    public static <T extends AbstractBirdEntity<?>> boolean isSkinAvailable(
+            T bird,
+            BirdSkin skin
+    ) {
+
+        /*
+         * 年龄限制
+         *
+         * baby:
+         * true  -> 幼鸟可用
+         *
+         * mature:
+         * true  -> 成鸟可用
+         */
         if (bird.isBaby() && !skin.baby()) {
             return false;
         }
-        // 雄性检查
+
+        if (!bird.isBaby() && !skin.mature()) {
+            return false;
+        }
+
+        // 雄性限制
         if (bird.isMale() && !skin.male()) {
             return false;
         }
-        // 雌性检查（非雄即雌）
+
+
+        // 雌性限制
         return bird.isMale() || skin.female();
     }
 
-    // ========== 变体检测 ==========
-
     /**
-     * 检测是否存在该家族的幼年皮肤变体
-     *
-     * @param bird   鸟类实体
-     * @param family 家族名称
-     * @param <T>    鸟类类型
-     * @return true=存在幼年变体
+     * 检测是否存在该家族支持幼鸟使用的皮肤
      */
-    public static <T extends AbstractBirdEntity<?>> boolean hasBabyVariant(T bird, String family) {
+    public static <T extends AbstractBirdEntity<?>> boolean hasBabyCompatibleSkin(
+            T bird,
+            String family
+    ) {
+
         BirdModel model = bird.getModel();
+
         for (BirdSkin skin : bird.getBirdData().model().birdSkin()) {
+
             if (!getSkinFamily(skin.id().getPath()).equals(family)) {
                 continue;
             }
+
             if (!model.supportsSkin(skin.id())) {
                 continue;
             }
+
+            // baby=true 表示幼鸟可用
             if (skin.baby()) {
                 return true;
             }
         }
+
         return false;
     }
+
+    // ========== 变体检测 ==========
 
     /**
      * 检测是否存在该家族的性别皮肤变体（同时存在雄性和雌性）
      *
      * @param bird   鸟类实体
      * @param family 家族名称
-     * @param <T>    鸟类类型
-     * @return true=存在性别变体
+     * male=true 表示雄性可用
+     * female=true 表示雌性可用
      */
     public static <T extends AbstractBirdEntity<?>> boolean hasGenderVariant(T bird, String family) {
         BirdModel model = bird.getModel();
@@ -241,6 +268,9 @@ public final class BirdSkinUtils {
                 continue;
             }
             if (!model.supportsSkin(skin.id())) {
+                continue;
+            }
+            if (!isSkinAvailable(bird, skin)) {
                 continue;
             }
             // 双性皮肤优先
