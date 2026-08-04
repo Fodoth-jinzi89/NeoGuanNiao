@@ -39,6 +39,9 @@ public abstract class AbstractVillagerMixin {
         AbstractVillager villager =
                 (AbstractVillager)(Object)this;
 
+        if (villager.level().isClientSide()) {
+            return;
+        }
 
         MerchantOffers offers = villager.getOffers();
 
@@ -47,13 +50,11 @@ public abstract class AbstractVillagerMixin {
 
 
         for (MerchantOffer offer : offers) {
+            if (!(offer instanceof MerchantOfferAccessor accessor)) {
+                continue;
+            }
 
             CompoundTag offerTag = new CompoundTag();
-
-
-            MerchantOfferAccessor accessor =
-                    (MerchantOfferAccessor) offer;
-
 
             ItemStack display =
                     accessor.neoguanniao$getDisplayCost();
@@ -124,6 +125,9 @@ public abstract class AbstractVillagerMixin {
         AbstractVillager villager =
                 (AbstractVillager)(Object)this;
 
+        if (villager.level().isClientSide()) {
+            return;
+        }
 
         MerchantOffers offers =
                 villager.getOffers();
@@ -147,6 +151,7 @@ public abstract class AbstractVillagerMixin {
         for (int i = 0; i < size; i++) {
 
 
+
             CompoundTag offerTag =
                     list.getCompound(i);
 
@@ -154,10 +159,9 @@ public abstract class AbstractVillagerMixin {
             MerchantOffer offer =
                     offers.get(i);
 
-
-            MerchantOfferAccessor accessor =
-                    (MerchantOfferAccessor) offer;
-
+            if (!(offer instanceof MerchantOfferAccessor accessor)) {
+                continue;
+            }
 
 
             if (offerTag.contains("DisplayCost")) {

@@ -28,7 +28,7 @@ public class QuestShopCompat {
     private static final ResourceLocation BRILLIANT_GOLD_ID =
             ResourceLocation.fromNamespaceAndPath(
                     "goldentweaks",
-                    "brilliant_gold"
+                    "radiant_gold"
             );
 
 

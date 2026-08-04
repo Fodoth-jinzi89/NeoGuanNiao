@@ -225,6 +225,7 @@
   "tag.neoguanniao.bird_food_fish": "鸟食（鱼类）",
   "tag.neoguanniao.bird_breed_food_fish": "鸟类繁殖食物（鱼类）",
   "tag.neoguanniao.filled_food_bag": "装满的鸟食袋",
+  "tag.neoguanniao.papers": "纸张",
   "block.neoguanniao.bird_nest": "鸟巢",
   "tooltip.neoguanniao.rarity": "§6稀有度：§r",
   "tooltip.neoguanniao.empty_feather": "未知的鸟羽",
@@ -286,16 +287,10 @@
   "advancements.neoguanniao.is_that_penguin.description": "在会下雪的群系用望远镜观察一只夜鹭",
   "advancements.neoguanniao.is_that_cockroach.title": "那是蟑螂吗？",
   "advancements.neoguanniao.is_that_cockroach.description": "用望远镜观察一只具有两根繁殖羽的夜鹭",
-  "advancements.neoguanniao.first_egg.title":
-  "先有鸟还是先有蛋",
-  "advancements.neoguanniao.first_egg.description":
-  "用鸟食袋繁殖鸟类",
-  "advancements.neoguanniao.hatch_first_bird.title":
-  "我从蛋里来",
-  "advancements.neoguanniao.hatch_first_bird.description":
-  "见证一只幼鸟从蛋中孵化",
-  "advancements.neoguanniao.walking_dandelion.title":
-  "行走的蒲公英",
-  "advancements.neoguanniao.walking_dandelion.description":
-  "捡起一根鸟羽"
+  "advancements.neoguanniao.first_egg.title": "先有鸟还是先有蛋",
+  "advancements.neoguanniao.first_egg.description": "用鸟食袋繁殖鸟类",
+  "advancements.neoguanniao.hatch_first_bird.title": "我从蛋里来",
+  "advancements.neoguanniao.hatch_first_bird.description": "见证一只幼鸟从蛋中孵化",
+  "advancements.neoguanniao.walking_dandelion.title": "行走的蒲公英",
+  "advancements.neoguanniao.walking_dandelion.description": "捡起一根鸟羽"
 }

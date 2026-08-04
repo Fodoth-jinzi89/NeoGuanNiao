@@ -8,10 +8,10 @@
   ],
   "key": {
     "A": {
-      "item": "minecraft:string"
+      "tag": "c:strings"
     },
     "B": {
-      "item": "minecraft:paper"
+      "tag": "neoguanniao:papers"
     }
   },
   "result": {
