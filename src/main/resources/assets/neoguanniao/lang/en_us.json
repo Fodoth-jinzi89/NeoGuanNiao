@@ -334,5 +334,6 @@
   "Walking Dandelion",
 
   "advancements.neoguanniao.walking_dandelion.description":
-  "Pick up a bird feather"
+  "Pick up a bird feather",
+  "container.neoguanniao.bird_nest": "Bird Nest"
 }

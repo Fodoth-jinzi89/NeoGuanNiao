@@ -12,11 +12,9 @@ public class NeoGuanNiaoCapabilities {
                 Capabilities.ItemHandler.BLOCK,
                 NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(),
                 (blockEntity, side) -> {
-
                     if (blockEntity instanceof BirdNestBlockEntity nest) {
-                        return nest.getInventory();
+                        return nest.getItemHandler();
                     }
-
                     return null;
                 }
         );

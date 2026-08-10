@@ -16,7 +16,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,68 +35,100 @@ import software.bernie.geckolib.animation.RawAnimation;
 /**
  * 鸟巢方块实体 - 管理鸟巢的库存、动画和鸟蛋孵化
  */
-public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
-
-    // ==================== 动画相关 ====================
-
-    /** 动画实例缓存 */
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
-    /** 空闲动画循环 */
-    private final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+public class BirdNestBlockEntity extends BlockEntity implements Container, GeoBlockEntity {
 
     // ==================== 库存系统 ====================
+    private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
 
-    /**
-     * 4格鸟蛋库存处理器
-     * - 每格最多1个物品
-     * - 仅允许放入 BIRD_EGG
-     */
-    private final ItemStackHandler inventory = new ItemStackHandler(4) {
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemStack stack) {
-            return 1; // 每格限1个
+        public int getSlotLimit(int slot) {
+            return 1;
         }
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return stack.is(NeoGuanNiaoItems.BIRD_EGG.get()); // 仅接受鸟蛋
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return stack.is(NeoGuanNiaoItems.BIRD_EGG.get());
         }
 
         @Override
         protected void onContentsChanged(int slot) {
-            setChanged(); // 标记数据变更
+            BirdNestBlockEntity.this.setChanged();
         }
     };
 
-    // ==================== 构造方法 ====================
+    // ==================== 动画相关 ====================
+    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
 
+    // ==================== 构造方法 ====================
     public BirdNestBlockEntity(BlockPos pos, BlockState state) {
         super(NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(), pos, state);
     }
 
-    // ==================== 库存访问方法 ====================
+    // ==================== Container 接口实现 ====================
 
-    public ItemStackHandler getInventory() {
-        return inventory;
-    }
-
-    public ItemStack getItem(int slot) {
-        return inventory.getStackInSlot(slot);
-    }
-
-    public void setItem(int slot, ItemStack stack) {
-        inventory.setStackInSlot(slot, stack);
-    }
-
+    @Override
     public int getContainerSize() {
-        return inventory.getSlots();
+        return itemHandler.getSlots();
     }
 
-    public void clearContent() {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            inventory.setStackInSlot(i, ItemStack.EMPTY);
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
+                return false;
+            }
         }
+        return true;
+    }
+
+    @Override
+    public @NotNull ItemStack getItem(int slot) {
+        return itemHandler.getStackInSlot(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack removeItem(int slot, int amount) {
+        ItemStack stack = itemHandler.getStackInSlot(slot);
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+
+        ItemStack result = stack.split(amount);
+        itemHandler.setStackInSlot(slot, stack);
+        return result;
+    }
+
+    @Override
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
+        ItemStack stack = itemHandler.getStackInSlot(slot);
+        itemHandler.setStackInSlot(slot, ItemStack.EMPTY);
+        return stack;
+    }
+
+    @Override
+    public void setItem(int slot, @NotNull ItemStack stack) {
+        itemHandler.setStackInSlot(slot, stack);
+    }
+
+    @Override
+    public void clearContent() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
+    @Override
+    public boolean stillValid(@NotNull Player player) {
+        return true; // 始终允许访问
+    }
+
+    @Override
+    public int getMaxStackSize(@NotNull ItemStack stack) {
+        return itemHandler.getSlotLimit(0);
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return stack.is(NeoGuanNiaoItems.BIRD_EGG.get());
     }
 
     // ==================== GeoBlockEntity 接口实现 ====================
@@ -102,7 +136,7 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 0,
-                state -> state.setAndContinue(IDLE) // 持续播放空闲动画
+                state -> state.setAndContinue(IDLE)
         ));
     }
 
@@ -111,35 +145,113 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
         return cache;
     }
 
+    // ==================== 辅助方法 ====================
+
+    public ItemStackHandler getItemHandler() {
+        return itemHandler;
+    }
+
+    public boolean hasEmptySlot() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addEgg(ItemStack egg) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                itemHandler.setStackInSlot(i, egg.copyWithCount(1));
+                return;
+            }
+        }
+    }
+
+    // ==================== 孵化逻辑 ====================
+
+    public void tickEggs() {
+        if (level == null || level.isClientSide) return;
+
+        for (int i = 0; i < getContainerSize(); i++) {
+            ItemStack egg = itemHandler.getStackInSlot(i);
+            if (egg.isEmpty()) continue;
+
+            BirdEggData data = BirdEggItem.getEggData(egg);
+            if (data == null || !data.alive()) continue;
+
+            BirdEggData newData = data.tickDown(20);
+
+            if (newData.canHatch()) {
+                hatchEgg(i, egg, newData);
+            } else {
+                egg.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), newData);
+                setItem(i, egg);
+            }
+        }
+    }
+
+    private void hatchEgg(int slot, ItemStack egg, BirdEggData data) {
+        if (level == null) return;
+
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(data.birdType());
+        if (!(type.create(level) instanceof AbstractBirdEntity<?> bird)) return;
+
+        bird.moveTo(
+                worldPosition.getX() + 0.5,
+                worldPosition.getY() + 0.3,
+                worldPosition.getZ() + 0.5,
+                level.random.nextFloat() * 360,
+                0
+        );
+
+        bird.applyEggData(data);
+        bird.setAge(-24000);
+
+        Component name = egg.get(DataComponents.CUSTOM_NAME);
+        if (name != null) bird.setCustomName(name);
+
+        level.addFreshEntity(bird);
+        triggerHatchEggAdvancement();
+
+        removeItemNoUpdate(slot);
+        setChanged();
+    }
+
+    private void triggerHatchEggAdvancement() {
+        if (!(level instanceof ServerLevel server)) return;
+
+        server.getEntitiesOfClass(
+                        ServerPlayer.class,
+                        new AABB(worldPosition).inflate(16)
+                )
+                .forEach(player ->
+                        NeoGuanNiaoCriteriaTriggers.HATCH_BIRD_EGG.get().trigger(player)
+                );
+    }
+
     // ==================== 数据持久化 ====================
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
-        tag.put("Inventory", inventory.serializeNBT(provider)); // 保存库存
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("Inventory", itemHandler.serializeNBT(registries));
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
-        super.loadAdditional(tag, provider);
-        inventory.deserializeNBT(provider, tag.getCompound("Inventory")); // 加载库存
+    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("Inventory")) {
+            itemHandler.deserializeNBT(registries, tag.getCompound("Inventory"));
+        }
     }
 
     // ==================== 网络同步 ====================
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(
-            HolderLookup.@NotNull Provider provider
-    ) {
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
         return saveWithoutMetadata(provider);
-    }
-
-    @Override
-    public void handleUpdateTag(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
-        super.handleUpdateTag(tag, provider);
-        if (tag.contains("Inventory")) {
-            inventory.deserializeNBT(provider, tag.getCompound("Inventory"));
-        }
     }
 
     @Override
@@ -147,140 +259,11 @@ public class BirdNestBlockEntity extends BlockEntity implements GeoBlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    // ==================== 变更通知 ====================
-
     @Override
     public void setChanged() {
         super.setChanged();
         if (level != null && !level.isClientSide) {
-            // 通知客户端方块状态更新（渲染同步）
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
-    }
-
-    // ==================== 孵化逻辑 ====================
-
-    /**
-     * 每秒（20 tick）调用一次，更新所有鸟蛋的孵化进度
-     * 由 BirdNestBlock.getTicker() 触发
-     */
-    public void tickEggs() {
-        if (level == null || level.isClientSide) return;
-
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack egg = inventory.getStackInSlot(i);
-            if (egg.isEmpty()) continue;
-
-            // 获取鸟蛋数据
-            BirdEggData data = BirdEggItem.getEggData(egg);
-            if (data == null || !data.alive()) continue;
-
-            // 减少20 tick（1秒）的孵化时间
-            BirdEggData newData = data.tickDown(20);
-
-            if (newData.canHatch()) {
-                // 孵化条件满足 → 生成小鸟
-                hatchEgg(i, egg, newData);
-            } else {
-                // 更新蛋的NBT数据
-                egg.set(NeoGuanNiaoDataComponents.BIRD_EGG_DATA.get(), newData);
-                inventory.setStackInSlot(i, egg);
-            }
-        }
-    }
-
-    /**
-     * 孵化鸟蛋，生成小鸟实体
-     * @param slot 鸟蛋所在的格子
-     * @param data 鸟蛋数据（包含鸟类类型、皮肤、性别等信息）
-     */
-    private void hatchEgg(int slot, ItemStack egg, BirdEggData data) {
-        if (level == null) return;
-
-        // 根据鸟类类型ID获取实体类型
-        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(data.birdType());
-        if (!(type.create(level) instanceof AbstractBirdEntity<?> bird)) return;
-
-        // 设置出生位置（巢穴中心偏上）
-        bird.moveTo(
-                worldPosition.getX() + 0.5,
-                worldPosition.getY() + 0.3,
-                worldPosition.getZ() + 0.5,
-                level.random.nextFloat() * 360, // 随机朝向
-                0
-        );
-
-        // 应用蛋里保存的遗传数据（皮肤、体型、性别等）
-        bird.applyEggData(data);
-
-        // 设置为幼年（-24000 tick = 20分钟成长时间）
-        bird.setAge(-24000);
-
-        // 如果鸟蛋被铁砧改过名，则继承名字
-        Component name = egg.get(DataComponents.CUSTOM_NAME);
-
-        if (name != null) {
-            bird.setCustomName(name);
-        }
-
-        // 生成到世界
-        level.addFreshEntity(bird);
-
-        triggerHatchEggAdvancement();
-
-        // 清除该格的蛋
-        inventory.setStackInSlot(slot, ItemStack.EMPTY);
-        setChanged();
-
-        // 通知客户端更新
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-    }
-
-    private void triggerHatchEggAdvancement() {
-
-        if (!(level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-
-
-        serverLevel.getEntitiesOfClass(
-                ServerPlayer.class,
-                new AABB(
-                        worldPosition
-                ).inflate(16)
-        ).forEach(player -> {
-
-            NeoGuanNiaoCriteriaTriggers.HATCH_BIRD_EGG
-                    .get()
-                    .trigger(player);
-
-        });
-    }
-
-    public boolean hasEmptySlot() {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            if (inventory.getStackInSlot(i).isEmpty()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    @SuppressWarnings("all")
-    public boolean addEgg(ItemStack egg) {
-
-        for (int i = 0; i < inventory.getSlots(); i++) {
-
-            if (inventory.getStackInSlot(i).isEmpty()) {
-
-                inventory.setStackInSlot(i, egg);
-                setChanged();
-                return true;
-            }
-        }
-
-        return false;
     }
 }
