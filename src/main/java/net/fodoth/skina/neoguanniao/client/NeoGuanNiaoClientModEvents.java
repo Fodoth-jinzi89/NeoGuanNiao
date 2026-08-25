@@ -8,11 +8,6 @@ import net.fodoth.skina.neoguanniao.client.cage.BirdCageItemRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestItemRenderer;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestRenderer;
-import net.fodoth.skina.neoguanniao.client.old.budgerigar.BudgerigarRenderer;
-import net.fodoth.skina.neoguanniao.client.old.columbid.PigeonRenderer;
-import net.fodoth.skina.neoguanniao.client.old.columbid.SpottedDoveRenderer;
-import net.fodoth.skina.neoguanniao.client.old.nightheron.NightHeronRenderer;
-import net.fodoth.skina.neoguanniao.client.old.sparrow.SparrowRenderer;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -45,31 +40,6 @@ public final class NeoGuanNiaoClientModEvents {
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
 
         event.registerEntityRenderer(
-                NeoGuanNiaoEntityTypes.NIGHT_HERON.get(),
-                NightHeronRenderer::new
-        );
-
-        event.registerEntityRenderer(
-                NeoGuanNiaoEntityTypes.SPARROW.get(),
-                SparrowRenderer::new
-        );
-
-        event.registerEntityRenderer(
-                NeoGuanNiaoEntityTypes.BUDGERIGAR.get(),
-                BudgerigarRenderer::new
-        );
-
-        event.registerEntityRenderer(
-                NeoGuanNiaoEntityTypes.SPOTTED_DOVE.get(),
-                SpottedDoveRenderer::new
-        );
-
-        event.registerEntityRenderer(
-                NeoGuanNiaoEntityTypes.PIGEON.get(),
-                PigeonRenderer::new
-        );
-
-        event.registerEntityRenderer(
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
                 BirdModelRenderer::new
         );
@@ -93,6 +63,11 @@ public final class NeoGuanNiaoClientModEvents {
                 NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
                 BirdModelRenderer::new
         );
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_COCKATIEL.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_LONG_TAILED_TIT.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MACAW.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_CROW.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),

@@ -6,8 +6,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelSkinDa
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelScale;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;

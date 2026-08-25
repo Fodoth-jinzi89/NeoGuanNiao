@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdGuidePreviewAnimation;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightAware;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightAware;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;

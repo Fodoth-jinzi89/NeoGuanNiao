@@ -2,7 +2,7 @@
   "parent": "minecraft:husbandry/root",
   "display": {
     "icon": {
-      "item": "neoguanniao:budgerigar_spawn_egg"
+      "item": "neoguanniao:bird_egg"
     },
     "title": {
       "translate": "advancements.neoguanniao.husbandry.chirpy_partner.title"

@@ -6,7 +6,6 @@ public record BirdEatingDatum(
         int eatingTicksVariant,
         int foodTicks,
         int foodTicksVariant,
-        float eatAmount,
         float eatSoundVolume,
         float eatSoundVolumeVariant,
         float eatSoundPitch,
@@ -18,7 +17,7 @@ public record BirdEatingDatum(
     public static BirdEatingDatum createDefault() {
         return new BirdEatingDatum(
                 35, 21, 90, 60,
-                0.35F, 0.45F, 0.05F, 1.35F, 0.2F, 0.8F,
+                0.45F, 0.05F, 1.35F, 0.2F, 0.8F,
                 120, 120
         );
     }

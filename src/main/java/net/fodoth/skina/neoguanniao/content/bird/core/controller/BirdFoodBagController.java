@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinUtils;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.particles.ParticleOptions;
@@ -64,7 +64,7 @@ public class BirdFoodBagController<T extends AbstractBirdEntity<T>> extends Abst
 
     /** 判断鸟类是否处于特殊活动状态（跳舞/睡觉） */
     protected boolean isBusyWithSpecialActivities() {
-        return bird() instanceof NeoBudgerigarEntity b && b.isBusyWithMusicOrSleep();
+        return bird() instanceof BudgerigarEntity b && b.isBusyWithMusicOrSleep();
     }
 
     /** 判断鸟类是否处于休息或飞行状态 */

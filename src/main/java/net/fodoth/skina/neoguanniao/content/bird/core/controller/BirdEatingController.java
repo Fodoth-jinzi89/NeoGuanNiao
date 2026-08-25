@@ -8,7 +8,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdEatingDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdTameDatum;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -78,7 +78,7 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         }
 
         // 鹦鹉跳舞也不吃东西
-        if (bird() instanceof NeoBudgerigarEntity budgerigar) {
+        if (bird() instanceof BudgerigarEntity budgerigar) {
             if (budgerigar.isBusyWithMusicOrSleep()) {
                 return InteractionResult.CONSUME;
             }
@@ -292,12 +292,11 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 计算进食参数（加上随机变化）
         int eatingTicks = eatingDatum.eatingTicks() + bird().getRandom().nextInt(eatingDatum.eatingTicksVariant());
         int foodTicks = eatingDatum.foodTicks() + bird().getRandom().nextInt(eatingDatum.foodTicksVariant());
-        float eatAmount = eatingDatum.eatAmount();
         float volume = eatingDatum.eatSoundVolume() + bird().getRandom().nextFloat() * eatingDatum.eatSoundVolumeVariant();
         float pitch = eatingDatum.eatSoundPitch() + bird().getRandom().nextFloat() * eatingDatum.eatSoundPitchVariant();
 
         // 开始进食行为
-        startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch);
+        startEatingBehavior(eatingTicks, foodTicks, volume, pitch);
     }
 
     /**
@@ -314,13 +313,12 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 计算进食参数（加上随机变化）
         int eatingTicks = eatingDatum.eatingTicks() + bird().getRandom().nextInt(eatingDatum.eatingTicksVariant());
         int foodTicks = eatingDatum.foodTicks() + bird().getRandom().nextInt(eatingDatum.foodTicksVariant());
-        float eatAmount = eatingDatum.eatAmount();
         float volume = eatingDatum.eatSoundVolume() + bird().getRandom().nextFloat() * eatingDatum.eatSoundVolumeVariant();
         float pitch = eatingDatum.eatSoundPitch() + bird().getRandom().nextFloat() * eatingDatum.eatSoundPitchVariant();
         float multiplier = eatingDatum.eatBathMultiplier();
 
         // 根据内容类型开始进食
-        startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch, multiplier);
+        startEatingBehavior(eatingTicks, foodTicks, volume, pitch, multiplier);
     }
 
     /**
@@ -330,11 +328,9 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 获取行为状态控制器
         var behaviorController = bird.getBehaviorStateController();
 
-        // 如果当前状态为进食，根据大脑决策切换到合适状态
+        // 如果当前状态为进食，恢复到默认状态
         if (behaviorController.getBehaviorState() == BirdBehaviorState.EATING) {
-            boolean wantsForage = bird().getBirdBrain().wantsForage();
-            BirdBehaviorState nextState = wantsForage ? BirdBehaviorState.FORAGING : BirdBehaviorState.IDLE;
-            behaviorController.setBehaviorState(nextState);
+            behaviorController.setBehaviorState(BirdBehaviorState.IDLE);
         }
     }
 
@@ -343,12 +339,11 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      *
      * @param eatingTicks 进食持续刻数
      * @param foodTicks   食物效果持续刻数
-     * @param eatAmount   进食恢复量/效果系数
      * @param volume      声音音量
      * @param pitch       声音音调
      */
-    private void startEatingBehavior(int eatingTicks, int foodTicks, float eatAmount, float volume, float pitch) {
-        startEatingBehavior(eatingTicks, foodTicks, eatAmount, volume, pitch, 1.0F);
+    private void startEatingBehavior(int eatingTicks, int foodTicks, float volume, float pitch) {
+        startEatingBehavior(eatingTicks, foodTicks, volume, pitch, 1.0F);
     }
 
     /**
@@ -356,12 +351,11 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
      *
      * @param eatingTicks 进食持续刻数
      * @param foodTicks   食物效果持续刻数
-     * @param eatAmount   进食恢复量/效果系数
      * @param volume      声音音量
      * @param pitch       声音音调
      * @param multiplier  全局倍率（影响所有数值参数）
      */
-    private void startEatingBehavior(int eatingTicks, int foodTicks, float eatAmount, float volume, float pitch, float multiplier) {
+    private void startEatingBehavior(int eatingTicks, int foodTicks, float volume, float pitch, float multiplier) {
         // 获取计时器控制器
         var tickController = bird().getTickController();
         var timer = tickController.getTickTimer();
@@ -369,7 +363,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
         // 计算应用倍率后的值
         int finalEatingTicks = (int) (eatingTicks * multiplier);
         int finalFoodTicks = (int) (foodTicks * multiplier);
-        float finalEatAmount = eatAmount * multiplier;
         float finalVolume = volume * multiplier;
         float finalPitch = pitch * multiplier;
 
@@ -386,8 +379,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
                 finalEatingTicks
         );
 
-        // 通知大脑进食事件
-        bird().getBirdBrain().onEat(finalEatAmount);
 
         // 播放进食音效
         bird().playSound(bird().getBirdData().sound().eatSound(), finalVolume, finalPitch);

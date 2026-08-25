@@ -1,0 +1,1 @@
+{"type":"neoforge:add_spawns","biomes":"#neoguanniao:macaw_habitat","spawners":{"type":"neoguanniao:neo_macaw","weight":2,"minCount":2,"maxCount":4}}

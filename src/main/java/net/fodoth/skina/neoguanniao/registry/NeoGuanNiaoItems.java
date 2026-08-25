@@ -3,8 +3,6 @@ package net.fodoth.skina.neoguanniao.registry;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathItem;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathVariant;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonDefinition;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveDefinition;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
@@ -12,11 +10,8 @@ import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.fodoth.skina.neoguanniao.content.feed.*;
 import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -26,12 +21,6 @@ public final class NeoGuanNiaoItems {
 
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(NeoGuanNiao.MODID);
-
-    public static final DeferredItem<Item> NIGHT_HERON_SPAWN_EGG;
-    public static final DeferredItem<Item> SPARROW_SPAWN_EGG;
-    public static final DeferredItem<Item> BUDGERIGAR_SPAWN_EGG;
-    public static final DeferredItem<Item> SPOTTED_DOVE_SPAWN_EGG;
-    public static final DeferredItem<Item> PIGEON_SPAWN_EGG;
 
     public static final DeferredItem<Item> BREADCRUMBS;
     public static final DeferredItem<Item> BIRD_GUIDE;
@@ -77,21 +66,6 @@ public final class NeoGuanNiaoItems {
     private NeoGuanNiaoItems() {
     }
 
-    private static DeferredItem<Item> registerSpawnEgg(
-            String id,
-            Supplier<? extends EntityType<? extends Mob>> entityType,
-            int baseColor,
-            int spotColor
-    ) {
-        return ITEMS.register(id,
-                () -> new DeferredSpawnEggItem(
-                        entityType,
-                        baseColor,
-                        spotColor,
-                        new Item.Properties()
-                ));
-    }
-
     private static DeferredItem<Item> registerBirdCageItem(
             BirdCageVariant variant,
             Supplier<? extends Block> block
@@ -117,41 +91,6 @@ public final class NeoGuanNiaoItems {
     }
 
     static {
-        NIGHT_HERON_SPAWN_EGG = registerSpawnEgg(
-                "night_heron_spawn_egg",
-                NeoGuanNiaoEntityTypes.NIGHT_HERON,
-                6121331,
-                14198125
-        );
-
-        SPARROW_SPAWN_EGG = registerSpawnEgg(
-                "sparrow_spawn_egg",
-                NeoGuanNiaoEntityTypes.SPARROW,
-                9072205,
-                14141346
-        );
-
-        BUDGERIGAR_SPAWN_EGG = registerSpawnEgg(
-                "budgerigar_spawn_egg",
-                NeoGuanNiaoEntityTypes.BUDGERIGAR,
-                7323461,
-                16111690
-        );
-
-        SPOTTED_DOVE_SPAWN_EGG = registerSpawnEgg(
-                "spotted_dove_spawn_egg",
-                NeoGuanNiaoEntityTypes.SPOTTED_DOVE,
-                SpottedDoveDefinition.SPAWN_EGG_BASE_COLOR,
-                SpottedDoveDefinition.SPAWN_EGG_SPOT_COLOR
-        );
-
-        PIGEON_SPAWN_EGG = registerSpawnEgg(
-                "pigeon_spawn_egg",
-                NeoGuanNiaoEntityTypes.PIGEON,
-                PigeonDefinition.SPAWN_EGG_BASE_COLOR,
-                PigeonDefinition.SPAWN_EGG_SPOT_COLOR
-        );
-
         BREADCRUMBS = ITEMS.register(
                 "breadcrumbs",
                 () -> new BreadcrumbItem(new Item.Properties())

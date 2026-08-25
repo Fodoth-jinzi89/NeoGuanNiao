@@ -7,8 +7,8 @@ import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlightProfile;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -598,6 +598,79 @@ public final class NeoGuanNiaoBirdData {
                                     ).withCuriousAndTrustingIndexRange(3, 3)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.2D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.25F))
             );
+
+    public static final DeferredHolder<BirdData, BirdData> COCKATIEL = registerSimpleBird(
+            "neo_cockatiel", "cockatiel", List.of("dark_gray_yellow_face", "gray_white_face",
+                    "gray_yellow_face", "pale_yellow", "white_yellow_face"),
+            BirdFlightProfile.BUDGERIGAR, BirdModelScaleProfile.BUDGERIGAR, 0.2F,
+            "cockatiel", Map.ofEntries(
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
+                    Map.entry("walk", "walk"), Map.entry("fly", "fly"), Map.entry("eat", "eat"),
+                    Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
+
+    public static final DeferredHolder<BirdData, BirdData> LONG_TAILED_TIT = registerSimpleBird(
+            "neo_long_tailed_tit", "long_tailed_tit", List.of("long_tailed_tit"),
+            BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F,
+            "long_tailed_tit", Map.ofEntries(
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
+                    Map.entry("walk", "walk"), Map.entry("fly", "fly_loop"), Map.entry("eat", "eat"),
+                    Map.entry("sleep", "idle"), Map.entry("sleep_loop", "idle")));
+
+    public static final DeferredHolder<BirdData, BirdData> MACAW = registerSimpleBird(
+            "neo_macaw", "macaw", List.of("variant_1", "variant_2", "variant_3", "variant_4", "variant_5"),
+            BirdFlightProfile.COLUMBID, BirdModelScaleProfile.COLUMBID, 0.32F,
+            "macaw", Map.ofEntries(
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_4"),
+                    Map.entry("walk", "walk"), Map.entry("fly", "fly_flapping_wing_loop"),
+                    Map.entry("eat", "eat"), Map.entry("sleep", "sleep"),
+                    Map.entry("sleep_loop", "sleep_loop")));
+
+    public static final DeferredHolder<BirdData, BirdData> CROW = registerSimpleBird(
+            "neo_crow", "crow", List.of("crow"), BirdFlightProfile.COLUMBID,
+            BirdModelScaleProfile.COLUMBID, 0.26F, "crow", Map.ofEntries(
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_2"),
+                    Map.entry("walk", "walk"), Map.entry("fly", "fly"),
+                    Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
+                    Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep2")));
+
+    public static final DeferredHolder<BirdData, BirdData> SEAGULL = registerSimpleBird(
+            "neo_seagull", "seagull", List.of("seagull"), BirdFlightProfile.NIGHT_HERON,
+            BirdModelScaleProfile.COLUMBID, 0.3F, "seagull", Map.ofEntries(
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_5"),
+                    Map.entry("walk", "walk"), Map.entry("fly", "fly_flapping_wing_loop"),
+                    Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
+                    Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
+
+    private static DeferredHolder<BirdData, BirdData> registerSimpleBird(
+            String id, String assetName, List<String> skins, BirdFlightProfile flightProfile,
+            BirdModelScaleProfile scaleProfile, float shadowRadius, String animationName,
+            Map<String, String> animations) {
+        return BIRD_DATA.register(id, () -> BirdData.createDefault()
+                .withSound(new BirdSoundDatum(0.5F, 240, SoundEvents.PARROT_AMBIENT,
+                        SoundEvents.PARROT_HURT, SoundEvents.PARROT_DEATH,
+                        SoundEvents.PARROT_AMBIENT, SoundEvents.PARROT_EAT))
+                .withFlying(BirdFlyingDatum.createDefault().withFlightProfile(flightProfile))
+                .withModel(BirdModelSkinDatum.createDefault()
+                        .withBirdModel(List.of(BirdModel.createDefault()
+                                .withId(resource(assetName))
+                                .withLocation(resource("geo/" + assetName + ".geo.json"))))
+                        .withBirdSkin(skins.stream().map(skin -> BirdSkin.createDefault()
+                                .withId(resource(id + "_" + skin))
+                                .withLocation(resource("textures/entity/" + assetName + "/" + skin + ".png")))
+                                .toList())
+                        .withModelScaleProfile(scaleProfile)
+                        .withShadowRadius(shadowRadius))
+                .withAnimation(BirdAnimationDatum.withAnimationIdAndMap(
+                        Map.of(resource(assetName), resource("animations/" + animationName + ".animation.json")),
+                        animations.entrySet().stream().collect(java.util.stream.Collectors.toUnmodifiableMap(
+                                Map.Entry::getKey,
+                                entry -> RawAnimation.begin().thenLoop(entry.getValue()))))));
+    }
 
 
     private static ResourceLocation resource(String path) {

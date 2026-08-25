@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.advancement.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NeoNightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
@@ -24,7 +24,7 @@ public class SpyglassAtBirdTrigger
 
     public void trigger(
             ServerPlayer player,
-            NeoNightHeronEntity heron
+            NightHeronEntity heron
     ) {
 
         this.trigger(player,
@@ -57,7 +57,7 @@ public class SpyglassAtBirdTrigger
 
         public boolean matches(
                 ServerPlayer player,
-                NeoNightHeronEntity heron
+                NightHeronEntity heron
         ) {
 
             return switch (type) {

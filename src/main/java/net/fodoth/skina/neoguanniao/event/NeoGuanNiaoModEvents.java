@@ -4,24 +4,22 @@ import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoDoveEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.columbid.NeoPigeonEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NeoNightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.sparrow.NeoSparrowEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.PigeonEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.SpottedDoveEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.BudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.CockatielEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.CrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.DoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.LongTailedTitEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.MacawEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -60,155 +58,54 @@ public final class NeoGuanNiaoModEvents {
     @SubscribeEvent
     public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 
-        event.put(
-                NeoGuanNiaoEntityTypes.NIGHT_HERON.get(),
-                NightHeronEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.SPARROW.get(),
-                SparrowEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.BUDGERIGAR.get(),
-                BudgerigarEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.SPOTTED_DOVE.get(),
-                SpottedDoveEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.PIGEON.get(),
-                PigeonEntity.createAttributes().build()
-        );
-
-
-        event.put(
-                NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
-                NeoBudgerigarEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(),
-                NeoNightHeronEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.NEO_PIGEON.get(),
-                NeoPigeonEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.NEO_DOVE.get(),
-                NeoDoveEntity.createAttributes().build()
-        );
-
-        event.put(
-                NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
-                NeoSparrowEntity.createAttributes().build()
-        );
+        event.put(NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(), BudgerigarEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(), NightHeronEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_PIGEON.get(), PigeonEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_DOVE.get(), DoveEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_SPARROW.get(), SparrowEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_COCKATIEL.get(), CockatielEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_LONG_TAILED_TIT.get(), LongTailedTitEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_MACAW.get(), MacawEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_CROW.get(), CrowEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), SeagullEntity.createAttributes().build());
     }
 
 
     @SubscribeEvent
     public static void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 
-        event.register(
-                NeoGuanNiaoEntityTypes.NIGHT_HERON.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NightHeronEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.SPARROW.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                SparrowEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.BUDGERIGAR.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                BudgerigarEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.SPOTTED_DOVE.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                SpottedDoveEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.PIGEON.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                PigeonEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NeoBudgerigarEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NeoNightHeronEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.NEO_PIGEON.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NeoPigeonEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.NEO_DOVE.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NeoDoveEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
-
-        event.register(
-                NeoGuanNiaoEntityTypes.NEO_SPARROW.get(),
-                SpawnPlacementTypes.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                NeoSparrowEntity::canSpawn,
-                RegisterSpawnPlacementsEvent.Operation.REPLACE
-        );
+        event.register(NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, BudgerigarEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NightHeronEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_PIGEON.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PigeonEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_DOVE.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DoveEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_SPARROW.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SparrowEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_COCKATIEL.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CockatielEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_LONG_TAILED_TIT.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, LongTailedTitEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_MACAW.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MacawEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_CROW.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CrowEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SeagullEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
-
-    @SubscribeEvent
-    public static void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
-
-        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            event.accept(NeoGuanNiaoItems.NIGHT_HERON_SPAWN_EGG.get());
-            event.accept(NeoGuanNiaoItems.SPARROW_SPAWN_EGG.get());
-            event.accept(NeoGuanNiaoItems.BUDGERIGAR_SPAWN_EGG.get());
-            event.accept(NeoGuanNiaoItems.SPOTTED_DOVE_SPAWN_EGG.get());
-            event.accept(NeoGuanNiaoItems.PIGEON_SPAWN_EGG.get());
-        }
-    }
 
     @SubscribeEvent
     public static void registerCapabilities(

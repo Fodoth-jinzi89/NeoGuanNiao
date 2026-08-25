@@ -3,7 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdMiscDatum;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.budgerigar.NeoBudgerigarEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.BudgerigarEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -44,7 +44,7 @@ public class BirdBreedController<T extends AbstractBirdEntity<T>> extends Abstra
         if (bird().isBaby()) return InteractionResult.PASS;        // 幼年禁止繁殖
         if (bird().getAge() > 0) return InteractionResult.PASS;    // 冷却中（贤者时间）
         if (bird().getEatingController().isEating()) return InteractionResult.PASS; // 正在进食
-        if (bird() instanceof NeoBudgerigarEntity b && b.isBusyWithMusicOrSleep()) {
+        if (bird() instanceof BudgerigarEntity b && b.isBusyWithMusicOrSleep()) {
             return InteractionResult.PASS; // 虎皮鹦鹉在跳舞/睡觉
         }
         if (bird().getRoutineController().isSleepingOrRoosting() || bird().getFlyingController().isBirdFlightActive()) return InteractionResult.PASS; // 睡眠/栖息中

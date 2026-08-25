@@ -19,11 +19,11 @@ public record BirdGuideEntry(String id, List<String> sections) {
 
     public EntityType<? extends LivingEntity> entityType() {
         return switch (this.id) {
-            case "budgerigar" -> NeoGuanNiaoEntityTypes.BUDGERIGAR.get();
-            case "sparrow" -> NeoGuanNiaoEntityTypes.SPARROW.get();
-            case "spotted_dove" -> NeoGuanNiaoEntityTypes.SPOTTED_DOVE.get();
-            case "pigeon" -> NeoGuanNiaoEntityTypes.PIGEON.get();
-            default -> NeoGuanNiaoEntityTypes.NIGHT_HERON.get();
+            case "budgerigar" -> NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get();
+            case "sparrow" -> NeoGuanNiaoEntityTypes.NEO_SPARROW.get();
+            case "spotted_dove" -> NeoGuanNiaoEntityTypes.NEO_DOVE.get();
+            case "pigeon" -> NeoGuanNiaoEntityTypes.NEO_PIGEON.get();
+            default -> NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get();
         };
     }
 }

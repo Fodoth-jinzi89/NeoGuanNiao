@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.data.datum;
 
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.BirdFlightProfile;
 
 // ============ 飞行数据 ============
 public record BirdFlyingDatum(

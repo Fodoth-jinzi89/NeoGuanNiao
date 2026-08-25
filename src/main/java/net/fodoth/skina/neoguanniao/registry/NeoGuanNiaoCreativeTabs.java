@@ -44,12 +44,6 @@ public final class NeoGuanNiaoCreativeTabs {
                                 output.accept(NeoGuanNiaoItems.STONE_BIRD_BATH_2.get());
                                 output.accept(NeoGuanNiaoItems.BIRD_BATH_2.get());
 
-                                output.accept(NeoGuanNiaoItems.NIGHT_HERON_SPAWN_EGG.get());
-                                output.accept(NeoGuanNiaoItems.SPARROW_SPAWN_EGG.get());
-                                output.accept(NeoGuanNiaoItems.BUDGERIGAR_SPAWN_EGG.get());
-                                output.accept(NeoGuanNiaoItems.SPOTTED_DOVE_SPAWN_EGG.get());
-                                output.accept(NeoGuanNiaoItems.PIGEON_SPAWN_EGG.get());
-
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG.get());
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_SEED.get());
                                 output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_FISH.get());

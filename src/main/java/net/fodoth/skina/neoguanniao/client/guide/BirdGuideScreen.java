@@ -3,14 +3,7 @@ package net.fodoth.skina.neoguanniao.client.guide;
 import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutConfig;
 import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutRect;
 import net.fodoth.skina.neoguanniao.client.keybind.NeoGuanNiaoClientKeyBindings;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.budgerigar.BudgerigarGuidePreviewAnimation;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.AbstractColumbidEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.columbid.ColumbidGuidePreviewAnimation;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.nightheron.NightHeronGuidePreviewAnimation;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowGuidePreviewAnimation;
+import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -705,64 +698,21 @@ public class BirdGuideScreen extends Screen {
     // ============ 动画转换方法 ============
 
     private void applyPreviewAnimation(LivingEntity entity) {
-        if (entity instanceof NightHeronEntity nightHeron) {
-            nightHeron.setGuidePreviewAnimation(this.toNightHeronPreviewAnimation(this.previewAnimation));
-        } else if (entity instanceof SparrowEntity sparrow) {
-            sparrow.setGuidePreviewAnimation(this.toSparrowPreviewAnimation(this.previewAnimation));
-        } else if (entity instanceof BudgerigarEntity budgerigar) {
-            budgerigar.setGuidePreviewAnimation(this.toBudgerigarPreviewAnimation(this.previewAnimation));
-        } else if (entity instanceof AbstractColumbidEntity columbid) {
-            columbid.setGuidePreviewAnimation(this.toColumbidPreviewAnimation(this.previewAnimation));
+        if (entity instanceof AbstractBirdEntity<?> bird) {
+            var animations = bird.getBirdData().animation().animationMap();
+            String key = switch (this.previewAnimation) {
+                case IDLE -> "idle";
+                case LOOK_1, SCRATCH -> "preen";
+                case LOOK_2, LOOK_5 -> "curious";
+                case LOOK_3 -> "dance";
+                case WALK, RUN -> "walk";
+                case FLY_FLAP -> "fly";
+                case GLIDE -> "fly_glide";
+            };
+            var animation = animations.getOrDefault(key,
+                    animations.getOrDefault("fly", animations.get("idle")));
+            bird.getAnimationController().setGuidePreviewAnimation(animation);
         }
-    }
-
-    private NightHeronGuidePreviewAnimation toNightHeronPreviewAnimation(GuidePreviewAnimation animation) {
-        return switch (animation) {
-            case IDLE -> NightHeronGuidePreviewAnimation.IDLE;
-            case LOOK_1 -> NightHeronGuidePreviewAnimation.LOOK_1;
-            case LOOK_2 -> NightHeronGuidePreviewAnimation.LOOK_2;
-            case LOOK_3 -> NightHeronGuidePreviewAnimation.LOOK_3;
-            case SCRATCH -> NightHeronGuidePreviewAnimation.SCRATCH;
-            case LOOK_5 -> NightHeronGuidePreviewAnimation.LOOK_5;
-            case WALK -> NightHeronGuidePreviewAnimation.WALK;
-            case RUN -> NightHeronGuidePreviewAnimation.RUN;
-            case FLY_FLAP -> NightHeronGuidePreviewAnimation.FLY_FLAP;
-            case GLIDE -> NightHeronGuidePreviewAnimation.GLIDE;
-        };
-    }
-
-    private SparrowGuidePreviewAnimation toSparrowPreviewAnimation(GuidePreviewAnimation animation) {
-        return switch (animation) {
-            case IDLE -> SparrowGuidePreviewAnimation.IDLE;
-            case LOOK_1, LOOK_5 -> SparrowGuidePreviewAnimation.TAIL;
-            case LOOK_2, SCRATCH -> SparrowGuidePreviewAnimation.PECK;
-            case LOOK_3 -> SparrowGuidePreviewAnimation.LOOK_AROUND;
-            case WALK, RUN -> SparrowGuidePreviewAnimation.WALK;
-            case FLY_FLAP, GLIDE -> SparrowGuidePreviewAnimation.FLY;
-        };
-    }
-
-    private BudgerigarGuidePreviewAnimation toBudgerigarPreviewAnimation(GuidePreviewAnimation animation) {
-        return switch (animation) {
-            case IDLE -> BudgerigarGuidePreviewAnimation.IDLE;
-            case LOOK_1, SCRATCH -> BudgerigarGuidePreviewAnimation.PREEN;
-            case LOOK_2, LOOK_5 -> BudgerigarGuidePreviewAnimation.CURIOUS;
-            case LOOK_3 -> BudgerigarGuidePreviewAnimation.DANCE;
-            case WALK, RUN -> BudgerigarGuidePreviewAnimation.WALK;
-            case FLY_FLAP, GLIDE -> BudgerigarGuidePreviewAnimation.FLY;
-        };
-    }
-
-    private ColumbidGuidePreviewAnimation toColumbidPreviewAnimation(GuidePreviewAnimation animation) {
-        return switch (animation) {
-            case IDLE -> ColumbidGuidePreviewAnimation.IDLE;
-            case LOOK_1, SCRATCH -> ColumbidGuidePreviewAnimation.LOOK_1;
-            case LOOK_2 -> ColumbidGuidePreviewAnimation.LOOK_2;
-            case LOOK_3, LOOK_5 -> ColumbidGuidePreviewAnimation.LOOK_3;
-            case WALK, RUN -> ColumbidGuidePreviewAnimation.WALK;
-            case FLY_FLAP -> ColumbidGuidePreviewAnimation.FLY_FLAP;
-            case GLIDE -> ColumbidGuidePreviewAnimation.GLIDE;
-        };
     }
 
     private GuidePreviewAnimation randomIdleGuideAnimation() {

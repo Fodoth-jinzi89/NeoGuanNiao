@@ -13,11 +13,11 @@ import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
-import net.fodoth.skina.neoguanniao.content.bird.feature.brain.BirdBrain;
-import net.fodoth.skina.neoguanniao.content.bird.feature.flight.*;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScale;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.ScalableBirdModel;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelScale;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.ScalableBirdModel;
+import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.*;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlightProfile;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
@@ -104,15 +104,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     protected final BirdControllers<T> BIRD_CONTROLLERS;
 
     // ==================== 变量 =======================
-    protected BirdBrain birdBrain;
-
-
     protected AbstractBirdEntity(EntityType<T> entityType,
                                  Level level, BirdData birdData, BirdControllers<T> birdControllers) {
         super(entityType, level);
         this.BIRD_DATA = birdData;
         this.BIRD_CONTROLLERS = birdControllers;
-        initFeatures();
         initPathfindingMalus();
     }
 
@@ -133,12 +129,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     public BirdControllers<T> getBirdControllers() {
         return BIRD_CONTROLLERS;
-    }
-
-    protected void initFeatures() {
-        if (birdBrain == null) {
-            birdBrain = new BirdBrain(this, null);
-        }
     }
 
     protected void initPathfindingMalus() {
@@ -540,7 +530,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         if (this.level().isClientSide) {
             getTickController().tickClient();
         } else {
-            birdBrain.tick();
             getTickController().tick();
             if (growthStopped && this.getAge() < 0) {
                 this.setAge(this.getAge() - 1);
@@ -577,7 +566,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
-        birdBrain.save(compoundTag);
         compoundTag.putInt("BirdTrustTicks", getTickController().getTickTimer().getBirdTrustTicker().getTicks());
         compoundTag.putInt("BirdCuriousTicks", getTickController().getTickTimer().getBirdCuriousTicker().getTicks());
         compoundTag.putBoolean("BirdGender", getBreedController().getGender());
@@ -596,7 +584,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
-        birdBrain.load(compoundTag);
         getTickController().getTickTimer().getBirdTrustTicker().setTicks(compoundTag.getInt("BirdTrustTicks"));
         getTickController().getTickTimer().getBirdCuriousTicker().setTicks(compoundTag.getInt("BirdCuriousTicks"));
         if (compoundTag.contains("BirdGender", CompoundTag.TAG_BYTE)) {
@@ -901,10 +888,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     public BirdData getBirdData() {
         return BIRD_DATA;
-    }
-
-    public BirdBrain getBirdBrain() {
-        return birdBrain;
     }
 
     public void setMoveControl(MoveControl control) {

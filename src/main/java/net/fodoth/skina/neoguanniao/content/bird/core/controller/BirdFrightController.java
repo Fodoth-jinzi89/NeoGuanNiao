@@ -30,7 +30,6 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
     public void processHurt(@NotNull DamageSource source) {
         var stateController = bird().getBehaviorStateController();
         var eatingController = bird().getEatingController();
-        var brain = bird().getBirdBrain();
         BirdData birdData = bird().getBirdData();
         BirdMiscDatum miscDatum = birdData.misc();
         BirdFrightDatum frightDatum = birdData.fright();
@@ -46,10 +45,6 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         if (!(bird().isTame() && bird().getOwner() != null && attacker != null && bird().getOwner().getUUID() == attacker.getUUID()))
         {
             setFrightSource(sourcePos);
-            float trustLoss = isPlayer
-                    ? miscDatum.frightenedTrustLossPlayer()
-                    : miscDatum.frightenedTrustLossOther();
-            brain.onFrightened(trustLoss);
         }
 
         // 停止移动
@@ -183,8 +178,6 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
                 continue;
             }
 
-            // 通知大脑受惊
-            bird.getBirdBrain().onFrightened(frightDatum.frightenAmount());
 
             // 设置警戒状态
             int alertTicks = miscDatum.alertTicks() + b.getRandom().nextInt(miscDatum.alertTicksVariant());

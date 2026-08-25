@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.event;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.bird.impl.neo.night_heron.NeoNightHeronEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoCriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public class SpyglassTickHandler {
         Entity target = getLookingEntity(player);
 
 
-        if(target instanceof NeoNightHeronEntity e) {
+        if(target instanceof NightHeronEntity e) {
 
             NeoGuanNiaoCriteriaTriggers.SPYGLASS_AT_BIRD
                     .get()

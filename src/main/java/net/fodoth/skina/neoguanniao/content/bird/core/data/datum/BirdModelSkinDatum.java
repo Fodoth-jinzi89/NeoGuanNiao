@@ -2,7 +2,6 @@ package net.fodoth.skina.neoguanniao.content.bird.core.data.datum;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
-import net.fodoth.skina.neoguanniao.content.bird.feature.scale.BirdModelScaleProfile;
 
 import java.util.List;
 

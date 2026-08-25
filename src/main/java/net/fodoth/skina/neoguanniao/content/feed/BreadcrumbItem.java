@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.feed;
 
-import net.fodoth.skina.neoguanniao.content.bird.impl.old.sparrow.SparrowEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlocks;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.core.BlockPos;
@@ -188,7 +187,6 @@ public class BreadcrumbItem extends Item {
                     0.02
             );
 
-            SparrowEntity.alertNearbyBreadcrumbs(level, originPos, player);
         }
     }
 
