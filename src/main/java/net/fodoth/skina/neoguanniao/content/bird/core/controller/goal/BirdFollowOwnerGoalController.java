@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightTargeting;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightTargeting;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 

@@ -89,6 +89,11 @@ public record BirdFeatherData(
             case "neo_dove" -> 2;
             case "neo_pigeon" -> 3;
             case "neo_sparrow" -> 4;
+            case "neo_cockatiel" -> 5;
+            case "neo_long_tailed_tit" -> 6;
+            case "neo_macaw" -> 7;
+            case "neo_crow" -> 8;
+            case "neo_seagull" -> 9;
             default -> -1;
         };
     }

@@ -4,9 +4,9 @@ import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlyingDatum;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightBoids;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightManager;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightTargeting;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightBoids;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightManager;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightTargeting;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +46,15 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
      */
     public BirdFlyingTicker() {
         super(true, false);
+    }
+
+    @Override
+    public void tick() {
+        if (shouldTickCommon() && !isFrozen() && getTicks() <= 0 && bird().isInWater()) {
+            tickWaterEscape();
+            return;
+        }
+        super.tick();
     }
 
 

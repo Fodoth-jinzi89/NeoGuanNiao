@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 public class NeoGuanNiaoItemTags {
     public static final TagKey<Item> BIRD_FOOD;
     public static final TagKey<Item> BIRD_FOOD_FISH;
+    public static final TagKey<Item> SEAGULL_EXTRA_FOOD;
     public static final TagKey<Item> BIRD_BREED_FOOD;
     public static final TagKey<Item> BIRD_BREED_FOOD_FISH;
     public static final TagKey<Item> FILLED_FOOD_BAG;
@@ -21,6 +22,10 @@ public class NeoGuanNiaoItemTags {
         BIRD_FOOD_FISH = TagKey.create(
                 Registries.ITEM,
                 ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "bird_food_fish")
+        );
+        SEAGULL_EXTRA_FOOD = TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "seagull_extra_food")
         );
         BIRD_BREED_FOOD = TagKey.create(
                 Registries.ITEM,

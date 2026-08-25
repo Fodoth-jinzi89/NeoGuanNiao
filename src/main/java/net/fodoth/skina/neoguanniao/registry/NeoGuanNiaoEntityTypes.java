@@ -51,11 +51,11 @@ public final class NeoGuanNiaoEntityTypes {
         NEO_NIGHT_HERON = registerCreature("neo_night_heron", NightHeronEntity::new, 0.8F, 0.9F);
         NEO_PIGEON = registerCreature("neo_pigeon", PigeonEntity::new, 0.4F, 0.54F);
         NEO_DOVE = registerCreature("neo_dove", DoveEntity::new, 0.4F, 0.54F);
-        NEO_SPARROW = registerCreature("neo_sparrow", SparrowEntity::new, 0.32F, 0.38F);
-        NEO_COCKATIEL = registerCreature("neo_cockatiel", CockatielEntity::new, 0.4F, 0.54F);
-        NEO_LONG_TAILED_TIT = registerCreature("neo_long_tailed_tit", LongTailedTitEntity::new, 0.34F, 0.36F);
-        NEO_MACAW = registerCreature("neo_macaw", MacawEntity::new, 0.68F, 0.92F);
-        NEO_CROW = registerCreature("neo_crow", CrowEntity::new, 0.52F, 0.72F);
-        NEO_SEAGULL = registerCreature("neo_seagull", SeagullEntity::new, 0.56F, 0.72F);
+        NEO_SPARROW = registerCreature("neo_sparrow", SparrowEntity::new, 0.384F, 0.456F);
+        NEO_COCKATIEL = registerCreature("neo_cockatiel", CockatielEntity::new, 0.52F, 0.702F);
+        NEO_LONG_TAILED_TIT = registerCreature("neo_long_tailed_tit", LongTailedTitEntity::new, 0.3072F, 0.3648F);
+        NEO_MACAW = registerCreature("neo_macaw", MacawEntity::new, 0.7072F, 0.9568F);
+        NEO_CROW = registerCreature("neo_crow", CrowEntity::new, 0.416F, 0.576F);
+        NEO_SEAGULL = registerCreature("neo_seagull", SeagullEntity::new, 0.72F, 0.81F);
     }
 }

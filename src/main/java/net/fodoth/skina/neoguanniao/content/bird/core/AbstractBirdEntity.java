@@ -15,7 +15,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.ScalableBirdModel;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.*;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.*;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
@@ -710,6 +710,10 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         BirdBehaviorState state = getBehaviorStateController().getBehaviorState();
         var tickTimer = getTickController().getTickTimer();
 
+        if (state != BirdBehaviorState.SLEEPING) {
+            getAnimationController().resetSleepAnimation();
+        }
+
         // 舞蹈动画条件：只有在非舞蹈状态且音乐计时器已归零时，才进入常规动画逻辑
         // 否则直接播放舞蹈动画
         if (state != BirdBehaviorState.DANCING && tickTimer.getBirdMusicTicker().getTicks() <= 0) {
@@ -719,6 +723,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
                 // 睡眠动画：根据行为计时器判断是进入睡眠还是睡眠循环
                 if (state == BirdBehaviorState.SLEEPING) {
+                    if (BIRD_DATA.animation().animationMap().containsKey("sleep_1")) {
+                        return animationState.setAndContinue(getAnimationController().pickSleepAnimation());
+                    }
                     String sleepAnimation = tickTimer.getBirdBehaviorStateTicker().getTicks() > 0
                             ? "sleep" : "sleep_loop";
                     return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get(sleepAnimation));

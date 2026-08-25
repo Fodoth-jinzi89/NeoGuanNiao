@@ -2,7 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdGuidePreviewAnimation;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.core.controller.flight.BirdFlightAware;
+import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightAware;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -24,6 +24,8 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
      * 当前待播放的待机动画
      */
     private RawAnimation currentIdleAnimation;
+
+    private RawAnimation currentSleepAnimation;
 
     /**
      * 当前引导预览动画
@@ -52,6 +54,7 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         this.cache = GeckoLibUtil.createInstanceCache(bird());
 
         this.currentIdleAnimation = pickIdleAnimation();
+        this.currentSleepAnimation = null;
         setGuidePreviewAnimation(null);
     }
 
@@ -165,6 +168,25 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         }
 
         return otherIdleKeys.get(bird().getRandom().nextInt(otherIdleKeys.size()));
+    }
+
+    public RawAnimation pickSleepAnimation() {
+        if (currentSleepAnimation == null) {
+            List<RawAnimation> sleepAnimations = bird().getBirdData().animation().animationMap().entrySet().stream()
+                    .filter(entry -> entry.getKey().equals("sleep") || entry.getKey().startsWith("sleep_"))
+                    .filter(entry -> !entry.getKey().equals("sleep_loop"))
+                    .map(java.util.Map.Entry::getValue)
+                    .toList();
+
+            currentSleepAnimation = sleepAnimations.isEmpty()
+                    ? bird().getBirdData().animation().animationMap().get("idle")
+                    : sleepAnimations.get(bird().getRandom().nextInt(sleepAnimations.size()));
+        }
+        return currentSleepAnimation;
+    }
+
+    public void resetSleepAnimation() {
+        currentSleepAnimation = null;
     }
 
     /**

@@ -3,25 +3,18 @@ package net.fodoth.skina.neoguanniao.registry;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.BirdData;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.*;
-import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
-import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
-import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlightProfile;
-import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import static net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdDataHelper.*;
 
 public final class NeoGuanNiaoBirdData {
-
 
     public static final DeferredRegister<BirdData> BIRD_DATA =
             DeferredRegister.create(
@@ -41,196 +34,30 @@ public final class NeoGuanNiaoBirdData {
                 .maxId(Integer.MAX_VALUE));
     }
 
+    private NeoGuanNiaoBirdData() {
+    }
+
+    // Existing birds
+
     public static final DeferredHolder<BirdData, BirdData> BUDGERIGAR =
             BIRD_DATA.register("neo_budgerigar", () ->
                     BirdData.createDefault()
                             .withSound(
-                                    new BirdSoundDatum(
-                                            0.5F,
-                                            180,
+                                    sound(180,
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_HURT.get(),
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_DEATH.get(),
                                             NeoGuanNiaoSoundEvents.BUDGERIGAR_INTERACT.get(),
-                                            SoundEvents.PARROT_EAT
-                                    )
+                                            SoundEvents.PARROT_EAT)
                             )
-                            .withFlying(
-                                    BirdFlyingDatum.createDefault()
-                                            .withFlightProfile(BirdFlightProfile.BUDGERIGAR)
-                            )
+                            .withFlying(flying(BirdFlightProfile.BUDGERIGAR))
                             .withModel(
-                                    BirdModelSkinDatum.createDefault()
-                                            .withBirdModel(List.of(
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("budgerigar"))
-                                                            .withLocation(resource("geo/budgerigar.geo.json"))
-                                                            .withRarity(BirdModelRarity.COMMON)
-                                            ))
-                                            .withBirdSkin(List.of(
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("green_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/green_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("green_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/green_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_white_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_white_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_white_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_white_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("white_lark_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/white_lark_male.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("white_lark_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/white_lark_female.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_lark_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_lark_male.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_lark_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_lark_female.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_lark_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_lark_male.png"))
-                                                            .withRarity(BirdSkinRarity.RARE)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_lark_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_lark_female.png"))
-                                                            .withRarity(BirdSkinRarity.RARE)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_black_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_black_male.png"))
-                                                            .withRarity(BirdSkinRarity.RARE)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("yellow_black_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/yellow_black_female.png"))
-                                                            .withRarity(BirdSkinRarity.RARE)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("mystery_green_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/mystery_green_male.png"))
-                                                            .withRarity(BirdSkinRarity.EPIC)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("mystery_green_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/mystery_green_female.png"))
-                                                            .withRarity(BirdSkinRarity.EPIC)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_porcelain_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_porcelain_male.png"))
-                                                            .withRarity(BirdSkinRarity.EPIC)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("blue_porcelain_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/blue_porcelain_female.png"))
-                                                            .withRarity(BirdSkinRarity.EPIC)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("black_white_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/black_white_male.png"))
-                                                            .withRarity(BirdSkinRarity.LEGENDARY)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("black_white_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/black_white_female.png"))
-                                                            .withRarity(BirdSkinRarity.LEGENDARY)
-                                                            .withNatureSpawn(false)
-                                                            .withMale(false).withFemale(true),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("golden_male"))
-                                                            .withLocation(resource("textures/entity/budgerigar/golden_male.png"))
-                                                            .withBreed(false)
-                                                            .withNatureSpawn(false)
-                                                            .withUnique(true)
-                                                            .withRarity(BirdSkinRarity.UNIQUE)
-                                                            .withMale(true).withFemale(false),
-
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("golden_female"))
-                                                            .withLocation(resource("textures/entity/budgerigar/golden_female.png"))
-                                                            .withBreed(false)
-                                                            .withNatureSpawn(false)
-                                                            .withUnique(true)
-                                                            .withRarity(BirdSkinRarity.UNIQUE)
-                                                            .withMale(false).withFemale(true))
-                                            )
-                                            .withModelScaleProfile(BirdModelScaleProfile.BUDGERIGAR)
-                                            .withShadowRadius(0.12F)
-                                            .withGlobalScale(1.0F)
+                                    modelData("budgerigar", "budgerigar", budgerigarSkins(),
+                                            BirdModelScaleProfile.BUDGERIGAR, 0.12F, 1.0F)
                             )
                             .withAnimation(
-                                    BirdAnimationDatum.withAnimationIdAndMap(
-                                            Map.of(resource("budgerigar"), resource("animations/budgerigar.animation.json")),
-                                            Map.of(
-                                                    "idle", RawAnimation.begin().thenLoop("idle"),
-                                                    "preen", RawAnimation.begin().thenPlay("idle_diff_1").thenLoop("idle"),
-                                                    "curious", RawAnimation.begin().thenPlay("idle_diff_2").thenLoop("idle"),
-                                                    "dance", RawAnimation.begin().thenLoop("idle_diff_3"),
-                                                    "eat", RawAnimation.begin().thenPlay("eat").thenLoop("idle"),
-                                                    "sleep", RawAnimation.begin().thenPlay("sleep").thenLoop("sleep_loop"),
-                                                    "sleep_loop", RawAnimation.begin().thenLoop("sleep_loop"),
-                                                    "walk", RawAnimation.begin().thenLoop("walk"),
-                                                    "fly", RawAnimation.begin().thenLoop("fly_flapping_wing_loop")
-                                            )
-                                    ).withCuriousAndTrustingIndexRange(2, 3)
+                                    animation("budgerigar", "budgerigar", budgerigarAnimations())
+                                            .withCuriousAndTrustingIndexRange(2, 3)
                             )
             );
 
@@ -238,154 +65,28 @@ public final class NeoGuanNiaoBirdData {
             BIRD_DATA.register("neo_night_heron", () ->
                     BirdData.createDefault()
                             .withSound(
-                                    new BirdSoundDatum(
-                                            0.5F,
-                                            240,
+                                    sound(240,
                                             NeoGuanNiaoSoundEvents.NIGHT_HERON_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.NIGHT_HERON_HURT.get(),
                                             NeoGuanNiaoSoundEvents.NIGHT_HERON_DEATH.get(),
                                             NeoGuanNiaoSoundEvents.NIGHT_HERON_AMBIENT.get(),
-                                            SoundEvents.ARMADILLO_EAT
-                                    )
+                                            SoundEvents.ARMADILLO_EAT)
                             )
-                            .withFlying(
-                                    BirdFlyingDatum.createDefault()
-                                            .withFlightProfile(BirdFlightProfile.NIGHT_HERON)
-                            )
+                            .withFlying(flying(BirdFlightProfile.NIGHT_HERON))
                             .withModel(
                                     BirdModelSkinDatum.createDefault()
-                                            .withBirdModel(List.of(
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("night_heron"))
-                                                            .withLocation(resource("geo/night_heron.geo.json"))
-                                                            .withRarity(BirdModelRarity.COMMON)
-                                                            .withBlackList(Set.of(resource("cheng_he_guang"))),
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("cheng_he_guang"))
-                                                            .withLocation(resource("geo/cheng_he_guang.geo.json"))
-                                                            .withRarity(BirdModelRarity.UNIQUE)
-                                                            .withFemale(false)
-                                                            .withNatureSpawn(false)
-                                                            .withWhiteList(Set.of(resource("cheng_he_guang")))
-                                            ))
-                                            .withBirdSkin(List.of(
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_0"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_0.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withBaby(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_0_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_0_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withMature(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_1"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_1.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withBaby(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_1_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_1_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.COMMON).withMature(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_2"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_2.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withBaby(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_2_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_2_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withMature(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_3"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_3.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withBaby(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_3_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_3_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNCOMMON).withMature(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_4"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_4.png"))
-                                                                    .withRarity(BirdSkinRarity.RARE).withBaby(false).withNatureSpawn(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_4_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_4_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.RARE).withMature(false).withNatureSpawn(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_5"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_5.png"))
-                                                                    .withRarity(BirdSkinRarity.EPIC).withBaby(false).withNatureSpawn(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_5_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_5_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.EPIC).withMature(false).withNatureSpawn(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_6"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_6.png"))
-                                                                    .withRarity(BirdSkinRarity.LEGENDARY).withBaby(false).withNatureSpawn(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_6_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_6_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.LEGENDARY).withMature(false).withNatureSpawn(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_7"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_7.png"))
-                                                                    .withRarity(BirdSkinRarity.ANCIENT).withBaby(false).withNatureSpawn(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_7_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_7_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.ANCIENT).withMature(false).withNatureSpawn(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_golden"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_golden.png"))
-                                                                    .withRarity(BirdSkinRarity.UNIQUE).withUnique(true).withBaby(false).withNatureSpawn(false),
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("night_heron_golden_baby"))
-                                                                    .withLocation(resource("textures/entity/night_heron/night_heron_golden_baby.png"))
-                                                                    .withRarity(BirdSkinRarity.UNIQUE).withUnique(true).withMature(false).withNatureSpawn(false),
-
-                                                            BirdSkin.createDefault()
-                                                                    .withId(resource("cheng_he_guang"))
-                                                                    .withLocation(resource("textures/entity/night_heron/cheng_he_guang.png"))
-                                                                    .withRarity(BirdSkinRarity.UNIQUE).withUnique(true).withNatureSpawn(false).withFemale(false)
-
-                                                    )
-
-
-                                            )
+                                            .withBirdModel(nightHeronModels())
+                                            .withBirdSkin(nightHeronSkins())
                                             .withModelScaleProfile(BirdModelScaleProfile.NIGHT_HERON)
                                             .withShadowRadius(0.25F)
                                             .withGlobalScale(1.0F)
                             )
                             .withAnimation(
-                                    BirdAnimationDatum.withAnimationIdAndMap(
+                                    animations(
                                             Map.of(
-                                                    resource("night_heron"),
-                                                    resource("animations/night_heron.animation.json"),
-                                                    resource("cheng_he_guang"),
-                                                    resource("animations/cheng_he_guang.animation.json")),
-                                            Map.ofEntries(
-                                                    Map.entry("idle", RawAnimation.begin().thenLoop("idle")),
-                                                    Map.entry("preen", RawAnimation.begin().thenLoop("idle_diff_4").thenLoop("idle")),
-                                                    Map.entry("idle_1", RawAnimation.begin().thenPlay("idle_diff_1").thenLoop("idle")),
-                                                    Map.entry("idle_2", RawAnimation.begin().thenPlay("idle_diff_2").thenLoop("idle")),
-                                                    Map.entry("idle_3", RawAnimation.begin().thenLoop("idle_diff_3").thenLoop("idle")),
-                                                    Map.entry("curious", RawAnimation.begin().thenLoop("idle_diff_5").thenLoop("idle")),
-                                                    Map.entry("walk", RawAnimation.begin().thenLoop("walk")),
-                                                    Map.entry("run", RawAnimation.begin().thenLoop("run")),
-                                                    Map.entry("fly", RawAnimation.begin().thenLoop("fly_flapping_wing_loop")),
-                                                    Map.entry("fly_glide", RawAnimation.begin().thenLoop("fly_loop")),
-                                                    Map.entry("eat", RawAnimation.begin().thenPlay("eat").thenLoop("idle")),
-                                                    Map.entry("sleep", RawAnimation.begin().thenPlay("sleep").thenLoop("sleep_loop")),
-                                                    Map.entry("sleep_loop", RawAnimation.begin().thenLoop("sleep_loop"))
-                                            )
-                                    ).withCuriousAndTrustingIndexRange(5, 5)
+                                                    resource("night_heron"), resource("animations/night_heron.animation.json"),
+                                                    resource("cheng_he_guang"), resource("animations/cheng_he_guang.animation.json")),
+                                            nightHeronAnimations()).withCuriousAndTrustingIndexRange(5, 5)
                             ).withMisc(
                                     BirdMiscDatum.createDefault().withActiveTime(11000, 1500)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(2.0D).withBreedMoveSpeed(1.5D).withBathUseConsumeChance(1.0F))
@@ -396,68 +97,25 @@ public final class NeoGuanNiaoBirdData {
             BIRD_DATA.register("neo_pigeon", () ->
                     BirdData.createDefault()
                             .withSound(
-                                    new BirdSoundDatum(
-                                            0.5F,
-                                            480,
+                                    sound(480,
                                             NeoGuanNiaoSoundEvents.PIGEON_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_HURT.get(),
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_DEATH.get(),
                                             NeoGuanNiaoSoundEvents.PIGEON_AMBIENT.get(),
-                                            SoundEvents.PARROT_EAT
-                                    )
+                                            SoundEvents.PARROT_EAT)
                             )
-                            .withFlying(
-                                    BirdFlyingDatum.createDefault()
-                                            .withFlightProfile(BirdFlightProfile.COLUMBID)
-                            )
+                            .withFlying(flying(BirdFlightProfile.COLUMBID))
                             .withModel(
-                                    BirdModelSkinDatum.createDefault()
-                                            .withBirdModel(List.of(
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("pigeon"))
-                                                            .withLocation(resource("geo/columbid.geo.json"))
-                                                            .withRarity(BirdModelRarity.COMMON)
-                                            ))
-                                            .withBirdSkin(List.of(
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("pigeon_gray_male"))
-                                                            .withLocation(resource("textures/entity/pigeon/pigeon_gray_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("pigeon_gray_female"))
-                                                            .withLocation(resource("textures/entity/pigeon/pigeon_gray_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withMale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("pigeon_white_male"))
-                                                            .withLocation(resource("textures/entity/pigeon/pigeon_white_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("pigeon_white_female"))
-                                                            .withLocation(resource("textures/entity/pigeon/pigeon_white_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withMale(false)
-                                            ))
-                                            .withModelScaleProfile(BirdModelScaleProfile.COLUMBID)
-                                            .withShadowRadius(0.25F)
-                                            .withGlobalScale(1.0F)
+                                    modelData(
+                                            "pigeon", "columbid",
+                                            genderedSkins("pigeon",
+                                                    skinVariant("pigeon_gray", BirdSkinRarity.COMMON),
+                                                    skinVariant("pigeon_white", BirdSkinRarity.COMMON)),
+                                            BirdModelScaleProfile.COLUMBID, 0.25F, 1.0F)
                             )
                             .withAnimation(
-                                    BirdAnimationDatum.withAnimationIdAndMap(
-                                            Map.of(
-                                                    resource("pigeon"),
-                                                    resource("animations/columbid.animation.json")),
-                                            Map.ofEntries(
-                                                    Map.entry("idle", RawAnimation.begin().thenLoop("idle")),
-                                                    Map.entry("preen", RawAnimation.begin().thenLoop("idle_diff_1").thenLoop("idle")),
-                                                    Map.entry("idle_1", RawAnimation.begin().thenPlay("idle_diff_2").thenLoop("idle")),
-                                                    Map.entry("curious", RawAnimation.begin().thenLoop("idle_diff_3").thenLoop("idle")),
-                                                    Map.entry("walk", RawAnimation.begin().thenLoop("walk")),
-                                                    Map.entry("fly", RawAnimation.begin().thenLoop("fly_flapping_wing_loop")),
-                                                    Map.entry("fly_glide", RawAnimation.begin().thenLoop("fly_loop")),
-                                                    Map.entry("eat", RawAnimation.begin().thenPlay("eat").thenLoop("idle")),
-                                                    Map.entry("sleep", RawAnimation.begin().thenPlay("sleep").thenLoop("sleep_loop")),
-                                                    Map.entry("sleep_loop", RawAnimation.begin().thenLoop("sleep_loop"))
-                                            )
-                                    ).withCuriousAndTrustingIndexRange(3, 3)
+                                    animation("pigeon", "columbid", columbidAnimations())
+                                            .withCuriousAndTrustingIndexRange(3, 3)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.5F))
             );
 
@@ -465,76 +123,26 @@ public final class NeoGuanNiaoBirdData {
             BIRD_DATA.register("neo_dove", () ->
                     BirdData.createDefault()
                             .withSound(
-                                    new BirdSoundDatum(
-                                            0.5F,
-                                            480,
+                                    sound(480,
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_HURT.get(),
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_DEATH.get(),
                                             NeoGuanNiaoSoundEvents.SPOTTED_DOVE_MATE.get(),
-                                            SoundEvents.PARROT_EAT
-                                    )
+                                            SoundEvents.PARROT_EAT)
                             )
-                            .withFlying(
-                                    BirdFlyingDatum.createDefault()
-                                            .withFlightProfile(BirdFlightProfile.COLUMBID)
-                            )
+                            .withFlying(flying(BirdFlightProfile.COLUMBID))
                             .withModel(
-                                    BirdModelSkinDatum.createDefault()
-                                            .withBirdModel(List.of(
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("dove"))
-                                                            .withLocation(resource("geo/columbid.geo.json"))
-                                                            .withRarity(BirdModelRarity.COMMON)
-                                            ))
-                                            .withBirdSkin(List.of(
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("spotted_dove_male"))
-                                                            .withLocation(resource("textures/entity/dove/spotted_dove_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("spotted_dove_female"))
-                                                            .withLocation(resource("textures/entity/dove/spotted_dove_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withMale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("orienta_turtle_dove_male"))
-                                                            .withLocation(resource("textures/entity/dove/orienta_turtle_dove_male.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("orienta_turtle_dove_female"))
-                                                            .withLocation(resource("textures/entity/dove/orienta_turtle_dove_female.png"))
-                                                            .withRarity(BirdSkinRarity.UNCOMMON).withMale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("treron_male"))
-                                                            .withLocation(resource("textures/entity/dove/treron_male.png"))
-                                                            .withRarity(BirdSkinRarity.RARE).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("treron_female"))
-                                                            .withLocation(resource("textures/entity/dove/treron_female.png"))
-                                                            .withRarity(BirdSkinRarity.RARE).withMale(false)
-                                            ))
-                                            .withModelScaleProfile(BirdModelScaleProfile.COLUMBID)
-                                            .withShadowRadius(0.25F)
-                                            .withGlobalScale(1.0F)
+                                    modelData(
+                                            "dove", "columbid",
+                                            genderedSkins("dove",
+                                                    skinVariant("spotted_dove", BirdSkinRarity.COMMON),
+                                                    skinVariant("orienta_turtle_dove", BirdSkinRarity.UNCOMMON),
+                                                    skinVariant("treron", BirdSkinRarity.RARE)),
+                                            BirdModelScaleProfile.COLUMBID, 0.25F, 1.0F)
                             )
                             .withAnimation(
-                                    BirdAnimationDatum.withAnimationIdAndMap(
-                                            Map.of(
-                                                    resource("dove"),
-                                                    resource("animations/columbid.animation.json")),
-                                            Map.ofEntries(
-                                                    Map.entry("idle", RawAnimation.begin().thenLoop("idle")),
-                                                    Map.entry("preen", RawAnimation.begin().thenLoop("idle_diff_1").thenLoop("idle")),
-                                                    Map.entry("idle_1", RawAnimation.begin().thenPlay("idle_diff_2").thenLoop("idle")),
-                                                    Map.entry("curious", RawAnimation.begin().thenLoop("idle_diff_3").thenLoop("idle")),
-                                                    Map.entry("walk", RawAnimation.begin().thenLoop("walk")),
-                                                    Map.entry("fly", RawAnimation.begin().thenLoop("fly_flapping_wing_loop")),
-                                                    Map.entry("fly_glide", RawAnimation.begin().thenLoop("fly_loop")),
-                                                    Map.entry("eat", RawAnimation.begin().thenPlay("eat").thenLoop("idle")),
-                                                    Map.entry("sleep", RawAnimation.begin().thenPlay("sleep").thenLoop("sleep_loop")),
-                                                    Map.entry("sleep_loop", RawAnimation.begin().thenLoop("sleep_loop"))
-                                            )
-                                    ).withCuriousAndTrustingIndexRange(3, 3)
+                                    animation("dove", "columbid", columbidAnimations())
+                                            .withCuriousAndTrustingIndexRange(3, 3)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.6F))
             );
 
@@ -543,138 +151,98 @@ public final class NeoGuanNiaoBirdData {
             BIRD_DATA.register("neo_sparrow", () ->
                     BirdData.createDefault()
                             .withSound(
-                                    new BirdSoundDatum(
-                                            0.5F,
-                                            240,
+                                    sound(240,
                                             NeoGuanNiaoSoundEvents.SPARROW_AMBIENT.get(),
                                             NeoGuanNiaoSoundEvents.SPARROW_HURT.get(),
                                             NeoGuanNiaoSoundEvents.SPARROW_DEATH.get(),
                                             NeoGuanNiaoSoundEvents.SPARROW_AMBIENT.get(),
-                                            SoundEvents.PARROT_EAT
-                                    )
+                                            SoundEvents.PARROT_EAT)
                             )
-                            .withFlying(
-                                    BirdFlyingDatum.createDefault()
-                                            .withFlightProfile(BirdFlightProfile.SPARROW)
-                            )
+                            .withFlying(flying(BirdFlightProfile.SPARROW))
                             .withModel(
-                                    BirdModelSkinDatum.createDefault()
-                                            .withBirdModel(List.of(
-                                                    BirdModel.createDefault()
-                                                            .withId(resource("sparrow"))
-                                                            .withLocation(resource("geo/sparrow.geo.json"))
-                                                            .withRarity(BirdModelRarity.COMMON)
-                                            ))
-                                            .withBirdSkin(List.of(
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("sparrow_male"))
-                                                            .withLocation(resource("textures/entity/sparrow/sparrow_male.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withFemale(false),
-                                                    BirdSkin.createDefault()
-                                                            .withId(resource("sparrow_female"))
-                                                            .withLocation(resource("textures/entity/sparrow/sparrow_female.png"))
-                                                            .withRarity(BirdSkinRarity.COMMON).withMale(false)
-                                            ))
-                                            .withModelScaleProfile(BirdModelScaleProfile.SPARROW)
-                                            .withShadowRadius(0.18F)
-                                            .withGlobalScale(0.75F)
+                                    modelData(
+                                            "sparrow", "sparrow",
+                                            genderedSkins("sparrow",
+                                                    skinVariant("sparrow", BirdSkinRarity.COMMON)),
+                                            BirdModelScaleProfile.SPARROW, 0.18F, 0.9F)
                             )
                             .withAnimation(
-                                    BirdAnimationDatum.withAnimationIdAndMap(
-                                            Map.of(
-                                                    resource("sparrow"),
-                                                    resource("animations/sparrow.animation.json")),
-                                            Map.ofEntries(
-                                                    Map.entry("idle", RawAnimation.begin().thenLoop("idle")),
-                                                    Map.entry("preen", RawAnimation.begin().thenLoop("idle")),
-                                                    Map.entry("idle_1", RawAnimation.begin().thenPlay("idle_diff_1").thenLoop("idle")),
-                                                    Map.entry("curious", RawAnimation.begin().thenLoop("idle_diff_3").thenLoop("idle")),
-                                                    Map.entry("walk", RawAnimation.begin().thenLoop("walk")),
-                                                    Map.entry("fly", RawAnimation.begin().thenLoop("fly")),
-                                                    Map.entry("eat", RawAnimation.begin().thenPlay("eat").thenLoop("idle")),
-                                                    Map.entry("sleep", RawAnimation.begin().thenPlay("sleep").thenLoop("sleep_loop")),
-                                                    Map.entry("sleep_loop", RawAnimation.begin().thenLoop("sleep_loop"))
-                                            )
-                                    ).withCuriousAndTrustingIndexRange(3, 3)
+                                    animation("sparrow", "sparrow", sparrowAnimations())
+                                            .withCuriousAndTrustingIndexRange(3, 3)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.2D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.25F))
             );
 
+    // Guaniao 2.1.3 birds
+
     public static final DeferredHolder<BirdData, BirdData> COCKATIEL = registerSimpleBird(
-            "neo_cockatiel", "cockatiel", List.of("dark_gray_yellow_face", "gray_white_face",
-                    "gray_yellow_face", "pale_yellow", "white_yellow_face"),
-            BirdFlightProfile.BUDGERIGAR, BirdModelScaleProfile.BUDGERIGAR, 0.2F,
+            "neo_cockatiel", "cockatiel", List.of(
+                    skinVariant("dark_gray_yellow_face", BirdSkinRarity.COMMON),
+                    skinVariant("gray_yellow_face", BirdSkinRarity.COMMON),
+                    skinVariant("gray_white_face", BirdSkinRarity.UNCOMMON),
+                    skinVariant("pale_yellow", BirdSkinRarity.UNCOMMON),
+                    skinVariant("white_yellow_face", BirdSkinRarity.RARE)),
+            BirdFlightProfile.BUDGERIGAR, BirdModelScaleProfile.BUDGERIGAR, 0.2F, 1.3F,
             "cockatiel", Map.ofEntries(
-                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
-                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
+                    Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_2"),
+                    Map.entry("curious", "idle_diff_1"), Map.entry("dance", "idle_diff_1"),
+                    Map.entry("idle_1", "idle_diff_3"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
 
     public static final DeferredHolder<BirdData, BirdData> LONG_TAILED_TIT = registerSimpleBird(
-            "neo_long_tailed_tit", "long_tailed_tit", List.of("long_tailed_tit"),
-            BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F,
+            "neo_long_tailed_tit", "long_tailed_tit",
+            List.of(skinVariant("long_tailed_tit", BirdSkinRarity.COMMON)),
+            BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F, 0.72F,
             "long_tailed_tit", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
-                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("idle_1", "idle_diff_3"),
+                    Map.entry("dance", "idle_diff_3"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "idle"), Map.entry("sleep_loop", "idle")));
 
     public static final DeferredHolder<BirdData, BirdData> MACAW = registerSimpleBird(
-            "neo_macaw", "macaw", List.of("variant_1", "variant_2", "variant_3", "variant_4", "variant_5"),
-            BirdFlightProfile.COLUMBID, BirdModelScaleProfile.COLUMBID, 0.32F,
+            "neo_macaw", "macaw", List.of(
+                    skinVariant("scarlet", BirdSkinRarity.COMMON),
+                    skinVariant("blue_yellow", BirdSkinRarity.UNCOMMON),
+                    skinVariant("catalina", BirdSkinRarity.UNCOMMON),
+                    skinVariant("hyacinth", BirdSkinRarity.RARE),
+                    skinVariant("glaucous", BirdSkinRarity.EPIC)),
+            BirdFlightProfile.COLUMBID, BirdModelScaleProfile.COLUMBID, 0.32F, 1.04F,
             "macaw", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
-                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_4"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
+                    Map.entry("idle_1", "idle_diff_4"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly_flapping_wing_loop"),
                     Map.entry("eat", "eat"), Map.entry("sleep", "sleep"),
                     Map.entry("sleep_loop", "sleep_loop")));
 
     public static final DeferredHolder<BirdData, BirdData> CROW = registerSimpleBird(
-            "neo_crow", "crow", List.of("crow"), BirdFlightProfile.COLUMBID,
-            BirdModelScaleProfile.COLUMBID, 0.26F, "crow", Map.ofEntries(
+            "neo_crow", "crow", List.of(skinVariant("crow", BirdSkinRarity.COMMON)), BirdFlightProfile.COLUMBID,
+            BirdModelScaleProfile.COLUMBID, 0.26F, 0.8F, "crow", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
-                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_2"),
+                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly"),
                     Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
-                    Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep2")));
+                    Map.entry("sleep", "sleep"), Map.entry("sleep_1", "sleep2")));
 
     public static final DeferredHolder<BirdData, BirdData> SEAGULL = registerSimpleBird(
-            "neo_seagull", "seagull", List.of("seagull"), BirdFlightProfile.NIGHT_HERON,
-            BirdModelScaleProfile.COLUMBID, 0.3F, "seagull", Map.ofEntries(
+            "neo_seagull", "seagull", List.of(skinVariant("seagull", BirdSkinRarity.COMMON)), BirdFlightProfile.NIGHT_HERON,
+            BirdModelScaleProfile.COLUMBID, 0.3F, 0.9F, "seagull", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
-                    Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_5"),
+                    Map.entry("curious", "idle_diff_3"),
+                    Map.entry("idle_1", "idle_diff_2"), Map.entry("idle_2", "idle_diff_4"),
+                    Map.entry("idle_3", "idle_diff_5"), Map.entry("dance", "idle_diff_4"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly_flapping_wing_loop"),
                     Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
 
     private static DeferredHolder<BirdData, BirdData> registerSimpleBird(
-            String id, String assetName, List<String> skins, BirdFlightProfile flightProfile,
-            BirdModelScaleProfile scaleProfile, float shadowRadius, String animationName,
+            String id, String assetName, List<SkinVariant> skins, BirdFlightProfile flightProfile,
+            BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, String animationName,
             Map<String, String> animations) {
-        return BIRD_DATA.register(id, () -> BirdData.createDefault()
-                .withSound(new BirdSoundDatum(0.5F, 240, SoundEvents.PARROT_AMBIENT,
-                        SoundEvents.PARROT_HURT, SoundEvents.PARROT_DEATH,
-                        SoundEvents.PARROT_AMBIENT, SoundEvents.PARROT_EAT))
-                .withFlying(BirdFlyingDatum.createDefault().withFlightProfile(flightProfile))
-                .withModel(BirdModelSkinDatum.createDefault()
-                        .withBirdModel(List.of(BirdModel.createDefault()
-                                .withId(resource(assetName))
-                                .withLocation(resource("geo/" + assetName + ".geo.json"))))
-                        .withBirdSkin(skins.stream().map(skin -> BirdSkin.createDefault()
-                                .withId(resource(id + "_" + skin))
-                                .withLocation(resource("textures/entity/" + assetName + "/" + skin + ".png")))
-                                .toList())
-                        .withModelScaleProfile(scaleProfile)
-                        .withShadowRadius(shadowRadius))
-                .withAnimation(BirdAnimationDatum.withAnimationIdAndMap(
-                        Map.of(resource(assetName), resource("animations/" + animationName + ".animation.json")),
-                        animations.entrySet().stream().collect(java.util.stream.Collectors.toUnmodifiableMap(
-                                Map.Entry::getKey,
-                                entry -> RawAnimation.begin().thenLoop(entry.getValue()))))));
-    }
-
-
-    private static ResourceLocation resource(String path) {
-        return ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, path);
+        return BIRD_DATA.register(id, () -> NeoGuanNiaoBirdDataHelper.simpleBird(
+                id, assetName, skins, flightProfile, scaleProfile,
+                shadowRadius, globalScale, animationName, animations));
     }
 
 }
