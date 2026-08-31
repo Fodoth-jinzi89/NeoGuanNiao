@@ -4,7 +4,7 @@
   "spawners": {
     "type": "neoguanniao:neo_budgerigar",
     "weight": 3,
-    "minCount": 2,
-    "maxCount": 6
+    "minCount": 1,
+    "maxCount": 3
   }
 }

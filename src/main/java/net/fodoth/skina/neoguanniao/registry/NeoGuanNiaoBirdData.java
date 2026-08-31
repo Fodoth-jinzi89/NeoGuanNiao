@@ -59,6 +59,7 @@ public final class NeoGuanNiaoBirdData {
                                     animation("budgerigar", "budgerigar", budgerigarAnimations())
                                             .withCuriousAndTrustingIndexRange(2, 3)
                             )
+                            .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(5))
             );
 
     public static final DeferredHolder<BirdData, BirdData> NIGHT_HERON =
@@ -88,7 +89,7 @@ public final class NeoGuanNiaoBirdData {
                                                     resource("cheng_he_guang"), resource("animations/cheng_he_guang.animation.json")),
                                             nightHeronAnimations()).withCuriousAndTrustingIndexRange(5, 5)
                             ).withMisc(
-                                    BirdMiscDatum.createDefault().withActiveTime(11000, 1500)
+                                    BirdMiscDatum.createDefault().withSpawnRarity(2).withActiveTime(11000, 1500)
                             ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(2.0D).withBreedMoveSpeed(1.5D).withBathUseConsumeChance(1.0F))
             );
 
@@ -116,7 +117,8 @@ public final class NeoGuanNiaoBirdData {
                             .withAnimation(
                                     animation("pigeon", "columbid", columbidAnimations())
                                             .withCuriousAndTrustingIndexRange(3, 3)
-                            ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.5F))
+                            ).withMisc(BirdMiscDatum.createDefault().withSpawnRarity(5))
+                            .withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.5F))
             );
 
     public static final DeferredHolder<BirdData, BirdData> DOVE =
@@ -143,7 +145,8 @@ public final class NeoGuanNiaoBirdData {
                             .withAnimation(
                                     animation("dove", "columbid", columbidAnimations())
                                             .withCuriousAndTrustingIndexRange(3, 3)
-                            ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.6F))
+                            ).withMisc(BirdMiscDatum.createDefault().withSpawnRarity(4))
+                            .withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.6F))
             );
 
 
@@ -169,7 +172,8 @@ public final class NeoGuanNiaoBirdData {
                             .withAnimation(
                                     animation("sparrow", "sparrow", sparrowAnimations())
                                             .withCuriousAndTrustingIndexRange(3, 3)
-                            ).withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.2D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.25F))
+                            ).withMisc(BirdMiscDatum.createDefault().withSpawnRarity(6))
+                            .withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.2D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.25F))
             );
 
     // Guaniao 2.1.3 birds
@@ -181,7 +185,7 @@ public final class NeoGuanNiaoBirdData {
                     skinVariant("gray_white_face", BirdSkinRarity.UNCOMMON),
                     skinVariant("pale_yellow", BirdSkinRarity.UNCOMMON),
                     skinVariant("white_yellow_face", BirdSkinRarity.RARE)),
-            BirdFlightProfile.BUDGERIGAR, BirdModelScaleProfile.BUDGERIGAR, 0.2F, 1.3F,
+            BirdFlightProfile.BUDGERIGAR, BirdModelScaleProfile.BUDGERIGAR, 0.2F, 1.3F, 4,
             "cockatiel", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_2"),
                     Map.entry("curious", "idle_diff_1"), Map.entry("dance", "idle_diff_1"),
@@ -192,7 +196,7 @@ public final class NeoGuanNiaoBirdData {
     public static final DeferredHolder<BirdData, BirdData> LONG_TAILED_TIT = registerSimpleBird(
             "neo_long_tailed_tit", "long_tailed_tit",
             List.of(skinVariant("long_tailed_tit", BirdSkinRarity.COMMON)),
-            BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F, 0.72F,
+            BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F, 0.72F, 6,
             "long_tailed_tit", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
                     Map.entry("curious", "idle_diff_2"), Map.entry("idle_1", "idle_diff_3"),
@@ -207,7 +211,7 @@ public final class NeoGuanNiaoBirdData {
                     skinVariant("catalina", BirdSkinRarity.UNCOMMON),
                     skinVariant("hyacinth", BirdSkinRarity.RARE),
                     skinVariant("glaucous", BirdSkinRarity.EPIC)),
-            BirdFlightProfile.COLUMBID, BirdModelScaleProfile.COLUMBID, 0.32F, 1.04F,
+            BirdFlightProfile.COLUMBID, BirdModelScaleProfile.COLUMBID, 0.32F, 1.04F, 2,
             "macaw", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
                     Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle_diff_3"),
@@ -218,7 +222,7 @@ public final class NeoGuanNiaoBirdData {
 
     public static final DeferredHolder<BirdData, BirdData> CROW = registerSimpleBird(
             "neo_crow", "crow", List.of(skinVariant("crow", BirdSkinRarity.COMMON)), BirdFlightProfile.COLUMBID,
-            BirdModelScaleProfile.COLUMBID, 0.26F, 0.8F, "crow", Map.ofEntries(
+            BirdModelScaleProfile.COLUMBID, 0.26F, 0.8F, 4, "crow", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
                     Map.entry("curious", "idle_diff_2"), Map.entry("dance", "idle"),
                     Map.entry("walk", "walk"), Map.entry("fly", "fly"),
@@ -227,7 +231,7 @@ public final class NeoGuanNiaoBirdData {
 
     public static final DeferredHolder<BirdData, BirdData> SEAGULL = registerSimpleBird(
             "neo_seagull", "seagull", List.of(skinVariant("seagull", BirdSkinRarity.COMMON)), BirdFlightProfile.NIGHT_HERON,
-            BirdModelScaleProfile.COLUMBID, 0.3F, 0.9F, "seagull", Map.ofEntries(
+            BirdModelScaleProfile.COLUMBID, 0.3F, 0.9F, 5, "seagull", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
                     Map.entry("curious", "idle_diff_3"),
                     Map.entry("idle_1", "idle_diff_2"), Map.entry("idle_2", "idle_diff_4"),
@@ -238,11 +242,13 @@ public final class NeoGuanNiaoBirdData {
 
     private static DeferredHolder<BirdData, BirdData> registerSimpleBird(
             String id, String assetName, List<SkinVariant> skins, BirdFlightProfile flightProfile,
-            BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, String animationName,
+            BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, int localSpawnCap,
+            String animationName,
             Map<String, String> animations) {
         return BIRD_DATA.register(id, () -> NeoGuanNiaoBirdDataHelper.simpleBird(
                 id, assetName, skins, flightProfile, scaleProfile,
-                shadowRadius, globalScale, animationName, animations));
+                shadowRadius, globalScale, animationName, animations)
+                .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(localSpawnCap)));
     }
 
 }

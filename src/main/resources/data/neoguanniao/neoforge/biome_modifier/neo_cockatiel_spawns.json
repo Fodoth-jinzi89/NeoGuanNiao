@@ -1,1 +1,1 @@
-{"type":"neoforge:add_spawns","biomes":"#neoguanniao:cockatiel_habitat","spawners":{"type":"neoguanniao:neo_cockatiel","weight":3,"minCount":2,"maxCount":5}}
+{"type":"neoforge:add_spawns","biomes":"#neoguanniao:cockatiel_habitat","spawners":{"type":"neoguanniao:neo_cockatiel","weight":3,"minCount":1,"maxCount":2}}

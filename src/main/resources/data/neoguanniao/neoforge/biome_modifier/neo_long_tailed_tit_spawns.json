@@ -1,1 +1,1 @@
-{"type":"neoforge:add_spawns","biomes":"#neoguanniao:long_tailed_tit_habitat","spawners":{"type":"neoguanniao:neo_long_tailed_tit","weight":5,"minCount":3,"maxCount":7}}
+{"type":"neoforge:add_spawns","biomes":"#neoguanniao:long_tailed_tit_habitat","spawners":{"type":"neoguanniao:neo_long_tailed_tit","weight":5,"minCount":2,"maxCount":4}}
