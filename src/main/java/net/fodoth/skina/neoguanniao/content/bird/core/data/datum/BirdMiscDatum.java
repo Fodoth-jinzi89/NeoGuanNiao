@@ -47,7 +47,7 @@ public record BirdMiscDatum(
 ) {
     public static BirdMiscDatum createDefault() {
         return new BirdMiscDatum(
-                8,
+                4,
                 8,
                 0.0025D,
                 0.20D,
@@ -77,6 +77,53 @@ public record BirdMiscDatum(
 
     // 链式调用的便利方法（同时设置两个）
     public BirdMiscDatum withActiveTime(long activeStartTime, long activeEndTime) {
+        return new BirdMiscDatum(
+                spawnRarity,
+                waterSearchRadius,
+                walkingSpeedThreshold,
+                runningSpeedThreshold,
+                followingDistanceThreshold,
+                activeStartTime,
+                activeEndTime,
+                maxTurns,
+                mutantChance,
+                curiousTicksLimitForBath,
+                curiousTicksLimitForSharedTrust,
+                curiousTicksLimitForAlert,
+                curiousTicksLimitForTame,
+                trustShareRange,
+                droppedItemTrustMultiplier,
+                escapeCooldownMin,
+                escapeCooldownVariance,
+                tameCooldownMin,
+                tameCooldownVariance,
+                wildCooldownMin,
+                wildCooldownVariance,
+                postFlightAlertTicks,
+                alertNearbyRange,
+                alertTicks,
+                alertTicksVariant,
+                alertTicksPlayer,
+                alertTicksOther,
+                mutantP1Boost,
+                mutantP2Boost,
+                mutantL1Cap,
+                mutantL2Cap,
+                eggCountMin,
+                eggCountVariance,
+                layEggRange,
+                layEggExp,
+                layEggExpVariance,
+                breedCooldown,
+                eggDefaultHatchTime,
+                featherCountMin,
+                featherCountVariance,
+                featherIntervalMiddle,
+                featherIntervalVariance
+        );
+    }
+
+    public BirdMiscDatum withSpawnRarity(int spawnRarity) {
         return new BirdMiscDatum(
                 spawnRarity,
                 waterSearchRadius,

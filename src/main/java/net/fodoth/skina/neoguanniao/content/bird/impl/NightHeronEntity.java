@@ -39,7 +39,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
@@ -134,12 +133,8 @@ public class NightHeronEntity extends SimpleNeoBirdEntity<NightHeronEntity> {
             return false;
         }
 
-        // 获取附近的实体列表
-        var entities = level.getEntitiesOfClass(AbstractBirdEntity.class,
-                new AABB(pos.getX() - 8, pos.getY() - 4, pos.getZ() - 8,
-                        pos.getX() + 8, pos.getY() + 4, pos.getZ() + 8));
-
-        return entities.size() <= birdData.misc().spawnRarity() && isNearWaterForWorldgen(level, pos, 8);
+        return AbstractBirdEntity.hasLocalSpawnCapacity(entityType, level, spawnType, pos, birdData)
+                && isNearWaterForWorldgen(level, pos, 8);
     }
 
     private static boolean isNearWaterForWorldgen(LevelReader level, BlockPos pos, int radius) {
@@ -255,7 +250,7 @@ public class NightHeronEntity extends SimpleNeoBirdEntity<NightHeronEntity> {
             BlockPos pos,
             RandomSource random
     ) {
-        return AbstractBirdEntity.canSpawn(
+        return canSpawn(
                 entityType,
                 level,
                 spawnType,

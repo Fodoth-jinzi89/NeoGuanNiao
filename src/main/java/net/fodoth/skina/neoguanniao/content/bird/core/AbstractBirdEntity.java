@@ -76,6 +76,8 @@ import java.util.List;
 
 public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extends TamableAnimal implements GeoEntity, FlyingAnimal, ScalableBirdModel, BirdFlightAware, BirdBathMountable, BirdBathFeedingAnimatable {
 
+    private static final int MAX_LOCAL_BIRDS = 12;
+
     // ================== 数据序列化器 ===================
     public static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
@@ -187,12 +189,34 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             return false;
         }
 
-        // 获取附近的实体列表
+        return hasLocalSpawnCapacity(entityType, level, spawnType, pos, birdData);
+    }
+
+    public static boolean hasLocalSpawnCapacity(
+            EntityType<? extends AbstractBirdEntity<?>> entityType,
+            ServerLevelAccessor level,
+            MobSpawnType spawnType,
+            BlockPos pos,
+            BirdData birdData
+    ) {
+        if (spawnType != MobSpawnType.NATURAL && spawnType != MobSpawnType.CHUNK_GENERATION) {
+            return true;
+        }
+
         var entities = level.getEntitiesOfClass(AbstractBirdEntity.class,
                 new AABB(pos.getX() - 8, pos.getY() - 4, pos.getZ() - 8,
                         pos.getX() + 8, pos.getY() + 4, pos.getZ() + 8));
+        if (entities.size() >= MAX_LOCAL_BIRDS) {
+            return false;
+        }
 
-        return entities.size() <= birdData.misc().spawnRarity();
+        int sameSpecies = 0;
+        for (AbstractBirdEntity<?> bird : entities) {
+            if (bird.getType() == entityType && ++sameSpecies >= birdData.misc().spawnRarity()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

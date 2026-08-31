@@ -19,7 +19,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import software.bernie.geckolib.animation.RawAnimation;
@@ -83,13 +82,8 @@ public class PigeonEntity extends SimpleNeoBirdEntity<PigeonEntity> {
         if (!validGround) {
             return false;
         }
-        AABB searchBox = new AABB(
-                pos.getX() - 8, pos.getY() - 4, pos.getZ() - 8,
-                pos.getX() + 8, pos.getY() + 4, pos.getZ() + 8
-        );
-        int entityCount = level.getEntitiesOfClass(PigeonEntity.class, searchBox).size();
-        // 如果附近同类型实体超过 12 个，不允许生成
-        if (entityCount > 12) {
+        if (!AbstractBirdEntity.hasLocalSpawnCapacity(
+                entityType, level, spawnType, pos, NeoGuanNiaoBirdData.PIGEON.get())) {
             return false;
         }
         // 计算栖息地分数
