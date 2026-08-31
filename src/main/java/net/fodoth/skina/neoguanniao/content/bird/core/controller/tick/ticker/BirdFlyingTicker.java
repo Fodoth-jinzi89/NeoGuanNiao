@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractBirdTicker<T> {
 
+    private static final int FLOCK_SAMPLE_INTERVAL = 4;
+
     /**
      * 悬停重定向剩余 Tick 数
      */
@@ -39,6 +41,8 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
      * 已飞行时间
      */
     public int flyingTime;
+
+    private Vec3 cachedFlockHeading = Vec3.ZERO;
 
     /**
      * 创建飞行计时器（仅在服务端执行）
@@ -64,6 +68,7 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
         if (!bird().getFlyingController().isLandingFlight && bird().getTickController().getTickTimer().getBirdLandingTicker().getTicks() == 0) {
             bird().getFlyingController().beginLandingFlight();
             flyingTime = 0;
+            cachedFlockHeading = Vec3.ZERO;
         }
     }
 
@@ -246,10 +251,17 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
                     ? flyingDatum.flockEscapeWeight()
                     : flyingDatum.flockAmbientWeight();
 
-            Vec3 flockHeading = BirdFlightBoids.sameTypeHeading(
-                    bird(), range, separation,
-                    alignment, cohesion, weightEscape,
-                    flockWeight
+            if (flyingTime == 1
+                    || Math.floorMod(bird().tickCount + bird().getId(), FLOCK_SAMPLE_INTERVAL) == 0) {
+                cachedFlockHeading = BirdFlightBoids.sameTypeHeading(
+                        bird(), range, separation,
+                        alignment, cohesion, weightEscape,
+                        0.0D
+                );
+            }
+
+            Vec3 flockHeading = cachedFlockHeading.add(
+                    BirdFlightTargeting.randomHorizontalDirection(bird().getRandom()).scale(flockWeight)
             );
 
             if (flockHeading.length() > 1.0E-4) {

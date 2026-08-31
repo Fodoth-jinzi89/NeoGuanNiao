@@ -54,6 +54,18 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
         this.environmentalTickOffset = Math.floorMod(Long.hashCode(pos.asLong()), 20000);
     }
 
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        BirdBathAttraction.registerBath(this);
+    }
+
+    @Override
+    public void setRemoved() {
+        BirdBathAttraction.unregisterBath(this);
+        super.setRemoved();
+    }
+
     public BirdBathVariant variant() {
         Block block = getBlockState().getBlock();
         if (block instanceof BirdBathBlock birdBathBlock) {

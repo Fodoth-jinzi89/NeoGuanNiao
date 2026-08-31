@@ -37,6 +37,10 @@ public class BudgerigarEntity extends SimpleNeoBirdEntity<BudgerigarEntity> {
     private static final ResourceLocation CHIRPY_PARTNER_ADVANCEMENT =
             ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "husbandry/chirpy_partner");
 
+    private BlockPos cachedPlayingJukebox;
+    private Level cachedJukeboxLevel;
+    private long nextJukeboxSearchGameTime;
+
     public BudgerigarEntity(EntityType<BudgerigarEntity> entityType, Level level) {
         super(
                 entityType,
@@ -147,13 +151,41 @@ public class BudgerigarEntity extends SimpleNeoBirdEntity<BudgerigarEntity> {
     }
 
     public BlockPos findNearbyJukebox() {
+        if (cachedPlayingJukebox != null) {
+            BlockPos origin = this.blockPosition();
+            int dx = Math.abs(cachedPlayingJukebox.getX() - origin.getX());
+            int dy = Math.abs(cachedPlayingJukebox.getY() - origin.getY());
+            int dz = Math.abs(cachedPlayingJukebox.getZ() - origin.getZ());
+            if (cachedJukeboxLevel == this.level()
+                    && dx <= 8 && dy <= 3 && dz <= 8
+                    && this.level().hasChunkAt(cachedPlayingJukebox)) {
+                BlockState cachedState = this.level().getBlockState(cachedPlayingJukebox);
+                if (cachedState.is(Blocks.JUKEBOX)
+                        && cachedState.hasProperty(JukeboxBlock.HAS_RECORD)
+                        && cachedState.getValue(JukeboxBlock.HAS_RECORD)) {
+                    return cachedPlayingJukebox;
+                }
+            }
+            cachedPlayingJukebox = null;
+            cachedJukeboxLevel = null;
+        }
+
+        long gameTime = this.level().getGameTime();
+        if (gameTime < nextJukeboxSearchGameTime) {
+            return null;
+        }
+        nextJukeboxSearchGameTime = gameTime + 100L + this.getRandom().nextInt(41);
+
         BlockPos origin = this.blockPosition();
         for (BlockPos pos : BlockPos.betweenClosed(
                 origin.offset(-8, -3, -8), origin.offset(8, 3, 8))) {
             BlockState state = this.level().getBlockState(pos);
             if (state.is(Blocks.JUKEBOX) && state.hasProperty(JukeboxBlock.HAS_RECORD)
                     && state.getValue(JukeboxBlock.HAS_RECORD)) {
-                return pos.immutable();
+                cachedPlayingJukebox = pos.immutable();
+                cachedJukeboxLevel = this.level();
+                nextJukeboxSearchGameTime = gameTime + 20L;
+                return cachedPlayingJukebox;
             }
         }
         return null;

@@ -8,6 +8,21 @@ import java.util.Set;
 
 final class BirdBathBoneVisibility {
 
+    private static final float[] TINT_WHITE = {1F, 1F, 1F};
+    private static final float[] TINT_SPOILED_FISH = {0.46F, 0.56F, 0.40F};
+    private static final float[] TINT_SPOILED_MEAT = {0.48F, 0.34F, 0.25F};
+    private static final float[] TINT_SPOILED_BREAD = {0.50F, 0.44F, 0.25F};
+    private static final float[] TINT_SPOILED_DEFAULT = {0.46F, 0.50F, 0.34F};
+    private static final float[] TINT_WATER_USED = {0.75F, 0.82F, 0.78F};
+    private static final float[] TINT_WATER_DIRTY = {0.56F, 0.54F, 0.43F};
+    private static final float[] TINT_WATER_FILTHY = {0.38F, 0.48F, 0.28F};
+    private static final float[] TINT_FROZEN = {0.74F, 0.88F, 1F};
+    private static final float[] TINT_FLIES = {0.08F, 0.08F, 0.07F};
+    private static final float[] TINT_SPOIL_SPOTS = {0.36F, 0.48F, 0.20F};
+    private static final float[] TINT_DIRT_USED = {0.62F, 0.58F, 0.48F};
+    private static final float[] TINT_DIRT_DIRTY = {0.42F, 0.46F, 0.28F};
+    private static final float[] TINT_DIRT_FILTHY = {0.24F, 0.32F, 0.16F};
+
     private static final Set<String> CONTENT_BONES = Set.of(
             "water_up", "water_middle", "water_down",
             "ice_up", "ice_middle", "ice_down",
@@ -75,6 +90,10 @@ final class BirdBathBoneVisibility {
             BirdBathContentType spoiledContentType,
             String boneName
     ) {
+
+        if (!CONTENT_BONES.contains(boneName)) {
+            return false;
+        }
 
         if (type == null || type.isEmpty() || level <= 0) {
             return false;
@@ -166,16 +185,16 @@ final class BirdBathBoneVisibility {
                     ) {
 
                 case FISH ->
-                        new float[]{0.46F, 0.56F, 0.40F};
+                        TINT_SPOILED_FISH;
 
                 case MEAT ->
-                        new float[]{0.48F, 0.34F, 0.25F};
+                        TINT_SPOILED_MEAT;
 
                 case BREAD ->
-                        new float[]{0.50F, 0.44F, 0.25F};
+                        TINT_SPOILED_BREAD;
 
                 default ->
-                        new float[]{0.46F, 0.50F, 0.34F};
+                        TINT_SPOILED_DEFAULT;
             };
         }
 
@@ -191,23 +210,23 @@ final class BirdBathBoneVisibility {
             return switch (clean) {
 
                 case CLEAN ->
-                        new float[]{1F, 1F, 1F};
+                        TINT_WHITE;
 
                 case USED ->
-                        new float[]{0.75F, 0.82F, 0.78F};
+                        TINT_WATER_USED;
 
                 case DIRTY ->
-                        new float[]{0.56F, 0.54F, 0.43F};
+                        TINT_WATER_DIRTY;
 
                 case FILTHY ->
-                        new float[]{0.38F, 0.48F, 0.28F};
+                        TINT_WATER_FILTHY;
             };
         }
 
 
         return type == BirdBathContentType.FROZEN_WATER
-                ? new float[]{0.74F, 0.88F, 1F}
-                : new float[]{1F, 1F, 1F};
+                ? TINT_FROZEN
+                : TINT_WHITE;
     }
 
 
@@ -225,11 +244,11 @@ final class BirdBathBoneVisibility {
         if (type == BirdBathContentType.SPOILED) {
 
             if (boneName.equals("flies")) {
-                return new float[]{0.08F, 0.08F, 0.07F};
+                return TINT_FLIES;
             }
 
             if (boneName.equals("spoil_spots")) {
-                return new float[]{0.36F, 0.48F, 0.20F};
+                return TINT_SPOIL_SPOTS;
             }
         }
 
@@ -243,16 +262,16 @@ final class BirdBathBoneVisibility {
         return switch (clean) {
 
             case CLEAN ->
-                    new float[]{1F, 1F, 1F};
+                    TINT_WHITE;
 
             case USED ->
-                    new float[]{0.62F, 0.58F, 0.48F};
+                    TINT_DIRT_USED;
 
             case DIRTY ->
-                    new float[]{0.42F, 0.46F, 0.28F};
+                    TINT_DIRT_DIRTY;
 
             case FILTHY ->
-                    new float[]{0.24F, 0.32F, 0.16F};
+                    TINT_DIRT_FILTHY;
         };
     }
 
