@@ -1,5 +1,6 @@
 package net.fodoth.skina.neoguanniao.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -14,8 +15,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(
@@ -36,16 +35,15 @@ public class BlockStateBaseMixin {
             );
 
 
-    @Inject(
+    @ModifyReturnValue(
             method = "getCollisionShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
-    private void neoguanniao$birdLeavesCollision(
+    private VoxelShape neoguanniao$birdLeavesCollision(
+            VoxelShape original,
             BlockGetter level,
             BlockPos pos,
-            CollisionContext context,
-            CallbackInfoReturnable<VoxelShape> cir
+            CollisionContext context
     ) {
         BlockState state = (BlockState) (Object) this;
 
@@ -63,14 +61,15 @@ public class BlockStateBaseMixin {
                 if (!activelyFlying
                         && entityContext.isAbove(neoguanniao$LEAVES_PERCH_SHAPE, pos, true)) {
 
-                    cir.setReturnValue(neoguanniao$LEAVES_PERCH_SHAPE);
+                    return neoguanniao$LEAVES_PERCH_SHAPE;
 
                 } else {
 
-                    cir.setReturnValue(Shapes.empty());
+                    return Shapes.empty();
 
                 }
             }
         }
+        return original;
     }
 }
