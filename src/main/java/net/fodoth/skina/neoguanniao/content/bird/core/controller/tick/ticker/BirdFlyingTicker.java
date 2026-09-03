@@ -54,6 +54,12 @@ public class BirdFlyingTicker<T extends AbstractBirdEntity<T>> extends AbstractB
 
     @Override
     public void tick() {
+        if (!bird().canFly()) {
+            if (getTicks() > 0) {
+                setTicks(0);
+            }
+            return;
+        }
         if (shouldTickCommon() && !isFrozen() && getTicks() <= 0 && bird().isInWater()) {
             tickWaterEscape();
             return;

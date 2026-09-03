@@ -240,6 +240,33 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
 
+    public static final DeferredHolder<BirdData, BirdData> KIWI = BIRD_DATA.register("neo_kiwi", () ->
+            BirdData.createDefault()
+                    .withSound(sound(240, NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(), NeoGuanNiaoSoundEvents.KIWI_HURT.get(),
+                            NeoGuanNiaoSoundEvents.KIWI_DEATH.get(), NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(), SoundEvents.PARROT_EAT))
+                    .withModel(modelData("kiwi", "kiwi", genderedSkins("kiwi", skinVariant("kiwi", BirdSkinRarity.COMMON)),
+                            BirdModelScaleProfile.COLUMBID, 0.2F, 1.0F))
+                    .withAnimation(animation("kiwi", "kiwi", Map.ofEntries(
+                            Map.entry("idle", loop("idle")), Map.entry("preen", playThenIdle("idle_diff_1")),
+                            Map.entry("curious", playThenIdle("idle_diff_2")), Map.entry("walk", loop("walk")),
+                            Map.entry("eat", playThenIdle("idle_diff_2")), Map.entry("sleep", playThenLoop("sleep", "sleep_loop")),
+                            Map.entry("sleep_loop", loop("sleep_loop")))))
+                    .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(3)));
+
+    public static final DeferredHolder<BirdData, BirdData> MYNA = BIRD_DATA.register("neo_myna", () ->
+            BirdData.createDefault()
+                    .withSound(sound(240, NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), NeoGuanNiaoSoundEvents.MYNA_HURT.get(),
+                            NeoGuanNiaoSoundEvents.MYNA_DEATH.get(), NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), SoundEvents.PARROT_EAT))
+                    .withFlying(flying(BirdFlightProfile.BUDGERIGAR))
+                    .withModel(modelData("myna", "myna", genderedSkins("myna", skinVariant("myna", BirdSkinRarity.COMMON)),
+                            BirdModelScaleProfile.COLUMBID, 0.2F, 1.0F))
+                    .withAnimation(animation("myna", "myna", Map.ofEntries(
+                            Map.entry("idle", loop("idle")), Map.entry("preen", playThenIdle("idle_diff_1")),
+                            Map.entry("curious", playThenIdle("idle_diff_2")), Map.entry("walk", loop("walk")),
+                            Map.entry("fly", loop("fly")), Map.entry("eat", playThenIdle("idle_diff_2")),
+                            Map.entry("sleep", playThenLoop("sleep", "sleep_loop")), Map.entry("sleep_loop", loop("sleep_loop")))))
+                    .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(4)));
+
     private static DeferredHolder<BirdData, BirdData> registerSimpleBird(
             String id, String assetName, List<SkinVariant> skins, BirdFlightProfile flightProfile,
             BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, int localSpawnCap,

@@ -23,6 +23,8 @@ public record BirdGuideEntry(String id, List<String> sections) {
             case "sparrow" -> NeoGuanNiaoEntityTypes.NEO_SPARROW.get();
             case "spotted_dove" -> NeoGuanNiaoEntityTypes.NEO_DOVE.get();
             case "pigeon" -> NeoGuanNiaoEntityTypes.NEO_PIGEON.get();
+            case "kiwi" -> NeoGuanNiaoEntityTypes.NEO_KIWI.get();
+            case "myna" -> NeoGuanNiaoEntityTypes.NEO_MYNA.get();
             default -> NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.get();
         };
     }

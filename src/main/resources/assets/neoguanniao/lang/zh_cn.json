@@ -181,6 +181,8 @@
   "model.neoguanniao.neo_macaw.macaw": "金刚鹦鹉",
   "model.neoguanniao.neo_crow.crow": "乌鸦",
   "model.neoguanniao.neo_seagull.seagull": "海鸥",
+  "model.neoguanniao.neo_kiwi.kiwi": "几维鸟",
+  "model.neoguanniao.neo_myna.myna": "八哥",
   "skin.neoguanniao.neo_budgerigar.green": "原始绿",
   "skin.neoguanniao.neo_budgerigar.white_lark": "灰白",
   "skin.neoguanniao.neo_budgerigar.mystery_green": "深绿",
@@ -230,6 +232,8 @@
   "skin.neoguanniao.neo_macaw.glaucous": "浅蓝",
   "skin.neoguanniao.neo_crow.crow": "乌鸦",
   "skin.neoguanniao.neo_seagull.seagull": "海鸥",
+  "skin.neoguanniao.neo_kiwi.kiwi": "几维鸟",
+  "skin.neoguanniao.neo_myna.myna": "八哥",
   "item.neoguanniao.bird_food_bag": "鸟食袋",
   "item.neoguanniao.bird_food_bag_seed": "鸟食袋（种子）",
   "item.neoguanniao.bird_food_bag_fish": "鸟食袋（鱼类）",
@@ -308,4 +312,12 @@
   "advancements.neoguanniao.walking_dandelion.title": "行走的蒲公英",
   "advancements.neoguanniao.walking_dandelion.description": "捡起一根鸟羽",
   "container.neoguanniao.bird_nest": "鸟巢"
+  ,"entity.neoguanniao.neo_kiwi":"几维鸟"
+  ,"entity.neoguanniao.neo_myna":"八哥"
+  ,"subtitles.neoguanniao.entity.kiwi.ambient":"几维鸟：鸣叫"
+  ,"subtitles.neoguanniao.entity.kiwi.hurt":"几维鸟：受伤"
+  ,"subtitles.neoguanniao.entity.kiwi.death":"几维鸟：死亡"
+  ,"subtitles.neoguanniao.entity.myna.ambient":"八哥：鸣叫"
+  ,"subtitles.neoguanniao.entity.myna.hurt":"八哥：受伤"
+  ,"subtitles.neoguanniao.entity.myna.death":"八哥：死亡"
 }

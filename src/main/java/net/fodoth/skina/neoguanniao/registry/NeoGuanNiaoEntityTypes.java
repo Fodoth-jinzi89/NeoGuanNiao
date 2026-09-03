@@ -7,6 +7,8 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.CrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.DoveEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.LongTailedTitEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.MacawEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.KiwiEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.MynaEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
@@ -34,6 +36,8 @@ public final class NeoGuanNiaoEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<MacawEntity>> NEO_MACAW;
     public static final DeferredHolder<EntityType<?>, EntityType<CrowEntity>> NEO_CROW;
     public static final DeferredHolder<EntityType<?>, EntityType<SeagullEntity>> NEO_SEAGULL;
+    public static final DeferredHolder<EntityType<?>, EntityType<KiwiEntity>> NEO_KIWI;
+    public static final DeferredHolder<EntityType<?>, EntityType<MynaEntity>> NEO_MYNA;
 
     private NeoGuanNiaoEntityTypes() {
     }
@@ -57,5 +61,7 @@ public final class NeoGuanNiaoEntityTypes {
         NEO_MACAW = registerCreature("neo_macaw", MacawEntity::new, 0.7072F, 0.9568F);
         NEO_CROW = registerCreature("neo_crow", CrowEntity::new, 0.416F, 0.576F);
         NEO_SEAGULL = registerCreature("neo_seagull", SeagullEntity::new, 0.72F, 0.81F);
+        NEO_KIWI = registerCreature("neo_kiwi", KiwiEntity::new, 0.58F, 0.7F);
+        NEO_MYNA = registerCreature("neo_myna", MynaEntity::new, 0.49F, 0.68F);
     }
 }

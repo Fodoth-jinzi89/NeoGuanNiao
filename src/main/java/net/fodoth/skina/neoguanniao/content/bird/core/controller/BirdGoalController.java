@@ -28,6 +28,7 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
     private final BirdSkinValidateGoalController<T> birdSkinValidateGoalController;
     private final BirdModelValidateGoalController<T> birdModelValidateGoalController;
     private final BirdRandomWalkAroundGoalController<T> birdRandomWalkAroundGoalController;
+    private final BirdWalkAroundGoalController<T> birdWalkAroundGoalController;
 
     private final List<AbstractGoalController<T>> controllers;
 
@@ -47,6 +48,7 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
         this.birdSkinValidateGoalController = builder.birdSkinValidateGoalController;
         this.birdModelValidateGoalController = builder.birdModelValidateGoalController;
         this.birdRandomWalkAroundGoalController = builder.birdRandomWalkAroundGoalController;
+        this.birdWalkAroundGoalController = builder.birdWalkAroundGoalController;
 
         this.controllers = List.of(
                 birdCuriousFollowGoalController,
@@ -63,7 +65,8 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
                 birdBreedGoalController,
                 birdSkinValidateGoalController,
                 birdModelValidateGoalController,
-                birdRandomWalkAroundGoalController
+                birdRandomWalkAroundGoalController,
+                birdWalkAroundGoalController
         );
     }
 
@@ -99,6 +102,7 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
         private BirdSkinValidateGoalController<T> birdSkinValidateGoalController = new BirdSkinValidateGoalController<>();
         private BirdModelValidateGoalController<T> birdModelValidateGoalController = new BirdModelValidateGoalController<>();
         private BirdRandomWalkAroundGoalController<T> birdRandomWalkAroundGoalController = new BirdRandomWalkAroundGoalController<>();
+        private BirdWalkAroundGoalController<T> birdWalkAroundGoalController = new BirdWalkAroundGoalController<>();
 
         public Builder<T> birdCuriousFollowGoalController(BirdCuriousFollowGoalController<T> controller) {
             this.birdCuriousFollowGoalController = controller;
@@ -175,6 +179,11 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
             return this;
         }
 
+        public Builder<T> birdWalkAroundGoalController(BirdWalkAroundGoalController<T> controller) {
+            this.birdWalkAroundGoalController = controller;
+            return this;
+        }
+
         public BirdGoalController<T> build() {
             return new BirdGoalController<>(this);
         }
@@ -241,6 +250,10 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
         return birdRandomWalkAroundGoalController;
     }
 
+    public BirdWalkAroundGoalController<T> getBirdWalkAroundGoalController() {
+        return birdWalkAroundGoalController;
+    }
+
     public List<AbstractGoalController<T>> getControllers() {
         return controllers;
     }
@@ -304,5 +317,9 @@ public class BirdGoalController<T extends AbstractBirdEntity<T>> extends Abstrac
 
     public BirdRandomWalkAroundGoalController<T> birdRandomWalkAroundGoalController() {
         return birdRandomWalkAroundGoalController;
+    }
+
+    public BirdWalkAroundGoalController<T> birdWalkAroundGoalController() {
+        return birdWalkAroundGoalController;
     }
 }

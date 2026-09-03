@@ -15,7 +15,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FenceBlock;
@@ -54,16 +54,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     protected void onAttach() {
         super.onAttach();
 
-        BirdData birdData = bird().getBirdData();
-        BirdMiscDatum miscDatum = birdData.misc();
-
-        bird().setMoveControl(
-                new FlyingMoveControl(
-                        bird(),
-                        miscDatum.maxTurns(),
-                        true
-                )
-        );
+        bird().setMoveControl(new MoveControl(bird()));
     }
 
     /**
@@ -72,6 +63,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 如果处于飞行状态返回 true
      */
     public boolean isBirdFlightActive() {
+        if (!bird.canFly()) {
+            return false;
+        }
         var timer = bird.getTickController().getTickTimer();
 
         boolean hasFlightDuration = timer.getBirdFlyingTicker().getTicks() > 0;
@@ -114,7 +108,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param fleeing 是否为逃跑飞行
      */
     public void startShortFlight(Vec3 target, boolean fleeing) {
-        if (bird().isLeashed()) {
+        if (!bird().canFly() || bird().isLeashed()) {
             return;
         }
         var timer = bird.getTickController().getTickTimer();
@@ -159,7 +153,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param target 飞行目标，为 {@code null} 时自动寻找目标
      */
     public void startFlybyFlight(Vec3 target) {
-        if (bird().isLeashed()) {
+        if (!bird().canFly() || bird().isLeashed()) {
             return;
         }
         var timer = bird.getTickController().getTickTimer();
@@ -199,7 +193,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 如果成功开始飞行返回 true
      */
     public boolean startBirdBathMountFlight(Vec3 standPosition) {
-        if (standPosition == null || isFlightInProgress() || bird().isLeashed()) {
+        if (!bird().canFly() || standPosition == null || isFlightInProgress() || bird().isLeashed()) {
             return false;
         }
 
@@ -489,6 +483,9 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @return 如果可以开始巡航返回 true
      */
     public boolean canStartAmbientAirCruise() {
+        if (!bird().canFly()) {
+            return false;
+        }
         var timer = bird.getTickController().getTickTimer();
         BirdBehaviorState state = bird.getBehaviorStateController().getBehaviorState();
 

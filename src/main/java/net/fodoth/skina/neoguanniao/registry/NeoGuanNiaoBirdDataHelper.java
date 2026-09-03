@@ -234,10 +234,19 @@ final class NeoGuanNiaoBirdDataHelper {
                                BirdFlightProfile flightProfile, BirdModelScaleProfile scaleProfile,
                                float shadowRadius, float globalScale, String animationName,
                                Map<String, String> animations) {
+        BirdSoundDatum sound = switch (assetName) {
+            case "kiwi" -> sound(240, NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(),
+                    NeoGuanNiaoSoundEvents.KIWI_HURT.get(), NeoGuanNiaoSoundEvents.KIWI_DEATH.get(),
+                    NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(), SoundEvents.PARROT_EAT);
+            case "myna" -> sound(240, NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(),
+                    NeoGuanNiaoSoundEvents.MYNA_HURT.get(), NeoGuanNiaoSoundEvents.MYNA_DEATH.get(),
+                    NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), SoundEvents.PARROT_EAT);
+            default -> new BirdSoundDatum(0.5F, 240, SoundEvents.PARROT_AMBIENT,
+                    SoundEvents.PARROT_HURT, SoundEvents.PARROT_DEATH,
+                    SoundEvents.PARROT_AMBIENT, SoundEvents.PARROT_EAT);
+        };
         return BirdData.createDefault()
-                .withSound(new BirdSoundDatum(0.5F, 240, SoundEvents.PARROT_AMBIENT,
-                        SoundEvents.PARROT_HURT, SoundEvents.PARROT_DEATH,
-                        SoundEvents.PARROT_AMBIENT, SoundEvents.PARROT_EAT))
+                .withSound(sound)
                 .withFlying(BirdFlyingDatum.createDefault().withFlightProfile(flightProfile))
                 .withModel(BirdModelSkinDatum.createDefault()
                         .withBirdModel(List.of(model(assetName, assetName)))

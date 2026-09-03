@@ -156,5 +156,29 @@
       "neoguanniao:entity/pigeon/pigeon_call_1",
       "neoguanniao:entity/pigeon/pigeon_coo_1"
     ]
+  },
+  "entity.kiwi.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.kiwi.ambient",
+    "sounds": ["neoguanniao:entity/kiwi/ambient_01", "neoguanniao:entity/kiwi/ambient_02", "neoguanniao:entity/kiwi/ambient_03"]
+  },
+  "entity.kiwi.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.kiwi.hurt",
+    "sounds": ["neoguanniao:entity/kiwi/ambient_01", "neoguanniao:entity/kiwi/ambient_02"]
+  },
+  "entity.kiwi.death": {
+    "subtitle": "subtitles.neoguanniao.entity.kiwi.death",
+    "sounds": ["neoguanniao:entity/kiwi/ambient_03"]
+  },
+  "entity.myna.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.myna.ambient",
+    "sounds": ["neoguanniao:entity/myna/call_03", "neoguanniao:entity/myna/call_04", "neoguanniao:entity/myna/call_05", "neoguanniao:entity/myna/call_07", "neoguanniao:entity/myna/call_08", "neoguanniao:entity/myna/call_10", "neoguanniao:entity/myna/call_11", "neoguanniao:entity/myna/call_12", "neoguanniao:entity/myna/call_13"]
+  },
+  "entity.myna.hurt": {
+    "subtitle": "subtitles.neoguanniao.entity.myna.hurt",
+    "sounds": ["neoguanniao:entity/myna/call_03", "neoguanniao:entity/myna/call_04"]
+  },
+  "entity.myna.death": {
+    "subtitle": "subtitles.neoguanniao.entity.myna.death",
+    "sounds": ["neoguanniao:entity/myna/call_05"]
   }
 }

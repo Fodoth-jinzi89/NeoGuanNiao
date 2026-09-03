@@ -16,6 +16,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelScale;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.ScalableBirdModel;
 import net.fodoth.skina.neoguanniao.content.bird.core.flight.*;
+import net.fodoth.skina.neoguanniao.content.bird.core.navigation.BirdPathNavigation;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdFlightProfile;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelScaleProfile;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameController;
@@ -48,7 +49,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
@@ -164,12 +164,17 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         goals.add(new BirdFollowOwnerGoal(this)); //7
         goals.add(new BirdFlockGoal(this)); //8
         goals.add(new BirdCuriousFollowGoal(this));  //9
-        goals.add(new BirdIdleGoal(this)); //10
+        goals.add(new BirdWalkAroundGoal(this)); //10
         goals.add(new BirdRandomLookAroundGoal(this)); //11
         goals.add(new BirdSkinValidateGoal(this)); //12
         goals.add(new BirdModelValidateGoal(this)); //13
 
         return goals;
+    }
+
+    /** Whether this species participates in the shared flight controller. */
+    public boolean canFly() {
+        return true;
     }
 
     /**
@@ -489,7 +494,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
-        FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
+        BirdPathNavigation navigation = new BirdPathNavigation(this, level);
         navigation.setCanFloat(false);
         navigation.setCanOpenDoors(true);
         navigation.setCanPassDoors(true);

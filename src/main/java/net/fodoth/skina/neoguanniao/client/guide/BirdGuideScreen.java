@@ -53,7 +53,9 @@ public class BirdGuideScreen extends Screen {
             new BirdGuideEntry("sparrow", List.of("intro")),
             new BirdGuideEntry("budgerigar", List.of("intro")),
             new BirdGuideEntry("spotted_dove", List.of("intro")),
-            new BirdGuideEntry("pigeon", List.of("intro"))
+            new BirdGuideEntry("pigeon", List.of("intro")),
+            new BirdGuideEntry("kiwi", List.of("intro")),
+            new BirdGuideEntry("myna", List.of("intro"))
     );
     private static final PoseKind[] POSES = PoseKind.values();
     private static final List<String> LAYOUT_RECT_IDS = List.of(
@@ -914,6 +916,8 @@ public class BirdGuideScreen extends Screen {
             case "budgerigar" -> List.of("diurnal", "social", "music", "seed_eater", "curious");
             case "spotted_dove" -> List.of("diurnal", "farmland", "pair_bond", "weather_sense", "calm");
             case "pigeon" -> List.of("diurnal", "urban", "social", "seed_eater");
+            case "kiwi" -> List.of("nocturnal", "forest", "tameable");
+            case "myna" -> List.of("diurnal", "social", "village", "seed_eater", "tameable");
             default -> List.of();
         };
     }
@@ -925,6 +929,8 @@ public class BirdGuideScreen extends Screen {
             case "budgerigar" -> -2696606;
             case "spotted_dove" -> -6583634;
             case "pigeon" -> -6638652;
+            case "kiwi" -> -10197928;
+            case "myna" -> -1184275;
             default -> ACCENT_TEXT_COLOR;
         };
     }

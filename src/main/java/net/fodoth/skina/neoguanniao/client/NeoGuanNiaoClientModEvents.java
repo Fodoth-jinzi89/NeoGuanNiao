@@ -68,6 +68,8 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MACAW.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_CROW.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),

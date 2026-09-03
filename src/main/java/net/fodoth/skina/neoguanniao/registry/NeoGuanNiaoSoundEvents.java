@@ -49,6 +49,19 @@ public final class NeoGuanNiaoSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> PIGEON_AMBIENT =
             register("entity.pigeon.ambient");
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> KIWI_AMBIENT =
+            register("entity.kiwi.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KIWI_HURT =
+            register("entity.kiwi.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KIWI_DEATH =
+            register("entity.kiwi.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYNA_AMBIENT =
+            register("entity.myna.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYNA_HURT =
+            register("entity.myna.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYNA_DEATH =
+            register("entity.myna.death");
+
 
     private NeoGuanNiaoSoundEvents() {
     }

@@ -64,6 +64,9 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
     public void onStart() {
         bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.ROOSTING);
         bird().getNavigation().stop();
+        if (bird().canFly() && roostPos != null && roostPos.getY() > bird().getY() + 1.0D) {
+            bird().getFlyingController().startShortFlight(Vec3.atCenterOf(roostPos), false);
+        }
     }
 
     @Override
@@ -95,7 +98,7 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
     @Override
     public void onReset() {
-        if (this.roostPos == null || bird().isBaby()) {
+        if (this.roostPos == null || bird().isBaby() || bird().getFlyingController().isFlightInProgress()) {
             return;
         }
         bird().getNavigation().moveTo(

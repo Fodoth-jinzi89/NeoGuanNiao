@@ -14,6 +14,8 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.KiwiEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.MynaEntity;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -68,6 +70,8 @@ public final class NeoGuanNiaoModEvents {
         event.put(NeoGuanNiaoEntityTypes.NEO_MACAW.get(), MacawEntity.createAttributes().build());
         event.put(NeoGuanNiaoEntityTypes.NEO_CROW.get(), CrowEntity.createAttributes().build());
         event.put(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), SeagullEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), KiwiEntity.createAttributes().build());
+        event.put(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), MynaEntity.createAttributes().build());
     }
 
 
@@ -103,6 +107,12 @@ public final class NeoGuanNiaoModEvents {
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SeagullEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, KiwiEntity::canSpawn,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MynaEntity::canSpawn,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
