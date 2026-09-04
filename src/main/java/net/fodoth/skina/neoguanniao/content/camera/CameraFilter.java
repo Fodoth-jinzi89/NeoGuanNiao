@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.CameraFilterCategory;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -64,7 +63,7 @@ public enum CameraFilter {
     private final String translationKey;
     private final CameraFilterCategory category;
 
-    private CameraFilter(int id, String translationKey, CameraFilterCategory category) {
+    CameraFilter(int id, String translationKey, CameraFilterCategory category) {
         this.id = id;
         this.translationKey = translationKey;
         this.category = category;

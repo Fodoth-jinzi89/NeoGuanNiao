@@ -9,7 +9,7 @@ public enum CameraFocusMode {
     private final String translationKey;
     private final String shortName;
 
-    private CameraFocusMode(int id, String translationKey, String shortName) {
+    CameraFocusMode(int id, String translationKey, String shortName) {
         this.id = id;
         this.translationKey = translationKey;
         this.shortName = shortName;

@@ -1,15 +1,15 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
+
 import net.minecraft.util.Mth;
 
 final class CameraImageFilters {
-    private static final float SHARPEN_STRENGTH = 0.16f;
+        private static final float SHARPEN_STRENGTH = 0.16f;
 
     private CameraImageFilters() {
     }
 
-    static void apply(int[] pixels, int width, int height, CameraFilter filter, long seed) {
+        static void apply(int[] pixels, int width, int height, CameraFilter filter, long seed) {
         if (filter == CameraFilter.COLOR_BALANCE) {
             CameraImageFilters.autoColorBalance(pixels);
         } else if (filter != CameraFilter.NONE) {
@@ -649,7 +649,7 @@ final class CameraImageFilters {
 
     private static int sharpenChannel(int center, int left, int right, int up, int down) {
         float neighborAverage = (float)(left + right + up + down) * 0.25f;
-        return CameraImageFilters.clamp(Math.round((float)center + ((float)center - neighborAverage) * 0.16f));
+        return CameraImageFilters.clamp(Math.round((float)center + ((float)center - neighborAverage) * SHARPEN_STRENGTH));
     }
 
     private static int alpha(int abgr) {

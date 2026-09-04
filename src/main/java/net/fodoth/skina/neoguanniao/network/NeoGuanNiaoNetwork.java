@@ -9,7 +9,9 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
-/** Registers and routes every camera payload through one typed NeoForge channel. */
+/**
+ * Registers and routes every camera payload through one typed NeoForge channel.
+ */
 @EventBusSubscriber(modid = NeoGuanNiao.MODID)
 public final class NeoGuanNiaoNetwork {
 

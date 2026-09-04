@@ -8,23 +8,14 @@ import net.fodoth.skina.neoguanniao.content.camera.PhotoIoService;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoRepository;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
-import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoNetwork;
-import net.fodoth.skina.neoguanniao.network.PhotoCaptureResultPacket;
-import net.fodoth.skina.neoguanniao.network.PhotoDownloadChunkPacket;
-import net.fodoth.skina.neoguanniao.network.PhotoDownloadStartPacket;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -38,14 +29,14 @@ import net.minecraft.world.level.ItemLike;
 
 public final class PhotoUploadManager {
     private static final DateTimeFormatter PHOTO_NAME_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final Map<UUID, UploadSession> ACTIVE_UPLOADS = new HashMap<UUID, UploadSession>();
-    private static final Map<UUID, UUID> PROCESSING_UPLOADS = new HashMap<UUID, UUID>();
-    private static final Map<UUID, Integer> PENDING_STORE_BYTES = new HashMap<UUID, Integer>();
-    private static final Map<UUID, ArrayDeque<RateEntry>> UPLOAD_RATE = new HashMap<UUID, ArrayDeque<RateEntry>>();
-    private static final Map<UUID, RequestWindow> DOWNLOAD_RATE = new HashMap<UUID, RequestWindow>();
-    private static final Set<UUID> PENDING_DOWNLOADS = new HashSet<UUID>();
-    private static final Map<UUID, DownloadSession> DOWNLOADS = new LinkedHashMap<UUID, DownloadSession>();
-    private static final ArrayDeque<UUID> DOWNLOAD_ORDER = new ArrayDeque();
+    private static final Map<UUID, UploadSession> ACTIVE_UPLOADS = new HashMap<>();
+    private static final Map<UUID, UUID> PROCESSING_UPLOADS = new HashMap<>();
+    private static final Map<UUID, Integer> PENDING_STORE_BYTES = new HashMap<>();
+    private static final Map<UUID, ArrayDeque<RateEntry>> UPLOAD_RATE = new HashMap<>();
+    private static final Map<UUID, RequestWindow> DOWNLOAD_RATE = new HashMap<>();
+    private static final Set<UUID> PENDING_DOWNLOADS = new HashSet<>();
+    private static final Map<UUID, DownloadSession> DOWNLOADS = new LinkedHashMap<>();
+    private static final ArrayDeque<UUID> DOWNLOAD_ORDER = new ArrayDeque<>();
 
     private PhotoUploadManager() {
     }
@@ -58,7 +49,7 @@ public final class PhotoUploadManager {
             return;
         }
         ItemStack camera = player.getItemInHand(hand);
-        if (!camera.is((Item)NeoGuanNiaoItems.NIKON_D750.get()) || player.getCooldowns().isOnCooldown(camera.getItem())) {
+        if (!camera.is((Item) NeoGuanNiaoItems.NIKON_D750.get()) || player.getCooldowns().isOnCooldown(camera.getItem())) {
             PhotoUploadManager.fail(player, uploadId);
             return;
         }
@@ -101,7 +92,7 @@ public final class PhotoUploadManager {
         boolean accepted = PhotoIoService.submit(server, () -> PhotoUploadManager.validateAndStore(server, session), result -> PhotoUploadManager.finishStoredUpload(server, playerId, ownerName, gameTime, filmName, location, uploadId, result), throwable -> {
             PhotoUploadManager.releasePendingStore(playerId);
             PROCESSING_UPLOADS.remove(playerId);
-            NeoGuanNiao.LOGGER.warn("Failed to validate or store photograph for {}", (Object)ownerName, throwable);
+            NeoGuanNiao.LOGGER.warn("Failed to validate or store photograph for {}", (Object) ownerName, throwable);
             ServerPlayer online = server.getPlayerList().getPlayer(playerId);
             if (online != null) {
                 PhotoUploadManager.fail(online, uploadId);
@@ -252,7 +243,7 @@ public final class PhotoUploadManager {
             return;
         }
         try {
-            ItemStack film = new ItemStack((ItemLike)NeoGuanNiaoItems.FILM.get());
+            ItemStack film = new ItemStack((ItemLike) NeoGuanNiaoItems.FILM.get());
             PhotographData.writeReference(film, result.photoId, ownerName, playerId, gameTime, result.width, result.height, result.contentHash);
             film.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.neoguanniao.film.named", filmName, location));
             if (!player.getInventory().add(film)) {
@@ -260,9 +251,8 @@ public final class PhotoUploadManager {
             }
             player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 0.8f, 1.25f);
             NeoGuanNiaoNetwork.sendToPlayer(new PhotoCaptureResultPacket(uploadId, true), player);
-        }
-        catch (RuntimeException exception) {
-            NeoGuanNiao.LOGGER.warn("Failed to deliver stored photograph {}", (Object)result.photoId, (Object)exception);
+        } catch (RuntimeException exception) {
+            NeoGuanNiao.LOGGER.warn("Failed to deliver stored photograph {}", result.photoId, exception);
             PhotoUploadManager.trashUndelivered(server, index, result.photoId, now);
             PhotoUploadManager.fail(player, uploadId);
         }
@@ -273,7 +263,8 @@ public final class PhotoUploadManager {
         PhotoIoService.submit(server, () -> {
             PhotoRepository.moveToTrash(server, photoId);
             return photoId;
-        }, ignored -> {}, throwable -> NeoGuanNiao.LOGGER.warn("Failed to trash an undelivered photograph {}", (Object)photoId, throwable));
+        }, ignored -> {
+        }, throwable -> NeoGuanNiao.LOGGER.warn("Failed to trash an undelivered photograph {}", (Object) photoId, throwable));
     }
 
     private static LoadedDownload loadDownload(MinecraftServer server, String photoId, String expectedHash) throws IOException {
@@ -298,7 +289,7 @@ public final class PhotoUploadManager {
         int pendingWorldCount = PENDING_STORE_BYTES.size();
         long pendingWorldBytes = PENDING_STORE_BYTES.values().stream().mapToLong(Integer::longValue).sum();
         int pendingPlayerCount = PENDING_STORE_BYTES.containsKey(playerId) ? 1 : 0;
-        long pendingPlayerBytes = PENDING_STORE_BYTES.getOrDefault(playerId, 0).intValue();
+        long pendingPlayerBytes = PENDING_STORE_BYTES.getOrDefault(playerId, 0);
         return usage.playerCount() + pendingPlayerCount + 1 <= CameraConfig.maxPhotosPerPlayer()
                 && usage.playerBytes() + pendingPlayerBytes + bytes <= CameraConfig.maxPhotoBytesPerPlayer()
                 && usage.worldCount() + pendingWorldCount + 1 <= CameraConfig.maxPhotosPerWorld()
@@ -314,8 +305,8 @@ public final class PhotoUploadManager {
     }
 
     private static boolean reserveUploadBytes(UUID playerId, long now, int bytes) {
-        ArrayDeque<RateEntry> entries = UPLOAD_RATE.computeIfAbsent(playerId, ignored -> new ArrayDeque());
-        while (!entries.isEmpty() && now - ((RateEntry)entries.peekFirst()).gameTime >= 1200L) {
+        ArrayDeque<RateEntry> entries = UPLOAD_RATE.computeIfAbsent(playerId, ignored -> new ArrayDeque<>());
+        while (!entries.isEmpty() && now - ((RateEntry) entries.peekFirst()).gameTime >= 1200L) {
             entries.removeFirst();
         }
         int used = entries.stream().mapToInt(RateEntry::bytes).sum();
@@ -328,11 +319,11 @@ public final class PhotoUploadManager {
 
     private static void cleanupExpired(MinecraftServer server, long now) {
         ACTIVE_UPLOADS.entrySet().removeIf(entry -> {
-            UploadSession session = (UploadSession)entry.getValue();
+            UploadSession session = (UploadSession) entry.getValue();
             if (now - session.startedAt <= CameraConfig.uploadTimeoutTicks()) {
                 return false;
             }
-            ServerPlayer player = server.getPlayerList().getPlayer((UUID)entry.getKey());
+            ServerPlayer player = server.getPlayerList().getPlayer((UUID) entry.getKey());
             if (player != null) {
                 PhotoUploadManager.fail(player, session.uploadId);
             }
@@ -340,7 +331,7 @@ public final class PhotoUploadManager {
         });
         UPLOAD_RATE.entrySet().removeIf(entry -> {
             ArrayDeque<RateEntry> entries = entry.getValue();
-            while (!entries.isEmpty() && now - ((RateEntry)entries.peekFirst()).gameTime >= 1200L) {
+            while (!entries.isEmpty() && now - ((RateEntry) entries.peekFirst()).gameTime >= 1200L) {
                 entries.removeFirst();
             }
             return entries.isEmpty();
@@ -399,7 +390,7 @@ public final class PhotoUploadManager {
         }
 
         private boolean complete() {
-            return this.receivedBytes == this.totalBytes && Arrays.stream(this.chunks).allMatch(chunk -> chunk != null);
+            return this.receivedBytes == this.totalBytes && Arrays.stream(this.chunks).allMatch(Objects::nonNull);
         }
 
         private byte[] assemble() throws IOException {
@@ -449,6 +440,10 @@ public final class PhotoUploadManager {
 
         private boolean complete() {
             return this.offset >= this.data.length;
+        }
+
+        public String getContentHash() {
+            return contentHash;
         }
     }
 

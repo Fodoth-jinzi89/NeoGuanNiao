@@ -22,12 +22,12 @@ public final class FilmToPhotographRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInput input, @NotNull Level level) {
+    public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
         return !findFilm(input).isEmpty();
     }
 
     @Override
-    public @NotNull ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInput input, HolderLookup.@NotNull Provider registries) {
         ItemStack film = findFilm(input);
         if (film.isEmpty()) {
             return ItemStack.EMPTY;
@@ -47,7 +47,7 @@ public final class FilmToPhotographRecipe extends CustomRecipe {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(HolderLookup.Provider registries) {
+    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider registries) {
         return new ItemStack(NeoGuanNiaoItems.PHOTOGRAPH.get());
     }
 

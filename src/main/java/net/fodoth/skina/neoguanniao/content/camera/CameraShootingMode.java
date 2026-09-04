@@ -1,10 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.CameraAperture;
-import net.fodoth.skina.neoguanniao.content.camera.CameraFocusMode;
-import net.fodoth.skina.neoguanniao.content.camera.CameraLens;
-import net.fodoth.skina.neoguanniao.content.camera.CameraState;
-
 public enum CameraShootingMode {
     AUTO(0, "gui.neoguanniao.camera_shooting_mode.auto", CameraLens.STANDARD, 50.0, CameraAperture.F5_6, CameraFocusMode.AF_S, 12.0),
     BIRD_PORTRAIT(1, "gui.neoguanniao.camera_shooting_mode.bird_portrait", CameraLens.TELEPHOTO, 200.0, CameraAperture.F2_8, CameraFocusMode.AF_C, 15.0),

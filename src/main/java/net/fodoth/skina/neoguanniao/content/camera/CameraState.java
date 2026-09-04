@@ -1,11 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.CameraAperture;
-import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
-import net.fodoth.skina.neoguanniao.content.camera.CameraFocusMode;
-import net.fodoth.skina.neoguanniao.content.camera.CameraLens;
-import net.fodoth.skina.neoguanniao.content.camera.CameraShootingMode;
-
 public record CameraState(CameraFilter filter, CameraLens lens, CameraShootingMode shootingMode, double focalLength, CameraAperture aperture, CameraFocusMode focusMode, double focusDistance) {
     public static final double MIN_FOCAL_LENGTH = 8.0;
     public static final double MAX_FOCAL_LENGTH = 200.0;
@@ -16,10 +10,10 @@ public record CameraState(CameraFilter filter, CameraLens lens, CameraShootingMo
         filter = filter == null ? CameraFilter.NONE : filter;
         lens = lens == null ? CameraLens.STANDARD : lens;
         shootingMode = shootingMode == null ? CameraShootingMode.AUTO : shootingMode;
-        focalLength = CameraState.clampFinite(focalLength, 8.0, 200.0, 50.0);
+        focalLength = CameraState.clampFinite(focalLength, MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH, 50.0);
         aperture = aperture == null ? CameraAperture.F5_6 : aperture;
         focusMode = focusMode == null ? CameraFocusMode.AF_S : focusMode;
-        focusDistance = CameraState.clampFinite(focusDistance, lens.minimumFocusDistance(), 128.0, 12.0);
+        focusDistance = CameraState.clampFinite(focusDistance, Math.max(MIN_FOCUS_DISTANCE, lens.minimumFocusDistance()), MAX_FOCUS_DISTANCE, 12.0);
     }
 
     public static CameraState defaults() {

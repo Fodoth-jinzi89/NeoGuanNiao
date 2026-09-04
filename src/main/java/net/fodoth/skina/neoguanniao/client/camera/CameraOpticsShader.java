@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
 import net.fodoth.skina.neoguanniao.content.camera.CameraState;
+
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -37,8 +37,8 @@ public final class CameraOpticsShader {
         shader.setSampler("DiffuseSampler", (Object)source.getColorTextureId());
         shader.setSampler("DepthSampler", (Object)source.getDepthTextureId());
         CameraOpticsShader.setUniform("OutSize", destination.width, destination.height);
-        CameraOpticsShader.setUniform("NearPlane", 0.05f);
-        float farPlane = Math.max(128.0f, (float)((Integer)Minecraft.getInstance().options.renderDistance().get()).intValue() * 16.0f);
+        CameraOpticsShader.setUniform("NearPlane", NEAR_PLANE);
+        float farPlane = Math.max(128.0f, (float) Minecraft.getInstance().options.renderDistance().get() * 16.0f);
         CameraOpticsShader.setUniform("FarPlane", farPlane);
         CameraOpticsShader.setUniform("FocusDistance", (float)state.focusDistance());
         CameraOpticsShader.setUniform("Aperture", state.aperture().fStop());
@@ -46,7 +46,7 @@ public final class CameraOpticsShader {
         CameraOpticsShader.setUniform("DofMultiplier", state.lens().depthOfFieldMultiplier());
         CameraOpticsShader.setUniform("LensDistortion", state.lens().distortion());
         RenderSystem.disableDepthTest();
-        RenderSystem.depthMask((boolean)false);
+        RenderSystem.depthMask(false);
         RenderSystem.disableBlend();
         RenderSystem.setShader(() -> shader);
         BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -55,7 +55,7 @@ public final class CameraOpticsShader {
         builder.addVertex(1.0F, 1.0F, 0.0F).setUv(1.0f, 1.0f);
         builder.addVertex(-1.0F, 1.0F, 0.0F).setUv(0.0f, 1.0f);
         BufferUploader.drawWithShader(builder.buildOrThrow());
-        RenderSystem.depthMask((boolean)true);
+        RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -68,7 +68,6 @@ public final class CameraOpticsShader {
             uniform.set(value);
         }
     }
-
     private static void setUniform(String name, float first, float second) {
         Uniform uniform = shader.getUniform(name);
         if (uniform != null) {

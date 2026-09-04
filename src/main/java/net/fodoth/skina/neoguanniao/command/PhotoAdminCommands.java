@@ -50,7 +50,7 @@ public final class PhotoAdminCommands {
 
     private static int stats(CommandSourceStack source, GameProfile profile) {
         var usage = PhotoIndexSavedData.get(source.getServer()).usage(profile == null ? null : profile.getId());
-        source.sendSuccess(() -> Component.translatable("command.neoguanniao.photo.stats", usage.worldCount(), formatBytes(usage.worldBytes()), usage.activeCount(), usage.trashCount(), usage.missingCount(), PhotoUploadManager.activeUploads(), PhotoUploadManager.activeDownloads(), PhotoIoService.queuedTasks()), false);
+                source.sendSuccess(() -> Component.translatable("command.neoguanniao.photo.stats", usage.worldCount(), formatBytes(usage.worldBytes()), usage.activeCount(), usage.trashCount(), usage.missingCount(), PhotoUploadManager.activeUploads(), PhotoUploadManager.activeDownloads(), PhotoIoService.queuedTasks()), false);
         return usage.worldCount();
     }
 
@@ -63,6 +63,8 @@ public final class PhotoAdminCommands {
     private static int moveToTrash(CommandSourceStack source, String id) {
         try {
             PhotoRepository.moveToTrash(source.getServer(), id);
+            PhotoIndexSavedData.get(source.getServer()).moveToTrash(id, System.currentTimeMillis());
+            source.sendSuccess(() -> Component.translatable("command.neoguanniao.photo.deleted", id), true);
             return 1;
         } catch (Exception exception) {
             NeoGuanNiao.LOGGER.warn("Unable to move photograph {} to trash", id, exception);
@@ -73,6 +75,8 @@ public final class PhotoAdminCommands {
     private static int restore(CommandSourceStack source, String id) {
         try {
             PhotoRepository.restoreFromTrash(source.getServer(), id);
+            PhotoIndexSavedData.get(source.getServer()).restore(id);
+            source.sendSuccess(() -> Component.translatable("command.neoguanniao.photo.restored", id), true);
             return 1;
         } catch (Exception exception) {
             NeoGuanNiao.LOGGER.warn("Unable to restore photograph {}", id, exception);
@@ -81,7 +85,8 @@ public final class PhotoAdminCommands {
     }
 
     private static int maintenance(CommandSourceStack source, boolean dryRun) {
-        return PhotoMaintenance.schedule(source.getServer(), dryRun, result -> { }) ? 1 : 0;
+        return PhotoMaintenance.schedule(source.getServer(), dryRun, result -> source.sendSuccess(
+                () -> Component.translatable("command.neoguanniao.photo.maintenance", result.missing().size(), result.orphans().size(), result.deletedTrash().size()), true)) ? 1 : 0;
     }
 
     private static String formatBytes(long bytes) {

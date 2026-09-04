@@ -744,7 +744,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         BirdBehaviorState state = getBehaviorStateController().getBehaviorState();
         var tickTimer = getTickController().getTickTimer();
 
-        if (state != BirdBehaviorState.SLEEPING) {
+        // Keep the selected sleep transition while the roost goal hands off
+        // from ROOSTING to SLEEPING. Clearing it during that hand-off causes
+        // the entry animation to play again.
+        if (state != BirdBehaviorState.SLEEPING && state != BirdBehaviorState.ROOSTING
+                && getRoutineController().isActiveTime()) {
             getAnimationController().resetSleepAnimation();
         }
 
@@ -769,12 +773,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
                     }
                 }
                 if (state == BirdBehaviorState.SLEEPING) {
-                    if (BIRD_DATA.animation().animationMap().containsKey("sleep_1")) {
-                        return animationState.setAndContinue(getAnimationController().pickSleepAnimation());
-                    }
-                    String sleepAnimation = tickTimer.getBirdBehaviorStateTicker().getTicks() > 0
-                            ? "sleep" : "sleep_loop";
-                    return animationState.setAndContinue(BIRD_DATA.animation().animationMap().get(sleepAnimation));
+                    // Cache the transition animation for the whole sleep session. Re-selecting
+                    // between "sleep" and "sleep_loop" every tick restarts the wake-up segment.
+                    return animationState.setAndContinue(getAnimationController().pickSleepAnimation());
                 }
 
                 // 飞行动画：由飞行条件控制器决定

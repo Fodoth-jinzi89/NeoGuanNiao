@@ -2,9 +2,6 @@ package net.fodoth.skina.neoguanniao.content.camera;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.client.camera.PhotographClientActions;
-import net.fodoth.skina.neoguanniao.content.camera.LegacyPhotoMigration;
-import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
-import net.fodoth.skina.neoguanniao.content.camera.PhotographEntity;
 import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -22,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class PhotographItem
 extends Item {
@@ -30,12 +27,11 @@ extends Item {
         super(properties);
     }
 
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, level, entity, slot, selected);
-        LegacyPhotoMigration.queue(level, stack);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide && PhotographData.hasImage(stack)) {
             ItemStack copy = stack.copy();
@@ -48,7 +44,7 @@ extends Item {
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
         Direction face = context.getClickedFace();
@@ -58,10 +54,8 @@ extends Item {
         }
         BlockPos placePos = context.getClickedPos().relative(face);
         if (!level.isClientSide) {
-            LegacyPhotoMigration.migrateNow(level, stack);
             ItemStack photo = stack.copy();
             photo.setCount(1);
-            LegacyPhotoMigration.queue(level, photo);
             PhotographEntity entity = new PhotographEntity(level, placePos, face, photo);
             if (!entity.survives()) {
                 return InteractionResult.FAIL;
@@ -73,7 +67,8 @@ extends Item {
         return InteractionResult.sidedSuccess((boolean)level.isClientSide);
     }
 
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (!PhotographData.hasImage(stack)) {
             tooltip.add((Component)Component.translatable((String)"item.neoguanniao.photograph.tooltip.empty").withStyle(ChatFormatting.GRAY));
             return;

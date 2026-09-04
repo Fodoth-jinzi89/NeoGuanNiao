@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.PhotographTextureCache;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import net.minecraft.ChatFormatting;
@@ -18,7 +17,7 @@ extends Screen {
     private final ItemStack photograph;
 
     public PhotographScreen(ItemStack photograph) {
-        super((Component)Component.translatable((String)"gui.neoguanniao.photograph.title"));
+        super(Component.translatable("gui.neoguanniao.photograph.title"));
         this.photograph = photograph;
     }
 
@@ -42,7 +41,7 @@ extends Screen {
         PhotographScreen.blitFullTexture(graphics, texture, x, y, imageSize, textureWidth, textureHeight);
         String photographer = PhotographData.photographer(this.photograph);
         if (!photographer.isEmpty()) {
-            graphics.drawCenteredString(this.font, (Component)Component.translatable((String)"item.neoguanniao.photograph.tooltip.photographer", (Object[])new Object[]{photographer}), this.width / 2, y + imageSize + 12, 12113894);
+            graphics.drawCenteredString(this.font, Component.translatable("item.neoguanniao.photograph.tooltip.photographer", new Object[]{photographer}), this.width / 2, y + imageSize + 12, 12113894);
         }
         super.render(graphics, mouseX, mouseY, partialTick);
     }
@@ -72,10 +71,10 @@ extends Screen {
         }
         try {
             Path file = PhotographTextureCache.export(this.photograph);
-            this.minecraft.player.displayClientMessage((Component)Component.translatable((String)"gui.neoguanniao.photograph.exported", (Object[])new Object[]{file.toString()}).withStyle(ChatFormatting.GREEN), false);
+            this.minecraft.player.displayClientMessage(Component.translatable("gui.neoguanniao.photograph.exported", new Object[]{file.toString()}).withStyle(ChatFormatting.GREEN), false);
         }
         catch (IOException exception) {
-            this.minecraft.player.displayClientMessage((Component)Component.translatable((String)"gui.neoguanniao.photograph.export_failed").withStyle(ChatFormatting.RED), false);
+            this.minecraft.player.displayClientMessage(Component.translatable("gui.neoguanniao.photograph.export_failed").withStyle(ChatFormatting.RED), false);
         }
     }
 }

@@ -1,10 +1,8 @@
 package net.fodoth.skina.neoguanniao.content.camera;
+import net.fodoth.skina.neoguanniao.config.CameraConfig;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.config.CameraConfig;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoIndexSavedData;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoIoService;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoRepository;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 public final class PhotoMaintenance {
     private static final int MAX_FILE_ACTIONS = 128;
     private static final int AUTOMATIC_SHARDS_PER_PASS = 16;
+
     private static final AtomicBoolean RUNNING = new AtomicBoolean();
     private static int nextAutomaticShard;
 
@@ -29,11 +28,12 @@ public final class PhotoMaintenance {
         return PhotoMaintenance.schedule(server, dryRun, callback, null);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean scheduleAutomatic(MinecraftServer server, Consumer<Result> callback) {
         int firstShard = nextAutomaticShard;
-        boolean accepted = PhotoMaintenance.schedule(server, true, callback, new ShardWindow(firstShard, 16));
+        boolean accepted = PhotoMaintenance.schedule(server, true, callback, new ShardWindow(firstShard, AUTOMATIC_SHARDS_PER_PASS));
         if (accepted) {
-            nextAutomaticShard = Math.floorMod(firstShard + 16, 256);
+            nextAutomaticShard = Math.floorMod(firstShard + AUTOMATIC_SHARDS_PER_PASS, 256);
         }
         return accepted;
     }
@@ -71,14 +71,14 @@ public final class PhotoMaintenance {
     }
 
     private static Result inspect(MinecraftServer server, Collection<PhotoIndexSavedData.PhotoRecord> records, int retentionDays, long now, boolean dryRun, ShardWindow shardWindow) throws IOException {
-        HashMap<String, PhotoIndexSavedData.PhotoRecord> indexed = new HashMap<String, PhotoIndexSavedData.PhotoRecord>();
+        HashMap<String, PhotoIndexSavedData.PhotoRecord> indexed = new HashMap<>();
         for (PhotoIndexSavedData.PhotoRecord record : records) {
             indexed.put(record.id(), record);
         }
-        HashSet<String> stored = new HashSet<String>(shardWindow == null ? PhotoRepository.listStoredPhotoIds(server, Integer.MAX_VALUE) : PhotoRepository.listStoredPhotoIdsInShards(server, shardWindow.firstShard, shardWindow.shardCount, Integer.MAX_VALUE));
-        ArrayList<String> missing = new ArrayList<String>();
-        ArrayList<OrphanFile> orphans = new ArrayList<OrphanFile>();
-        ArrayList<String> deletedTrash = new ArrayList<String>();
+        HashSet<String> stored = new HashSet<>(shardWindow == null ? PhotoRepository.listStoredPhotoIds(server, Integer.MAX_VALUE) : PhotoRepository.listStoredPhotoIdsInShards(server, shardWindow.firstShard, shardWindow.shardCount));
+        ArrayList<String> missing = new ArrayList<>();
+        ArrayList<OrphanFile> orphans = new ArrayList<>();
+        ArrayList<String> deletedTrash = new ArrayList<>();
         int actions = 0;
         for (PhotoIndexSavedData.PhotoRecord record : records) {
             if (shardWindow != null && !shardWindow.includes(record.id())) continue;
@@ -89,7 +89,7 @@ public final class PhotoMaintenance {
                     deletedTrash.add(record.id());
                     continue;
                 }
-                if (actions >= 128) continue;
+                if (actions >= MAX_FILE_ACTIONS) continue;
                 PhotoRepository.deleteTrashPermanently(server, record.id());
                 deletedTrash.add(record.id());
                 ++actions;
@@ -105,7 +105,7 @@ public final class PhotoMaintenance {
                 orphans.add(new OrphanFile(id, bytes));
                 continue;
             }
-            if (actions >= 128) continue;
+            if (actions >= MAX_FILE_ACTIONS) continue;
             PhotoRepository.moveToTrash(server, id);
             orphans.add(new OrphanFile(id, bytes));
             ++actions;

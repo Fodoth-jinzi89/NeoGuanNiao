@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
 import net.fodoth.skina.neoguanniao.content.camera.PhotoImageCodec;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
+
 import net.fodoth.skina.neoguanniao.network.BeginPhotoUploadPacket;
 import net.fodoth.skina.neoguanniao.network.FinishPhotoUploadPacket;
 import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoNetwork;
@@ -9,14 +9,7 @@ import net.fodoth.skina.neoguanniao.network.PhotoRequestPacket;
 import net.fodoth.skina.neoguanniao.network.PhotoUploadChunkPacket;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import net.minecraft.client.Minecraft;
@@ -24,7 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 
 public final class PhotoClientRepository {
-    private static final int MAX_CACHED_IMAGES = 192;
+        private static final int MAX_CACHED_IMAGES = 192;
     private static final long REQUEST_RETRY_MILLIS = 5000L;
     private static final Map<String, CachedImage> IMAGES = new LinkedHashMap<String, CachedImage>(193, 0.75f, true);
     private static final Map<String, DownloadSession> DOWNLOADS = new HashMap<String, DownloadSession>();
@@ -90,7 +83,7 @@ public final class PhotoClientRepository {
         if (!(DOWNLOADS.containsKey(photoId) || VALIDATING.contains(photoId) || photoId.equals(activeRequest) || now < RETRY_AFTER.getOrDefault(photoId, 0L))) {
             EXPECTED_HASHES.put(photoId, expectedHash == null ? "" : expectedHash);
             RETRY_AFTER.put(photoId, now + 5000L);
-            if (REQUEST_QUEUE.size() < 192) {
+            if (REQUEST_QUEUE.size() < MAX_CACHED_IMAGES) {
                 REQUEST_QUEUE.putIfAbsent(photoId, expectedHash == null ? "" : expectedHash);
                 PhotoClientRepository.dispatchNextRequest();
             }
@@ -176,7 +169,7 @@ public final class PhotoClientRepository {
         EXPECTED_HASHES.remove(photoId);
         int failures = Math.min(5, FAILURE_COUNTS.getOrDefault(photoId, 0) + 1);
         FAILURE_COUNTS.put(photoId, failures);
-        long delay = Math.min(60000L, 5000L << failures - 1);
+        long delay = Math.min(60000L, REQUEST_RETRY_MILLIS << failures - 1);
         RETRY_AFTER.put(photoId, System.currentTimeMillis() + delay);
         REQUEST_QUEUE.remove(photoId);
         PhotoClientRepository.finishActiveRequest(photoId);
@@ -221,7 +214,7 @@ public final class PhotoClientRepository {
 
     private static void evictOldestImages() {
         Iterator<String> iterator = IMAGES.keySet().iterator();
-        while (IMAGES.size() > 192 && iterator.hasNext()) {
+        while (IMAGES.size() > MAX_CACHED_IMAGES && iterator.hasNext()) {
             iterator.next();
             iterator.remove();
         }
@@ -260,7 +253,7 @@ public final class PhotoClientRepository {
         }
 
         private boolean complete() {
-            return this.receivedBytes == this.totalBytes && Arrays.stream(this.chunks).allMatch(chunk -> chunk != null);
+            return this.receivedBytes == this.totalBytes && Arrays.stream(this.chunks).allMatch(Objects::nonNull);
         }
 
         private byte[] assemble() throws IOException {

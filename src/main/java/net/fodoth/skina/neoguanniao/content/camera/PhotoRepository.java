@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.camera;
+import net.fodoth.skina.neoguanniao.config.CameraConfig;
 
-import net.fodoth.skina.neoguanniao.content.camera.PhotoImageCodec;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public final class PhotoRepository {
     }
 
     public static void storeValidated(MinecraftServer server, String photoId, byte[] jpeg) throws IOException {
-        if (jpeg == null || jpeg.length <= 0 || jpeg.length > net.fodoth.skina.neoguanniao.config.CameraConfig.maxCompressedBytes()) {
+        if (jpeg == null || jpeg.length == 0 || jpeg.length > CameraConfig.maxCompressedBytes()) {
             throw new IOException("Invalid compressed photograph size");
         }
         Path target = PhotoRepository.photoPath(server, photoId);
@@ -46,7 +45,7 @@ public final class PhotoRepository {
             throw new IOException("Photograph does not exist");
         }
         long size = Files.size(target);
-        if (size <= 0L || size > net.fodoth.skina.neoguanniao.config.CameraConfig.maxCompressedBytes()) {
+        if (size <= 0L || size > CameraConfig.maxCompressedBytes()) {
             throw new IOException("Photograph file has an invalid size");
         }
         byte[] data = Files.readAllBytes(target);
@@ -91,6 +90,7 @@ public final class PhotoRepository {
         return Files.deleteIfExists(PhotoRepository.photoPath(server, photoId)) || deleted;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean deleteTrashPermanently(MinecraftServer server, String photoId) throws IOException {
         PhotoRepository.validatePhotoId(photoId);
         return Files.deleteIfExists(PhotoRepository.trashPath(server, photoId));
@@ -115,9 +115,9 @@ public final class PhotoRepository {
         return ids;
     }
 
-    static List<String> listStoredPhotoIdsInShards(MinecraftServer server, int firstShard, int shardCount, int limit) throws IOException {
-        int boundedLimit = Math.max(1, limit);
-        int boundedShardCount = Math.max(1, Math.min(256, shardCount));
+    static List<String> listStoredPhotoIdsInShards(MinecraftServer server, int firstShard, int shardCount) throws IOException {
+        int boundedLimit = Math.max(1, Integer.MAX_VALUE);
+        int boundedShardCount = Math.clamp(shardCount, 1, 256);
         Path root = PhotoRepository.root(server);
         if (!Files.isDirectory(root, new LinkOption[0])) {
             return List.of();
@@ -189,12 +189,15 @@ public final class PhotoRepository {
     }
 
     private static void writeAtomically(Path target, byte[] data) throws IOException {
-        Files.createDirectories(target.getParent(), new FileAttribute[0]);
-        Path temporary = target.resolveSibling(String.valueOf(target.getFileName()) + ".tmp");
+        Files.createDirectories(target.getParent());
+        Path temporary = target.resolveSibling(target.getFileName() + ".tmp");
         try (FileChannel channel = FileChannel.open(temporary, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);){
             ByteBuffer buffer = ByteBuffer.wrap(data);
             while (buffer.hasRemaining()) {
-                channel.write(buffer);
+                int written = channel.write(buffer);
+                if (written == 0) {
+                    throw new IOException("Unable to make progress while writing photograph");
+                }
             }
             channel.force(true);
         }

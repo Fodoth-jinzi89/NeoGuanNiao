@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,11 +19,15 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 public final class PhotoIndexSavedData
 extends SavedData {
     private static final String DATA_NAME = "guaniao_photo_index";
-    private static final long ACCESS_UPDATE_INTERVAL_MILLIS = 21600000L;
+
+    private static final long ACCESS_UPDATE_INTERVAL_MILLIS = 21_600_000L;
+
+
     private final Map<String, PhotoRecord> records = new HashMap<String, PhotoRecord>();
     private final Map<Integer, Set<String>> idsByShard = new HashMap<Integer, Set<String>>();
     private final Map<UUID, OwnerUsage> usageByOwner = new HashMap<UUID, OwnerUsage>();
@@ -56,7 +59,7 @@ extends SavedData {
         return data;
     }
 
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         ListTag list = new ListTag();
         for (PhotoRecord record : this.records.values()) {
             CompoundTag entry = new CompoundTag();
@@ -84,11 +87,11 @@ extends SavedData {
     }
 
     public Collection<PhotoRecord> snapshot() {
-        return Collections.unmodifiableList(new ArrayList<PhotoRecord>(this.records.values()));
+        return List.copyOf(this.records.values());
     }
 
     public Collection<PhotoRecord> snapshotInShards(int firstShard, int shardCount) {
-        int boundedCount = Math.max(1, Math.min(256, shardCount));
+        int boundedCount = Math.clamp(shardCount, 1, 256);
         ArrayList<PhotoRecord> snapshot = new ArrayList<PhotoRecord>();
         for (int offset = 0; offset < boundedCount; ++offset) {
             int shard = Math.floorMod(firstShard + offset, 256);
@@ -109,7 +112,7 @@ extends SavedData {
 
     public void touch(String photoId, long now) {
         PhotoRecord record = this.records.get(photoId);
-        if (record == null || now <= record.lastAccessAt() || now - record.lastAccessAt() < 21600000L) {
+        if (record == null || now <= record.lastAccessAt() || now - record.lastAccessAt() < ACCESS_UPDATE_INTERVAL_MILLIS) {
             return;
         }
         this.putRecord(record.withLastAccess(now), true);
@@ -125,13 +128,14 @@ extends SavedData {
         int normalizedWidth = Math.max(0, width);
         int normalizedHeight = Math.max(0, height);
         String normalizedHash = contentHash == null ? record.contentHash() : contentHash;
-        long l = lastAccess = now - record.lastAccessAt() >= 21600000L ? Math.max(record.lastAccessAt(), now) : record.lastAccessAt();
+        long l = lastAccess = now - record.lastAccessAt() >= ACCESS_UPDATE_INTERVAL_MILLIS ? Math.max(record.lastAccessAt(), now) : record.lastAccessAt();
         if (record.bytes() == normalizedBytes && record.width() == normalizedWidth && record.height() == normalizedHeight && record.lastAccessAt() == lastAccess && Objects.equals(record.contentHash(), normalizedHash)) {
             return;
         }
         this.putRecord(new PhotoRecord(record.id(), record.owner(), record.ownerName(), record.createdAt(), lastAccess, record.deletedAt(), normalizedBytes, normalizedWidth, normalizedHeight, normalizedHash, record.status()), true);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean moveToTrash(String photoId, long now) {
         PhotoRecord record = this.records.get(photoId);
         if (record == null || record.status() == PhotoStatus.TRASH) {
@@ -141,6 +145,7 @@ extends SavedData {
         return true;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean restore(String photoId) {
         PhotoRecord record = this.records.get(photoId);
         if (record == null || record.status() != PhotoStatus.TRASH) {
@@ -185,7 +190,7 @@ extends SavedData {
         } else {
             int shard = PhotoIndexSavedData.shardOf(record.id());
             if (shard >= 0) {
-                this.idsByShard.computeIfAbsent(shard, ignored -> new HashSet()).add(record.id());
+                this.idsByShard.computeIfAbsent(shard, ignored -> new HashSet<>()).add(record.id());
             }
         }
         this.addUsage(record);

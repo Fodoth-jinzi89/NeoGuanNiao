@@ -55,7 +55,7 @@ public final class PhotoIoService {
             thread.setUncaughtExceptionHandler((ignored, throwable) -> NeoGuanNiao.LOGGER.error("Uncaught photograph I/O error", throwable));
             return thread;
         };
-        ThreadPoolExecutor created = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(32), factory, new ThreadPoolExecutor.AbortPolicy());
+        ThreadPoolExecutor created = new ThreadPoolExecutor(THREADS, THREADS, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(QUEUE_CAPACITY), factory, new ThreadPoolExecutor.AbortPolicy());
         created.prestartAllCoreThreads();
         return created;
     }

@@ -1,16 +1,15 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.LegacyPhotoMigration;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
@@ -28,23 +27,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PhotographEntity
 extends HangingEntity {
     public static final int FRAME_SIZE_PIXELS = 12;
-    public static final int PHOTO_SIZE_PIXELS = 10;
-    private static final EntityDataAccessor<ItemStack> DATA_ITEM = SynchedEntityData.defineId(PhotographEntity.class, (EntityDataSerializer)EntityDataSerializers.ITEM_STACK);
-    private static final EntityDataAccessor<Integer> DATA_ROTATION = SynchedEntityData.defineId(PhotographEntity.class, (EntityDataSerializer)EntityDataSerializers.INT);
+
+    private static final EntityDataAccessor<ItemStack> DATA_ITEM = SynchedEntityData.defineId(PhotographEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Integer> DATA_ROTATION = SynchedEntityData.defineId(PhotographEntity.class, EntityDataSerializers.INT);
 
     public PhotographEntity(EntityType<? extends PhotographEntity> entityType, Level level) {
         super(entityType, level);
     }
 
     public PhotographEntity(Level level, BlockPos pos, Direction direction, ItemStack photograph) {
-        super((EntityType)NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), level, pos);
+        super(NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), level, pos);
         this.setDirection(direction);
         this.setItem(photograph);
     }
@@ -54,7 +52,7 @@ extends HangingEntity {
         builder.define(DATA_ROTATION, 0);
     }
 
-    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
         if (DATA_ITEM.equals(key)) {
             this.onItemChanged(this.getItem());
         }
@@ -63,11 +61,18 @@ extends HangingEntity {
 
     public void recreateFromPacket(@NotNull ClientboundAddEntityPacket packet) {
         super.recreateFromPacket(packet);
-        this.setDirection(Direction.from3DDataValue((int)packet.getData()));
+        int data = packet.getData();
+        Direction direction = Direction.from3DDataValue(data);
+        if (!direction.getAxis().isHorizontal()) {
+            NeoGuanNiao.LOGGER.warn("Ignoring invalid photograph facing {} in spawn packet", data);
+            direction = Direction.SOUTH;
+        }
+        this.setDirection(direction);
     }
 
+    @Override
     @NotNull
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket(@NotNull ServerEntity serverEntity) {
         return new ClientboundAddEntityPacket((Entity)this, this.direction.get3DDataValue(), this.getPos());
     }
 
@@ -84,7 +89,6 @@ extends HangingEntity {
         super.readAdditionalSaveData(tag);
         ItemStack item = ItemStack.parseOptional(this.registryAccess(), tag.getCompound("Item"));
         if (!item.isEmpty()) {
-            LegacyPhotoMigration.migrateNow(this.level(), item);
             this.setItem(item);
         }
         this.setDirection(Direction.from3DDataValue((int)tag.getByte("Facing")));
@@ -96,11 +100,11 @@ extends HangingEntity {
     }
 
     public int getWidth() {
-        return 12;
+        return FRAME_SIZE_PIXELS;
     }
 
     public int getHeight() {
-        return 12;
+        return FRAME_SIZE_PIXELS;
     }
 
     @Nullable
@@ -108,6 +112,7 @@ extends HangingEntity {
         return this.getItem().copy();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean survives() {
         if (!this.level().noCollision((Entity)this)) {
             return false;
@@ -116,7 +121,7 @@ extends HangingEntity {
         return (state.isSolid() || this.direction.getAxis().isHorizontal() && DiodeBlock.isDiode((BlockState)state)) && this.level().getEntities((Entity)this, this.getBoundingBox(), HANGING_ENTITY).isEmpty();
     }
 
-    protected AABB calculateBoundingBox(BlockPos pos, Direction direction) {
+    protected @NotNull AABB calculateBoundingBox(BlockPos pos, Direction direction) {
         double hangOffset = 0.46875;
         double x = pos.getX() + 0.5 - direction.getStepX() * hangOffset;
         double y = pos.getY() + 0.5 - direction.getStepY() * hangOffset;

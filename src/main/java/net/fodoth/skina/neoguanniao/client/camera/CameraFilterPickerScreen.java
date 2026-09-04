@@ -1,9 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
-import net.fodoth.skina.neoguanniao.client.camera.CameraPreviewPostEffect;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilterCategory;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,7 +15,7 @@ import net.minecraft.util.Mth;
 
 public final class CameraFilterPickerScreen
 extends Screen {
-    private static final int OUTER_GAP = 8;
+        private static final int OUTER_GAP = 8;
     private static final int COLUMN_GAP = 9;
     private static final int SECTION_GAP = 5;
     private static final int FOOTER_HEIGHT = 30;
@@ -65,7 +63,7 @@ extends Screen {
     private boolean finished;
 
     private CameraFilterPickerScreen(CameraFilter original) {
-        super((Component)Component.translatable((String)"gui.neoguanniao.camera_filter_picker.title"));
+        super(Component.translatable("gui.neoguanniao.camera_filter_picker.title"));
         this.original = original;
         this.highlighted = original;
         this.category = original == CameraFilter.NONE ? CameraFilterCategory.NATURAL : original.category();
@@ -77,12 +75,11 @@ extends Screen {
             return;
         }
         Screen screen = minecraft.screen;
-        if (screen instanceof CameraFilterPickerScreen) {
-            CameraFilterPickerScreen picker = (CameraFilterPickerScreen)screen;
+        if (screen instanceof CameraFilterPickerScreen picker) {
             picker.confirmAndClose();
             return;
         }
-        minecraft.setScreen((Screen)new CameraFilterPickerScreen(CameraClientCapture.currentFilter()));
+        minecraft.setScreen(new CameraFilterPickerScreen(CameraClientCapture.currentFilter()));
     }
 
     public boolean isPauseScreen() {
@@ -118,8 +115,8 @@ extends Screen {
         int maximumHeight = Math.max(1, this.height - 12);
         int minimumWidth = Math.min(520, maximumWidth);
         int minimumHeight = Math.min(280, maximumHeight);
-        int panelWidth = Mth.clamp((int)Math.round((float)this.width * 0.88f), (int)minimumWidth, (int)maximumWidth);
-        int panelHeight = Mth.clamp((int)Math.round((float)this.height * 0.82f), (int)minimumHeight, (int)maximumHeight);
+        int panelWidth = Mth.clamp(Math.round((float)this.width * 0.88f), minimumWidth, maximumWidth);
+        int panelHeight = Mth.clamp(Math.round((float)this.height * 0.82f), minimumHeight, maximumHeight);
         this.panelLeft = (this.width - panelWidth) / 2;
         this.panelTop = (this.height - panelHeight) / 2;
         this.panelRight = this.panelLeft + panelWidth;
@@ -143,7 +140,7 @@ extends Screen {
         this.listTop = this.originalTop + 21 + 5;
         this.listBottom = contentBottom;
         int listHeight = Math.max(1, this.listBottom - this.listTop);
-        this.visibleRows = Mth.clamp((int)((listHeight + 3) / 35), (int)1, (int)7);
+        this.visibleRows = Mth.clamp((listHeight + 3) / 35, 1, 7);
         this.rowHeight = Math.max(24, (listHeight - (this.visibleRows - 1) * 3) / this.visibleRows);
     }
 
@@ -157,8 +154,8 @@ extends Screen {
 
     private void syncIndexToHighlighted() {
         List<CameraFilter> filters = this.currentFilters();
-        int index = filters.indexOf((Object)this.highlighted);
-        int n = this.highlightedIndex = index >= 0 ? index : 0;
+        int index = filters.indexOf(this.highlighted);
+        int n = this.highlightedIndex = Math.max(index, 0);
         if (!filters.isEmpty() && index < 0) {
             this.highlighted = filters.get(this.highlightedIndex);
         }
@@ -174,7 +171,7 @@ extends Screen {
                 this.scrollOffset = this.highlightedIndex - this.visibleRows + 1;
             }
         }
-        this.scrollOffset = Mth.clamp((int)this.scrollOffset, (int)0, (int)maximum);
+        this.scrollOffset = Mth.clamp(this.scrollOffset, 0, maximum);
     }
 
     private void setCategory(CameraFilterCategory next) {
@@ -186,7 +183,7 @@ extends Screen {
         this.scrollOffset = 0;
         List<CameraFilter> filters = this.currentFilters();
         if (!filters.isEmpty()) {
-            this.select(filters.get(0));
+            this.select(filters.getFirst());
         }
     }
 
@@ -242,19 +239,19 @@ extends Screen {
         CameraPreviewPostEffect.drawPreview(graphics, this.leftLeft + 3, this.previewTop + 3, this.leftRight - 3, this.previewBottom - 3);
         this.drawFocusMarks(graphics, this.leftLeft + 3, this.previewTop + 3, this.leftRight - 3, this.previewBottom - 3);
         this.drawPanel(graphics, this.leftLeft, this.infoTop, this.leftRight, this.listBottom, -400546776);
-        String filterName = Component.translatable((String)this.highlighted.translationKey()).getString();
+        String filterName = Component.translatable(this.highlighted.translationKey()).getString();
         String selected = String.format(Locale.ROOT, "#%02d  %s", CameraFilterPickerScreen.categoryDisplayNumber(this.highlighted), filterName);
         graphics.drawString(this.font, selected, this.leftLeft + 10, this.infoTop + 11, -5975188, false);
-        graphics.drawString(this.font, (Component)Component.translatable((String)this.category.translationKey()), this.leftLeft + 10, this.infoTop + 30, -5393480, false);
+        graphics.drawString(this.font, Component.translatable(this.category.translationKey()), this.leftLeft + 10, this.infoTop + 30, -5393480, false);
         int dividerX = Math.min(this.leftRight - 120, this.leftLeft + (this.leftRight - this.leftLeft) * 2 / 5);
         graphics.vLine(dividerX, this.infoTop + 7, this.listBottom - 7, -12893624);
         int noteX = dividerX + 9;
         int noteWidth = Math.max(32, this.leftRight - noteX - 9);
-        graphics.drawString(this.font, (Component)Component.translatable((String)"gui.neoguanniao.camera_filter_picker.lens_note"), noteX, this.infoTop + 8, -5975188, false);
-        List noteLines = this.font.split((FormattedText)Component.translatable((String)this.highlighted.descriptionKey()), noteWidth);
+                graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_filter_picker.lens_note"), noteX, this.infoTop + 8, -5975188, false);
+        List<FormattedCharSequence> noteLines = this.font.split(Component.translatable(this.highlighted.descriptionKey()), noteWidth);
         int noteY = this.infoTop + 24;
         for (int i = 0; i < Math.min(2, noteLines.size()); ++i) {
-            graphics.drawString(this.font, (FormattedCharSequence)noteLines.get(i), noteX, noteY + i * 11, -5393480, false);
+            graphics.drawString(this.font, noteLines.get(i), noteX, noteY + i * 11, -5393480, false);
         }
     }
 
@@ -282,7 +279,7 @@ extends Screen {
             int background = selected ? -13090253 : (hovered ? -13617605 : -14407379);
             graphics.fill(x0, this.tabsTop, x1, this.tabsTop + 24, background);
             CameraFilterPickerScreen.drawBorder(graphics, x0, this.tabsTop, x1, this.tabsTop + 24, selected ? -11111109 : -12893624);
-            this.drawCenteredFittingString(graphics, (Component)Component.translatable((String)candidate.translationKey()), x0 + 2, this.tabsTop, x1 - x0 - 4, 24, selected ? -5975188 : -5393480);
+            this.drawCenteredFittingString(graphics, Component.translatable(candidate.translationKey()), x0 + 2, this.tabsTop, x1 - x0 - 4, 24, selected ? -5975188 : -5393480);
         }
     }
 
@@ -296,7 +293,7 @@ extends Screen {
             graphics.fill(x0, this.originalTop, x0 + 3, this.originalTop + 21, -5975188);
         }
         CameraFilterPickerScreen.drawBorder(graphics, x0, this.originalTop, x1, this.originalTop + 21, selected ? -11111109 : -12893624);
-        String label = "#00  " + Component.translatable((String)CameraFilter.NONE.translationKey()).getString();
+        String label = "#00  " + Component.translatable(CameraFilter.NONE.translationKey()).getString();
         graphics.drawString(this.font, (selected ? "> " : "  ") + label, x0 + 7, this.originalTop + 6, selected ? -5975188 : -1775897, false);
     }
 
@@ -321,13 +318,13 @@ extends Screen {
             if (selected) {
                 graphics.fill(this.rightLeft + 3, y0, this.rightLeft + 6, y1, -5975188);
             }
-            if (!(thumbnailDrawn = CameraPreviewPostEffect.drawFilterThumbnail(graphics, filter, thumbnailX = this.rightLeft + 10, thumbnailY = y0 + (y1 - y0 - (thumbnailHeight = Math.max(12, y1 - y0 - 8))) / 2, thumbnailX + (thumbnailWidth = Math.min(72, Math.max(24, Math.round((float)thumbnailHeight * 1.6f)))), thumbnailY + thumbnailHeight))) {
+            if (!(thumbnailDrawn = CameraPreviewPostEffect.drawFilterThumbnail(graphics, filter, thumbnailX = this.rightLeft + 10, thumbnailY = y0 + (y1 - y0 - (thumbnailHeight = Math.max(12, y1 - y0 - 8))) / 2, thumbnailX + (thumbnailWidth = Math.clamp(Math.round((float) thumbnailHeight * 1.6f), 24, 72)), thumbnailY + thumbnailHeight))) {
                 this.renderPaletteThumbnail(graphics, filter, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
             }
             CameraFilterPickerScreen.drawBorder(graphics, thumbnailX, thumbnailY, thumbnailX + thumbnailWidth, thumbnailY + thumbnailHeight, -15921391);
             int textX = thumbnailX + thumbnailWidth + 9;
             int textWidth = Math.max(8, contentRight - textX - 6);
-            String name = (selected ? "> " : "  ") + String.format(Locale.ROOT, "%02d  %s", filterIndex + 1, Component.translatable((String)filter.translationKey()).getString());
+            String name = (selected ? "> " : "  ") + String.format(Locale.ROOT, "%02d  %s", filterIndex + 1, Component.translatable(filter.translationKey()).getString());
             if (this.font.width(name) > textWidth) {
                 name = this.font.plainSubstrByWidth(name, Math.max(6, textWidth - 6)) + "\u2026";
             }
@@ -340,7 +337,7 @@ extends Screen {
         if (filter == CameraFilter.NONE) {
             return 0;
         }
-        int index = CameraFilter.inCategory(filter.category()).indexOf((Object)filter);
+        int index = CameraFilter.inCategory(filter.category()).indexOf(filter);
         return index < 0 ? 0 : index + 1;
     }
 
@@ -377,9 +374,9 @@ extends Screen {
             default -> throw new IllegalStateException("Unexpected filter category");
         };
         hue -= (float)Math.floor(hue);
-        int sky = 0xFF000000 | Mth.hsvToRgb((float)hue, (float)(saturation * 0.72f), (float)brightness);
-        int groundHueOffset = Mth.hsvToRgb((float)(hue + 0.08f >= 1.0f ? hue - 0.92f : hue + 0.08f), (float)saturation, (float)(brightness * 0.58f));
-        int highlightHueOffset = Mth.hsvToRgb((float)(hue + 0.16f >= 1.0f ? hue - 0.84f : hue + 0.16f), (float)Math.max(0.0f, saturation - 0.12f), (float)Math.min(1.0f, brightness + 0.1f));
+        int sky = 0xFF000000 | Mth.hsvToRgb(hue, saturation * 0.72f, brightness);
+        int groundHueOffset = Mth.hsvToRgb(hue + 0.08f >= 1.0f ? hue - 0.92f : hue + 0.08f, saturation, brightness * 0.58f);
+        int highlightHueOffset = Mth.hsvToRgb(hue + 0.16f >= 1.0f ? hue - 0.84f : hue + 0.16f, Math.max(0.0f, saturation - 0.12f), Math.min(1.0f, brightness + 0.1f));
         int ground = 0xFF000000 | groundHueOffset;
         int highlight = 0xFF000000 | highlightHueOffset;
         int horizon = y + Math.max(4, height * 5 / 9);
@@ -397,7 +394,7 @@ extends Screen {
         int x1 = this.rightRight - 4;
         graphics.fill(x0, this.listTop, x1, this.listBottom, -15657962);
         int maximum = Math.max(0, filters.size() - this.visibleRows);
-        if (maximum <= 0) {
+        if (maximum == 0) {
             graphics.fill(x0 + 1, this.listTop + 1, x1 - 1, this.listBottom - 1, -12893624);
             return;
         }
@@ -412,11 +409,11 @@ extends Screen {
     private void renderFooter(GuiGraphics graphics) {
         graphics.fill(this.panelLeft, this.footerTop, this.panelRight, this.panelBottom, -216918760);
         graphics.hLine(this.panelLeft, this.panelRight, this.footerTop, -12893624);
-        this.drawCenteredFittingString(graphics, (Component)Component.translatable((String)"gui.neoguanniao.camera_filter_picker.help"), this.panelLeft + 8, this.footerTop, this.panelRight - this.panelLeft - 16, 30, -5393480);
+        this.drawCenteredFittingString(graphics, Component.translatable("gui.neoguanniao.camera_filter_picker.help"), this.panelLeft + 8, this.footerTop, this.panelRight - this.panelLeft - 16, 30, -5393480);
     }
 
     private void drawFocusMarks(GuiGraphics graphics, int left, int top, int right, int bottom) {
-        int length = Mth.clamp((int)(Math.min(right - left, bottom - top) / 9), (int)9, (int)22);
+        int length = Mth.clamp(Math.min(right - left, bottom - top) / 9, 9, 22);
         int inset = 12;
         int x0 = left + inset;
         int y0 = top + inset;
@@ -455,11 +452,11 @@ extends Screen {
     }
 
     private void drawCenteredFittingString(GuiGraphics graphics, Component text, int x, int y, int width, int height, int color) {
-        int textWidth = this.font.width((FormattedText)text);
+        int textWidth = this.font.width(text);
         if (textWidth <= 0 || width <= 0) {
             return;
         }
-        float scale = Math.min(1.0f, Math.max(0.42f, (float)(width - 6) / (float)textWidth));
+        float scale = Math.clamp((float) (width - 6) / (float) textWidth, 0.42f, 1.0f);
         int scaledWidth = Math.round((float)textWidth * scale);
         int scaledHeight = Math.round(8.0f * scale);
         graphics.pose().pushPose();
@@ -511,14 +508,14 @@ extends Screen {
     private void scrollFromTrack(double mouseY) {
         List<CameraFilter> filters = this.currentFilters();
         int maximum = Math.max(0, filters.size() - this.visibleRows);
-        if (maximum <= 0) {
+        if (maximum == 0) {
             return;
         }
-        double progress = Mth.clamp((double)((mouseY - (double)this.listTop) / Math.max(1.0, (double)(this.listBottom - this.listTop))), (double)0.0, (double)1.0);
-        this.scrollOffset = Mth.clamp((int)((int)Math.round(progress * (double)maximum)), (int)0, (int)maximum);
+        double progress = Mth.clamp((mouseY - (double)this.listTop) / Math.max(1.0, this.listBottom - this.listTop), 0.0, 1.0);
+        this.scrollOffset = Mth.clamp((int)Math.round(progress * (double)maximum), 0, maximum);
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (delta == 0.0) {
             return true;
         }
@@ -557,7 +554,7 @@ extends Screen {
         }
         if (keyCode == 268) {
             this.highlightedIndex = 0;
-            this.select(this.currentFilters().get(0));
+            this.select(this.currentFilters().getFirst());
             return true;
         }
         if (keyCode == 269) {

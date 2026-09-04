@@ -81,6 +81,10 @@ public class BirdBehaviorStateController<T extends AbstractBirdEntity<T>> extend
                         ? state
                         : BirdBehaviorState.IDLE;
 
+        if (this.behaviorState == targetState
+                && bird().getEntityData().get(BEHAVIOR_STATE) == targetState.ordinal()) {
+            return;
+        }
 
         this.behaviorState = targetState;
 

@@ -1,11 +1,9 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
-import net.fodoth.skina.neoguanniao.client.camera.CameraFilterPickerScreen;
-import net.fodoth.skina.neoguanniao.client.camera.CameraOpticsShader;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilterCategory;
 import net.fodoth.skina.neoguanniao.content.camera.CameraState;
+import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig;
+
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,7 +12,6 @@ import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.logging.LogUtils;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,12 +23,12 @@ import net.minecraft.client.renderer.PostChain;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
-import org.slf4j.Logger;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
 public final class CameraPreviewPostEffect {
-    private static final Logger LOGGER = LogUtils.getLogger();
     private static final int THUMBNAIL_WIDTH = 160;
     private static final int THUMBNAIL_HEIGHT = 90;
+
     private static TextureTarget previewTarget;
     private static TextureTarget opticsTarget;
     private static PostChain chain;
@@ -51,7 +48,7 @@ public final class CameraPreviewPostEffect {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static void prepare(float partialTick) {
-        if (!net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.ENABLE_PREVIEW_POST_EFFECT.get()) {
+        if (!NeoGuanNiaoClientConfig.ENABLE_PREVIEW_POST_EFFECT.get()) {
             preparedThisFrame = false;
             cleanCapturePrepared = false;
             return;
@@ -84,13 +81,13 @@ public final class CameraPreviewPostEffect {
         }
         try {
             boolean opticsRendered = false;
-            if (!opticsPassFailed && net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.ENABLE_OPTICS_SHADER.get()) {
+            if (!opticsPassFailed && NeoGuanNiaoClientConfig.ENABLE_OPTICS_SHADER.get()) {
                 try {
                     opticsRendered = CameraOpticsShader.process(mainTarget, (RenderTarget)opticsTarget, state);
                 }
                 catch (RuntimeException exception) {
                     opticsPassFailed = true;
-                    LOGGER.error("Failed to process camera depth-of-field pass; using the unprocessed scene", (Throwable)exception);
+                    NeoGuanNiao.LOGGER.error("Failed to process camera depth-of-field pass; using the unprocessed scene", exception);
                 }
             }
             if (!opticsRendered) {
@@ -102,7 +99,7 @@ public final class CameraPreviewPostEffect {
             }
             CameraPreviewPostEffect.blitColor((RenderTarget)opticsTarget, (RenderTarget)previewTarget);
             preparedThisFrame = true;
-            if (filter == CameraFilter.NONE || !net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.ENABLE_FILTER_PREVIEW.get()) {
+            if (filter == CameraFilter.NONE || !NeoGuanNiaoClientConfig.ENABLE_FILTER_PREVIEW.get()) {
                 CameraPreviewPostEffect.closeChain();
             } else {
                 if (loadedFilter != filter) {
@@ -113,7 +110,7 @@ public final class CameraPreviewPostEffect {
                         chain.process(partialTick);
                     }
                     catch (RuntimeException exception) {
-                        LOGGER.error("Failed to process camera preview filter {}", (Object)filter, (Object)exception);
+                        NeoGuanNiao.LOGGER.error("Failed to process camera preview filter {}", filter, exception);
                         CameraPreviewPostEffect.closeChain();
                         loadedFilter = filter;
                     }
@@ -180,7 +177,7 @@ public final class CameraPreviewPostEffect {
 
     private static void drawPreviewTarget(GuiGraphics graphics, RenderTarget target, int left, int top, int right, int bottom, float u0, float vBottom, float u1, float vTop) {
         RenderSystem.disableDepthTest();
-        RenderSystem.depthMask((boolean)false);
+        RenderSystem.depthMask(false);
         RenderSystem.disableBlend();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture((int)0, (int)target.getColorTextureId());
@@ -191,7 +188,7 @@ public final class CameraPreviewPostEffect {
         builder.addVertex(matrix, (float)right, (float)top, 0.0f).setUv(u1, vTop);
         builder.addVertex(matrix, (float)left, (float)top, 0.0f).setUv(u0, vTop);
         BufferUploader.drawWithShader(builder.buildOrThrow());
-        RenderSystem.depthMask((boolean)true);
+        RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -259,7 +256,7 @@ public final class CameraPreviewPostEffect {
             }
             catch (RuntimeException exception) {
                 slot.failed = true;
-                LOGGER.error("Failed to process camera filter thumbnail {}", (Object)slot.filter, (Object)exception);
+                NeoGuanNiao.LOGGER.error("Failed to process camera filter thumbnail {}", slot.filter, exception);
                 slot.closeChain();
             }
         }
@@ -283,7 +280,7 @@ public final class CameraPreviewPostEffect {
             }
             catch (Exception exception) {
                 slot.failed = true;
-                LOGGER.error("Failed to load camera filter thumbnail effect {}", (Object)postEffect, (Object)exception);
+                NeoGuanNiao.LOGGER.error("Failed to load camera filter thumbnail effect {}", postEffect, exception);
                 slot.closeChain();
             }
         }
@@ -310,7 +307,7 @@ public final class CameraPreviewPostEffect {
             loadedFilter = filter;
         }
         catch (Exception exception) {
-            LOGGER.error("Failed to load camera preview post effect {}", (Object)postEffect, (Object)exception);
+            NeoGuanNiao.LOGGER.error("Failed to load camera preview post effect {}", postEffect, exception);
             CameraPreviewPostEffect.closeChain();
             loadedFilter = filter;
         }

@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.event;
 
-import net.fodoth.skina.neoguanniao.content.camera.LegacyPhotoMigration;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoIndexSavedData;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoIoService;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoMaintenance;
@@ -22,7 +21,6 @@ public final class PhotoTransferEvents {
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
             PhotoUploadManager.tick(event.getServer());
-            LegacyPhotoMigration.tick(event.getServer());
             long now = event.getServer().overworld().getGameTime();
             if (now >= nextMaintenanceTick && !PhotoMaintenance.isRunning()) {
                 nextMaintenanceTick = now + 36000L;
@@ -44,7 +42,6 @@ public final class PhotoTransferEvents {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         PhotoUploadManager.clear();
-        LegacyPhotoMigration.clear();
         PhotoMaintenance.reset();
         PhotoIoService.shutdown();
         nextMaintenanceTick = 0L;

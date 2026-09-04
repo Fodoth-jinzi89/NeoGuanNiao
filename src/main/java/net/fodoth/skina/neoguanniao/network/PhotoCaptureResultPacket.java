@@ -1,3 +1,28 @@
 package net.fodoth.skina.neoguanniao.network;
-import net.fodoth.skina.neoguanniao.client.camera.PhotoClientRepository; import net.minecraft.network.RegistryFriendlyByteBuf; import net.minecraft.network.codec.StreamCodec; import net.minecraft.network.protocol.common.custom.CustomPacketPayload; import net.minecraft.resources.ResourceLocation; import net.neoforged.neoforge.network.handling.IPayloadContext; import org.jetbrains.annotations.NotNull; import java.util.UUID;
-public record PhotoCaptureResultPacket(UUID uploadId,boolean success) implements CustomPacketPayload { public static final Type<PhotoCaptureResultPacket> TYPE=new Type<>(ResourceLocation.fromNamespaceAndPath("neoguanniao","photo_capture_result")); public static final StreamCodec<RegistryFriendlyByteBuf,PhotoCaptureResultPacket> STREAM_CODEC=StreamCodec.of((b,p)->{b.writeUUID(p.uploadId);b.writeBoolean(p.success);},b->new PhotoCaptureResultPacket(b.readUUID(),b.readBoolean())); public static void handle(PhotoCaptureResultPacket p,IPayloadContext c){c.enqueueWork(()->PhotoClientRepository.captureResult(p.uploadId,p.success));} @Override public @NotNull Type<? extends CustomPacketPayload> type(){return TYPE;} }
+
+import net.fodoth.skina.neoguanniao.client.camera.PhotoClientRepository;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+public record PhotoCaptureResultPacket(UUID uploadId, boolean success) implements CustomPacketPayload {
+    public static final Type<PhotoCaptureResultPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("neoguanniao", "photo_capture_result"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, PhotoCaptureResultPacket> STREAM_CODEC = StreamCodec.of((b, p) -> {
+        b.writeUUID(p.uploadId);
+        b.writeBoolean(p.success);
+    }, b -> new PhotoCaptureResultPacket(b.readUUID(), b.readBoolean()));
+
+    public static void handle(PhotoCaptureResultPacket p, IPayloadContext c) {
+        c.enqueueWork(() -> PhotoClientRepository.captureResult(p.uploadId, p.success));
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+}

@@ -1,11 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.CameraAperture;
-import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
-import net.fodoth.skina.neoguanniao.content.camera.CameraFocusMode;
-import net.fodoth.skina.neoguanniao.content.camera.CameraLens;
-import net.fodoth.skina.neoguanniao.content.camera.CameraShootingMode;
-import net.fodoth.skina.neoguanniao.content.camera.CameraState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 

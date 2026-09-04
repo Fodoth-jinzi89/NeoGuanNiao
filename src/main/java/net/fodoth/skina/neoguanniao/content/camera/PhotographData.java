@@ -1,16 +1,17 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
-import net.fodoth.skina.neoguanniao.content.camera.PhotoImageCodec;
-import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
 import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
 public final class PhotographData {
+
+
     public static final int IMAGE_SIZE = 1024;
-    public static final int LEGACY_IMAGE_SIZE = 256;
     private static final int MIN_IMAGE_SIZE = 16;
     private static final int MAX_IMAGE_SIZE = 1024;
+
+
     public static final String TAG_PHOTO_ID = "PhotoId";
     public static final String TAG_PHOTOGRAPHER = "Photographer";
     public static final String TAG_PHOTOGRAPHER_ID = "PhotographerId";
@@ -49,10 +50,6 @@ public final class PhotographData {
         return CameraItemData.read(stack).getIntArray(TAG_PIXELS);
     }
 
-    public static boolean hasLegacyPixels(ItemStack stack) {
-        return CameraItemData.read(stack).getIntArray(TAG_PIXELS).length == 65_536;
-    }
-
     public static String contentHash(ItemStack stack) {
         return CameraItemData.read(stack).getString(TAG_CONTENT_HASH);
     }
@@ -66,7 +63,7 @@ public final class PhotographData {
     }
 
     public static void writeReference(ItemStack stack, String id, String photographer, UUID photographerId, long gameTime, int width, int height, String contentHash) {
-        if (!PhotoTransferLimits.isValidPhotoId(id) || width < 16 || height < 16 || width > 1024 || height > 1024 || !PhotoImageCodec.isSha256(contentHash)) {
+        if (!PhotoTransferLimits.isValidPhotoId(id) || width < MIN_IMAGE_SIZE || height < MIN_IMAGE_SIZE || width > MAX_IMAGE_SIZE || height > MAX_IMAGE_SIZE || !PhotoImageCodec.isSha256(contentHash)) {
             throw new IllegalArgumentException("Invalid photograph reference");
         }
         CameraItemData.update(stack, tag -> {
@@ -89,18 +86,6 @@ public final class PhotographData {
         CameraItemData.update(to, target -> copyImageTag(source, target));
     }
 
-    public static void finishLegacyMigration(ItemStack stack, String contentHash) {
-        if (!PhotoImageCodec.isSha256(contentHash)) {
-            return;
-        }
-        CameraItemData.update(stack, tag -> {
-            tag.putInt(TAG_WIDTH, LEGACY_IMAGE_SIZE);
-            tag.putInt(TAG_HEIGHT, LEGACY_IMAGE_SIZE);
-            tag.putString(TAG_CONTENT_HASH, contentHash);
-            tag.remove(TAG_PIXELS);
-        });
-    }
-
     private static void copyImageTag(CompoundTag source, CompoundTag target) {
         copyString(source, target, TAG_PHOTO_ID);
         copyString(source, target, TAG_PHOTOGRAPHER);
@@ -113,12 +98,8 @@ public final class PhotographData {
         copyString(source, target, TAG_CONTENT_HASH);
         int width = imageWidth(source);
         int height = imageHeight(source);
-        target.putInt(TAG_WIDTH, width > 0 ? width : LEGACY_IMAGE_SIZE);
-        target.putInt(TAG_HEIGHT, height > 0 ? height : LEGACY_IMAGE_SIZE);
-        int[] pixels = source.getIntArray(TAG_PIXELS);
-        if (pixels.length == LEGACY_IMAGE_SIZE * LEGACY_IMAGE_SIZE) {
-            target.putIntArray(TAG_PIXELS, pixels);
-        }
+        target.putInt(TAG_WIDTH, width);
+        target.putInt(TAG_HEIGHT, height);
     }
 
     private static void copyString(CompoundTag source, CompoundTag target, String key) {
@@ -128,9 +109,8 @@ public final class PhotographData {
     }
 
     private static int imageWidth(CompoundTag tag) {
-        int height;
         int width = tag.getInt(TAG_WIDTH);
-        if (PhotographData.validDimensions(width, height = tag.getInt(TAG_HEIGHT))) {
+        if (PhotographData.validDimensions(width, tag.getInt(TAG_HEIGHT))) {
             return width;
         }
         return tag.getIntArray(TAG_PIXELS).length == 65536 ? 256 : 0;

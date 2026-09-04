@@ -1,25 +1,22 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
-import net.fodoth.skina.neoguanniao.client.camera.CameraPreviewPostEffect;
 import net.fodoth.skina.neoguanniao.content.camera.CameraAperture;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFocusMode;
 import net.fodoth.skina.neoguanniao.content.camera.CameraLens;
 import net.fodoth.skina.neoguanniao.content.camera.CameraShootingMode;
 import net.fodoth.skina.neoguanniao.content.camera.CameraState;
+
 import java.util.List;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
 public final class CameraCreativeControlsScreen
 extends Screen {
-    private static final int GAP = 8;
+        private static final int GAP = 8;
     private static final int FOOTER_HEIGHT = 28;
     private static final int HEADER_HEIGHT = 27;
     private static final int TAB_HEIGHT = 24;
@@ -60,7 +57,7 @@ extends Screen {
     private int controlsBottom;
 
     private CameraCreativeControlsScreen(CameraState original) {
-        super((Component)Component.translatable((String)"gui.neoguanniao.camera_creative.title"));
+                super(Component.translatable("gui.neoguanniao.camera_creative.title"));
         this.original = original;
         this.working = original;
     }
@@ -71,12 +68,11 @@ extends Screen {
         }
         Minecraft minecraft = Minecraft.getInstance();
         Screen screen = minecraft.screen;
-        if (screen instanceof CameraCreativeControlsScreen) {
-            CameraCreativeControlsScreen controls = (CameraCreativeControlsScreen)screen;
+        if (screen instanceof CameraCreativeControlsScreen controls) {
             controls.confirmAndClose();
             return;
         }
-        minecraft.setScreen((Screen)new CameraCreativeControlsScreen(CameraClientCapture.currentState()));
+        minecraft.setScreen(new CameraCreativeControlsScreen(CameraClientCapture.currentState()));
     }
 
     public boolean isPauseScreen() {
@@ -110,8 +106,8 @@ extends Screen {
     private void recomputeLayout() {
         int maximumWidth = Math.max(1, this.width - 16);
         int maximumHeight = Math.max(1, this.height - 12);
-        int panelWidth = Mth.clamp((int)Math.round((float)this.width * 0.88f), (int)Math.min(520, maximumWidth), (int)maximumWidth);
-        int panelHeight = Mth.clamp((int)Math.round((float)this.height * 0.82f), (int)Math.min(280, maximumHeight), (int)maximumHeight);
+        int panelWidth = Mth.clamp(Math.round((float)this.width * 0.88f), Math.min(520, maximumWidth), maximumWidth);
+        int panelHeight = Mth.clamp(Math.round((float)this.height * 0.82f), Math.min(280, maximumHeight), maximumHeight);
         this.panelLeft = (this.width - panelWidth) / 2;
         this.panelTop = (this.height - panelHeight) / 2;
         this.panelRight = this.panelLeft + panelWidth;
@@ -148,16 +144,16 @@ extends Screen {
         CameraPreviewPostEffect.drawPreview(graphics, this.leftLeft + 3, this.previewTop + 3, this.leftRight - 3, this.previewBottom - 3);
         this.renderPreviewReticle(graphics);
         this.drawPanel(graphics, this.leftLeft, this.infoTop, this.leftRight, this.controlsBottom, -400546776);
-        graphics.drawString(this.font, (Component)Component.translatable((String)this.working.shootingMode().translationKey()), this.leftLeft + 10, this.infoTop + 10, -5975188, false);
-        graphics.drawString(this.font, (Component)Component.translatable((String)this.working.lens().translationKey()), this.leftLeft + 10, this.infoTop + 31, -5393480, false);
+        graphics.drawString(this.font, Component.translatable(this.working.shootingMode().translationKey()), this.leftLeft + 10, this.infoTop + 10, -5975188, false);
+        graphics.drawString(this.font, Component.translatable(this.working.lens().translationKey()), this.leftLeft + 10, this.infoTop + 31, -5393480, false);
         int dividerX = this.leftLeft + (this.leftRight - this.leftLeft) * 2 / 5;
         graphics.vLine(dividerX, this.infoTop + 7, this.controlsBottom - 7, -12893624);
         int summaryX = dividerX + 9;
-        graphics.drawString(this.font, (Component)Component.translatable((String)"gui.neoguanniao.camera_creative.current_setup"), summaryX, this.infoTop + 8, -1775897, false);
-        String focus = this.working.hasInfiniteFocus() ? "\u221e" : String.format(Locale.ROOT, "%.1fm", this.working.focusDistance());
-        String firstLine = String.format(Locale.ROOT, "%dmm \u00b7 %s \u00b7 %s", Math.round(this.working.focalLength()), this.working.aperture().label(), this.working.focusMode().shortName());
+                graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_creative.current_setup"), summaryX, this.infoTop + 8, -1775897, false);
+        String focus = this.working.hasInfiniteFocus() ? "∞" : String.format(Locale.ROOT, "%.1fm", this.working.focusDistance());
+        String firstLine = String.format(Locale.ROOT, "%dmm · %s · %s", Math.round(this.working.focalLength()), this.working.aperture().label(), this.working.focusMode().shortName());
         graphics.drawString(this.font, firstLine, summaryX, this.infoTop + 25, -5975188, false);
-        graphics.drawString(this.font, (Component)Component.translatable((String)"gui.neoguanniao.camera_creative.focus_value", (Object[])new Object[]{focus}), summaryX, this.infoTop + 39, -5393480, false);
+                graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_creative.focus_value", new Object[]{focus}), summaryX, this.infoTop + 39, -5393480, false);
     }
 
     private void renderPreviewReticle(GuiGraphics graphics) {
@@ -213,7 +209,7 @@ extends Screen {
             boolean hovered = CameraCreativeControlsScreen.contains(mouseX, mouseY, x0, this.tabsTop, x1, this.tabsTop + 24);
             graphics.fill(x0, this.tabsTop, x1, this.tabsTop + 24, selected ? -13090253 : (hovered ? -13617605 : -14407379));
             CameraCreativeControlsScreen.drawBorder(graphics, x0, this.tabsTop, x1, this.tabsTop + 24, selected ? -11111109 : -12893624);
-            this.drawCentered(graphics, (Component)Component.translatable((String)pages[i].translationKey), x0, this.tabsTop, x1 - x0, 24, selected ? -5975188 : -5393480);
+            this.drawCentered(graphics, Component.translatable(pages[i].translationKey), x0, this.tabsTop, x1 - x0, 24, selected ? -5975188 : -5393480);
         }
     }
 
@@ -260,7 +256,7 @@ extends Screen {
         this.renderChoiceScrollbar(graphics, modes.length, visibleRows, scrollOffset);
     }
 
-    private void renderChoiceRow(GuiGraphics graphics, int mouseX, int mouseY, int y0, int y1, boolean selected) {
+        private void renderChoiceRow(GuiGraphics graphics, int mouseX, int mouseY, int y0, int y1, boolean selected) {
         this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, selected, this.rightRight - 3);
     }
 
@@ -301,29 +297,29 @@ extends Screen {
     }
 
     private static int choiceScrollOffset(int selectedIndex, int totalRows, int visibleRows) {
-        return Mth.clamp((int)(selectedIndex - visibleRows + 1), (int)0, (int)Math.max(0, totalRows - visibleRows));
+        return Mth.clamp(selectedIndex - visibleRows + 1, 0, Math.max(0, totalRows - visibleRows));
     }
 
     private void renderNamedDescription(GuiGraphics graphics, String nameKey, String descriptionKey, int x, int y, int width, int height, boolean selected) {
-        this.drawLeftFitted(graphics, (Component)Component.translatable((String)nameKey), x, y + 7, width, selected ? -5975188 : -1775897);
+        this.drawLeftFitted(graphics, Component.translatable(nameKey), x, y + 7, width, selected ? -5975188 : -1775897);
         if (height < 38) {
             return;
         }
-        List lines = this.font.split((FormattedText)Component.translatable((String)descriptionKey), width);
+        List<FormattedCharSequence> lines = this.font.split(Component.translatable(descriptionKey), width);
         if (!lines.isEmpty()) {
-            graphics.drawString(this.font, (FormattedCharSequence)lines.get(0), x, y + 22, -5393480, false);
+            graphics.drawString(this.font, lines.get(0), x, y + 22, -5393480, false);
         }
     }
 
     private void renderParameters(GuiGraphics graphics, int mouseX, int mouseY) {
         int rowHeight = this.parameterRowHeight();
         graphics.enableScissor(this.rightLeft + 2, this.controlsTop, this.rightRight - 2, this.controlsBottom);
-        this.renderSliderRow(graphics, mouseX, mouseY, 0, (Component)Component.translatable((String)"gui.neoguanniao.camera_parameter.focal_length"), Math.round(this.working.focalLength()) + "mm", (this.working.focalLength() - 8.0) / 192.0, rowHeight);
+                this.renderSliderRow(graphics, mouseX, mouseY, 0, Component.translatable("gui.neoguanniao.camera_parameter.focal_length"), Math.round(this.working.focalLength()) + "mm", (this.working.focalLength() - 8.0) / 192.0, rowHeight);
         this.renderApertureRow(graphics, mouseX, mouseY, rowHeight);
         this.renderFocusModeRow(graphics, mouseX, mouseY, rowHeight);
         double focusProgress = Math.log(this.working.focusDistance() / 0.3) / Math.log(426.6666666666667);
-        String focusValue = this.working.hasInfiniteFocus() ? "\u221e" : String.format(Locale.ROOT, "%.1fm", this.working.focusDistance());
-        this.renderSliderRow(graphics, mouseX, mouseY, 3, (Component)Component.translatable((String)"gui.neoguanniao.camera_parameter.focus_distance"), focusValue, focusProgress, rowHeight);
+        String focusValue = this.working.hasInfiniteFocus() ? "∞" : String.format(Locale.ROOT, "%.1fm", this.working.focusDistance());
+                this.renderSliderRow(graphics, mouseX, mouseY, 3, Component.translatable("gui.neoguanniao.camera_parameter.focus_distance"), focusValue, focusProgress, rowHeight);
         graphics.disableScissor();
     }
 
@@ -342,7 +338,7 @@ extends Screen {
         int barRight = this.rightRight - 10;
         int barY = y1 - 13;
         graphics.fill(barLeft, barY, barRight, barY + 3, -15394532);
-        int knobX = Mth.clamp((int)(barLeft + (int)Math.round((double)(barRight - barLeft) * progress)), (int)barLeft, (int)barRight);
+        int knobX = Mth.clamp(barLeft + (int)Math.round((double)(barRight - barLeft) * progress), barLeft, barRight);
         graphics.fill(barLeft, barY, knobX, barY + 3, -11111109);
         graphics.fill(knobX - 2, barY - 2, knobX + 2, barY + 5, -5975188);
     }
@@ -351,7 +347,7 @@ extends Screen {
         int y0 = this.controlsTop + rowHeight + 4;
         int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
         this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false);
-        graphics.drawString(this.font, (Component)Component.translatable((String)"gui.neoguanniao.camera_parameter.aperture"), this.rightLeft + 10, y0 + 6, -1775897, false);
+                graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_parameter.aperture"), this.rightLeft + 10, y0 + 6, -1775897, false);
         CameraAperture[] apertures = CameraAperture.values();
         int x0 = this.rightLeft + 7;
         int totalWidth = this.rightRight - this.rightLeft - 14;
@@ -362,7 +358,7 @@ extends Screen {
             int right = i == apertures.length - 1 ? this.rightRight - 7 : left + buttonWidth;
             boolean selected = apertures[i] == this.working.aperture();
             graphics.fill(left, buttonTop, right, y1 - 5, selected ? -13090253 : -14670551);
-            this.drawCentered(graphics, (Component)Component.literal((String)apertures[i].label()), left, buttonTop, right - left, y1 - 5 - buttonTop, selected ? -5975188 : -5393480);
+            this.drawCentered(graphics, Component.literal(apertures[i].label()), left, buttonTop, right - left, y1 - 5 - buttonTop, selected ? -5975188 : -5393480);
         }
     }
 
@@ -370,7 +366,7 @@ extends Screen {
         int y0 = this.controlsTop + 2 * (rowHeight + 4);
         int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
         this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false);
-        graphics.drawString(this.font, (Component)Component.translatable((String)"gui.neoguanniao.camera_parameter.focus_mode"), this.rightLeft + 10, y0 + 6, -1775897, false);
+                graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_parameter.focus_mode"), this.rightLeft + 10, y0 + 6, -1775897, false);
         CameraFocusMode[] modes = CameraFocusMode.values();
         int x0 = this.rightLeft + 7;
         int totalWidth = this.rightRight - this.rightLeft - 14;
@@ -381,14 +377,14 @@ extends Screen {
             int right = i == modes.length - 1 ? this.rightRight - 7 : left + buttonWidth;
             boolean selected = modes[i] == this.working.focusMode();
             graphics.fill(left, buttonTop, right, y1 - 5, selected ? -13090253 : -14670551);
-            this.drawCentered(graphics, (Component)Component.translatable((String)modes[i].translationKey()), left, buttonTop, right - left, y1 - 5 - buttonTop, selected ? -5975188 : -5393480);
+            this.drawCentered(graphics, Component.translatable(modes[i].translationKey()), left, buttonTop, right - left, y1 - 5 - buttonTop, selected ? -5975188 : -5393480);
         }
     }
 
     private void renderFooter(GuiGraphics graphics) {
         graphics.fill(this.panelLeft, this.footerTop, this.panelRight, this.panelBottom, -216918760);
         graphics.hLine(this.panelLeft, this.panelRight, this.footerTop, -12893624);
-        this.drawCentered(graphics, (Component)Component.translatable((String)"gui.neoguanniao.camera_creative.help"), this.panelLeft + 8, this.footerTop, this.panelRight - this.panelLeft - 16, 28, -5393480);
+                this.drawCentered(graphics, Component.translatable("gui.neoguanniao.camera_creative.help"), this.panelLeft + 8, this.footerTop, this.panelRight - this.panelLeft - 16, 28, -5393480);
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -422,8 +418,7 @@ extends Screen {
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
-
-    private boolean clickLens(double mouseX, double mouseY) {
+        private boolean clickLens(double mouseX, double mouseY) {
         CameraLens[] lenses = CameraLens.values();
         int visibleRows = this.visibleChoiceRows(lenses.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
@@ -438,8 +433,7 @@ extends Screen {
         }
         return true;
     }
-
-    private boolean clickMode(double mouseX, double mouseY) {
+        private boolean clickMode(double mouseX, double mouseY) {
         CameraShootingMode[] modes = CameraShootingMode.values();
         int visibleRows = this.visibleChoiceRows(modes.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
@@ -469,9 +463,9 @@ extends Screen {
             return true;
         }
         if (row == 0 || row == 3) {
-            double progress = Mth.clamp((double)((mouseX - (double)(this.rightLeft + 10)) / Math.max(1.0, (double)(this.rightRight - this.rightLeft) - 20.0)), (double)0.0, (double)1.0);
+            double progress = Mth.clamp((mouseX - (double)(this.rightLeft + 10)) / Math.max(1.0, (double)(this.rightRight - this.rightLeft) - 20.0), 0.0, 1.0);
             if (row == 0) {
-                double focal = Mth.lerp((double)progress, (double)8.0, (double)200.0);
+                double focal = Mth.lerp(progress, 8.0, 200.0);
                 this.setWorking(this.working.withFocalLength(Math.round(focal)));
             } else {
                 double distance = 0.3 * Math.pow(426.6666666666667, progress);
@@ -483,17 +477,16 @@ extends Screen {
         int totalWidth = this.rightRight - this.rightLeft - 14;
         if (row == 1) {
             CameraAperture[] apertures = CameraAperture.values();
-            int index = Mth.clamp((int)((int)((mouseX - (double)x0) * (double)apertures.length / (double)Math.max(1, totalWidth))), (int)0, (int)(apertures.length - 1));
+            int index = Mth.clamp((int)((mouseX - (double)x0) * (double)apertures.length / (double)Math.max(1, totalWidth)), 0, apertures.length - 1);
             this.setWorking(this.working.withAperture(apertures[index]));
         } else {
             CameraFocusMode[] modes = CameraFocusMode.values();
-            int index = Mth.clamp((int)((int)((mouseX - (double)x0) * (double)modes.length / (double)Math.max(1, totalWidth))), (int)0, (int)(modes.length - 1));
+            int index = Mth.clamp((int)((mouseX - (double)x0) * (double)modes.length / (double)Math.max(1, totalWidth)), 0, modes.length - 1);
             this.setWorking(this.working.withFocusMode(modes[index]));
         }
         return true;
     }
-
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         int direction;
         if (delta == 0.0) {
             return true;
@@ -578,7 +571,7 @@ extends Screen {
     }
 
     private void drawCentered(GuiGraphics graphics, Component text, int x, int y, int width, int height, int color) {
-        int textWidth = this.font.width((FormattedText)text);
+        int textWidth = this.font.width(text);
         float scale = textWidth <= width - 4 ? 1.0f : Math.max(0.5f, (float)(width - 4) / (float)Math.max(1, textWidth));
         int scaledWidth = Math.round((float)textWidth * scale);
         graphics.pose().pushPose();
@@ -589,7 +582,7 @@ extends Screen {
     }
 
     private void drawLeftFitted(GuiGraphics graphics, Component text, int x, int y, int width, int color) {
-        int textWidth = this.font.width((FormattedText)text);
+        int textWidth = this.font.width(text);
         float scale = textWidth <= width ? 1.0f : Math.max(0.58f, (float)width / (float)Math.max(1, textWidth));
         graphics.pose().pushPose();
         graphics.pose().translate((float)x, (float)y, 0.0f);
@@ -602,14 +595,14 @@ extends Screen {
         return x >= (double)left && x < (double)right && y >= (double)top && y < (double)bottom;
     }
 
-    private static enum Page {
+    private enum Page {
         LENS("gui.neoguanniao.camera_creative.tab.lens"),
         MODE("gui.neoguanniao.camera_creative.tab.mode"),
         PARAMETERS("gui.neoguanniao.camera_creative.tab.parameters");
 
         private final String translationKey;
 
-        private Page(String translationKey) {
+        Page(String translationKey) {
             this.translationKey = translationKey;
         }
 

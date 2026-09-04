@@ -1,6 +1,8 @@
 package net.fodoth.skina.neoguanniao;
 
 import com.mojang.logging.LogUtils;
+import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig;
+import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoCommonConfig;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -29,8 +31,8 @@ public class NeoGuanNiao {
         NeoGuanNiaoDataComponents.DATA_COMPONENTS.register(modEventBus);
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register(modEventBus);
         NeoGuanNiaoCriteriaTriggers.register(modEventBus);
-        container.registerConfig(ModConfig.Type.COMMON, net.fodoth.skina.neoguanniao.config.NeoGuanNiaoCommonConfig.SPEC);
-        container.registerConfig(ModConfig.Type.CLIENT, net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.SPEC);
+        container.registerConfig(ModConfig.Type.COMMON, NeoGuanNiaoCommonConfig.SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, NeoGuanNiaoClientConfig.SPEC);
     }
 
     public static ResourceLocation resource(String path) {

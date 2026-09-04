@@ -88,9 +88,15 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
         if (bird().isBaby() || distance < goalDatum().roostGoalRange()) {
             // 到达栖息位置
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
-            bird().setPos(this.roostPos.getX() + 0.5, this.roostPos.getY() - 0.5, this.roostPos.getZ() + 0.5);
-            if (!bird().isBaby()) {
+            // Ground birds (for example kiwi) already stand at a valid floor
+            // position; teleporting them to the block center would sink them.
+            if (bird().canFly()) {
+                bird().setPos(this.roostPos.getX() + 0.5D, this.roostPos.getY() - 0.5D, this.roostPos.getZ() + 0.5D);
+            }
+            if (bird().canFly() && !bird().isBaby()) {
                 bird().setNoGravity(true);
+            } else {
+                bird().setNoGravity(false);
             }
             return;
         }

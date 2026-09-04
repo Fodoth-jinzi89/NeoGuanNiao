@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.CameraPreviewPostEffect;
 import net.fodoth.skina.neoguanniao.content.camera.CameraState;
+import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig;
+
 import java.util.Locale;
 import java.util.Objects;
 import net.minecraft.client.Minecraft;
@@ -12,8 +12,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 
 final class CameraViewfinderOverlay {
-    private static final int APERTURE_PERCENT = 72;
-    private static final int MASK_COLOR = -1711143158;
+        private static final int APERTURE_PERCENT = 72;
     private static final int FRAME_COLOR = -571934977;
     private static final int SOFT_FRAME_COLOR = 1721351376;
     private static final int TEXT_COLOR = -420020225;
@@ -22,7 +21,7 @@ final class CameraViewfinderOverlay {
     }
 
     static void render(GuiGraphics graphics, CameraState state, double fov) {
-        if (!net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.SHOW_CAMERA_UI.get()) return;
+        if (!NeoGuanNiaoClientConfig.SHOW_CAMERA_UI.get()) return;
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
         int width = minecraft.getWindow().getGuiScaledWidth();
@@ -31,14 +30,14 @@ final class CameraViewfinderOverlay {
         int topTextReserve = 9 + 8;
         Objects.requireNonNull(font);
         int bottomTextReserve = 9 * 3 + 12;
-        int apertureSize = Math.min(CameraViewfinderOverlay.apertureSize(width, height), Math.max(1, height - topTextReserve - bottomTextReserve));
+        int apertureSize = Math.clamp(height - topTextReserve - bottomTextReserve, 1, CameraViewfinderOverlay.apertureSize(width, height));
         int left = (width - apertureSize) / 2;
         int availableHeight = Math.max(1, height - topTextReserve - bottomTextReserve);
         int top = topTextReserve + Math.max(0, (availableHeight - apertureSize) / 2);
         int right = left + apertureSize;
         int bottom = top + apertureSize;
         CameraPreviewPostEffect.drawFilteredLens(graphics, left, top, right, bottom);
-        int mask = ((int) (net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.VIEWFINDER_OPACITY.get() * 255) << 24) | 0x101010;
+        int mask = ((int) (NeoGuanNiaoClientConfig.VIEWFINDER_OPACITY.get() * 255) << 24) | 0x101010;
         graphics.fill(0, 0, width, top, mask);
         graphics.fill(0, bottom, width, height, mask);
         graphics.fill(0, top, left, bottom, mask);
@@ -47,16 +46,16 @@ final class CameraViewfinderOverlay {
         CameraViewfinderOverlay.drawGuides(graphics, left, top, right, bottom);
         MutableComponent modeLine = Component.translatable((String)"gui.neoguanniao.camera_viewfinder.focal_line", (Object[])new Object[]{(int)Math.round(state.focalLength()), (int)Math.round(fov)});
         Objects.requireNonNull(font);
-        CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)modeLine, width, Math.max(2, top - 9 - 5), -420020225);
+        CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)modeLine, width, Math.max(2, top - 9 - 5), TEXT_COLOR);
         MutableComponent filterLine = Component.translatable((String)"gui.neoguanniao.camera_viewfinder.filter_line", (Object[])new Object[]{Component.translatable((String)state.filter().translationKey())});
         int filterY = bottom + 5;
-        CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)filterLine, width, filterY, -420020225);
-        String focusDistance = state.hasInfiniteFocus() ? "\u221e" : String.format(Locale.ROOT, "%.1fm", state.focusDistance());
+        CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)filterLine, width, filterY, TEXT_COLOR);
+        String focusDistance = state.hasInfiniteFocus() ? "∞" : String.format(Locale.ROOT, "%.1fm", state.focusDistance());
         MutableComponent settingsLine = Component.translatable((String)"gui.neoguanniao.camera_viewfinder.settings_line", (Object[])new Object[]{Component.translatable((String)state.shootingMode().translationKey()), Component.translatable((String)state.lens().translationKey()), state.aperture().label(), state.focusMode().shortName(), focusDistance});
         Objects.requireNonNull(font);
         int settingsY = filterY + 9 + 2;
         CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)settingsLine, width, settingsY, -858069010);
-        if (net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.SHOW_VIEWFINDER_HINT.get()) {
+        if (NeoGuanNiaoClientConfig.SHOW_VIEWFINDER_HINT.get()) {
             MutableComponent hint = Component.translatable((String)"gui.neoguanniao.camera_viewfinder.hint");
             Objects.requireNonNull(font);
             int hintY = settingsY + 9 + 2;
@@ -65,13 +64,13 @@ final class CameraViewfinderOverlay {
     }
 
     static int apertureSize(int width, int height) {
-        return Math.max(1, Math.min(width, height) * 72 / 100);
+        return Math.max(1, Math.min(width, height) * APERTURE_PERCENT / 100);
     }
 
     private static void drawCenteredFitted(GuiGraphics graphics, Font font, Component text, int screenWidth, int y, int color) {
         int availableWidth = Math.max(1, screenWidth - 12);
         int textWidth = font.width((FormattedText)text);
-        float scale = textWidth <= availableWidth ? 1.0f : Math.max(0.55f, (float)availableWidth / (float)Math.max(1, textWidth));
+        float scale = textWidth <= availableWidth ? 1.0f : Math.max(0.55f, (float)availableWidth / (float) textWidth);
         float scaledWidth = (float)textWidth * scale;
         graphics.pose().pushPose();
         graphics.pose().translate(((float)screenWidth - scaledWidth) / 2.0f, (float)y, 0.0f);
@@ -81,28 +80,28 @@ final class CameraViewfinderOverlay {
     }
 
     private static void drawFrame(GuiGraphics graphics, int left, int top, int right, int bottom) {
-        graphics.fill(left - 1, top - 1, right + 1, top + 1, 1721351376);
-        graphics.fill(left - 1, bottom - 1, right + 1, bottom + 1, 1721351376);
-        graphics.fill(left - 1, top - 1, left + 1, bottom + 1, 1721351376);
-        graphics.fill(right - 1, top - 1, right + 1, bottom + 1, 1721351376);
+        graphics.fill(left - 1, top - 1, right + 1, top + 1, SOFT_FRAME_COLOR);
+        graphics.fill(left - 1, bottom - 1, right + 1, bottom + 1, SOFT_FRAME_COLOR);
+        graphics.fill(left - 1, top - 1, left + 1, bottom + 1, SOFT_FRAME_COLOR);
+        graphics.fill(right - 1, top - 1, right + 1, bottom + 1, SOFT_FRAME_COLOR);
         int corner = Math.max(24, (right - left) / 10);
-        graphics.fill(left - 2, top - 2, left + corner, top + 2, -571934977);
-        graphics.fill(left - 2, top - 2, left + 2, top + corner, -571934977);
-        graphics.fill(right - corner, top - 2, right + 2, top + 2, -571934977);
-        graphics.fill(right - 2, top - 2, right + 2, top + corner, -571934977);
-        graphics.fill(left - 2, bottom - 2, left + corner, bottom + 2, -571934977);
-        graphics.fill(left - 2, bottom - corner, left + 2, bottom + 2, -571934977);
-        graphics.fill(right - corner, bottom - 2, right + 2, bottom + 2, -571934977);
-        graphics.fill(right - 2, bottom - corner, right + 2, bottom + 2, -571934977);
+        graphics.fill(left - 2, top - 2, left + corner, top + 2, FRAME_COLOR);
+        graphics.fill(left - 2, top - 2, left + 2, top + corner, FRAME_COLOR);
+        graphics.fill(right - corner, top - 2, right + 2, top + 2, FRAME_COLOR);
+        graphics.fill(right - 2, top - 2, right + 2, top + corner, FRAME_COLOR);
+        graphics.fill(left - 2, bottom - 2, left + corner, bottom + 2, FRAME_COLOR);
+        graphics.fill(left - 2, bottom - corner, left + 2, bottom + 2, FRAME_COLOR);
+        graphics.fill(right - corner, bottom - 2, right + 2, bottom + 2, FRAME_COLOR);
+        graphics.fill(right - 2, bottom - corner, right + 2, bottom + 2, FRAME_COLOR);
     }
 
     private static void drawGuides(GuiGraphics graphics, int left, int top, int right, int bottom) {
         int centerX = (left + right) / 2;
         int centerY = (top + bottom) / 2;
-        graphics.fill(centerX - 10, centerY, centerX - 3, centerY + 1, -571934977);
-        graphics.fill(centerX + 3, centerY, centerX + 10, centerY + 1, -571934977);
-        graphics.fill(centerX, centerY - 10, centerX + 1, centerY - 3, -571934977);
-        graphics.fill(centerX, centerY + 3, centerX + 1, centerY + 10, -571934977);
+        graphics.fill(centerX - 10, centerY, centerX - 3, centerY + 1, FRAME_COLOR);
+        graphics.fill(centerX + 3, centerY, centerX + 10, centerY + 1, FRAME_COLOR);
+        graphics.fill(centerX, centerY - 10, centerX + 1, centerY - 3, FRAME_COLOR);
+        graphics.fill(centerX, centerY + 3, centerX + 1, centerY + 10, FRAME_COLOR);
         int third = (right - left) / 3;
         int lineColor = 865713360;
         graphics.fill(left + third, top, left + third + 1, bottom, lineColor);

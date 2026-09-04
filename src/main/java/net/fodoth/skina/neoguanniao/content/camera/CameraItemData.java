@@ -8,20 +8,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Compatibility boundary for camera metadata stored on item stacks.
- *
- * <p>Minecraft 1.21 stores custom item NBT in a data component. Keeping all
- * access here prevents camera code from depending on the old mutable tag API
- * and preserves tags written by Guaniao 3.1.4.</p>
- */
+/** Accessor for camera metadata stored in the 1.21.1 custom-data component. */
 public final class CameraItemData {
 
     private CameraItemData() {
     }
 
     public static @NotNull CompoundTag read(ItemStack stack) {
-        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        return data == null ? new CompoundTag() : data.copyTag();
     }
 
     public static void update(ItemStack stack, Consumer<CompoundTag> writer) {

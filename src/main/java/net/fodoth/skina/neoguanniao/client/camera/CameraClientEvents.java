@@ -1,11 +1,5 @@
 package net.fodoth.skina.neoguanniao.client.camera;
 
-import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
-import net.fodoth.skina.neoguanniao.client.camera.CameraCreativeControlsScreen;
-import net.fodoth.skina.neoguanniao.client.camera.CameraFilterPickerScreen;
-import net.fodoth.skina.neoguanniao.client.camera.CameraKeyMappings;
-import net.fodoth.skina.neoguanniao.client.camera.CameraPreviewPostEffect;
-import net.fodoth.skina.neoguanniao.client.camera.PhotographTextureCache;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -58,6 +52,11 @@ public final class CameraClientEvents {
                 if (Minecraft.getInstance().screen != null) continue;
                 CameraClientCapture.focusAtCrosshair();
             }
+    }
+
+    @SubscribeEvent
+    public static void onRenderFrameStart(RenderFrameEvent.Pre event) {
+        CameraClientCapture.onRenderTickStart();
     }
 
     @SubscribeEvent
@@ -165,9 +164,8 @@ public final class CameraClientEvents {
         poseStack.mulPose(Axis.XP.rotationDegrees(-5.0f + equip * 22.0f));
         minecraft.getItemRenderer().renderStatic(camera, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, event.getPackedLight(), OverlayTexture.NO_OVERLAY, poseStack, event.getMultiBufferSource(), player.level(), player.getId());
         poseStack.popPose();
-        EntityRenderer renderer = minecraft.getEntityRenderDispatcher().getRenderer((Entity)player);
-        if (renderer instanceof PlayerRenderer) {
-            PlayerRenderer playerRenderer = (PlayerRenderer)renderer;
+        EntityRenderer<? super LocalPlayer> renderer = minecraft.getEntityRenderDispatcher().getRenderer(player);
+        if (renderer instanceof PlayerRenderer playerRenderer) {
             CameraClientEvents.renderCameraArm(playerRenderer, player, poseStack, event, HumanoidArm.RIGHT);
             CameraClientEvents.renderCameraArm(playerRenderer, player, poseStack, event, HumanoidArm.LEFT);
         }

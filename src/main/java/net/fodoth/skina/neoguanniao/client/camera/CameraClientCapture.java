@@ -1,16 +1,13 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.CameraCreativeControlsScreen;
-import net.fodoth.skina.neoguanniao.client.camera.CameraFilterPickerScreen;
-import net.fodoth.skina.neoguanniao.client.camera.CameraImageFilters;
-import net.fodoth.skina.neoguanniao.client.camera.CameraPreviewPostEffect;
-import net.fodoth.skina.neoguanniao.client.camera.CameraViewfinderOverlay;
-import net.fodoth.skina.neoguanniao.client.camera.PhotoClientRepository;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFocusMode;
 import net.fodoth.skina.neoguanniao.content.camera.CameraSettingsData;
 import net.fodoth.skina.neoguanniao.content.camera.CameraState;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoImageCodec;
+import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig;
+import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
+
 import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoNetwork;
 import net.fodoth.skina.neoguanniao.network.SetCameraSettingsPacket;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -37,15 +34,16 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.ViewportEvent;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public final class CameraClientCapture {
-    private static final int CLEAN_CAPTURE_DELAY_FRAMES = 0;
-    private static final double DEFAULT_FOCAL_LENGTH = 50.0;
-    private static final double FOCAL_LENGTH_SCROLL_STEP = 4.0;
-    private static final double FULL_FRAME_SENSOR_WIDTH = 36.0;
-    private static final double MIN_VIEWFINDER_SENSITIVITY_SCALE = 0.28;
-    private static final double MAX_AUTOFOCUS_DISTANCE = 128.0;
-    private static boolean viewfinderOpen;
+    private static final ExecutorService ENCODE_EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "Guaniao-Photo-Encode");
+        thread.setDaemon(true);
+        return thread;
+    });
+                                private static boolean viewfinderOpen;
     private static InteractionHand viewfinderHand;
     private static CameraState currentState;
     private static int focusTargetId;
@@ -102,7 +100,7 @@ public final class CameraClientCapture {
     }
 
     public static boolean shouldHideHands() {
-        return (viewfinderOpen || cleanCapturePending) && net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.HIDE_HAND.get();
+        return (viewfinderOpen || cleanCapturePending) && NeoGuanNiaoClientConfig.HIDE_HAND.get();
     }
 
     public static boolean isCleanCapturePending() {
@@ -143,7 +141,7 @@ public final class CameraClientCapture {
             double factor = Math.pow(1.16, scrollAmount * (delta > 0.0 ? 1.0 : -1.0));
             currentState = currentState.withFocusDistance(currentState.focusDistance() * factor);
         } else {
-            double next = currentState.focalLength() + (delta > 0.0 ? 4.0 : -4.0) * scrollAmount;
+            double next = currentState.focalLength() + (delta > 0.0 ? 1.0 : -1.0) * NeoGuanNiaoClientConfig.WHEEL_FOCUS_STEP.get() * scrollAmount;
             currentState = currentState.withFocalLength(next);
             CameraClientCapture.applyFocalSensitivity(minecraft);
         }
@@ -172,6 +170,7 @@ public final class CameraClientCapture {
         return false;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean previewFilter(CameraFilter filter) {
         if (!viewfinderOpen || cleanCapturePending || filter == null) {
             return false;
@@ -180,6 +179,7 @@ public final class CameraClientCapture {
         return true;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean commitFilter(CameraFilter filter) {
         if (!viewfinderOpen || cleanCapturePending || filter == null) {
             return false;
@@ -204,6 +204,7 @@ public final class CameraClientCapture {
         return true;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean commitState(CameraState state) {
         if (!CameraClientCapture.previewState(state)) {
             return false;
@@ -230,6 +231,7 @@ public final class CameraClientCapture {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean focusAtCrosshair() {
         if (!viewfinderOpen || cleanCapturePending) {
             return false;
@@ -279,6 +281,7 @@ public final class CameraClientCapture {
         if (!cleanCapturePending || !cleanFramePrepared) {
             return;
         }
+        cleanFramePrepared = false;
         try {
             CameraClientCapture.captureAndSend(pendingCaptureHand);
         }
@@ -293,18 +296,36 @@ public final class CameraClientCapture {
             return;
         }
         RenderTarget captureTarget = CameraPreviewPostEffect.cleanCaptureTarget(minecraft.getMainRenderTarget());
+        if (captureTarget == null || captureTarget.width <= 0 || captureTarget.height <= 0) {
+            NeoGuanNiao.LOGGER.error("Unable to capture photograph: render target is unavailable");
+            return;
+        }
         try (NativeImage image = Screenshot.takeScreenshot((RenderTarget)captureTarget);){
-            int[] pixels = CameraClientCapture.cropSquare(image, 1024);
-            CameraImageFilters.apply(pixels, 1024, 1024, pendingCaptureState.filter(), System.nanoTime());
-            byte[] jpeg = PhotoImageCodec.encodeJpeg(pixels, 1024, 1024);
-            PhotoClientRepository.upload(hand, jpeg);
+            int[] pixels = CameraClientCapture.cropSquare(image, PhotographData.IMAGE_SIZE);
+            CameraFilter filter = pendingCaptureState.filter();
+            ENCODE_EXECUTOR.execute(() -> {
+                try {
+                    CameraImageFilters.apply(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE, filter, System.nanoTime());
+                    byte[] jpeg = PhotoImageCodec.encodeJpeg(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE);
+                    NeoGuanNiao.LOGGER.debug("Captured photograph ({} bytes), starting upload", jpeg.length);
+                    Minecraft.getInstance().execute(() -> {
+                        try {
+                            PhotoClientRepository.upload(hand, jpeg);
+                        } catch (Exception exception) {
+                            NeoGuanNiao.LOGGER.error("Failed to upload photograph", exception);
+                        }
+                    });
+                } catch (Exception exception) {
+                    NeoGuanNiao.LOGGER.error("Failed to encode photograph", exception);
+                }
+            });
         }
         catch (Exception exception) {
+            NeoGuanNiao.LOGGER.error("Failed to capture or upload photograph", exception);
             minecraft.player.displayClientMessage((Component)Component.translatable((String)"item.neoguanniao.nikon_d750.capture_failed"), true);
         }
     }
-
-    private static int[] cropSquare(NativeImage image, int size) {
+        private static int[] cropSquare(NativeImage image, int size) {
         int sourceWidth = image.getWidth();
         int sourceHeight = image.getHeight();
         int sourceSize = CameraViewfinderOverlay.apertureSize(sourceWidth, sourceHeight);
@@ -340,7 +361,7 @@ public final class CameraClientCapture {
         pendingCameraXRot = minecraft.player.getViewXRot(1.0f);
         storedHideGui = minecraft.options.hideGui;
         storedCameraType = minecraft.options.getCameraType();
-        minecraft.options.hideGui = net.fodoth.skina.neoguanniao.config.NeoGuanNiaoClientConfig.HIDE_GUI.get();
+        minecraft.options.hideGui = NeoGuanNiaoClientConfig.HIDE_GUI.get();
         if (storedCameraType != CameraType.THIRD_PERSON_FRONT) {
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
         }
@@ -399,14 +420,14 @@ public final class CameraClientCapture {
     private static double focalSensitivityScale() {
         double normalized = Mth.clamp((double)((currentState.focalLength() - 8.0) / 192.0), (double)0.0, (double)1.0);
         double smooth = normalized * normalized * (3.0 - 2.0 * normalized);
-        return Mth.lerp((double)smooth, (double)1.0, (double)0.28);
+        return Mth.lerp((double)smooth, (double)1.0, NeoGuanNiaoClientConfig.MOUSE_SENSITIVITY.get() * 0.28);
     }
 
     private static void tickContinuousFocus(Minecraft minecraft) {
         double distance;
         Entity target;
         Entity entity = target = minecraft.level == null || focusTargetId < 0 ? null : minecraft.level.getEntity(focusTargetId);
-        if (target != null && target.isAlive() && minecraft.player != null && (distance = minecraft.player.getEyePosition(1.0f).distanceTo(target.getBoundingBox().getCenter())) <= 128.0) {
+        if (target != null && target.isAlive() && minecraft.player != null && (distance = minecraft.player.getEyePosition(1.0f).distanceTo(target.getBoundingBox().getCenter())) <= CameraState.MAX_FOCUS_DISTANCE) {
             currentState = currentState.withFocusDistance(distance);
             return;
         }
@@ -440,8 +461,7 @@ public final class CameraClientCapture {
             return true;
         }
         double distance = eye.distanceTo(hit.getLocation());
-        if ((currentState = currentState.withFocusDistance(distance)).focusMode() == CameraFocusMode.AF_C && hit instanceof EntityHitResult) {
-            EntityHitResult focusedEntityHit = (EntityHitResult)hit;
+        if ((currentState = currentState.withFocusDistance(distance)).focusMode() == CameraFocusMode.AF_C && hit instanceof EntityHitResult focusedEntityHit) {
             focusTargetId = focusedEntityHit.getEntity().getId();
         } else {
             focusTargetId = -1;
@@ -467,7 +487,7 @@ public final class CameraClientCapture {
         currentState = CameraState.defaults();
         focusTargetId = -1;
         pendingCaptureHand = InteractionHand.MAIN_HAND;
-        pendingCaptureFov = CameraClientCapture.focalLengthToFov(50.0);
+        pendingCaptureFov = CameraClientCapture.focalLengthToFov(CameraState.defaults().focalLength());
         pendingCaptureState = CameraState.defaults();
         storedCameraType = CameraType.FIRST_PERSON;
     }

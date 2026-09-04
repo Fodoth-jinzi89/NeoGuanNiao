@@ -10,12 +10,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 public class FilmItemRenderer
 extends BlockEntityWithoutLevelRenderer {
     private static final ResourceLocation FILM_TEXTURE = ResourceLocation.fromNamespaceAndPath("neoguanniao", "textures/item/film.png");
-    private static final float FILM_WIDTH = 0.78f;
+        private static final float FILM_WIDTH = 0.78f;
     private static final float FILM_HEIGHT = 0.54f;
 
     public FilmItemRenderer() {
@@ -25,7 +26,7 @@ extends BlockEntityWithoutLevelRenderer {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    public void renderByItem(@NotNull ItemStack stack, @NotNull ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         poseStack.pushPose();
         try {
             FilmItemRenderer.applyDisplayTransform(poseStack, context);
@@ -57,7 +58,7 @@ extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-    private static void renderQuad(VertexConsumer consumer, Matrix4f matrix, float x, float y, float width, float height, float z, int packedLight) {
+        private static void renderQuad(VertexConsumer consumer, Matrix4f matrix, float x, float y, float width, float height, float z, int packedLight) {
         CameraRenderUtil.vertex(consumer, matrix, x, y + height, z, 0.0F, 1.0F, packedLight);
         CameraRenderUtil.vertex(consumer, matrix, x + width, y + height, z, 1.0F, 1.0F, packedLight);
         CameraRenderUtil.vertex(consumer, matrix, x + width, y, z, 1.0F, 0.0F, packedLight);

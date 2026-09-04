@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.camera;
+import net.fodoth.skina.neoguanniao.config.CameraConfig;
 
-import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public final class PhotoImageCodec {
         }
         for (float quality : JPEG_QUALITIES) {
             byte[] encoded = PhotoImageCodec.encodeJpeg(image, quality);
-            if (encoded.length > net.fodoth.skina.neoguanniao.config.CameraConfig.maxCompressedBytes()) continue;
+            if (encoded.length > CameraConfig.maxCompressedBytes()) continue;
             return encoded;
         }
         throw new IOException("Photograph remains too large after JPEG compression");
@@ -43,7 +43,7 @@ public final class PhotoImageCodec {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static Dimensions validateJpeg(byte[] encoded) throws IOException {
-        if (encoded.length <= 0 || encoded.length > net.fodoth.skina.neoguanniao.config.CameraConfig.maxCompressedBytes()) {
+        if (encoded.length == 0 || encoded.length > CameraConfig.maxCompressedBytes()) {
             throw new IOException("Invalid compressed photograph size");
         }
         try (ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(encoded));){
@@ -89,29 +89,7 @@ public final class PhotoImageCodec {
         return value != null && value.length() == 64 && value.matches("[0-9a-f]{64}");
     }
 
-    /*
-     * Exception decompiling
-     */
     private static byte[] encodeJpeg(BufferedImage image, float quality) throws IOException {
-        /*
-         * This method has failed to decompile.  When submitting a bug report, please provide this stack trace, and (if you hold appropriate legal rights) the relevant class file.
-         * 
-         * org.benf.cfr.reader.util.ConfusedCFRException: Started 2 blocks at once
-         *     at org.benf.cfr.reader.bytecode.analysis.opgraph.Op04StructuredStatement.getStartingBlocks(Op04StructuredStatement.java:412)
-         *     at org.benf.cfr.reader.bytecode.analysis.opgraph.Op04StructuredStatement.buildNestedBlocks(Op04StructuredStatement.java:487)
-         *     at org.benf.cfr.reader.bytecode.analysis.opgraph.Op03SimpleStatement.createInitialStructuredBlock(Op03SimpleStatement.java:736)
-         *     at org.benf.cfr.reader.bytecode.CodeAnalyser.getAnalysisInner(CodeAnalyser.java:850)
-         *     at org.benf.cfr.reader.bytecode.CodeAnalyser.getAnalysisOrWrapFail(CodeAnalyser.java:278)
-         *     at org.benf.cfr.reader.bytecode.CodeAnalyser.getAnalysis(CodeAnalyser.java:201)
-         *     at org.benf.cfr.reader.entities.attributes.AttributeCode.analyse(AttributeCode.java:94)
-         *     at org.benf.cfr.reader.entities.Method.analyse(Method.java:531)
-         *     at org.benf.cfr.reader.entities.ClassFile.analyseMid(ClassFile.java:1055)
-         *     at org.benf.cfr.reader.entities.ClassFile.analyseTop(ClassFile.java:942)
-         *     at org.benf.cfr.reader.Driver.doJarVersionTypes(Driver.java:257)
-         *     at org.benf.cfr.reader.Driver.doJar(Driver.java:139)
-         *     at org.benf.cfr.reader.CfrDriverImpl.analyse(CfrDriverImpl.java:76)
-         *     at org.benf.cfr.reader.Main.main(Main.java:54)
-         */
         var writers = ImageIO.getImageWritersByFormatName("jpg");
         if (!writers.hasNext()) {
             throw new IOException("No JPEG writer is available");
@@ -123,7 +101,7 @@ public final class PhotoImageCodec {
             var params = writer.getDefaultWriteParam();
             if (params.canWriteCompressed()) {
                 params.setCompressionMode(javax.imageio.ImageWriteParam.MODE_EXPLICIT);
-                params.setCompressionQuality(Math.max(0.1F, Math.min(1.0F, quality)));
+                params.setCompressionQuality(Math.clamp(quality, 0.1F, 1.0F));
             }
             writer.write(null, new javax.imageio.IIOImage(image, null, null), params);
             return output.toByteArray();

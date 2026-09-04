@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-
-import net.fodoth.skina.neoguanniao.client.camera.PhotoClientRepository;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+
 import com.mojang.blaze3d.platform.NativeImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,13 +24,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public final class PhotographTextureCache {
-    private static final int MAX_TEXTURES = 96;
+        private static final int MAX_TEXTURES = 96;
     private static final int MAX_UPLOADS_PER_FRAME = 2;
     private static final long UNUSED_TEXTURE_MILLIS = 60000L;
     private static final ResourceLocation FALLBACK = ResourceLocation.fromNamespaceAndPath("neoguanniao", "textures/item/photograph.png");
     private static final Map<String, CachedTexture> TEXTURES = new LinkedHashMap<String, CachedTexture>(97, 0.75f, true);
     private static final Set<String> DECODING = new HashSet<String>();
-    private static final ArrayDeque<DecodedImage> READY = new ArrayDeque();
+    private static final ArrayDeque<DecodedImage> READY = new ArrayDeque<>();
     private static final ExecutorService DECODER = Executors.newSingleThreadExecutor(runnable -> {
         Thread thread = new Thread(runnable, "Guaniao-Photo-Texture-Decode");
         thread.setDaemon(true);
@@ -66,10 +66,9 @@ public final class PhotographTextureCache {
      */
     public static void pumpUploads() {
         Minecraft minecraft = Minecraft.getInstance();
-        for (int uploaded = 0; uploaded < 2; ++uploaded) {
+        for (int uploaded = 0; uploaded < MAX_UPLOADS_PER_FRAME; ++uploaded) {
             DecodedImage decoded;
-            ArrayDeque<DecodedImage> arrayDeque = READY;
-            synchronized (arrayDeque) {
+            synchronized (READY) {
                 decoded = READY.pollFirst();
             }
             if (decoded == null) break;
@@ -87,6 +86,7 @@ public final class PhotographTextureCache {
                 continue;
             }
             catch (RuntimeException exception) {
+                NeoGuanNiao.LOGGER.error("Failed to upload photograph texture {}", decoded.key, exception);
                 decoded.image.close();
             }
         }
@@ -103,8 +103,7 @@ public final class PhotographTextureCache {
         }
         TEXTURES.clear();
         DECODING.clear();
-        ArrayDeque<DecodedImage> arrayDeque = READY;
-        synchronized (arrayDeque) {
+        synchronized (READY) {
             while (!READY.isEmpty()) {
                 PhotographTextureCache.READY.removeFirst().image.close();
             }
@@ -125,7 +124,7 @@ public final class PhotographTextureCache {
         }
         Path directory = Minecraft.getInstance().gameDirectory.toPath().resolve("guaniao_photos");
         Files.createDirectories(directory, new FileAttribute[0]);
-        Path file = directory.resolve(PhotographTextureCache.safe(photoId) + ".png");
+        Path file = directory.resolve(PhotographTextureCache.safe(photoId) + ".jpg");
         try (NativeImage image = NativeImage.read((InputStream)new ByteArrayInputStream(jpeg));){
             image.writeToFile(file);
         }
@@ -138,23 +137,23 @@ public final class PhotographTextureCache {
     private static void decode(String key, byte[] jpeg, int decodeGeneration) {
         try {
             NativeImage image = NativeImage.read((InputStream)new ByteArrayInputStream(jpeg));
-            ArrayDeque<DecodedImage> arrayDeque = READY;
-            synchronized (arrayDeque) {
+            synchronized (READY) {
                 READY.addLast(new DecodedImage(key, image, decodeGeneration));
             }
         }
         catch (IOException | RuntimeException exception) {
+            NeoGuanNiao.LOGGER.error("Failed to decode photograph texture {}", key, exception);
             Minecraft.getInstance().execute(() -> DECODING.remove(key));
         }
     }
 
     private static void evictTextures() {
         Minecraft minecraft = Minecraft.getInstance();
-        long cutoff = System.currentTimeMillis() - 60000L;
+        long cutoff = System.currentTimeMillis() - UNUSED_TEXTURE_MILLIS;
         Iterator<Map.Entry<String, CachedTexture>> iterator = TEXTURES.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, CachedTexture> entry = iterator.next();
-            if (TEXTURES.size() <= 96 && entry.getValue().lastUsedMillis >= cutoff) continue;
+            if (TEXTURES.size() <= MAX_TEXTURES && entry.getValue().lastUsedMillis >= cutoff) continue;
             iterator.remove();
             minecraft.getTextureManager().release(entry.getValue().location);
         }
