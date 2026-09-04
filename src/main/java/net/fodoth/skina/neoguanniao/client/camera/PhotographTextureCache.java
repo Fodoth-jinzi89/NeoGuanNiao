@@ -3,9 +3,10 @@ import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
@@ -125,10 +126,27 @@ public final class PhotographTextureCache {
         Path directory = Minecraft.getInstance().gameDirectory.toPath().resolve("guaniao_photos");
         Files.createDirectories(directory, new FileAttribute[0]);
         Path file = directory.resolve(PhotographTextureCache.safe(photoId) + ".jpg");
-        try (NativeImage image = NativeImage.read((InputStream)new ByteArrayInputStream(jpeg));){
-            image.writeToFile(file);
-        }
+        Files.write(file, jpeg);
         return file;
+    }
+
+    private static NativeImage readJpegAsNativeImage(byte[] jpeg) throws IOException {
+        BufferedImage source = ImageIO.read(new ByteArrayInputStream(jpeg));
+        if (source == null) {
+            throw new IOException("Unable to decode JPEG photograph");
+        }
+        NativeImage image = new NativeImage(source.getWidth(), source.getHeight(), false);
+        for (int y = 0; y < source.getHeight(); ++y) {
+            for (int x = 0; x < source.getWidth(); ++x) {
+                int rgb = source.getRGB(x, y);
+                int alpha = rgb >>> 24;
+                int red = rgb >>> 16 & 0xFF;
+                int green = rgb >>> 8 & 0xFF;
+                int blue = rgb & 0xFF;
+                image.setPixelRGBA(x, y, alpha << 24 | blue << 16 | green << 8 | red);
+            }
+        }
+        return image;
     }
 
     /*
@@ -136,7 +154,7 @@ public final class PhotographTextureCache {
      */
     private static void decode(String key, byte[] jpeg, int decodeGeneration) {
         try {
-            NativeImage image = NativeImage.read((InputStream)new ByteArrayInputStream(jpeg));
+            NativeImage image = PhotographTextureCache.readJpegAsNativeImage(jpeg);
             synchronized (READY) {
                 READY.addLast(new DecodedImage(key, image, decodeGeneration));
             }

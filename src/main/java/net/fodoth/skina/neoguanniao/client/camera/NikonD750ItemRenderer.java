@@ -16,9 +16,10 @@ extends GeoItemRenderer<NikonD750Item> {
         super(new NikonD750ItemModel());
     }
 
-    public void preRender(PoseStack poseStack, NikonD750Item animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    @Override
+    public void preRender(PoseStack poseStack, NikonD750Item animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         NikonD750ItemRenderer.applyDisplayTransform(poseStack, this.renderPerspective);
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, packedOverlay);
+        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
     }
 
     private static void applyDisplayTransform(PoseStack poseStack, ItemDisplayContext context) {
