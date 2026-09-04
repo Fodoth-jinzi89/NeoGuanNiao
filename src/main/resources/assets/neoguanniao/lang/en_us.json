@@ -167,7 +167,7 @@
   "gui.neoguanniao.photograph.export_failed": "Export failed.",
   "item.neoguanniao.film": "Film",
   "item.neoguanniao.film.tooltip.empty": "This film has no image data.",
-  "item.neoguanniao.film.tooltip.frame": "Craft with eight sticks to mount it as a hanging framed photograph.",
+  "item.neoguanniao.film.tooltip.frame": "Craft with any block to mount it as a hanging framed photograph.",
   "item.neoguanniao.film.named": "Film %s · %s",
   "item.neoguanniao.photograph.named": "Framed Photograph · %s",
   "key.category.neoguanniao.bird_guide": "Bird Guide",

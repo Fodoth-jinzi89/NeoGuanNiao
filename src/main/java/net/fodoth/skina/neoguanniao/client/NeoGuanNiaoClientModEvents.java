@@ -12,6 +12,8 @@ import net.fodoth.skina.neoguanniao.client.camera.FilmItemRenderer;
 import net.fodoth.skina.neoguanniao.client.camera.NikonD750ItemRenderer;
 import net.fodoth.skina.neoguanniao.client.camera.PhotographEntityRenderer;
 import net.fodoth.skina.neoguanniao.client.camera.PhotographItemRenderer;
+import net.fodoth.skina.neoguanniao.client.fan.FeatherFanItemExtensions;
+import net.fodoth.skina.neoguanniao.client.fan.FeatherFanProjectileRenderer;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -75,7 +77,7 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), PhotographEntityRenderer::new);
-        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), FeatherFanProjectileRenderer::new);
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),
@@ -162,6 +164,8 @@ public final class NeoGuanNiaoClientModEvents {
                 NeoGuanNiaoItems.BIRD_NEST.get(),
                 BirdNestItemRenderer::new
         );
+
+        FeatherFanItemExtensions.register(event);
 
     }
 }

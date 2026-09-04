@@ -50,7 +50,7 @@ extends EntityRenderer<PhotographEntity> {
         Matrix4f matrix = poseStack.last().pose();
         var block = BuiltInRegistries.BLOCK.get(PhotographData.frameBlock(entity.getItem()));
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getParticleIcon(block.defaultBlockState());
-        VertexConsumer frameConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
+        VertexConsumer frameConsumer = bufferSource.getBuffer(RenderType.text(TextureAtlas.LOCATION_BLOCKS));
         // Render only the four opaque border strips, so the frame can never occlude the photo.
         // The whole frame is 16x16; the photo covers the central 14x14, leaving the outer 1px border.
         float pixel = (sprite.getU1() - sprite.getU0()) / FRAME_TEXTURE_SIZE;
@@ -66,8 +66,8 @@ extends EntityRenderer<PhotographEntity> {
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, sprite, 0.0f, FRAME_SIZE - border, FRAME_SIZE, border, 0.002f, packedLight, u0, u1, v1 - pixel, v1);
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, sprite, 0.0f, border, border, photoSize, 0.002f, packedLight, u0, innerU0, innerV0, innerV1);
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, sprite, FRAME_SIZE - border, border, border, photoSize, 0.002f, packedLight, innerU1, u1, innerV0, innerV1);
-        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(PhotographTextureCache.textureFor(entity.getItem())));
-        PhotographEntityRenderer.renderQuad(photoConsumer, matrix, border, border, photoSize, -0.002f, packedLight);
+        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.text(PhotographTextureCache.textureFor(entity.getItem())));
+        PhotographEntityRenderer.renderQuad(photoConsumer, matrix, border, border, photoSize, 0.004f, packedLight);
         poseStack.popPose();
     }
 

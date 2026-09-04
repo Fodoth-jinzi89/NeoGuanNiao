@@ -32,7 +32,7 @@ extends BlockEntityWithoutLevelRenderer {
             FilmItemRenderer.applyDisplayTransform(poseStack, context);
             int light = context == ItemDisplayContext.GUI ? 0xF000F0 : packedLight;
             Matrix4f matrix = poseStack.last().pose();
-            VertexConsumer filmConsumer = bufferSource.getBuffer(RenderType.text((ResourceLocation)FILM_TEXTURE));
+            VertexConsumer filmConsumer = bufferSource.getBuffer(RenderType.text(FILM_TEXTURE));
             FilmItemRenderer.renderQuad(filmConsumer, matrix, -0.39f, -0.27f, 0.78f, 0.54f, 0.0f, light);
         }
         finally {

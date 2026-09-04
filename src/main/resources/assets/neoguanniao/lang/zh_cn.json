@@ -167,7 +167,7 @@
   "gui.neoguanniao.photograph.export_failed": "导出失败",
   "item.neoguanniao.film": "胶片",
   "item.neoguanniao.film.tooltip.empty": "这张胶片还没有影像",
-  "item.neoguanniao.film.tooltip.frame": "与一圈木棍合成可悬挂的相框相片",
+  "item.neoguanniao.film.tooltip.frame": "与任意方块合成可悬挂的相框相片",
   "item.neoguanniao.film.named": "胶片 %s · %s",
   "item.neoguanniao.photograph.named": "相框相片 · %s",
   "key.category.neoguanniao.bird_guide": "观鸟图鉴",

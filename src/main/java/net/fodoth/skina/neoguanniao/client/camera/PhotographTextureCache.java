@@ -35,6 +35,20 @@ public final class PhotographTextureCache {
     });
     private static int generation;
 
+    private static ResourceLocation textureForKey(ItemStack stack, String key) {
+        CachedTexture cached = TEXTURES.get(key);
+        if (cached != null) {
+            cached.lastUsedMillis = System.currentTimeMillis();
+            return cached.location;
+        }
+        byte[] png = PhotoClientRepository.getOrRequest(PhotographData.id(stack), PhotographData.contentHash(stack));
+        if (png != null && DECODING.add(key)) {
+            int decodeGeneration = generation;
+            DECODER.execute(() -> PhotographTextureCache.decode(key, png, decodeGeneration));
+        }
+        return FALLBACK;
+    }
+
     private PhotographTextureCache() {
     }
 
@@ -45,17 +59,7 @@ public final class PhotographTextureCache {
         String photoId = PhotographData.id(stack);
         String contentHash = PhotographData.contentHash(stack);
         String key = PhotographTextureCache.safe(photoId) + "_" + PhotographTextureCache.safe(contentHash);
-        CachedTexture cached = TEXTURES.get(key);
-        if (cached != null) {
-            cached.lastUsedMillis = System.currentTimeMillis();
-            return cached.location;
-        }
-        byte[] png = PhotoClientRepository.getOrRequest(photoId, contentHash);
-        if (png != null && DECODING.add(key)) {
-            int decodeGeneration = generation;
-            DECODER.execute(() -> PhotographTextureCache.decode(key, png, decodeGeneration));
-        }
-        return FALLBACK;
+        return textureForKey(stack, key);
     }
 
     /*
