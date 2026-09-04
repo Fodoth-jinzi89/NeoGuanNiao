@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FilmItem
 extends Item {
-    private static final DateTimeFormatter CAPTURE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm");
+    private static final DateTimeFormatter CAPTURE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
     private static Component formatTime(long ticks) {
         return Component.literal(CAPTURE_TIME_FORMAT.format(Instant.ofEpochMilli(Math.max(0L, ticks)).atZone(ZoneId.systemDefault())));
     }
@@ -57,9 +57,10 @@ extends Item {
         tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(PhotographData.dimension(stack)).withStyle(ChatFormatting.AQUA)));
         tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates").withStyle(ChatFormatting.GOLD)
-                .append(Component.translatable("tooltip.neoguanniao.photo.coordinates", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack)).withStyle(ChatFormatting.AQUA)));
+                .append(Component.literal(String.format("%s, %s, %s", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack))).withStyle(ChatFormatting.AQUA)));
         if (!photographer.isEmpty()) {
-            tooltip.add(Component.translatable("tooltip.neoguanniao.photo.photographer", photographer).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.neoguanniao.photo.photographer").withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(photographer).withStyle(ChatFormatting.AQUA)));
         }
         tooltip.add(Component.translatable("item.neoguanniao.film.tooltip.frame").withStyle(ChatFormatting.DARK_GRAY));
     }

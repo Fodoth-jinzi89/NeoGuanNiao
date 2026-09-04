@@ -31,8 +31,9 @@ public record BeginPhotoUploadPacket(UUID uploadId, InteractionHand hand, int to
 
     public static void handle(BeginPhotoUploadPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (context.player() instanceof ServerPlayer player)
+            if (context.player() instanceof ServerPlayer player) {
                 PhotoUploadManager.begin(player, packet.uploadId, packet.hand, packet.totalBytes, packet.width, packet.height, packet.contentHash);
+            }
         });
     }
 

@@ -59,6 +59,7 @@ public final class PhotoUploadManager {
         }
         player.getCooldowns().addCooldown(camera.getItem(), CameraConfig.captureCooldownTicks());
         ACTIVE_UPLOADS.put(player.getUUID(), new UploadSession(uploadId, totalBytes, contentHash, now));
+        NeoGuanNiao.LOGGER.debug("Started photograph upload {} for {}", uploadId, player.getScoreboardName());
     }
 
     public static void acceptChunk(ServerPlayer player, UUID uploadId, int chunkIndex, byte[] data) {
@@ -69,6 +70,7 @@ public final class PhotoUploadManager {
         if (!session.uploadId.equals(uploadId) || !session.accept(chunkIndex, data)) {
             ACTIVE_UPLOADS.remove(player.getUUID());
             PhotoUploadManager.fail(player, session.uploadId);
+            return;
         }
     }
 
@@ -76,6 +78,7 @@ public final class PhotoUploadManager {
         UUID playerId = player.getUUID();
         UploadSession session = ACTIVE_UPLOADS.remove(playerId);
         if (session == null) {
+            PhotoUploadManager.fail(player, uploadId);
             return;
         }
         if (!(session.uploadId.equals(uploadId) && session.complete() && PhotoUploadManager.quotaAllows(player.server, playerId, session.totalBytes))) {

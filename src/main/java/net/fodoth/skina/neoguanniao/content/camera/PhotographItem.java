@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PhotographItem
 extends Item {
-    private static final DateTimeFormatter CAPTURE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm");
+    private static final DateTimeFormatter CAPTURE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
     private static Component formatTime(long ticks) {
         return Component.literal(CAPTURE_TIME_FORMAT.format(Instant.ofEpochMilli(Math.max(0L, ticks)).atZone(ZoneId.systemDefault())));
     }
@@ -81,11 +81,14 @@ extends Item {
             return;
         }
         String photographer = PhotographData.photographer(stack);
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").append(formatTime(PhotographData.captureTime(stack))));
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").append(PhotographData.dimension(stack)));
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(formatTime(PhotographData.captureTime(stack)).getString()).withStyle(ChatFormatting.AQUA)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").withStyle(ChatFormatting.GOLD).append(Component.literal(PhotographData.dimension(stack)).withStyle(ChatFormatting.AQUA)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(String.format("%s, %s, %s", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack))).withStyle(ChatFormatting.AQUA)));
         if (!photographer.isEmpty()) {
-            tooltip.add(Component.translatable("tooltip.neoguanniao.photo.photographer", photographer).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.neoguanniao.photo.photographer").withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(photographer).withStyle(ChatFormatting.AQUA)));
         }
         tooltip.add((Component)Component.translatable((String)"item.neoguanniao.photograph.tooltip.actions").withStyle(ChatFormatting.DARK_GRAY));
     }

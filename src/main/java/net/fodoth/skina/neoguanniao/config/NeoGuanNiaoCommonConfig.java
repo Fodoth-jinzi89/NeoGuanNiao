@@ -28,7 +28,7 @@ public final class NeoGuanNiaoCommonConfig {
         UPLOAD_TIMEOUT_TICKS = b.defineInRange("uploadTimeoutTicks", 200, 20, 72000);
         DOWNLOAD_TIMEOUT_TICKS = b.defineInRange("downloadTimeoutTicks", 200, 20, 72000);
         CAPTURE_COOLDOWN_TICKS = b.defineInRange("captureCooldownTicks", 30, 0, 1200);
-        MAX_UPLOAD_BYTES_PER_MINUTE = b.defineInRange("maxUploadBytesPerMinute", 0x1800000, 65536, 0x10000000);
+        MAX_UPLOAD_BYTES_PER_MINUTE = b.defineInRange("maxUploadBytesPerMinute", 0x4000000, 65536, 0x10000000);
         b.pop();
         SPEC = b.build();
     }
