@@ -10,6 +10,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Client-side item extensions for the Wind Feather Fan. Registered through
@@ -23,7 +24,7 @@ public final class FeatherFanItemExtensions {
     public static void register(RegisterClientExtensionsEvent event) {
         event.registerItem(new IClientItemExtensions() {
             @Override
-            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProgress, float swingProgress) {
+            public boolean applyForgeHandTransform(@NotNull PoseStack poseStack, @NotNull LocalPlayer player, @NotNull HumanoidArm arm, @NotNull ItemStack itemInHand, float partialTick, float equipProgress, float swingProgress) {
                 InteractionHand renderedHand = arm == player.getMainArm() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
                 if (!player.isUsingItem() || player.getUsedItemHand() != renderedHand || !ItemStack.isSameItemSameComponents(player.getUseItem(), itemInHand)) {
                     return false;

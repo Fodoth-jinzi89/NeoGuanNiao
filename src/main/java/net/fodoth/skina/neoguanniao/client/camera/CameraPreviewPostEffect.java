@@ -26,8 +26,6 @@ import org.lwjgl.opengl.GL30;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
 public final class CameraPreviewPostEffect {
-    private static final int THUMBNAIL_WIDTH = 160;
-    private static final int THUMBNAIL_HEIGHT = 90;
 
     private static TextureTarget previewTarget;
     private static TextureTarget opticsTarget;
@@ -126,10 +124,8 @@ public final class CameraPreviewPostEffect {
     }
 
     public static void drawFilteredLens(GuiGraphics graphics, int left, int top, int right, int bottom) {
-        if (!preparedThisFrame || previewTarget == null) {
-            return;
-        }
         Minecraft minecraft = Minecraft.getInstance();
+        RenderTarget target = preparedThisFrame && previewTarget != null ? previewTarget : minecraft.getMainRenderTarget();
         int guiWidth = minecraft.getWindow().getGuiScaledWidth();
         int guiHeight = minecraft.getWindow().getGuiScaledHeight();
         if (guiWidth <= 0 || guiHeight <= 0) {
@@ -139,7 +135,7 @@ public final class CameraPreviewPostEffect {
         float u1 = (float)right / (float)guiWidth;
         float vTop = 1.0f - (float)top / (float)guiHeight;
         float vBottom = 1.0f - (float)bottom / (float)guiHeight;
-        CameraPreviewPostEffect.drawPreviewTarget(graphics, (RenderTarget)previewTarget, left, top, right, bottom, u0, vBottom, u1, vTop);
+        CameraPreviewPostEffect.drawPreviewTarget(graphics, target, left, top, right, bottom, u0, vBottom, u1, vTop);
     }
 
     public static void drawPreview(GuiGraphics graphics, int left, int top, int right, int bottom) {

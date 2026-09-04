@@ -9,28 +9,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.fan.FeatherFanEnchantments;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoParticleTypes;
@@ -57,45 +53,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class FeatherFanProjectileEntity
 extends ThrowableItemProjectile {
-    private static final EntityDataAccessor<Integer> DATA_STATE = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, (EntityDataSerializer)EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> DATA_CHARGE = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, (EntityDataSerializer)EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> DATA_RIVEN_TICKS = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, (EntityDataSerializer)EntityDataSerializers.INT);
-    private static final int MAX_OWNER_MISSING_TICKS = 200;
-    private static final int MAX_TOTAL_LIFE_TICKS = 400;
-    private static final int RETURN_COOLDOWN_TICKS = 12;
-    private static final int ENTITY_STUCK_DURATION_TICKS = 100;
-    private static final int BLOCK_STUCK_DURATION_TICKS = 70;
-    private static final int STUCK_DAMAGE_DURATION_TICKS = 50;
-    private static final double ENTITY_STUCK_DEPTH = 0.06;
-    private static final int PULLOUT_DURATION_TICKS = 5;
-    private static final int STUCK_DAMAGE_INTERVAL = 10;
-    private static final float STUCK_DAMAGE = 1.0f;
-    private static final double STUCK_SLOW_AMOUNT = -0.25;
-    private static final ResourceLocation STUCK_SLOWDOWN_ID = ResourceLocation.fromNamespaceAndPath("neoguanniao", "feather_fan_stuck_slowdown");
-    private static final int BURIAL_DURATION_TICKS = 40;
-    private static final double BURIAL_PULL_RADIUS = 5.0;
-    private static final int BURIAL_DAMAGE_INTERVAL_TICKS = 10;
-    private static final float BURIAL_DAMAGE = 0.5f;
-    private static final double BURIAL_SLASH_RADIUS = 4.0;
-    private static final float BURIAL_SLASH_DAMAGE = 6.0f;
-    public static final int RIVEN_PREPARE_END = 5;
-    public static final int RIVEN_SPLIT_END = 14;
-    public static final int RIVEN_LOCK_END = 19;
-    public static final int RIVEN_CONVERGE_END = 26;
-    public static final int RIVEN_END = 36;
-    private static final double RIVEN_BURST_RADIUS = 3.75;
-    private static final float RIVEN_MAIN_DAMAGE = 8.0f;
-    private static final float RIVEN_MIN_SPLASH_DAMAGE = 3.0f;
-    private static final float RIVEN_MAX_SPLASH_DAMAGE = 5.0f;
-    private static final float RIVEN_REFORM_DAMAGE = 16.0f;
-    private static final int HUNT_MAX_TARGETS = 7;
-    public static final float HUNT_SPEED = 1.75f;
-    private static final double HUNT_TURN_RATE = 0.24;
-    private static final double HUNT_HIT_RANGE = 0.85;
-    private static final double HUNT_ABANDON_RANGE = 20.0;
-    private final Set<UUID> outboundHits = new HashSet<UUID>();
-    private final Set<UUID> returnHits = new HashSet<UUID>();
-    private final Set<UUID> huntedTargets = new HashSet<UUID>();
+    private static final EntityDataAccessor<Integer> DATA_STATE = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DATA_CHARGE = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DATA_RIVEN_TICKS = SynchedEntityData.defineId(FeatherFanProjectileEntity.class, EntityDataSerializers.INT);
+    private static final ResourceLocation STUCK_SLOWDOWN_ID = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "feather_fan_stuck_slowdown");
+    private final Set<UUID> outboundHits = new HashSet<>();
+    private final Set<UUID> returnHits = new HashSet<>();
+    private final Set<UUID> huntedTargets = new HashSet<>();
     private final Set<UUID> huntingLockedTargets = new LinkedHashSet<UUID>();
     private final Map<UUID, Boolean> burialTargetPhysics = new HashMap<UUID, Boolean>();
     private Vec3 throwOrigin = Vec3.ZERO;
@@ -130,12 +94,12 @@ extends ThrowableItemProjectile {
     }
 
     public FeatherFanProjectileEntity(Level level, LivingEntity owner) {
-        super((EntityType)NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), owner, level);
+        super(NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), owner, level);
         this.ownerUuid = owner.getUUID();
         this.throwOrigin = this.position();
     }
 
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_STATE, FanState.OUTBOUND_SPIN.ordinal());
         builder.define(DATA_CHARGE, 0.0f);
@@ -143,22 +107,22 @@ extends ThrowableItemProjectile {
     }
 
     public void configureThrow(ItemStack fanStack, InteractionHand hand, float charge) {
-        float clampedCharge = Mth.clamp((float)charge, (float)0.0f, (float)1.0f);
+        float clampedCharge = Mth.clamp(charge, 0.0f, 1.0f);
         this.setItem(fanStack);
         this.returnHand = hand;
         this.setFanState(FanState.OUTBOUND_SPIN);
-        this.entityData.set(DATA_CHARGE, Float.valueOf(clampedCharge));
+        this.entityData.set(DATA_CHARGE, clampedCharge);
         this.throwOrigin = this.position();
-        this.maxDistance = Mth.lerp((float)clampedCharge, (float)6.0f, (float)16.0f);
-        this.attackDamage = Mth.lerp((float)clampedCharge, (float)3.0f, (float)7.0f);
-        this.returnSpeed = Mth.lerp((float)clampedCharge, (float)1.45f, (float)1.85f);
+        this.maxDistance = Mth.lerp(clampedCharge, 6.0f, 16.0f);
+        this.attackDamage = Mth.lerp(clampedCharge, 3.0f, 7.0f);
+        this.returnSpeed = Mth.lerp(clampedCharge, 1.45f, 1.85f);
     }
 
     public void configurePiercing(ItemStack fanStack, InteractionHand hand) {
         this.setItem(fanStack);
         this.returnHand = hand;
         this.setFanState(FanState.PIERCING);
-        this.entityData.set(DATA_CHARGE, Float.valueOf(1.0f));
+        this.entityData.set(DATA_CHARGE, 1.0f);
         this.throwOrigin = this.position();
         this.maxDistance = 20.0f;
         this.attackDamage = 7.0f;
@@ -166,15 +130,15 @@ extends ThrowableItemProjectile {
     }
 
     public void configureHunting(ItemStack fanStack, InteractionHand hand, float charge, List<LivingEntity> targets) {
-        float clampedCharge = Mth.clamp((float)charge, (float)0.0f, (float)1.0f);
+        float clampedCharge = Mth.clamp(charge, 0.0f, 1.0f);
         this.setItem(fanStack);
         this.returnHand = hand;
         this.setFanState(FanState.HUNTING);
-        this.entityData.set(DATA_CHARGE, Float.valueOf(clampedCharge));
+        this.entityData.set(DATA_CHARGE, clampedCharge);
         this.throwOrigin = this.position();
         this.maxDistance = 64.0f;
         this.attackDamage = 6.0f;
-        this.returnSpeed = Mth.lerp((float)clampedCharge, (float)1.55f, (float)1.95f);
+        this.returnSpeed = Mth.lerp(clampedCharge, 1.55f, 1.95f);
         this.huntingLockedTargets.clear();
         targets.stream().limit(7L).map(Entity::getUUID).forEach(this.huntingLockedTargets::add);
         this.huntingTargetUuid = this.huntingLockedTargets.stream().findFirst().orElse(null);
@@ -184,7 +148,7 @@ extends ThrowableItemProjectile {
 
     @NotNull
     protected Item getDefaultItem() {
-        return (Item)NeoGuanNiaoItems.WIND_FEATHER_FAN.get();
+        return NeoGuanNiaoItems.WIND_FEATHER_FAN.get();
     }
 
     protected double getDefaultGravity() {
@@ -216,7 +180,7 @@ extends ThrowableItemProjectile {
                     this.dropFanAndDiscard();
                     return;
                 }
-                this.setOwner((Entity)owner);
+                this.setOwner(owner);
                 switch (this.getFanState()) {
                     case RETURNING: {
                         if (!this.tickReturning(owner)) break;
@@ -248,8 +212,7 @@ extends ThrowableItemProjectile {
                     }
                 }
                 Level level = this.level();
-                if (level instanceof ServerLevel) {
-                    ServerLevel serverLevel = (ServerLevel)level;
+                if (level instanceof ServerLevel serverLevel) {
                     FanState currentState = this.getFanState();
                     if (currentState == FanState.OUTBOUND_SPIN || currentState == FanState.PIERCING || currentState == FanState.HUNTING || currentState == FanState.RETURNING) {
                         this.spawnFlightTrail(serverLevel);
@@ -273,7 +236,7 @@ extends ThrowableItemProjectile {
         }
     }
 
-    protected boolean canHitEntity(Entity target) {
+    protected boolean canHitEntity(@NotNull Entity target) {
         FanState state = this.getFanState();
         if (state == FanState.STUCK_ENTITY || state == FanState.STUCK_BLOCK || state == FanState.BURIAL_VORTEX || state == FanState.RIVEN_SEQUENCE || !(target instanceof LivingEntity) || target == this.getOwner() || isBird(target) || !super.canHitEntity(target)) {
             return false;
@@ -287,8 +250,7 @@ extends ThrowableItemProjectile {
 
     protected void onHitEntity(EntityHitResult result) {
         Entity hit = result.getEntity();
-        if (hit instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity)hit;
+        if (hit instanceof LivingEntity living) {
             this.hitLivingEntity(living, result.getLocation());
         }
     }
@@ -306,7 +268,7 @@ extends ThrowableItemProjectile {
             this.hitPiercingTarget(living, hitLocation);
             return;
         }
-        Set<UUID> set = hits = this.isReturning() ? this.returnHits : this.outboundHits;
+        hits = this.isReturning() ? this.returnHits : this.outboundHits;
         if (!hits.add(living.getUUID()) || this.level().isClientSide) {
             return;
         }
@@ -315,7 +277,7 @@ extends ThrowableItemProjectile {
         if (this.isReturning()) {
             living.invulnerableTime = 0;
         }
-        boolean damaged = living.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), damage);
+        boolean damaged = living.hurt(this.damageSources().thrown(this, this.getOwner()), damage);
         if (this.isReturning()) {
             living.invulnerableTime = Math.max(living.invulnerableTime, previousInvulnerableTime);
         }
@@ -327,8 +289,7 @@ extends ThrowableItemProjectile {
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.7f, this.isReturning() ? 0.85f : 1.1f);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TRIDENT_HIT, SoundSource.PLAYERS, 0.28f, 1.45f);
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             double hitY = living.getY(0.55);
             serverLevel.sendParticles((ParticleOptions)ParticleTypes.CRIT, living.getX(), hitY, living.getZ(), 6, 0.24, 0.24, 0.24, 0.14);
             serverLevel.sendParticles((ParticleOptions)ParticleTypes.POOF, living.getX(), hitY, living.getZ(), 2, 0.12, 0.12, 0.12, 0.025);
@@ -349,7 +310,7 @@ extends ThrowableItemProjectile {
             this.positionOnEntitySurface(living, surfaceHit);
             return;
         }
-        boolean damaged = living.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), this.attackDamage);
+        boolean damaged = living.hurt(this.damageSources().thrown(this, this.getOwner()), this.attackDamage);
         Vec3 movement = this.getDeltaMovement();
         if (movement.lengthSqr() > 1.0E-6) {
             living.knockback(0.18, -movement.x, -movement.z);
@@ -372,10 +333,10 @@ extends ThrowableItemProjectile {
         this.positionOnEntitySurface(target, hitLocation);
         PiercingArt art = this.getPiercingArt();
         this.setFanState(switch (art) {
-            default -> throw new IncompatibleClassChangeError();
             case PiercingArt.BURIAL -> FanState.BURIAL_VORTEX;
             case PiercingArt.RIVEN -> FanState.RIVEN_SEQUENCE;
             case PiercingArt.NORMAL -> FanState.STUCK_ENTITY;
+            default -> throw new IncompatibleClassChangeError();
         });
         this.stuckTicks = 0;
         this.pulloutTicks = 0;
@@ -419,14 +380,14 @@ extends ThrowableItemProjectile {
         AABB surfaceBox = target.getBoundingBox().inflate(0.02);
         Vec3 rayStart = fallback.subtract(forward.scale(4.0));
         Vec3 rayEnd = fallback.add(forward.scale(4.0));
-        return surfaceBox.clip(rayStart, rayEnd).orElseGet(() -> new Vec3(Mth.clamp((double)fallback.x, (double)surfaceBox.minX, (double)surfaceBox.maxX), Mth.clamp((double)fallback.y, (double)surfaceBox.minY, (double)surfaceBox.maxY), Mth.clamp((double)fallback.z, (double)surfaceBox.minZ, (double)surfaceBox.maxZ)));
+        return surfaceBox.clip(rayStart, rayEnd).orElseGet(() -> new Vec3(Mth.clamp(fallback.x, surfaceBox.minX, surfaceBox.maxX), Mth.clamp(fallback.y, surfaceBox.minY, surfaceBox.maxY), Mth.clamp(fallback.z, surfaceBox.minZ, surfaceBox.maxZ)));
     }
 
     private void stickToBlock(BlockHitResult result) {
         this.captureStuckDirection();
         this.stuckBlockPos = result.getBlockPos();
         this.stuckFace = result.getDirection();
-        Vec3 surfaceOffset = Vec3.atLowerCornerOf((Vec3i)this.stuckFace.getNormal()).scale(0.035);
+        Vec3 surfaceOffset = Vec3.atLowerCornerOf(this.stuckFace.getNormal()).scale(0.035);
         this.stuckPosition = result.getLocation().add(surfaceOffset);
         this.setPos(this.stuckPosition.x, this.stuckPosition.y, this.stuckPosition.z);
         this.setDeltaMovement(Vec3.ZERO);
@@ -434,8 +395,7 @@ extends ThrowableItemProjectile {
         this.stuckTicks = 0;
         this.pulloutTicks = 0;
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             this.spawnPinEffects(serverLevel);
         }
     }
@@ -458,7 +418,7 @@ extends ThrowableItemProjectile {
             Vec3 movementBeforeDamage = target.getDeltaMovement();
             int previousInvulnerableTime = target.invulnerableTime;
             target.invulnerableTime = 0;
-            boolean damaged = target.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), 1.0f);
+            boolean damaged = target.hurt(this.damageSources().thrown(this, this.getOwner()), 1.0f);
             target.invulnerableTime = Math.max(target.invulnerableTime, previousInvulnerableTime);
             target.setDeltaMovement(movementBeforeDamage);
             if (damaged && (level = this.level()) instanceof ServerLevel) {
@@ -598,7 +558,7 @@ extends ThrowableItemProjectile {
             return;
         }
         float damage = Math.max(3.5f, 6.0f * (1.0f - (float)this.huntingHop * 0.1f));
-        boolean damaged = target.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), damage);
+        boolean damaged = target.hurt(this.damageSources().thrown(this, this.getOwner()), damage);
         if (damaged) {
             Vec3 movement = this.getDeltaMovement();
             target.knockback(0.18, -movement.x, -movement.z);
@@ -628,10 +588,9 @@ extends ThrowableItemProjectile {
         LivingEntity best = null;
         double bestDistance = Double.MAX_VALUE;
         Level level = this.level();
-        if (!(level instanceof ServerLevel)) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return null;
         }
-        ServerLevel serverLevel = (ServerLevel)level;
         for (UUID targetUuid : this.huntingLockedTargets) {
             double distance;
             LivingEntity candidate;
@@ -674,7 +633,7 @@ extends ThrowableItemProjectile {
 
     private boolean hasClearHuntingPath(Vec3 start, LivingEntity target) {
         Vec3 end = target.getBoundingBox().getCenter();
-        BlockHitResult hit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, (Entity)this));
+        BlockHitResult hit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return hit.getType() == HitResult.Type.MISS;
     }
 
@@ -728,10 +687,9 @@ extends ThrowableItemProjectile {
 
     private void moveBurialTargets(Vec3 collectionPoint) {
         Level level = this.level();
-        if (!(level instanceof ServerLevel)) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        ServerLevel serverLevel = (ServerLevel)level;
         Iterator<Map.Entry<UUID, Boolean>> iterator = this.burialTargetPhysics.entrySet().iterator();
         while (iterator.hasNext()) {
             LivingEntity target;
@@ -750,7 +708,7 @@ extends ThrowableItemProjectile {
             if (distance <= 0.1) {
                 target.setPos(collectionPoint.x, collectionPoint.y, collectionPoint.z);
             } else {
-                double step = Math.min(distance, Mth.clamp((double)(distance * 0.18), (double)0.1, (double)0.4));
+                double step = Math.min(distance, Mth.clamp(distance * 0.18, 0.1, 0.4));
                 Vec3 next = target.position().add(toPoint.scale(step / distance));
                 target.setPos(next.x, next.y, next.z);
             }
@@ -763,10 +721,9 @@ extends ThrowableItemProjectile {
     private void damageBurialTargets(LivingEntity anchor) {
         this.damageBurialTarget(anchor);
         Level level = this.level();
-        if (!(level instanceof ServerLevel)) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        ServerLevel serverLevel = (ServerLevel)level;
         for (UUID targetUuid : this.burialTargetPhysics.keySet()) {
             LivingEntity target;
             Entity entity = serverLevel.getEntity(targetUuid);
@@ -782,7 +739,7 @@ extends ThrowableItemProjectile {
         Vec3 movementBeforeDamage = target.getDeltaMovement();
         int previousInvulnerableTime = target.invulnerableTime;
         target.invulnerableTime = 0;
-        target.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), 0.5f);
+        target.hurt(this.damageSources().thrown(this, this.getOwner()), 0.5f);
         target.invulnerableTime = Math.max(target.invulnerableTime, previousInvulnerableTime);
         target.setDeltaMovement(movementBeforeDamage);
         target.hurtMarked = true;
@@ -793,9 +750,8 @@ extends ThrowableItemProjectile {
             return;
         }
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
-            for (Map.Entry entry : this.burialTargetPhysics.entrySet()) {
+        if (level instanceof ServerLevel serverLevel) {
+            for (Map.Entry<?,?> entry : this.burialTargetPhysics.entrySet()) {
                 Entity entity = serverLevel.getEntity((UUID)entry.getKey());
                 if (entity == null) continue;
                 entity.noPhysics = (Boolean)entry.getValue();
@@ -806,7 +762,7 @@ extends ThrowableItemProjectile {
     }
 
     private boolean hasBurialLineOfSight(Vec3 center, LivingEntity target) {
-        BlockHitResult blockHit = this.level().clip(new ClipContext(center, target.getBoundingBox().getCenter(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, (Entity)this));
+        BlockHitResult blockHit = this.level().clip(new ClipContext(center, target.getBoundingBox().getCenter(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return blockHit.getType() == HitResult.Type.MISS;
     }
 
@@ -821,7 +777,7 @@ extends ThrowableItemProjectile {
             Vec3 movementBeforeDamage = target2.getDeltaMovement();
             int previousInvulnerableTime = target2.invulnerableTime;
             target2.invulnerableTime = 0;
-            boolean damaged = target2.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), 6.0f);
+            boolean damaged = target2.hurt(this.damageSources().thrown(this, this.getOwner()), 6.0f);
             target2.invulnerableTime = Math.max(target2.invulnerableTime, previousInvulnerableTime);
             target2.setDeltaMovement(movementBeforeDamage);
             if (!damaged || !target2.isAlive()) continue;
@@ -833,8 +789,7 @@ extends ThrowableItemProjectile {
             target2.hurtMarked = true;
         }
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             this.spawnBurialSlashEffects(serverLevel, center);
         }
     }
@@ -865,12 +820,12 @@ extends ThrowableItemProjectile {
                 damage = 8.0f;
             } else {
                 float factor = 1.0f - (float)(distance / 3.75);
-                damage = Mth.lerp((float)factor, (float)3.0f, (float)5.0f);
+                damage = Mth.lerp(factor, 3.0f, 5.0f);
             }
             Vec3 movementBeforeDamage = target2.getDeltaMovement();
             int previousInvulnerableTime = target2.invulnerableTime;
             target2.invulnerableTime = 0;
-            boolean damaged = target2.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), damage);
+            boolean damaged = target2.hurt(this.damageSources().thrown(this, this.getOwner()), damage);
             target2.invulnerableTime = Math.max(target2.invulnerableTime, previousInvulnerableTime);
             target2.setDeltaMovement(movementBeforeDamage);
             if (!damaged || !target2.isAlive()) continue;
@@ -884,8 +839,7 @@ extends ThrowableItemProjectile {
             target2.hurtMarked = true;
         }
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             this.spawnRivenBurstEffects(serverLevel, center);
         }
     }
@@ -898,7 +852,7 @@ extends ThrowableItemProjectile {
         Vec3 movementBeforeDamage = target.getDeltaMovement();
         int previousInvulnerableTime = target.invulnerableTime;
         target.invulnerableTime = 0;
-        boolean damaged = target.hurt(this.damageSources().thrown((Entity)this, this.getOwner()), 16.0f);
+        boolean damaged = target.hurt(this.damageSources().thrown(this, this.getOwner()), 16.0f);
         target.invulnerableTime = Math.max(target.invulnerableTime, previousInvulnerableTime);
         target.setDeltaMovement(movementBeforeDamage);
         target.hurtMarked = true;
@@ -936,8 +890,7 @@ extends ThrowableItemProjectile {
         this.pulloutTicks = 1;
         this.setPos(this.position().subtract(this.stuckForward.scale(0.05)));
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             this.spawnPulloutEffects(serverLevel);
         }
     }
@@ -958,24 +911,24 @@ extends ThrowableItemProjectile {
         this.updateRotationFromDirection();
     }
 
+    @SuppressWarnings("all")
     private void updateRotationFromDirection() {
         double horizontal = Math.sqrt(this.stuckForward.x * this.stuckForward.x + this.stuckForward.z * this.stuckForward.z);
         double radiansToDegrees = 57.29577951308232;
-        this.setYRot((float)(Mth.atan2((double)this.stuckForward.x, (double)this.stuckForward.z) * radiansToDegrees));
-        this.setXRot((float)(Mth.atan2((double)this.stuckForward.y, (double)horizontal) * radiansToDegrees));
+        this.setYRot((float)(Mth.atan2(this.stuckForward.x, this.stuckForward.z) * radiansToDegrees));
+        this.setXRot((float)(Mth.atan2(this.stuckForward.y, horizontal) * radiansToDegrees));
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
     }
 
     private LivingEntity findStuckEntity() {
-        LivingEntity living;
         Level level;
         if (this.stuckEntityUuid == null || !((level = this.level()) instanceof ServerLevel)) {
             return null;
         }
         ServerLevel serverLevel = (ServerLevel)level;
         Entity target = serverLevel.getEntity(this.stuckEntityUuid);
-        return target instanceof LivingEntity ? (living = (LivingEntity)target) : null;
+        return target instanceof LivingEntity ? (LivingEntity)target : null;
     }
 
     private void applyStuckSlowdown(LivingEntity target) {
@@ -996,7 +949,7 @@ extends ThrowableItemProjectile {
         }
     }
 
-    protected void onHitBlock(BlockHitResult result) {
+    protected void onHitBlock(@NotNull BlockHitResult result) {
         if (this.level().isClientSide || this.isNonCollidingState()) {
             return;
         }
@@ -1046,11 +999,10 @@ extends ThrowableItemProjectile {
         if ((turn = current.scale(0.45).add(perpendicular.scale(0.65)).add(desired.scale(0.4))).lengthSqr() < 1.0E-6) {
             turn = desired;
         }
-        this.setDeltaMovement(turn.normalize().scale((double)this.returnSpeed));
+        this.setDeltaMovement(turn.normalize().scale(this.returnSpeed));
         this.hasImpulse = true;
         Level level = this.level();
-        if (level instanceof ServerLevel) {
-            ServerLevel serverLevel = (ServerLevel)level;
+        if (level instanceof ServerLevel serverLevel) {
             if (previousState == FanState.OUTBOUND_SPIN) {
                 this.spawnTurnEffects(serverLevel);
             } else if (previousState == FanState.HUNTING) {
@@ -1076,17 +1028,17 @@ extends ThrowableItemProjectile {
         Vec3 desiredDirection = toOwner.normalize();
         Vec3 current = this.getDeltaMovement();
         if (distance > 5.0) {
-            Vec3 desiredVelocity = desiredDirection.scale((double)this.returnSpeed);
+            Vec3 desiredVelocity = desiredDirection.scale(this.returnSpeed);
             double alignment = current.lengthSqr() < 1.0E-6 ? 1.0 : current.normalize().dot(desiredDirection);
             double desiredWeight = alignment < -0.25 ? 0.65 : 0.45;
             Vec3 steering = current.scale(1.0 - desiredWeight).add(desiredVelocity.scale(desiredWeight));
             if (steering.lengthSqr() > 1.0E-6) {
-                this.setDeltaMovement(steering.normalize().scale((double)this.returnSpeed));
+                this.setDeltaMovement(steering.normalize().scale(this.returnSpeed));
             } else {
                 this.setDeltaMovement(desiredVelocity);
             }
         } else {
-            double speed = Mth.clamp((double)(distance * 0.38), (double)0.35, (double)this.returnSpeed);
+            double speed = Mth.clamp(distance * 0.38, 0.35, this.returnSpeed);
             this.setDeltaMovement(desiredDirection.scale(speed));
         }
         this.hasImpulse = true;
@@ -1147,7 +1099,7 @@ extends ThrowableItemProjectile {
         Vec3 forward = movement.normalize();
         Vec3 side = forward.cross(new Vec3(0.0, 1.0, 0.0));
         side = side.lengthSqr() < 1.0E-4 ? new Vec3(1.0, 0.0, 0.0) : side.normalize();
-        int segments = Mth.clamp((int)((int)Math.ceil(movement.length() * 2.0)), (int)3, (int)6);
+        int segments = Mth.clamp((int)Math.ceil(movement.length() * 2.0), 3, 6);
         double spacing = movement.length() / (double)segments;
         for (int segment = 1; segment <= segments; ++segment) {
             Vec3 center = this.position().subtract(forward.scale((double)segment * spacing));
@@ -1164,7 +1116,7 @@ extends ThrowableItemProjectile {
         }
         Vec3 forward = movement.normalize();
         Vec3 center = this.position().subtract(forward.scale(0.24));
-        serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_STREAK.get()), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
+        serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_STREAK.get(), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
         if ((this.tickCount & 1) == 0) {
             serverLevel.sendParticles((ParticleOptions)ParticleTypes.WAX_ON, center.x, center.y, center.z, 2, 0.1, 0.1, 0.1, 0.018);
         }
@@ -1172,8 +1124,8 @@ extends ThrowableItemProjectile {
 
     private void spawnHuntingHitEffects(ServerLevel serverLevel, LivingEntity target, int hop) {
         Vec3 center = target.getBoundingBox().getCenter();
-        this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_HIT.get(), SoundSource.PLAYERS, 0.92f, 1.05f + (float)hop * 0.08f);
-        serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_MARK.get()), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
+        this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_HIT.get(), SoundSource.PLAYERS, 0.92f, 1.05f + (float)hop * 0.08f);
+        serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_MARK.get(), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.CRIT, center.x, center.y, center.z, 6, 0.22, 0.25, 0.22, 0.13);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.WAX_ON, center.x, center.y, center.z, 8, 0.28, 0.3, 0.28, 0.08);
     }
@@ -1184,17 +1136,17 @@ extends ThrowableItemProjectile {
         if (direction.lengthSqr() > 1.0E-4) {
             direction = direction.normalize();
         }
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_TURN.get(), SoundSource.PLAYERS, 0.72f, 1.0f + (float)this.huntingHop * 0.08f);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_TURN.get(), SoundSource.PLAYERS, 0.72f, 1.0f + (float)this.huntingHop * 0.08f);
         for (int i = -1; i <= 1; ++i) {
             double ySpeed = direction.y * 0.08 + (double)i * 0.018;
-            serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_STREAK.get()), this.getX(), this.getY(), this.getZ(), 0, direction.x * 0.15, ySpeed, direction.z * 0.15, 1.0);
+            serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_STREAK.get(), this.getX(), this.getY(), this.getZ(), 0, direction.x * 0.15, ySpeed, direction.z * 0.15, 1.0);
         }
-        serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_MARK.get()), nextCenter.x, nextCenter.y, nextCenter.z, 1, 0.0, 0.0, 0.0, 0.0);
+        serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_MARK.get(), nextCenter.x, nextCenter.y, nextCenter.z, 1, 0.0, 0.0, 0.0, 0.0);
     }
 
     private void spawnHuntingReturnEffects(ServerLevel serverLevel) {
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_TURN.get(), SoundSource.PLAYERS, 0.78f, 0.82f);
-        serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_MARK.get()), this.getX(), this.getY(), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_TURN.get(), SoundSource.PLAYERS, 0.78f, 0.82f);
+        serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_MARK.get(), this.getX(), this.getY(), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.WAX_ON, this.getX(), this.getY(), this.getZ(), 7, 0.24, 0.18, 0.24, 0.055);
     }
 
@@ -1231,7 +1183,7 @@ extends ThrowableItemProjectile {
     }
 
     private void spawnBurialStartEffects(ServerLevel serverLevel, Vec3 center) {
-        this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_VORTEX.get(), SoundSource.PLAYERS, 0.72f, 0.88f);
+        this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_VORTEX.get(), SoundSource.PLAYERS, 0.72f, 0.88f);
         this.level().playSound(null, center.x, center.y, center.z, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 0.28f, 0.72f);
         for (int layer = 0; layer < 3; ++layer) {
             double radius = 1.15 + (double)layer * 0.72;
@@ -1242,7 +1194,7 @@ extends ThrowableItemProjectile {
                 double tangentialSpeed = 0.045 + (double)layer * 0.008;
                 double xSpeed = -Math.sin(angle) * tangentialSpeed - Math.cos(angle) * 0.018;
                 double zSpeed = Math.cos(angle) * tangentialSpeed - Math.sin(angle) * 0.018;
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get()), center.x + Math.cos(angle) * radius, y + Math.sin(angle * 2.0) * 0.1, center.z + Math.sin(angle) * radius, 0, xSpeed, 0.018 + (double)layer * 0.006, zSpeed, 1.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get(), center.x + Math.cos(angle) * radius, y + Math.sin(angle * 2.0) * 0.1, center.z + Math.sin(angle) * radius, 0, xSpeed, 0.018 + (double)layer * 0.006, zSpeed, 1.0);
             }
         }
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.CLOUD, center.x, center.y - 0.25, center.z, 12, 1.15, 0.12, 1.15, 0.035);
@@ -1254,11 +1206,11 @@ extends ThrowableItemProjectile {
         if ((this.stuckTicks & 1) != 0) {
             return;
         }
-        double progress = Mth.clamp((double)((double)this.stuckTicks / 40.0), (double)0.0, (double)1.0);
+        double progress = Mth.clamp((double)this.stuckTicks / 40.0, 0.0, 1.0);
         double baseAngle = (double)this.stuckTicks * (0.48 + progress * 0.2);
         for (int layer = 0; layer < 5; ++layer) {
             double layerProgress = (double)layer / 4.0;
-            radius = Mth.lerp((double)layerProgress, (double)0.72, (double)2.55) * Mth.lerp((double)progress, (double)1.0, (double)0.86);
+            radius = Mth.lerp(layerProgress, 0.72, 2.55) * Mth.lerp(progress, 1.0, 0.86);
             double y = center.y - 0.48 + layerProgress * 2.1;
             for (int arm = 0; arm < 3; ++arm) {
                 double angle = baseAngle + Math.PI * 2 * (double)arm / 3.0 + (double)layer * 0.54;
@@ -1268,29 +1220,29 @@ extends ThrowableItemProjectile {
                 double inwardSpeed = 0.018 + progress * 0.012;
                 double xSpeed = -Math.sin(angle) * tangentialSpeed - Math.cos(angle) * inwardSpeed;
                 double zSpeed = Math.cos(angle) * tangentialSpeed - Math.sin(angle) * inwardSpeed;
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get()), x, y, z, 0, xSpeed, 0.028 + layerProgress * 0.018, zSpeed, 1.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get(), x, y, z, 0, xSpeed, 0.028 + layerProgress * 0.018, zSpeed, 1.0);
             }
         }
         for (int stream = 0; stream < 6; ++stream) {
             double inwardProgress = ((double)this.stuckTicks * 0.095 + (double)stream / 6.0) % 1.0;
-            radius = Mth.lerp((double)inwardProgress, (double)4.8, (double)0.55);
+            radius = Mth.lerp(inwardProgress, 4.8, 0.55);
             double angle = (double)(-this.stuckTicks) * 0.22 + (double)((float)stream * ((float)Math.PI * 2)) / 6.0 + inwardProgress * 2.2;
             double x = center.x + Math.cos(angle) * radius;
             double z = center.z + Math.sin(angle) * radius;
             double y = center.y - 0.34 + inwardProgress * 0.7;
             double xSpeed = -Math.cos(angle) * 0.095 - Math.sin(angle) * 0.045;
             double zSpeed = -Math.sin(angle) * 0.095 + Math.cos(angle) * 0.045;
-            serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get()), x, y, z, 0, xSpeed, 0.022, zSpeed, 1.0);
+            serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.BURIAL_CYCLONE.get(), x, y, z, 0, xSpeed, 0.022, zSpeed, 1.0);
         }
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.CLOUD, center.x, center.y - 0.3, center.z, 4, 1.15, 0.08, 1.15, 0.025);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.WHITE_ASH, center.x, center.y + 0.45, center.z, 3, 1.35, 0.7, 1.35, 0.018);
         if (this.stuckTicks % 10 == 0 && this.stuckTicks < 40) {
-            this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_VORTEX.get(), SoundSource.PLAYERS, 0.64f, (float)(0.92 + progress * 0.14));
+            this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_VORTEX.get(), SoundSource.PLAYERS, 0.64f, (float)(0.92 + progress * 0.14));
         }
     }
 
     private void spawnBurialSlashEffects(ServerLevel serverLevel, Vec3 center) {
-        this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_SLASH.get(), SoundSource.PLAYERS, 1.2f, 1.0f);
+        this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_BURIAL_SLASH.get(), SoundSource.PLAYERS, 1.2f, 1.0f);
         this.level().playSound(null, center.x, center.y, center.z, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.38f, 1.28f);
         for (int ring = 0; ring < 3; ++ring) {
             double radius = 1.2 + (double)ring * 1.25;
@@ -1299,7 +1251,7 @@ extends ThrowableItemProjectile {
                 double angle = Math.PI * 2 * (double)i / (double)segments + (double)ring * 0.22;
                 double x = center.x + Math.cos(angle) * radius;
                 double z = center.z + Math.sin(angle) * radius;
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.BURIAL_WIND.get()), x, center.y - 0.08 + (double)ring * 0.11, z, 1, Math.cos(angle) * 0.11, 0.035, Math.sin(angle) * 0.11, 0.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.BURIAL_WIND.get(), x, center.y - 0.08 + (double)ring * 0.11, z, 1, Math.cos(angle) * 0.11, 0.035, Math.sin(angle) * 0.11, 0.0);
                 if (ring != 2 || i % 4 != 0) continue;
                 serverLevel.sendParticles((ParticleOptions)ParticleTypes.SWEEP_ATTACK, x, center.y + 0.14, z, 1, 0.0, 0.0, 0.0, 0.0);
             }
@@ -1311,21 +1263,21 @@ extends ThrowableItemProjectile {
     }
 
     private void spawnRivenStartEffects(ServerLevel serverLevel, Vec3 center) {
-        this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_PIN.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
-        serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
+        this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_PIN.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
+        serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x, center.y, center.z, 1, 0.0, 0.0, 0.0, 0.0);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.ELECTRIC_SPARK, center.x, center.y, center.z, 8, 0.24, 0.24, 0.24, 0.055);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.END_ROD, center.x, center.y, center.z, 4, 0.14, 0.14, 0.14, 0.025);
     }
 
     private void spawnRivenSequenceEffects(ServerLevel serverLevel, Vec3 center) {
         if (this.rivenTicks == 5) {
-            this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_SPLIT.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_SPLIT.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             serverLevel.sendParticles((ParticleOptions)ParticleTypes.ELECTRIC_SPARK, center.x, center.y, center.z, 18, 0.34, 0.34, 0.34, 0.12);
             for (int i = 0; i < 8; ++i) {
                 double angle = (double)((float)Math.PI * 2 * (float)i) / 8.0;
                 double ySpeed = Math.sin(angle * 2.0) * 0.055;
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x, center.y, center.z, 0, Math.cos(angle) * 0.21, ySpeed, Math.sin(angle) * 0.21, 1.0);
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x, center.y, center.z, 0, Math.cos(angle + 0.12) * 0.14, -ySpeed * 0.65, Math.sin(angle + 0.12) * 0.14, 1.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x, center.y, center.z, 0, Math.cos(angle) * 0.21, ySpeed, Math.sin(angle) * 0.21, 1.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x, center.y, center.z, 0, Math.cos(angle + 0.12) * 0.14, -ySpeed * 0.65, Math.sin(angle + 0.12) * 0.14, 1.0);
             }
             return;
         }
@@ -1339,20 +1291,22 @@ extends ThrowableItemProjectile {
                     double y = Math.sin(baseAngle * 2.0) * 0.85 * (double)radius / 3.8;
                     double outward = 0.075 + (double)radius * 0.012;
                     double tangent = 0.028;
-                    serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * (double)radius, center.y + y, center.z + Math.sin(angle) * (double)radius, 0, Math.cos(angle) * outward - Math.sin(angle) * tangent, Math.sin(baseAngle * 2.0) * 0.018, Math.sin(angle) * outward + Math.cos(angle) * tangent, 1.0);
+                    serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x + Math.cos(angle) * (double)radius, center.y + y, center.z + Math.sin(angle) * (double)radius, 0, Math.cos(angle) * outward - Math.sin(angle) * tangent, Math.sin(baseAngle * 2.0) * 0.018, Math.sin(angle) * outward + Math.cos(angle) * tangent, 1.0);
                 }
             }
             return;
         }
         if (this.rivenTicks == 14) {
-            this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_LOCK.get(), SoundSource.PLAYERS, 0.95f, 1.0f);
+            this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_LOCK.get(), SoundSource.PLAYERS, 0.95f, 1.0f);
             double rotation = FeatherFanProjectileEntity.getRivenRingRotation(this.rivenTicks);
             for (int i = 0; i < 8; ++i) {
                 double baseAngle = (double)((float)Math.PI * 2 * (float)i) / 8.0;
                 double angle = baseAngle + rotation;
                 double y = Math.sin(baseAngle * 2.0) * 0.85;
-                serverLevel.sendParticles((ParticleOptions)ParticleTypes.END_ROD, center.x + Math.cos(angle) * 3.8, center.y + y, center.z + Math.sin(angle) * 3.8, 3, 0.08, 0.08, 0.08, 0.015);
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * 3.8, center.y + y, center.z + Math.sin(angle) * 3.8, 1, 0.0, 0.0, 0.0, 0.0);
+                double posX = center.x + Math.cos(angle) * 3.8;
+                double posZ = center.z + Math.sin(angle) * 3.8;
+                serverLevel.sendParticles((ParticleOptions)ParticleTypes.END_ROD, posX, center.y + y, posZ, 3, 0.08, 0.08, 0.08, 0.015);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), posX, center.y + y, posZ, 1, 0.0, 0.0, 0.0, 0.0);
             }
             return;
         }
@@ -1363,7 +1317,7 @@ extends ThrowableItemProjectile {
                     double baseAngle = (double)((float)Math.PI * 2 * (float)i) / 8.0;
                     double angle = baseAngle + rotation;
                     double y = Math.sin(baseAngle * 2.0) * 0.85;
-                    serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * 3.8, center.y + y, center.z + Math.sin(angle) * 3.8, 1, 0.0, 0.0, 0.0, 0.0);
+                    serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x + Math.cos(angle) * 3.8, center.y + y, center.z + Math.sin(angle) * 3.8, 1, 0.0, 0.0, 0.0, 0.0);
                 }
             }
             return;
@@ -1378,7 +1332,7 @@ extends ThrowableItemProjectile {
                 double y = Math.sin(baseAngle * 2.0) * 0.85 * heightScale;
                 double x = center.x + Math.cos(angle) * (double)radius;
                 double z = center.z + Math.sin(angle) * (double)radius;
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_STREAK.get()), x, center.y + y, z, 0, -Math.cos(angle) * 0.21, -y * 0.065, -Math.sin(angle) * 0.21, 1.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_STREAK.get(), x, center.y + y, z, 0, -Math.cos(angle) * 0.21, -y * 0.065, -Math.sin(angle) * 0.21, 1.0);
             }
             return;
         }
@@ -1387,32 +1341,32 @@ extends ThrowableItemProjectile {
                 double stormProgress = (double)(this.rivenTicks - 26) / 10.0;
                 for (int i = 0; i < 8; ++i) {
                     double angle = (double)this.rivenTicks * 0.58 + (double)((float)Math.PI * 2 * (float)i) / 8.0;
-                    double radius = Mth.lerp((double)stormProgress, (double)2.15, (double)0.52);
+                    double radius = Mth.lerp(stormProgress, 2.15, 0.52);
                     double y = Math.sin(angle * 1.7) * 0.72;
                     double tangential = 0.1 + stormProgress * 0.05;
-                    serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * radius, center.y + y, center.z + Math.sin(angle) * radius, 0, -Math.sin(angle) * tangential - Math.cos(angle) * 0.04, 0.025 - y * 0.018, Math.cos(angle) * tangential - Math.sin(angle) * 0.04, 1.0);
+                    serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x + Math.cos(angle) * radius, center.y + y, center.z + Math.sin(angle) * radius, 0, -Math.sin(angle) * tangential - Math.cos(angle) * 0.04, 0.025 - y * 0.018, Math.cos(angle) * tangential - Math.sin(angle) * 0.04, 1.0);
                 }
             }
             if (this.rivenTicks == 30) {
                 for (int i = 0; i < 8; ++i) {
                     double angle = (double)((float)Math.PI * 2 * (float)i) / 8.0 + 0.22;
-                    serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x, center.y + 0.18, center.z, 0, Math.cos(angle) * 0.13, Math.sin(angle * 2.0) * 0.035, Math.sin(angle) * 0.13, 1.0);
+                    serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x, center.y + 0.18, center.z, 0, Math.cos(angle) * 0.13, Math.sin(angle * 2.0) * 0.035, Math.sin(angle) * 0.13, 1.0);
                 }
             }
         }
     }
 
     private void spawnRivenBurstEffects(ServerLevel serverLevel, Vec3 center) {
-        this.level().playSound(null, center.x, center.y, center.z, (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_BURST.get(), SoundSource.PLAYERS, 1.25f, 1.0f);
+        this.level().playSound(null, center.x, center.y, center.z, NeoGuanNiaoSoundEvents.FEATHER_FAN_RIVEN_BURST.get(), SoundSource.PLAYERS, 1.25f, 1.0f);
         this.level().playSound(null, center.x, center.y, center.z, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.38f, 1.35f);
         for (int ray = 0; ray < 8; ++ray) {
             double angle = (double)((float)Math.PI * 2 * (float)ray) / 8.0 + 0.18;
             for (int step = 1; step <= 7; ++step) {
                 double radius = (double)step * 0.48;
                 double y = Math.sin((float)ray * 1.5707964f) * 0.18 * (1.0 - (double)step / 8.0);
-                serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_STREAK.get()), center.x + Math.cos(angle) * radius, center.y + y, center.z + Math.sin(angle) * radius, 1, 0.0, 0.0, 0.0, 0.0);
+                serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_STREAK.get(), center.x + Math.cos(angle) * radius, center.y + y, center.z + Math.sin(angle) * radius, 1, 0.0, 0.0, 0.0, 0.0);
             }
-            serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * 2.45, center.y, center.z + Math.sin(angle) * 2.45, 0, Math.cos(angle) * 0.12, Math.sin((float)ray * 1.5707964f) * 0.025, Math.sin(angle) * 0.12, 1.0);
+            serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x + Math.cos(angle) * 2.45, center.y, center.z + Math.sin(angle) * 2.45, 0, Math.cos(angle) * 0.12, Math.sin((float)ray * 1.5707964f) * 0.025, Math.sin(angle) * 0.12, 1.0);
         }
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.ELECTRIC_SPARK, center.x, center.y, center.z, 36, 1.05, 0.82, 1.05, 0.23);
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.CRIT, center.x, center.y, center.z, 28, 1.45, 0.92, 1.45, 0.2);
@@ -1425,7 +1379,7 @@ extends ThrowableItemProjectile {
         serverLevel.sendParticles((ParticleOptions)ParticleTypes.END_ROD, center.x, center.y, center.z, 8, 0.3, 0.3, 0.3, 0.06);
         for (int i = 0; i < 8; ++i) {
             double angle = (double)((float)Math.PI * 2 * (float)i) / 8.0;
-            serverLevel.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get()), center.x + Math.cos(angle) * 1.35, center.y + Math.sin(angle * 2.0) * 0.28, center.z + Math.sin(angle) * 1.35, 0, -Math.cos(angle) * 0.16, -Math.sin(angle * 2.0) * 0.025, -Math.sin(angle) * 0.16, 1.0);
+            serverLevel.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.RIVEN_SPLIT.get(), center.x + Math.cos(angle) * 1.35, center.y + Math.sin(angle * 2.0) * 0.28, center.z + Math.sin(angle) * 1.35, 0, -Math.cos(angle) * 0.16, -Math.sin(angle * 2.0) * 0.025, -Math.sin(angle) * 0.16, 1.0);
         }
     }
 
@@ -1436,7 +1390,7 @@ extends ThrowableItemProjectile {
         if (age < 14.0f) {
             float progress = (age - 5.0f) / 9.0f;
             float eased = 1.0f - (1.0f - progress) * (1.0f - progress);
-            return Mth.lerp((float)eased, (float)0.3f, (float)3.8f);
+            return Mth.lerp(eased, 0.3f, 3.8f);
         }
         if (age < 19.0f) {
             return 3.8f;
@@ -1444,13 +1398,13 @@ extends ThrowableItemProjectile {
         if (age < 26.0f) {
             float progress = (age - 19.0f) / 7.0f;
             float eased = progress * progress * progress;
-            return Mth.lerp((float)eased, (float)3.8f, (float)0.15f);
+            return Mth.lerp(eased, 3.8f, 0.15f);
         }
         return 0.0f;
     }
 
     public static float getRivenRingRotation(float age) {
-        float progress = Mth.clamp((float)((age - 5.0f) / 9.0f), (float)0.0f, (float)1.0f);
+        float progress = Mth.clamp((age - 5.0f) / 9.0f, 0.0f, 1.0f);
         float eased = 1.0f - (1.0f - progress) * (1.0f - progress) * (1.0f - progress);
         return eased * 0.95f;
     }
@@ -1482,15 +1436,15 @@ extends ThrowableItemProjectile {
         }
         Vec3 start = this.position();
         Vec3 end = start.add(movement);
-        if (!this.isReturning() && (blockHit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, (Entity)this))).getType() != HitResult.Type.MISS) {
+        if (!this.isReturning() && (blockHit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this))).getType() != HitResult.Type.MISS) {
             end = blockHit.getLocation();
         }
         AABB searchBox = this.getBoundingBox().expandTowards(movement).inflate(0.35);
-        List<Entity> targets = this.level().getEntities((Entity)this, searchBox, this::canHitEntity);
+        List<Entity> targets = this.level().getEntities(this, searchBox, this::canHitEntity);
         targets.sort(Comparator.comparingDouble(target -> target.position().distanceToSqr(start)));
         for (Entity target2 : targets) {
             AABB targetBox = target2.getBoundingBox().inflate(0.3);
-            Vec3 hitLocation = targetBox.contains(start) ? start : (Vec3)targetBox.clip(start, end).orElse(null);
+            Vec3 hitLocation = targetBox.contains(start) ? start : targetBox.clip(start, end).orElse(null);
             if (hitLocation == null) continue;
             this.hitLivingEntity((LivingEntity)target2, hitLocation);
             if (motionState != FanState.PIERCING || this.getFanState() == FanState.PIERCING) continue;
@@ -1501,10 +1455,9 @@ extends ThrowableItemProjectile {
     private ServerPlayer findServerOwner() {
         Entity entity;
         Level level = this.level();
-        if (!(level instanceof ServerLevel)) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return null;
         }
-        ServerLevel serverLevel = (ServerLevel)level;
         if (this.ownerUuid == null && (entity = this.getOwner()) instanceof ServerPlayer) {
             ServerPlayer owner = (ServerPlayer)entity;
             this.ownerUuid = owner.getUUID();
@@ -1525,7 +1478,7 @@ extends ThrowableItemProjectile {
         } else if (!owner.getInventory().add(fan)) {
             owner.drop(fan, false);
         }
-        owner.getCooldowns().addCooldown((Item)NeoGuanNiaoItems.WIND_FEATHER_FAN.get(), 12);
+        owner.getCooldowns().addCooldown(NeoGuanNiaoItems.WIND_FEATHER_FAN.get(), 12);
         this.level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.7f, 1.35f);
         this.level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.PHANTOM_FLAP, SoundSource.PLAYERS, 0.22f, 1.7f);
         this.discard();
@@ -1569,11 +1522,11 @@ extends ThrowableItemProjectile {
     }
 
     public int getRivenTicks() {
-        return (Integer)this.entityData.get(DATA_RIVEN_TICKS);
+        return this.entityData.get(DATA_RIVEN_TICKS);
     }
 
     public FanState getFanState() {
-        return FanState.fromId((Integer)this.entityData.get(DATA_STATE));
+        return FanState.fromId(this.entityData.get(DATA_STATE));
     }
 
     private void setFanState(FanState state) {
@@ -1591,10 +1544,10 @@ extends ThrowableItemProjectile {
     }
 
     public float getCharge() {
-        return ((Float)this.entityData.get(DATA_CHARGE)).floatValue();
+        return this.entityData.get(DATA_CHARGE);
     }
 
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Returning", this.isReturning());
         tag.putInt("FanState", this.getFanState().ordinal());
@@ -1624,10 +1577,10 @@ extends ThrowableItemProjectile {
         FeatherFanProjectileEntity.putVec3(tag, "StuckForward", this.stuckForward);
         FeatherFanProjectileEntity.putVec3(tag, "StuckLocalForward", this.stuckLocalForward);
         FeatherFanProjectileEntity.putVec3(tag, "RivenAnchor", this.rivenAnchor);
-        tag.put("OutboundHits", (Tag)FeatherFanProjectileEntity.saveHitSet(this.outboundHits));
-        tag.put("ReturnHits", (Tag)FeatherFanProjectileEntity.saveHitSet(this.returnHits));
-        tag.put("HuntedTargets", (Tag)FeatherFanProjectileEntity.saveHitSet(this.huntedTargets));
-        tag.put("HuntingLockedTargets", (Tag)FeatherFanProjectileEntity.saveHitSet(this.huntingLockedTargets));
+        tag.put("OutboundHits", FeatherFanProjectileEntity.saveHitSet(this.outboundHits));
+        tag.put("ReturnHits", FeatherFanProjectileEntity.saveHitSet(this.returnHits));
+        tag.put("HuntedTargets", FeatherFanProjectileEntity.saveHitSet(this.huntedTargets));
+        tag.put("HuntingLockedTargets", FeatherFanProjectileEntity.saveHitSet(this.huntingLockedTargets));
         if (this.ownerUuid != null) {
             tag.putUUID("FanOwner", this.ownerUuid);
         }
@@ -1639,7 +1592,7 @@ extends ThrowableItemProjectile {
         }
     }
 
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         Vec3 savedLocalForward;
         super.readAdditionalSaveData(tag);
         if (tag.contains("FanState", 3)) {
@@ -1649,7 +1602,7 @@ extends ThrowableItemProjectile {
         } else {
             this.setFanState(tag.getBoolean("Returning") ? FanState.RETURNING : FanState.OUTBOUND_SPIN);
         }
-        this.entityData.set(DATA_CHARGE, Float.valueOf(tag.getFloat("Charge")));
+        this.entityData.set(DATA_CHARGE, tag.getFloat("Charge"));
         this.throwOrigin = new Vec3(tag.getDouble("ThrowOriginX"), tag.getDouble("ThrowOriginY"), tag.getDouble("ThrowOriginZ"));
         this.maxDistance = tag.getFloat("MaxDistance");
         this.attackDamage = tag.getFloat("AttackDamage");
@@ -1666,7 +1619,7 @@ extends ThrowableItemProjectile {
         this.huntingHop = tag.getInt("HuntingHop");
         this.entityData.set(DATA_RIVEN_TICKS, this.rivenTicks);
         this.stuckBlockPos = new BlockPos(tag.getInt("StuckBlockX"), tag.getInt("StuckBlockY"), tag.getInt("StuckBlockZ"));
-        this.stuckFace = Direction.from3DDataValue((int)tag.getInt("StuckFace"));
+        this.stuckFace = Direction.from3DDataValue(tag.getInt("StuckFace"));
         this.stuckPosition = FeatherFanProjectileEntity.getVec3(tag, "StuckPosition");
         this.stuckOffset = FeatherFanProjectileEntity.getVec3(tag, "StuckOffset");
         this.rivenAnchor = FeatherFanProjectileEntity.getVec3(tag, "RivenAnchor");
@@ -1719,7 +1672,7 @@ extends ThrowableItemProjectile {
         return new Vec3(tag.getDouble(key + "X"), tag.getDouble(key + "Y"), tag.getDouble(key + "Z"));
     }
 
-    public static enum FanState {
+    public enum FanState {
         OUTBOUND_SPIN,
         PIERCING,
         STUCK_ENTITY,
@@ -1732,14 +1685,14 @@ extends ThrowableItemProjectile {
 
         private static FanState fromId(int id) {
             FanState[] values = FanState.values();
-            return values[Mth.clamp((int)id, (int)0, (int)(values.length - 1))];
+            return values[Mth.clamp(id, 0, values.length - 1)];
         }
     }
 
-    private static enum PiercingArt {
+    private enum PiercingArt {
         NORMAL,
         BURIAL,
-        RIVEN;
+        RIVEN
 
     }
 

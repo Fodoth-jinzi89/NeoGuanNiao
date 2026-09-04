@@ -1,5 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.fan;
 
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.client.particle.FeatherFanParticles;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoParticleTypes;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -7,7 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = "neoguanniao", value = Dist.CLIENT)
+@EventBusSubscriber(modid = NeoGuanNiao.MODID, value = Dist.CLIENT)
 public final class FeatherFanParticleProviders {
     @SubscribeEvent
     public static void register(RegisterParticleProvidersEvent e) {

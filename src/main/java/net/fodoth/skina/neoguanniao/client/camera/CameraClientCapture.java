@@ -301,11 +301,11 @@ public final class CameraClientCapture {
             return;
         }
         try (NativeImage image = Screenshot.takeScreenshot((RenderTarget)captureTarget);){
-            int[] pixels = CameraClientCapture.cropSquare(image, PhotographData.IMAGE_SIZE);
+            int[] pixels = CameraClientCapture.cropSquare(image);
             CameraFilter filter = pendingCaptureState.filter();
             ENCODE_EXECUTOR.execute(() -> {
                 try {
-                    CameraImageFilters.apply(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE, filter, System.nanoTime());
+                    CameraImageFilters.apply(pixels, filter, System.nanoTime());
                     byte[] png = PhotoImageCodec.encodePng(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE);
                     NeoGuanNiao.LOGGER.debug("Captured photograph ({} bytes), starting upload", png.length);
                     Minecraft.getInstance().execute(() -> {
@@ -325,18 +325,18 @@ public final class CameraClientCapture {
             minecraft.player.displayClientMessage((Component)Component.translatable((String)"item.neoguanniao.nikon_d750.capture_failed"), true);
         }
     }
-        private static int[] cropSquare(NativeImage image, int size) {
+        private static int[] cropSquare(NativeImage image) {
         int sourceWidth = image.getWidth();
         int sourceHeight = image.getHeight();
         int sourceSize = CameraViewfinderOverlay.apertureSize(sourceWidth, sourceHeight);
         int offsetX = (sourceWidth - sourceSize) / 2;
         int offsetY = (sourceHeight - sourceSize) / 2;
-        int[] pixels = new int[size * size];
-        for (int y = 0; y < size; ++y) {
-            int sampleY = offsetY + Math.min(sourceSize - 1, (int)(((double)y + 0.5) * (double)sourceSize / (double)size));
-            for (int x = 0; x < size; ++x) {
-                int sampleX = offsetX + Math.min(sourceSize - 1, (int)(((double)x + 0.5) * (double)sourceSize / (double)size));
-                pixels[y * size + x] = image.getPixelRGBA(sampleX, sampleY);
+        int[] pixels = new int[PhotographData.IMAGE_SIZE * PhotographData.IMAGE_SIZE];
+        for (int y = 0; y < PhotographData.IMAGE_SIZE; ++y) {
+            int sampleY = offsetY + Math.min(sourceSize - 1, (int)(((double)y + 0.5) * (double)sourceSize / (double) PhotographData.IMAGE_SIZE));
+            for (int x = 0; x < PhotographData.IMAGE_SIZE; ++x) {
+                int sampleX = offsetX + Math.min(sourceSize - 1, (int)(((double)x + 0.5) * (double)sourceSize / (double) PhotographData.IMAGE_SIZE));
+                pixels[y * PhotographData.IMAGE_SIZE + x] = image.getPixelRGBA(sampleX, sampleY);
             }
         }
         return pixels;

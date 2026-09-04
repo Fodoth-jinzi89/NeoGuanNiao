@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Ported guaniao-3.1.4 fan projectile renderer: spinning 3D fan in flight,
@@ -28,7 +29,7 @@ public class FeatherFanProjectileRenderer extends EntityRenderer<FeatherFanProje
     }
 
     @Override
-    public void render(FeatherFanProjectileEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(FeatherFanProjectileEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         if (entity.tickCount < 2) {
             super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
             return;
@@ -116,7 +117,7 @@ public class FeatherFanProjectileRenderer extends EntityRenderer<FeatherFanProje
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FeatherFanProjectileEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull FeatherFanProjectileEntity entity) {
         return InventoryMenu.BLOCK_ATLAS;
     }
 }

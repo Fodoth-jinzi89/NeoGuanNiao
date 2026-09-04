@@ -78,7 +78,6 @@ public final class NeoGuanNiaoSoundEvents {
 
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String id) {
-        assert SOUND_EVENTS != null;
         return SOUND_EVENTS.register(
                 id,
                 () -> SoundEvent.createVariableRangeEvent(

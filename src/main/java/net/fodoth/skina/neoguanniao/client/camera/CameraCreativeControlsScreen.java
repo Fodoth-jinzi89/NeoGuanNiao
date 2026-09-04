@@ -242,8 +242,8 @@ extends Screen {
         this.renderChoiceScrollbar(graphics, modes.length, visibleRows, scrollOffset);
     }
 
-        private void renderChoiceRow(GuiGraphics graphics, int mouseX, int mouseY, int y0, int y1, boolean selected) {
-        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, selected, this.rightRight - 3);
+        private void renderChoiceRow(GuiGraphics graphics, int mouseX, int mouseY, int y0, int y1) {
+        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false, this.rightRight - 3);
     }
 
     private void renderChoiceRow(GuiGraphics graphics, int mouseX, int mouseY, int y0, int y1, boolean selected, int x1) {
@@ -317,7 +317,7 @@ extends Screen {
     private void renderSliderRow(GuiGraphics graphics, int mouseX, int mouseY, int index, Component label, String value, double progress, int rowHeight) {
         int y0 = this.controlsTop + index * (rowHeight + 4);
         int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
-        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false);
+        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1);
         graphics.drawString(this.font, label, this.rightLeft + 10, y0 + 7, -1775897, false);
         graphics.drawString(this.font, value, this.rightRight - 10 - this.font.width(value), y0 + 7, -5975188, false);
         int barLeft = this.rightLeft + 10;
@@ -332,7 +332,7 @@ extends Screen {
     private void renderApertureRow(GuiGraphics graphics, int mouseX, int mouseY, int rowHeight) {
         int y0 = this.controlsTop + rowHeight + 4;
         int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
-        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false);
+        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1);
                 graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_parameter.aperture"), this.rightLeft + 10, y0 + 6, -1775897, false);
         CameraAperture[] apertures = CameraAperture.values();
         int x0 = this.rightLeft + 7;
@@ -351,7 +351,7 @@ extends Screen {
     private void renderFocusModeRow(GuiGraphics graphics, int mouseX, int mouseY, int rowHeight) {
         int y0 = this.controlsTop + 2 * (rowHeight + 4);
         int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
-        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, false);
+        this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1);
                 graphics.drawString(this.font, Component.translatable("gui.neoguanniao.camera_parameter.focus_mode"), this.rightLeft + 10, y0 + 6, -1775897, false);
         CameraFocusMode[] modes = CameraFocusMode.values();
         int x0 = this.rightLeft + 7;
@@ -403,6 +403,7 @@ extends Screen {
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
+
     private boolean clickLens(double mouseX, double mouseY) {
         CameraLens[] lenses = CameraLens.values();
         int visibleRows = this.visibleChoiceRows(lenses.length);

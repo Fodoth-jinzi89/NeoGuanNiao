@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
 
+import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import net.minecraft.util.Mth;
 
 final class CameraImageFilters {
@@ -9,24 +10,24 @@ final class CameraImageFilters {
     private CameraImageFilters() {
     }
 
-        static void apply(int[] pixels, int width, int height, CameraFilter filter, long seed) {
+        static void apply(int[] pixels, CameraFilter filter, long seed) {
         if (filter == CameraFilter.COLOR_BALANCE) {
             CameraImageFilters.autoColorBalance(pixels);
         } else if (filter != CameraFilter.NONE) {
-            CameraImageFilters.applyUniversal(pixels, width, height, filter.id(), seed);
+            CameraImageFilters.applyUniversal(pixels, filter.id(), seed);
         }
-        CameraImageFilters.sharpen(pixels, width, height);
+        CameraImageFilters.sharpen(pixels);
     }
 
-    private static void applyUniversal(int[] pixels, int width, int height, int mode, long seed) {
+    private static void applyUniversal(int[] pixels, int mode, long seed) {
         boolean samplesNeighbours = mode == CameraFilter.GLITCH_RGB.id() || mode == CameraFilter.CHROMATIC_ABERRATION.id();
-        int[] source = samplesNeighbours ? (int[])pixels.clone() : pixels;
+        int[] source = samplesNeighbours ? pixels.clone() : pixels;
         for (int index = 0; index < pixels.length; ++index) {
-            int x = index % width;
-            int yPixel = index / width;
+            int x = index % PhotographData.IMAGE_SIZE;
+            int yPixel = index / PhotographData.IMAGE_SIZE;
             int pixel = source[index];
-            double u = ((double)x + 0.5) / (double)width;
-            double v = ((double)yPixel + 0.5) / (double)height;
+            double u = ((double)x + 0.5) / (double) PhotographData.IMAGE_SIZE;
+            double v = ((double)yPixel + 0.5) / (double) PhotographData.IMAGE_SIZE;
             double red = CameraImageFilters.normalized(CameraImageFilters.red(pixel));
             double green = CameraImageFilters.normalized(CameraImageFilters.green(pixel));
             double blue = CameraImageFilters.normalized(CameraImageFilters.blue(pixel));
@@ -47,7 +48,7 @@ final class CameraImageFilters {
                     green = CameraImageFilters.saturate(green, tintedLuminance, 0.95);
                     blue = CameraImageFilters.saturate(blue, tintedLuminance, 0.95);
                     double grain = CameraImageFilters.grainOffset(red, green, blue, x, yPixel, seed, 0.075);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.3, 0.66, 0.22);
+                    double amount = CameraImageFilters.vignette(u, v, 0.3, 0.66, 0.22);
                     red = (red + grain) * amount;
                     green = (green + grain) * amount;
                     blue = (blue + grain) * amount;
@@ -80,7 +81,7 @@ final class CameraImageFilters {
                     red = CameraImageFilters.contrast(CameraImageFilters.saturate(red, tintedLuminance, 0.82), 1.07) * 0.88 + 0.075;
                     green = CameraImageFilters.contrast(CameraImageFilters.saturate(green, tintedLuminance, 0.82), 1.07) * 0.88 + 0.052;
                     blue = CameraImageFilters.contrast(CameraImageFilters.saturate(blue, tintedLuminance, 0.82), 1.07) * 0.88 + 0.025;
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.31, 0.68, 0.28);
+                    double amount = CameraImageFilters.vignette(u, v, 0.31, 0.68, 0.28);
                     red *= amount;
                     green *= amount;
                     blue *= amount;
@@ -115,7 +116,7 @@ final class CameraImageFilters {
                     red = CameraImageFilters.contrast(CameraImageFilters.saturate(red, luminance, 1.75), 1.3) * 1.06;
                     green = CameraImageFilters.contrast(CameraImageFilters.saturate(green, luminance, 1.75), 1.3) * 0.98;
                     blue = CameraImageFilters.contrast(CameraImageFilters.saturate(blue, luminance, 1.75), 1.3) * 1.02;
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.26, 0.62, 0.58);
+                    double amount = CameraImageFilters.vignette(u, v, 0.26, 0.62, 0.58);
                     red *= amount;
                     green *= amount;
                     blue *= amount;
@@ -236,7 +237,7 @@ final class CameraImageFilters {
                     red = CameraImageFilters.contrast(sourceRed * 0.393 + sourceGreen * 0.769 + sourceBlue * 0.189, 1.16);
                     green = CameraImageFilters.contrast(sourceRed * 0.349 + sourceGreen * 0.686 + sourceBlue * 0.168, 1.16);
                     blue = CameraImageFilters.contrast(sourceRed * 0.272 + sourceGreen * 0.534 + sourceBlue * 0.131, 1.16);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.31, 0.69, 0.25);
+                    double amount = CameraImageFilters.vignette(u, v, 0.31, 0.69, 0.25);
                     red *= amount;
                     green *= amount;
                     blue *= amount;
@@ -267,7 +268,7 @@ final class CameraImageFilters {
                     red = CameraImageFilters.contrast(CameraImageFilters.saturate(red, luminance, 1.48), 1.32) * 1.08;
                     green = CameraImageFilters.contrast(CameraImageFilters.saturate(green, luminance, 1.48), 1.32) * 0.94;
                     blue = CameraImageFilters.contrast(CameraImageFilters.saturate(blue, luminance, 1.48), 1.32) * 1.03;
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.2, 0.58, 0.68);
+                    double amount = CameraImageFilters.vignette(u, v, 0.2, 0.58, 0.68);
                     double grain = CameraImageFilters.grainOffset(red *= amount, green *= amount, blue *= amount, x, yPixel, seed, 0.055);
                     red += grain;
                     green += grain;
@@ -288,7 +289,7 @@ final class CameraImageFilters {
                 }
                 case 27: {
                     double grey = CameraImageFilters.contrast(Math.pow(luminance, 1.55), 1.45);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.27, 0.66, 0.32);
+                    double amount = CameraImageFilters.vignette(u, v, 0.27, 0.66, 0.32);
                     green = blue = grey * amount;
                     red = blue;
                     break;
@@ -327,7 +328,7 @@ final class CameraImageFilters {
                     green = blue = (grey = CameraImageFilters.contrast(luminance, 1.68));
                     red = blue;
                     double grain = CameraImageFilters.grainOffset(red, green, blue, x, yPixel, seed, 0.105);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.24, 0.62, 0.52);
+                    double amount = CameraImageFilters.vignette(u, v, 0.24, 0.62, 0.52);
                     red = (red + grain) * amount;
                     green = (green + grain) * amount;
                     blue = (blue + grain) * amount;
@@ -419,7 +420,7 @@ final class CameraImageFilters {
                     red = CameraImageFilters.saturate(red, horrorLuminance, 0.72);
                     green = CameraImageFilters.saturate(green, horrorLuminance, 0.72);
                     blue = CameraImageFilters.saturate(blue, horrorLuminance, 0.72);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.25, 0.62, 0.52);
+                    double amount = CameraImageFilters.vignette(u, v, 0.25, 0.62, 0.52);
                     red *= amount;
                     green *= amount;
                     blue *= amount;
@@ -430,7 +431,7 @@ final class CameraImageFilters {
                     green = CameraImageFilters.contrast(CameraImageFilters.saturate(green, luminance, 0.58) * 0.82, 1.42);
                     blue = CameraImageFilters.contrast(CameraImageFilters.saturate(blue, luminance, 0.58) * 0.53, 1.42);
                     double grain = CameraImageFilters.grainOffset(red, green, blue, x, yPixel, seed, 0.06);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.29, 0.66, 0.3);
+                    double amount = CameraImageFilters.vignette(u, v, 0.29, 0.66, 0.3);
                     red = (red + grain) * amount;
                     green = (green + grain) * amount;
                     blue = (blue + grain) * amount;
@@ -439,11 +440,11 @@ final class CameraImageFilters {
                 case 44: {
                     int band = (int)Math.floor(v * 90.0);
                     double kick = CameraImageFilters.noise01(band, 0, seed) >= 0.84 ? 1.0 : 0.0;
-                    int shift = (int)Math.round((CameraImageFilters.noise01(band * 23, 7, seed ^ 0x5DEECE66DL) - 0.5) * 0.045 * kick * (double)width);
-                    int colorOffset = Math.max(1, (int)Math.round((double)width * 0.004));
-                    red = CameraImageFilters.sampleChannel(source, width, height, x + shift + colorOffset, yPixel, 0);
-                    green = CameraImageFilters.sampleChannel(source, width, height, x + shift, yPixel, 1);
-                    blue = CameraImageFilters.sampleChannel(source, width, height, x + shift - colorOffset, yPixel, 2);
+                    int shift = (int)Math.round((CameraImageFilters.noise01(band * 23, 7, seed ^ 0x5DEECE66DL) - 0.5) * 0.045 * kick * (double) PhotographData.IMAGE_SIZE);
+                    int colorOffset = Math.max(1, (int)Math.round((double) PhotographData.IMAGE_SIZE * 0.004));
+                    red = CameraImageFilters.sampleChannel(source, x + shift + colorOffset, yPixel, 0);
+                    green = CameraImageFilters.sampleChannel(source, x + shift, yPixel, 1);
+                    blue = CameraImageFilters.sampleChannel(source, x + shift - colorOffset, yPixel, 2);
                     double glitchLuminance = CameraImageFilters.luminance(red, green, blue);
                     red = CameraImageFilters.contrast(CameraImageFilters.saturate(red, glitchLuminance, 1.35), 1.18);
                     green = CameraImageFilters.contrast(CameraImageFilters.saturate(green, glitchLuminance, 1.35), 1.18);
@@ -451,11 +452,11 @@ final class CameraImageFilters {
                     break;
                 }
                 case 45: {
-                    int offsetX = (int)Math.round((u - 0.5) * 0.018 * (double)width);
-                    int offsetY = (int)Math.round((v - 0.5) * 0.018 * (double)height);
-                    red = CameraImageFilters.sampleChannel(source, width, height, x + offsetX, yPixel + offsetY, 0);
+                    int offsetX = (int)Math.round((u - 0.5) * 0.018 * (double) PhotographData.IMAGE_SIZE);
+                    int offsetY = (int)Math.round((v - 0.5) * 0.018 * (double) PhotographData.IMAGE_SIZE);
+                    red = CameraImageFilters.sampleChannel(source, x + offsetX, yPixel + offsetY, 0);
                     green = sourceGreen;
-                    blue = CameraImageFilters.sampleChannel(source, width, height, x - offsetX, yPixel - offsetY, 2);
+                    blue = CameraImageFilters.sampleChannel(source, x - offsetX, yPixel - offsetY, 2);
                     red = CameraImageFilters.contrast(red, 1.12);
                     green = CameraImageFilters.contrast(green, 1.12);
                     blue = CameraImageFilters.contrast(blue, 1.12);
@@ -486,7 +487,7 @@ final class CameraImageFilters {
                     green = boosted;
                     blue = boosted * 0.18;
                     double grain = CameraImageFilters.grainOffset(red, green, blue, x, yPixel, seed, 0.07);
-                    double amount = CameraImageFilters.vignette(u, v, width, height, 0.28, 0.65, 0.48);
+                    double amount = CameraImageFilters.vignette(u, v, 0.28, 0.65, 0.48);
                     red = (red + grain) * amount;
                     green = (green + grain) * amount;
                     blue = (blue + grain) * amount;
@@ -532,9 +533,9 @@ final class CameraImageFilters {
         long greenTotal = 0L;
         long blueTotal = 0L;
         for (int pixel : pixels) {
-            redTotal += (long)CameraImageFilters.red(pixel);
-            greenTotal += (long)CameraImageFilters.green(pixel);
-            blueTotal += (long)CameraImageFilters.blue(pixel);
+            redTotal += CameraImageFilters.red(pixel);
+            greenTotal += CameraImageFilters.green(pixel);
+            blueTotal += CameraImageFilters.blue(pixel);
         }
         double count = Math.max(1, pixels.length);
         double redAverage = (double)redTotal / count;
@@ -554,14 +555,14 @@ final class CameraImageFilters {
         if (channelAverage < 1.0) {
             return 1.0;
         }
-        double correction = Mth.clamp((double)(neutral / channelAverage), (double)0.82, (double)1.18);
+        double correction = Mth.clamp(neutral / channelAverage, 0.82, 1.18);
         return CameraImageFilters.lerp(0.48, 1.0, correction);
     }
 
-    private static double sampleChannel(int[] pixels, int width, int height, int x, int y, int channel) {
-        int clampedX = Mth.clamp((int)x, (int)0, (int)(width - 1));
-        int clampedY = Mth.clamp((int)y, (int)0, (int)(height - 1));
-        int pixel = pixels[clampedY * width + clampedX];
+    private static double sampleChannel(int[] pixels, int x, int y, int channel) {
+        int clampedX = Mth.clamp(x, 0, PhotographData.IMAGE_SIZE - 1);
+        int clampedY = Mth.clamp(y, 0, PhotographData.IMAGE_SIZE - 1);
+        int pixel = pixels[clampedY * PhotographData.IMAGE_SIZE + clampedX];
         return CameraImageFilters.normalized(switch (channel) {
             case 0 -> CameraImageFilters.red(pixel);
             case 1 -> CameraImageFilters.green(pixel);
@@ -584,8 +585,8 @@ final class CameraImageFilters {
         return (double)(hash >>> 11) * (double)1.110223E-16f;
     }
 
-    private static double vignette(double u, double v, int width, int height, double start, double end, double amount) {
-        double aspectY = (double)height / (double)Math.max(1, width);
+    private static double vignette(double u, double v, double start, double end, double amount) {
+        double aspectY = (double) PhotographData.IMAGE_SIZE / (double)Math.max(1, PhotographData.IMAGE_SIZE);
         double x = u - 0.5;
         double y = (v - 0.5) * aspectY;
         double distance = Math.sqrt(x * x + y * y);
@@ -626,22 +627,22 @@ final class CameraImageFilters {
     }
 
     private static double clamp01(double value) {
-        return Mth.clamp((double)value, (double)0.0, (double)1.0);
+        return Mth.clamp(value, 0.0, 1.0);
     }
 
-    private static void sharpen(int[] pixels, int width, int height) {
-        if (width < 3 || height < 3) {
+    private static void sharpen(int[] pixels) {
+        if (PhotographData.IMAGE_SIZE < 3) {
             return;
         }
-        int[] source = (int[])pixels.clone();
-        for (int y = 1; y < height - 1; ++y) {
-            for (int x = 1; x < width - 1; ++x) {
-                int index = y * width + x;
+        int[] source = pixels.clone();
+        for (int y = 1; y < PhotographData.IMAGE_SIZE - 1; ++y) {
+            for (int x = 1; x < PhotographData.IMAGE_SIZE - 1; ++x) {
+                int index = y * PhotographData.IMAGE_SIZE + x;
                 int center = source[index];
                 int left = source[index - 1];
                 int right = source[index + 1];
-                int up = source[index - width];
-                int down = source[index + width];
+                int up = source[index - PhotographData.IMAGE_SIZE];
+                int down = source[index + PhotographData.IMAGE_SIZE];
                 pixels[index] = CameraImageFilters.abgr(CameraImageFilters.alpha(center), CameraImageFilters.sharpenChannel(CameraImageFilters.red(center), CameraImageFilters.red(left), CameraImageFilters.red(right), CameraImageFilters.red(up), CameraImageFilters.red(down)), CameraImageFilters.sharpenChannel(CameraImageFilters.green(center), CameraImageFilters.green(left), CameraImageFilters.green(right), CameraImageFilters.green(up), CameraImageFilters.green(down)), CameraImageFilters.sharpenChannel(CameraImageFilters.blue(center), CameraImageFilters.blue(left), CameraImageFilters.blue(right), CameraImageFilters.blue(up), CameraImageFilters.blue(down)));
             }
         }
@@ -673,7 +674,7 @@ final class CameraImageFilters {
     }
 
     private static int clamp(int channel) {
-        return Mth.clamp((int)channel, (int)0, (int)255);
+        return Mth.clamp(channel, 0, 255);
     }
 }
 

@@ -36,7 +36,7 @@ public final class CameraOpticsShader {
         destination.bindWrite(true);
         shader.setSampler("DiffuseSampler", (Object)source.getColorTextureId());
         shader.setSampler("DepthSampler", (Object)source.getDepthTextureId());
-        CameraOpticsShader.setUniform("OutSize", destination.width, destination.height);
+        CameraOpticsShader.setUniform(destination.width, destination.height);
         CameraOpticsShader.setUniform("NearPlane", NEAR_PLANE);
         float farPlane = Math.max(128.0f, (float) Minecraft.getInstance().options.renderDistance().get() * 16.0f);
         CameraOpticsShader.setUniform("FarPlane", farPlane);
@@ -68,8 +68,8 @@ public final class CameraOpticsShader {
             uniform.set(value);
         }
     }
-    private static void setUniform(String name, float first, float second) {
-        Uniform uniform = shader.getUniform(name);
+    private static void setUniform(float first, float second) {
+        Uniform uniform = shader.getUniform("OutSize");
         if (uniform != null) {
             uniform.set(first, second);
         }

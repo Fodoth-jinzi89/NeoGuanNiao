@@ -12,7 +12,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 
 final class CameraViewfinderOverlay {
-        private static final int APERTURE_PERCENT = 72;
+    private static final int APERTURE_PERCENT = 72;
     private static final int FRAME_COLOR = -571934977;
     private static final int SOFT_FRAME_COLOR = 1721351376;
     private static final int TEXT_COLOR = -420020225;

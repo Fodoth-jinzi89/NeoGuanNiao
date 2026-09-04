@@ -2,14 +2,12 @@ package net.fodoth.skina.neoguanniao.content.fan;
 
 import java.util.Comparator;
 import java.util.List;
-import net.minecraft.ChatFormatting;
+
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -30,70 +28,29 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class FeatherFanItem
 extends Item {
-    private static final int USE_DURATION_TICKS = 72000;
-    private static final int MIN_CHARGE_TICKS = 5;
-    private static final int MAX_CHARGE_TICKS = 30;
-    private static final float CHARGE_POSE_SETTLE_TICKS = 30.0f;
-    private static final float MIN_THROW_SPEED = 0.8f;
-    private static final float MAX_THROW_SPEED = 1.6f;
-    private static final double MELEE_KNOCKBACK = 0.3;
-    private static final int HUNT_LOCK_DELAY_TICKS = 6;
-    private static final int HUNT_LOCK_INTERVAL_TICKS = 4;
-    private static final int HUNT_MAX_LOCKED_TARGETS = 7;
-    private static final double HUNT_LOCK_RANGE = 18.0;
     private static final double HUNT_LOCK_MIN_DOT = Math.cos(Math.toRadians(52.0));
 
     public FeatherFanItem(Item.Properties properties) {
         super(properties.durability(256));
     }
 
-    public Component getName(ItemStack stack) {
-        if (FeatherFanEnchantments.hasHuntingReturn(stack)) {
-            return Component.translatable((String)"item.neoguanniao.wind_feather_fan.hunting");
-        }
-        if (FeatherFanEnchantments.hasRivenPlume(stack)) {
-            return Component.translatable((String)"item.neoguanniao.wind_feather_fan.riven");
-        }
-        if (FeatherFanEnchantments.hasBurialPlume(stack)) {
-            return Component.translatable((String)"item.neoguanniao.wind_feather_fan.burial");
-        }
-        return super.getName(stack);
-    }
-
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        if (FeatherFanEnchantments.hasHuntingReturn(stack)) {
-            FeatherFanItem.addSpecialFanTooltip(tooltip, "hunting", ChatFormatting.GOLD);
-        } else if (FeatherFanEnchantments.hasRivenPlume(stack)) {
-            FeatherFanItem.addSpecialFanTooltip(tooltip, "riven", ChatFormatting.BLUE);
-        } else if (FeatherFanEnchantments.hasBurialPlume(stack)) {
-            FeatherFanItem.addSpecialFanTooltip(tooltip, "burial", ChatFormatting.DARK_AQUA);
-        }
-    }
-
-    private static void addSpecialFanTooltip(List<Component> tooltip, String variant, ChatFormatting abilityColor) {
-        String key = "item.neoguanniao.wind_feather_fan." + variant + ".tooltip";
-        tooltip.add((Component)Component.translatable((String)(key + ".legend")).withStyle(new ChatFormatting[]{ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC}));
-        tooltip.add((Component)Component.translatable((String)(key + ".ability")).withStyle(abilityColor));
-    }
-
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
         return ItemAttributeModifiers.builder()
-                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("neoguanniao", "fan_damage"), 4.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                .add(Attributes.ATTACK_SPEED, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("neoguanniao", "fan_speed"), -2.1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "fan_damage"), 4.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "fan_speed"), -2.1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                 .build();
     }
 
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
         if (isBird(target)) {
             return false;
         }
@@ -104,24 +61,22 @@ extends Item {
         return true;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (player.getCooldowns().isOnCooldown((Item)this)) {
+        if (player.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.fail(stack);
         }
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(stack);
     }
 
-    public void onUseTick(Level level, LivingEntity living, ItemStack stack, int remainingUseDuration) {
-        if (!(level instanceof ServerLevel)) {
+    public void onUseTick(@NotNull Level level, @NotNull LivingEntity living, @NotNull ItemStack stack, int remainingUseDuration) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        ServerLevel serverLevel = (ServerLevel)level;
         int chargeTicks = this.getUseDuration(stack, living) - remainingUseDuration;
-        if (living instanceof Player) {
+        if (living instanceof Player player) {
             int lockCapacity;
-            Player player = (Player)living;
             if (FeatherFanEnchantments.hasHuntingReturn(stack) && (lockCapacity = FeatherFanItem.getHuntingLockCapacity(chargeTicks)) > 0 && chargeTicks % 2 == 0) {
                 List<LivingEntity> targets = FeatherFanItem.findHuntingTargets(player, lockCapacity);
                 for (int index = 0; index < targets.size(); ++index) {
@@ -129,14 +84,14 @@ extends Item {
                 }
                 if (FeatherFanItem.isHuntingLockMilestone(chargeTicks) && targets.size() >= lockCapacity) {
                     LivingEntity newestTarget = targets.get(lockCapacity - 1);
-                    level.playSound(null, newestTarget.getX(), newestTarget.getY(), newestTarget.getZ(), (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_LOCK.get(), SoundSource.PLAYERS, 0.52f, 0.96f + (float)lockCapacity * 0.075f);
+                    level.playSound(null, newestTarget.getX(), newestTarget.getY(), newestTarget.getZ(), NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_LOCK.get(), SoundSource.PLAYERS, 0.52f, 0.96f + (float)lockCapacity * 0.075f);
                 }
             }
         }
-        float charge = Mth.clamp((float)((float)chargeTicks / 30.0f), (float)0.0f, (float)1.0f);
+        float charge = Mth.clamp((float)chargeTicks / 30.0f, 0.0f, 1.0f);
         if (chargeTicks > 0 && chargeTicks % 4 == 0) {
             Vec3 center = living.getEyePosition().add(living.getLookAngle().scale(0.78)).add(0.0, -0.38, 0.0);
-            int moteCount = 1 + Mth.floor((float)charge);
+            int moteCount = 1 + Mth.floor(charge);
             serverLevel.sendParticles((ParticleOptions)ParticleTypes.WHITE_ASH, center.x, center.y, center.z, moteCount, 0.08 + (double)charge * 0.05, 0.07, 0.08 + (double)charge * 0.05, 0.008);
             if (chargeTicks >= 30) {
                 serverLevel.sendParticles((ParticleOptions)ParticleTypes.SNOWFLAKE, center.x, center.y, center.z, 1, 0.12, 0.08, 0.12, 0.008);
@@ -154,7 +109,7 @@ extends Item {
         }
     }
 
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int timeLeft) {
+    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity living, int timeLeft) {
         Player player;
         block6: {
             block5: {
@@ -172,8 +127,8 @@ extends Item {
         float charge = FeatherFanItem.getCharge(chargeTicks);
         List<LivingEntity> huntingTargets = List.of();
         if (FeatherFanEnchantments.hasHuntingReturn(stack) && (huntingTargets = FeatherFanItem.findHuntingTargets(player, FeatherFanItem.getHuntingLockCapacity(chargeTicks))).isEmpty()) {
-            player.getCooldowns().addCooldown((Item)this, 6);
-            level.playSound(null, player.getX(), player.getY(), player.getZ(), (SoundEvent)SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 0.35f, 0.72f);
+            player.getCooldowns().addCooldown(this, 6);
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 0.35f, 0.72f);
             return;
         }
         this.launchFan(stack, level, player, hand, charge, false, huntingTargets);
@@ -189,30 +144,30 @@ extends Item {
         return chargeTicks >= 30;
     }
 
-    public boolean tryLaunchPiercing(ServerPlayer player) {
-        if (player.getCooldowns().isOnCooldown((Item)this) || !FeatherFanItem.isFullyCharged((LivingEntity)player)) {
-            return false;
+    public void tryLaunchPiercing(ServerPlayer player) {
+        if (player.getCooldowns().isOnCooldown(this) || !FeatherFanItem.isFullyCharged(player)) {
+            return;
         }
         InteractionHand hand = player.getUsedItemHand();
         ItemStack stack = player.getUseItem();
         player.stopUsingItem();
-        return this.launchFan(stack, player.level(), (Player)player, hand, 1.0f, true, List.of());
+        this.launchFan(stack, player.level(), player, hand, 1.0f, true, List.of());
     }
 
-    private boolean launchFan(ItemStack stack, Level level, Player player, InteractionHand hand, float charge, boolean piercing, List<LivingEntity> huntingTargets) {
+    private void launchFan(ItemStack stack, Level level, Player player, InteractionHand hand, float charge, boolean piercing, List<LivingEntity> huntingTargets) {
         LivingEntity primaryHuntingTarget;
         boolean hunting = !piercing && !huntingTargets.isEmpty();
-        LivingEntity livingEntity = primaryHuntingTarget = hunting ? huntingTargets.get(0) : null;
-        float speed = piercing ? 2.65f : (hunting ? 1.75f : Mth.lerp((float)charge, (float)0.8f, (float)1.6f));
+        primaryHuntingTarget = hunting ? huntingTargets.getFirst() : null;
+        float speed = piercing ? 2.65f : (hunting ? 1.75f : Mth.lerp(charge, 0.8f, 1.6f));
         ItemStack thrownStack = stack.copy();
         thrownStack.setCount(1);
         thrownStack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         if (thrownStack.isEmpty()) {
             stack.shrink(1);
             player.awardStat(Stats.ITEM_USED.get(this));
-            return false;
+            return;
         }
-        FeatherFanProjectileEntity projectile = new FeatherFanProjectileEntity(level, (LivingEntity)player);
+        FeatherFanProjectileEntity projectile = new FeatherFanProjectileEntity(level, player);
         if (piercing) {
             projectile.configurePiercing(thrownStack, hand);
         } else if (hunting) {
@@ -226,30 +181,27 @@ extends Item {
                 projectile.shoot(direction.x, direction.y, direction.z, speed, 0.0f);
             }
         } else {
-            projectile.shootFromRotation((Entity)player, player.getXRot(), player.getYRot(), 0.0f, speed, 0.0f);
+            projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, speed, 0.0f);
         }
-        if (level.addFreshEntity((Entity)projectile)) {
+        if (level.addFreshEntity(projectile)) {
             stack.shrink(1);
             player.awardStat(Stats.ITEM_USED.get(this));
             player.swing(hand, true);
             if (piercing) {
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0f, 1.55f);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, SoundSource.PLAYERS, 0.85f, 1.25f);
-                if (level instanceof ServerLevel) {
-                    ServerLevel serverLevel = (ServerLevel)level;
+                if (level instanceof ServerLevel serverLevel) {
                     Vec3 launch = player.getEyePosition().add(player.getLookAngle().scale(1.15));
                     serverLevel.sendParticles((ParticleOptions)ParticleTypes.WHITE_ASH, launch.x, launch.y, launch.z, 6, 0.06, 0.05, 0.06, 0.025);
                 }
             } else if (hunting) {
-                level.playSound(null, player.getX(), player.getY(), player.getZ(), (SoundEvent)NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_START.get(), SoundSource.PLAYERS, 0.95f, 1.0f + charge * 0.12f);
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), NeoGuanNiaoSoundEvents.FEATHER_FAN_HUNT_START.get(), SoundSource.PLAYERS, 0.95f, 1.0f + charge * 0.12f);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.45f, 1.42f);
             } else {
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.8f, 1.15f + charge * 0.25f);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.65f, 0.85f + charge * 0.2f);
             }
-            return true;
         }
-        return false;
     }
 
     private static List<LivingEntity> findHuntingTargets(Player player, int limit) {
@@ -267,7 +219,7 @@ extends Item {
                 return true;
             }
             double dot = look.dot(offset.scale(1.0 / distance));
-            return dot < HUNT_LOCK_MIN_DOT || !player.hasLineOfSight((Entity)target);
+            return dot < HUNT_LOCK_MIN_DOT || !player.hasLineOfSight(target);
         });
         candidates.sort(Comparator.comparingDouble(target -> FeatherFanItem.huntingTargetScore(player, target)));
         return candidates.size() <= limit ? candidates : List.copyOf(candidates.subList(0, limit));
@@ -284,7 +236,7 @@ extends Item {
         if (chargeTicks < 6) {
             return 0;
         }
-        return Mth.clamp((int)(1 + (chargeTicks - 6) / 4), (int)1, (int)7);
+        return Mth.clamp(1 + (chargeTicks - 6) / 4, 1, 7);
     }
 
     private static boolean isHuntingLockMilestone(int chargeTicks) {
@@ -295,20 +247,20 @@ extends Item {
         Vec3 center = target.getBoundingBox().getCenter().add(0.0, (double)target.getBbHeight() * 0.08, 0.0);
         double radius = (double)target.getBbWidth() * 0.65 + 0.38;
         double angle = (double)ticks * 0.18 + (double)index * 0.78;
-        level.sendParticles((ParticleOptions)((SimpleParticleType)NeoGuanNiaoParticleTypes.HUNTING_MARK.get()), center.x + Math.cos(angle) * radius * 0.12, center.y, center.z + Math.sin(angle) * radius * 0.12, 1, 0.0, 0.0, 0.0, 0.0);
+        level.sendParticles((ParticleOptions) NeoGuanNiaoParticleTypes.HUNTING_MARK.get(), center.x + Math.cos(angle) * radius * 0.12, center.y, center.z + Math.sin(angle) * radius * 0.12, 1, 0.0, 0.0, 0.0, 0.0);
         level.sendParticles((ParticleOptions)ParticleTypes.WAX_ON, center.x, center.y, center.z, 2, radius * 0.45, (double)target.getBbHeight() * 0.22, radius * 0.45, 0.012);
     }
 
-    public int getUseDuration(ItemStack stack, LivingEntity living) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity living) {
         return 72000;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.BLOCK;
     }
 
     private static float getCharge(int chargeTicks) {
-        return Mth.clamp((float)((float)(chargeTicks - 5) / 25.0f), (float)0.0f, (float)1.0f);
+        return Mth.clamp((float)(chargeTicks - 5) / 25.0f, 0.0f, 1.0f);
     }
 
     private static boolean isBird(Entity entity) {

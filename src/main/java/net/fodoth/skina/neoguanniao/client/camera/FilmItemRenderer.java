@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.client.camera;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +16,7 @@ import org.joml.Matrix4f;
 
 public class FilmItemRenderer
 extends BlockEntityWithoutLevelRenderer {
-    private static final ResourceLocation FILM_TEXTURE = ResourceLocation.fromNamespaceAndPath("neoguanniao", "textures/item/film.png");
+    private static final ResourceLocation FILM_TEXTURE = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "textures/item/film.png");
         private static final float FILM_WIDTH = 0.78f;
     private static final float FILM_HEIGHT = 0.54f;
 
@@ -33,7 +34,7 @@ extends BlockEntityWithoutLevelRenderer {
             int light = context == ItemDisplayContext.GUI ? 0xF000F0 : packedLight;
             Matrix4f matrix = poseStack.last().pose();
             VertexConsumer filmConsumer = bufferSource.getBuffer(RenderType.text(FILM_TEXTURE));
-            FilmItemRenderer.renderQuad(filmConsumer, matrix, -0.39f, -0.27f, 0.78f, 0.54f, 0.0f, light);
+            FilmItemRenderer.renderQuad(filmConsumer, matrix, light);
         }
         finally {
             poseStack.popPose();
@@ -58,11 +59,11 @@ extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-        private static void renderQuad(VertexConsumer consumer, Matrix4f matrix, float x, float y, float width, float height, float z, int packedLight) {
-        CameraRenderUtil.vertex(consumer, matrix, x, y + height, z, 0.0F, 1.0F, packedLight);
-        CameraRenderUtil.vertex(consumer, matrix, x + width, y + height, z, 1.0F, 1.0F, packedLight);
-        CameraRenderUtil.vertex(consumer, matrix, x + width, y, z, 1.0F, 0.0F, packedLight);
-        CameraRenderUtil.vertex(consumer, matrix, x, y, z, 0.0F, 0.0F, packedLight);
+        private static void renderQuad(VertexConsumer consumer, Matrix4f matrix, int packedLight) {
+        CameraRenderUtil.vertex(consumer, matrix, (float) -0.39, (float) -0.27 + (float) 0.54, (float) 0.0, 0.0F, 1.0F, packedLight);
+        CameraRenderUtil.vertex(consumer, matrix, (float) -0.39 + (float) 0.78, (float) -0.27 + (float) 0.54, (float) 0.0, 1.0F, 1.0F, packedLight);
+        CameraRenderUtil.vertex(consumer, matrix, (float) -0.39 + (float) 0.78, (float) -0.27, (float) 0.0, 1.0F, 0.0F, packedLight);
+        CameraRenderUtil.vertex(consumer, matrix, (float) -0.39, (float) -0.27, (float) 0.0, 0.0F, 0.0F, packedLight);
     }
 }
 
