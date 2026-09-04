@@ -98,3 +98,4 @@ desktop.ini
 # =========================
 .env
 .env.*
+.deepcode/settings.json
