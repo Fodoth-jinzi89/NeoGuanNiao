@@ -1,6 +1,6 @@
 # Neo Guan Niao - 观鸟模组
 
-[![Mod Version](https://img.shields.io/badge/version-3.0.1-blue.svg)](https://github.com/fodoth/neoguanniao)
+[![Mod Version](https://img.shields.io/badge/version-3.0.2-blue.svg)](https://github.com/fodoth/neoguanniao)
 [![Minecraft Version](https://img.shields.io/badge/minecraft-1.21.1-green.svg)](https://minecraft.net)
 [![NeoForge Version](https://img.shields.io/badge/neoforge-21.1.233+-orange.svg)](https://neoforged.net)
 [![License](https://img.shields.io/badge/license-GPL--3.0--only-red.svg)](LICENSE)

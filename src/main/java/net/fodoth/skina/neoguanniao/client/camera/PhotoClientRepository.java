@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoImageCodec;
 import net.fodoth.skina.neoguanniao.content.camera.PhotoTransferLimits;
+import net.fodoth.skina.neoguanniao.config.CameraConfig;
 
 import net.fodoth.skina.neoguanniao.network.BeginPhotoUploadPacket;
 import net.fodoth.skina.neoguanniao.network.FinishPhotoUploadPacket;
@@ -80,6 +81,9 @@ public final class PhotoClientRepository {
             IMAGES.remove(photoId);
         }
         long now = System.currentTimeMillis();
+        if (activeRequest != null && now - activeRequestStarted > 10000L) {
+            PhotoClientRepository.reject(activeRequest);
+        }
         if (!(DOWNLOADS.containsKey(photoId) || VALIDATING.contains(photoId) || photoId.equals(activeRequest) || now < RETRY_AFTER.getOrDefault(photoId, 0L))) {
             EXPECTED_HASHES.put(photoId, expectedHash == null ? "" : expectedHash);
             RETRY_AFTER.put(photoId, now + 5000L);
@@ -104,7 +108,7 @@ public final class PhotoClientRepository {
             return;
         }
         String expectedHash = EXPECTED_HASHES.getOrDefault(photoId, "");
-        if (totalBytes <= 0 || totalBytes > 0x200000 || !PhotoTransferLimits.isSupportedDimensions(width, height) || !PhotoImageCodec.isSha256(contentHash) || !expectedHash.isEmpty() && !expectedHash.equals(contentHash)) {
+        if (totalBytes <= 0 || totalBytes > CameraConfig.maxCompressedBytes() || !PhotoTransferLimits.isSupportedDimensions(width, height) || !PhotoImageCodec.isSha256(contentHash) || !expectedHash.isEmpty() && !expectedHash.equals(contentHash)) {
             PhotoClientRepository.reject(photoId);
             return;
         }
