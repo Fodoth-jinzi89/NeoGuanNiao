@@ -29,7 +29,8 @@ extends Screen {
     }
 
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTick);
+        graphics.fill(0, 0, this.width, this.height, 0x78000000);
+        super.render(graphics, mouseX, mouseY, partialTick);
         int textureWidth = Math.max(1, PhotographData.width(this.photograph));
         int textureHeight = Math.max(1, PhotographData.height(this.photograph));
         int imageSize = Math.min(1024, Math.min(this.width - 48, this.height - 96));
@@ -45,12 +46,12 @@ extends Screen {
         if (!photographer.isEmpty()) {
             graphics.drawCenteredString(this.font, Component.translatable("item.neoguanniao.photograph.tooltip.photographer", new Object[]{photographer}), this.width / 2, y + imageSize + 12, 12113894);
         }
-        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     public boolean isPauseScreen() {
         return false;
     }
+
 
     /*
      * WARNING - Removed try catching itself - possible behaviour change.

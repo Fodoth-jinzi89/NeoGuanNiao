@@ -48,7 +48,7 @@ extends EntityRenderer<PhotographEntity> {
         Matrix4f matrix = poseStack.last().pose();
         var block = BuiltInRegistries.BLOCK.get(PhotographData.frameBlock(entity.getItem()));
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(block.defaultBlockState()).getParticleIcon();
-        VertexConsumer frameConsumer = bufferSource.getBuffer(RenderType.TEXT.apply(InventoryMenu.BLOCK_ATLAS));
+        VertexConsumer frameConsumer = bufferSource.getBuffer(RenderType.text(InventoryMenu.BLOCK_ATLAS));
         float pixel = (sprite.getU1() - sprite.getU0()) / FRAME_TEXTURE_SIZE;
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
@@ -62,7 +62,7 @@ extends EntityRenderer<PhotographEntity> {
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, 0.0f, FRAME_SIZE - border, FRAME_SIZE, border, 0.002f, packedLight, u0, u1, v1 - pixel, v1);
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, 0.0f, border, border, photoSize, 0.002f, packedLight, u0, innerU0, innerV0, innerV1);
         PhotographEntityRenderer.renderSprite(frameConsumer, matrix, FRAME_SIZE - border, border, border, photoSize, 0.002f, packedLight, innerU1, u1, innerV0, innerV1);
-        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.TEXT.apply(PhotographTextureCache.textureFor(entity.getItem())));
+        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.text(PhotographTextureCache.textureFor(entity.getItem())));
         PhotographEntityRenderer.renderQuad(photoConsumer, matrix, border, border, photoSize, -0.002f, packedLight);
         poseStack.popPose();
     }

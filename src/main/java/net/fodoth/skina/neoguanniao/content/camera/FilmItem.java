@@ -52,9 +52,12 @@ extends Item {
             return;
         }
         String photographer = PhotographData.photographer(stack);
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").append(formatTime(PhotographData.captureTime(stack))));
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").append(PhotographData.dimension(stack)));
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(formatTime(PhotographData.captureTime(stack)).getString()).withStyle(ChatFormatting.AQUA)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(PhotographData.dimension(stack)).withStyle(ChatFormatting.AQUA)));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates").withStyle(ChatFormatting.GOLD)
+                .append(Component.translatable("tooltip.neoguanniao.photo.coordinates", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack)).withStyle(ChatFormatting.AQUA)));
         if (!photographer.isEmpty()) {
             tooltip.add(Component.translatable("tooltip.neoguanniao.photo.photographer", photographer).withStyle(ChatFormatting.GRAY));
         }

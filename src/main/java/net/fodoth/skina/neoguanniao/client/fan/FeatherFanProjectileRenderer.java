@@ -53,6 +53,9 @@ public class FeatherFanProjectileRenderer extends EntityRenderer<FeatherFanProje
             poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0f - pitch));
             poseStack.mulPose(Axis.ZP.rotationDegrees(43.0f));
+            if (entity.isBurialActive()) {
+                poseStack.mulPose(Axis.YP.rotationDegrees(((float)entity.tickCount + partialTick) * 18.0f));
+            }
             poseStack.scale(0.9f, 0.9f, 0.9f);
             if (entity.isRivenActive() && entity.getRivenTicks() >= 26) {
                 float reformProgress = Mth.clamp(((float)entity.getRivenTicks() + partialTick - 26.0f) / 10.0f, 0.0f, 1.0f);

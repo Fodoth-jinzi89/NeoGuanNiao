@@ -529,5 +529,15 @@
   "enchantment.neoguanniao.riven_plume": "Riven Plume",
   "enchantment.neoguanniao.riven_plume.desc": "Splits into feather blades on hit, locks onto nearby enemies, then converges for area damage.",
   "enchantment.neoguanniao.hunting_return": "Hunting Return",
-  "enchantment.neoguanniao.hunting_return.desc": "Locks onto targets while charging, then tracks and strikes multiple enemies in sequence."
+  "enchantment.neoguanniao.hunting_return.desc": "Locks onto targets while charging, then tracks and strikes multiple enemies in sequence.",
+  "message.neoguanniao.feather_fan.mode.burial": "Mode: Burial | Area Slash",
+  "message.neoguanniao.feather_fan.mode.riven": "Mode: Riven | Splitting Strike",
+  "message.neoguanniao.feather_fan.mode.hunting": "Mode: Hunting | Continuous Pursuit",
+  "item.neoguanniao.wind_feather_fan.mode.burial": "Burial",
+  "item.neoguanniao.wind_feather_fan.mode.riven": "Riven",
+  "item.neoguanniao.wind_feather_fan.mode.hunting": "Hunting",
+  "item.neoguanniao.wind_feather_fan.usage": "Hold right-click to charge, then release to throw",
+  "tooltip.neoguanniao.wind_feather_fan.mode": "Mode: ",
+  "tooltip.neoguanniao.wind_feather_fan.attack_damage": "Attack Damage: ",
+  "tooltip.neoguanniao.wind_feather_fan.attack_range": "Attack Range: "
 }

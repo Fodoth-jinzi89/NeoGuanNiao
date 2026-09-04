@@ -36,9 +36,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -60,8 +63,8 @@ extends ThrowableItemProjectile {
     private final Set<UUID> outboundHits = new HashSet<>();
     private final Set<UUID> returnHits = new HashSet<>();
     private final Set<UUID> huntedTargets = new HashSet<>();
-    private final Set<UUID> huntingLockedTargets = new LinkedHashSet<UUID>();
-    private final Map<UUID, Boolean> burialTargetPhysics = new HashMap<UUID, Boolean>();
+    private final Set<UUID> huntingLockedTargets = new LinkedHashSet<>();
+    private final Map<UUID, Boolean> burialTargetPhysics = new HashMap<>();
     private Vec3 throwOrigin = Vec3.ZERO;
     private float maxDistance = 6.0f;
     private float attackDamage = 3.0f;
@@ -113,7 +116,7 @@ extends ThrowableItemProjectile {
         this.setFanState(FanState.OUTBOUND_SPIN);
         this.entityData.set(DATA_CHARGE, clampedCharge);
         this.throwOrigin = this.position();
-        this.maxDistance = Mth.lerp(clampedCharge, 6.0f, 16.0f);
+        this.maxDistance = Mth.lerp(clampedCharge, FeatherFanItem.attackRange(fanStack), 16.0f + FeatherFanItem.attackRange(fanStack) - 6.0f);
         this.attackDamage = Mth.lerp(clampedCharge, 3.0f, 7.0f);
         this.returnSpeed = Mth.lerp(clampedCharge, 1.45f, 1.85f);
     }
@@ -124,7 +127,7 @@ extends ThrowableItemProjectile {
         this.setFanState(FanState.PIERCING);
         this.entityData.set(DATA_CHARGE, 1.0f);
         this.throwOrigin = this.position();
-        this.maxDistance = 20.0f;
+        this.maxDistance = 20.0f + FeatherFanItem.attackRange(fanStack) - 6.0f;
         this.attackDamage = 7.0f;
         this.returnSpeed = 1.95f;
     }
@@ -202,13 +205,21 @@ extends ThrowableItemProjectile {
                         this.tickRivenSequence(owner);
                         break;
                     }
-                    case HUNTING: {
-                        this.tickHunting(owner);
-                        break;
-                    }
                     case OUTBOUND_SPIN: 
                     case PIERCING: {
+                        if (this.lifeTicks % 3 == 1) {
+                            this.collectReturnDrops();
+                        }
                         this.hitEntitiesAlongMotion();
+                        this.collectReturnDrops();
+                        break;
+                    }
+                    case HUNTING: {
+                        if (this.lifeTicks % 3 == 1) {
+                            this.collectReturnDrops();
+                        }
+                        this.tickHunting(owner);
+                        break;
                     }
                 }
                 Level level = this.level();
@@ -238,7 +249,7 @@ extends ThrowableItemProjectile {
 
     protected boolean canHitEntity(@NotNull Entity target) {
         FanState state = this.getFanState();
-        if (state == FanState.STUCK_ENTITY || state == FanState.STUCK_BLOCK || state == FanState.BURIAL_VORTEX || state == FanState.RIVEN_SEQUENCE || !(target instanceof LivingEntity) || target == this.getOwner() || isBird(target) || !super.canHitEntity(target)) {
+        if (state == FanState.STUCK_ENTITY || state == FanState.STUCK_BLOCK || state == FanState.BURIAL_VORTEX || state == FanState.RIVEN_SEQUENCE || !(target instanceof LivingEntity) || target == this.getOwner() || isFriendly(target) || !super.canHitEntity(target)) {
             return false;
         }
         if (state == FanState.HUNTING) {
@@ -246,6 +257,11 @@ extends ThrowableItemProjectile {
         }
         Set<UUID> hits = state == FanState.RETURNING ? this.returnHits : this.outboundHits;
         return !hits.contains(target.getUUID());
+    }
+
+    @Override
+    protected boolean canAddPassenger(@NotNull Entity passenger) {
+        return passenger instanceof ItemEntity || passenger instanceof ExperienceOrb || super.canAddPassenger(passenger);
     }
 
     protected void onHitEntity(EntityHitResult result) {
@@ -257,7 +273,7 @@ extends ThrowableItemProjectile {
 
     private void hitLivingEntity(LivingEntity living, Vec3 hitLocation) {
         Set<UUID> hits;
-        if (isBird(living)) {
+        if (isFriendly(living)) {
             return;
         }
         if (this.getFanState() == FanState.HUNTING) {
@@ -346,7 +362,8 @@ extends ThrowableItemProjectile {
         this.entityData.set(DATA_RIVEN_TICKS, 0);
         this.rivenAnchor = this.getBurialCenter(target);
         if (art == PiercingArt.NORMAL) {
-            this.applyStuckSlowdown(target);
+            this.beginReturn(this.findServerOwner());
+            return;
         }
         if ((level = this.level()) instanceof ServerLevel) {
             ServerLevel serverLevel = (ServerLevel)level;
@@ -391,13 +408,11 @@ extends ThrowableItemProjectile {
         this.stuckPosition = result.getLocation().add(surfaceOffset);
         this.setPos(this.stuckPosition.x, this.stuckPosition.y, this.stuckPosition.z);
         this.setDeltaMovement(Vec3.ZERO);
-        this.setFanState(FanState.STUCK_BLOCK);
-        this.stuckTicks = 0;
-        this.pulloutTicks = 0;
         Level level = this.level();
         if (level instanceof ServerLevel serverLevel) {
             this.spawnPinEffects(serverLevel);
         }
+        this.beginReturn(this.findServerOwner());
     }
 
     private void tickStuckEntity(ServerPlayer owner) {
@@ -406,7 +421,7 @@ extends ThrowableItemProjectile {
             return;
         }
         LivingEntity target = this.findStuckEntity();
-        if (target == null || !target.isAlive() || isBird(target)) {
+        if (target == null || !target.isAlive() || isFriendly(target)) {
             this.beginPullout();
             return;
         }
@@ -426,7 +441,7 @@ extends ThrowableItemProjectile {
                 this.spawnStuckPulse(serverLevel, target);
             }
         }
-        if (!target.isAlive() || this.stuckTicks >= 100) {
+        if (!target.isAlive() || this.stuckTicks >= 25) {
             this.beginPullout();
         }
     }
@@ -457,6 +472,7 @@ extends ThrowableItemProjectile {
         }
         if (this.stuckTicks >= 40) {
             this.performBurialSlash(center);
+            this.collectReturnDrops();
             this.beginPullout();
         }
     }
@@ -524,6 +540,7 @@ extends ThrowableItemProjectile {
         }
         this.updateHuntingVelocity(targetCenter, distance);
         this.hitEntitiesAlongMotion();
+        this.collectReturnDrops();
         if (this.getFanState() != FanState.HUNTING || !target.getUUID().equals(this.huntingTargetUuid)) {
             return;
         }
@@ -595,7 +612,7 @@ extends ThrowableItemProjectile {
             double distance;
             LivingEntity candidate;
             Entity entity;
-            if (this.huntedTargets.contains(targetUuid) || targetUuid.equals(this.huntingTargetUuid) || !((entity = serverLevel.getEntity(targetUuid)) instanceof LivingEntity) || !(candidate = (LivingEntity)entity).isAlive() || candidate.isSpectator() || candidate == owner || isBird(candidate) || !owner.canAttack(candidate) || (distance = candidate.getBoundingBox().getCenter().distanceToSqr(origin)) > 400.0 || !this.hasClearHuntingPath(this.position(), candidate) || !(distance < bestDistance)) continue;
+            if (this.huntedTargets.contains(targetUuid) || targetUuid.equals(this.huntingTargetUuid) || !((entity = serverLevel.getEntity(targetUuid)) instanceof LivingEntity) || !(candidate = (LivingEntity)entity).isAlive() || candidate.isSpectator() || candidate == owner || isFriendly(candidate) || !owner.canAttack(candidate) || (distance = candidate.getBoundingBox().getCenter().distanceToSqr(origin)) > 400.0 || !this.hasClearHuntingPath(this.position(), candidate) || !(distance < bestDistance)) continue;
             bestDistance = distance;
             best = candidate;
         }
@@ -628,7 +645,7 @@ extends ThrowableItemProjectile {
         if (!(entity instanceof LivingEntity living)) {
             return null;
         }
-        return isBird(living) ? null : living;
+        return isFriendly(living) ? null : living;
     }
 
     private boolean hasClearHuntingPath(Vec3 start, LivingEntity target) {
@@ -676,7 +693,7 @@ extends ThrowableItemProjectile {
     private void captureBurialTargets(Vec3 center, LivingEntity anchor) {
         Entity owner = this.getOwner();
         AABB area = new AABB(center, center).inflate(5.0);
-        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && !target.isPassenger() && !target.isVehicle() && target != owner && target != anchor && !isBird(target));
+        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && !target.isPassenger() && !target.isVehicle() && target != owner && target != anchor && !isFriendly(target));
         for (LivingEntity target2 : targets) {
             Vec3 targetCenter = target2.getBoundingBox().getCenter();
             if (targetCenter.distanceToSqr(center) > 25.0 || !this.hasBurialLineOfSight(center, target2)) continue;
@@ -695,7 +712,7 @@ extends ThrowableItemProjectile {
             LivingEntity target;
             Map.Entry<UUID, Boolean> entry = iterator.next();
             Entity entity = serverLevel.getEntity(entry.getKey());
-            if (!(entity instanceof LivingEntity) || !(target = (LivingEntity)entity).isAlive()) {
+            if (!(entity instanceof LivingEntity) || !(target = (LivingEntity)entity).isAlive() || isFriendly(target)) {
                 if (entity != null) {
                     entity.noPhysics = entry.getValue();
                 }
@@ -733,7 +750,7 @@ extends ThrowableItemProjectile {
     }
 
     private void damageBurialTarget(LivingEntity target) {
-        if (isBird(target)) {
+        if (isFriendly(target)) {
             return;
         }
         Vec3 movementBeforeDamage = target.getDeltaMovement();
@@ -769,7 +786,7 @@ extends ThrowableItemProjectile {
     private void performBurialSlash(Vec3 center) {
         Entity owner = this.getOwner();
         AABB area = new AABB(center, center).inflate(4.0);
-        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && target != owner && !isBird(target));
+        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && target != owner && !isFriendly(target));
         for (LivingEntity target2 : targets) {
             Vec3 targetCenter = target2.getBoundingBox().getCenter();
             Vec3 away = targetCenter.subtract(center);
@@ -809,7 +826,7 @@ extends ThrowableItemProjectile {
         Entity owner = this.getOwner();
         LivingEntity mainTarget = this.findStuckEntity();
         AABB area = new AABB(center, center).inflate(3.75);
-        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && target != owner && !isBird(target));
+        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, area, target -> target.isAlive() && !target.isSpectator() && target != owner && !isFriendly(target));
         for (LivingEntity target2 : targets) {
             float damage;
             Vec3 targetCenter = target2.getBoundingBox().getCenter();
@@ -846,7 +863,7 @@ extends ThrowableItemProjectile {
 
     private void performRivenReformStrike(LivingEntity target) {
         Level level;
-        if (target == null || !target.isAlive() || isBird(target)) {
+        if (target == null || !target.isAlive() || isFriendly(target)) {
             return;
         }
         Vec3 movementBeforeDamage = target.getDeltaMovement();
@@ -1018,6 +1035,9 @@ extends ThrowableItemProjectile {
 
     private boolean tickReturning(ServerPlayer owner) {
         ++this.returningTicks;
+        if (this.returningTicks % 3 == 1) {
+            this.collectReturnDrops();
+        }
         Vec3 target = FeatherFanProjectileEntity.returnTarget(owner);
         Vec3 toOwner = target.subtract(this.position());
         double distance = toOwner.length();
@@ -1048,6 +1068,20 @@ extends ThrowableItemProjectile {
             return true;
         }
         return false;
+    }
+
+    private void collectReturnDrops() {
+        AABB pickupBox = this.getBoundingBox().inflate(2.0);
+        for (ItemEntity item : this.level().getEntitiesOfClass(ItemEntity.class, pickupBox)) {
+            if (item.isAlive() && !item.isPassenger()) {
+                item.startRiding(this, true);
+            }
+        }
+        for (ExperienceOrb orb : this.level().getEntitiesOfClass(ExperienceOrb.class, pickupBox)) {
+            if (orb.isAlive() && !orb.isPassenger()) {
+                orb.startRiding(this, true);
+            }
+        }
     }
 
     private void spawnFlightTrail(ServerLevel serverLevel) {
@@ -1471,6 +1505,7 @@ extends ThrowableItemProjectile {
         }
         this.releaseBurialTargets();
         this.removeStuckSlowdown();
+        this.deliverReturnCargo(owner);
         ItemStack fan = this.getItem().copy();
         fan.setCount(1);
         if (owner.getItemInHand(this.returnHand).isEmpty()) {
@@ -1482,6 +1517,26 @@ extends ThrowableItemProjectile {
         this.level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.7f, 1.35f);
         this.level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.PHANTOM_FLAP, SoundSource.PLAYERS, 0.22f, 1.7f);
         this.discard();
+    }
+
+    private void deliverReturnCargo(ServerPlayer owner) {
+        List<Entity> cargoEntities = List.copyOf(this.getPassengers());
+        for (Entity cargo : cargoEntities) {
+            if (!cargo.isAlive()) {
+                continue;
+            }
+            cargo.stopRiding();
+            if (cargo instanceof ItemEntity item) {
+                item.setPickUpDelay(0);
+                item.playerTouch(owner);
+                if (item.isAlive()) {
+                    owner.drop(item.getItem(), false);
+                    item.discard();
+                }
+            } else if (cargo instanceof ExperienceOrb orb) {
+                orb.playerTouch(owner);
+            }
+        }
     }
 
     private void dropFanAndDiscard() {
@@ -1521,6 +1576,10 @@ extends ThrowableItemProjectile {
         return this.getFanState() == FanState.RIVEN_SEQUENCE;
     }
 
+    public boolean isBurialActive() {
+        return this.getFanState() == FanState.BURIAL_VORTEX;
+    }
+
     public int getRivenTicks() {
         return this.entityData.get(DATA_RIVEN_TICKS);
     }
@@ -1536,6 +1595,10 @@ extends ThrowableItemProjectile {
     private boolean isFlyingOutbound() {
         FanState state = this.getFanState();
         return state == FanState.OUTBOUND_SPIN || state == FanState.PIERCING;
+    }
+
+    public boolean isFlying() {
+        return this.isFlyingOutbound();
     }
 
     private boolean isNonCollidingState() {
@@ -1695,9 +1758,16 @@ extends ThrowableItemProjectile {
         RIVEN
 
     }
-
     private static boolean isBird(Entity entity) {
         return entity instanceof AbstractBirdEntity<?>;
+    }
+
+    private boolean isFriendly(Entity entity) {
+        if (isBird(entity)) return true;
+        Entity owner = this.getOwner();
+        if (!(owner instanceof ServerPlayer player) || !(entity instanceof OwnableEntity ownable)) return false;
+        Entity entityOwner = ownable.getOwner();
+        return entityOwner == player || entityOwner != null && entityOwner.getUUID().equals(player.getUUID());
     }
 
 }

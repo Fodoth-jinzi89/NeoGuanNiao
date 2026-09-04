@@ -87,4 +87,10 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+            FEATHER_FAN_MODE = DATA_COMPONENTS.registerComponentType(
+            "feather_fan_mode",
+            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT)
+    );
+
 }

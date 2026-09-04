@@ -15,5 +15,9 @@
       "scale": [0.78, 0.78, 0.78]
     }
   },
-  "overrides": []
+  "overrides": [
+    {"predicate": {"neoguanniao:mode": 0.0}, "model": "neoguanniao:item/wind_feather_fan_burial"},
+    {"predicate": {"neoguanniao:mode": 1.0}, "model": "neoguanniao:item/wind_feather_fan_riven"},
+    {"predicate": {"neoguanniao:mode": 2.0}, "model": "neoguanniao:item/wind_feather_fan_hunting"}
+  ]
 }

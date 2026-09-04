@@ -149,27 +149,22 @@ public final class PhotographTextureCache {
     }
 
     private static NativeImage readImage(byte[] data) throws IOException {
-        try {
-            return NativeImage.read(data);
+        BufferedImage source = ImageIO.read(new ByteArrayInputStream(data));
+        if (source == null) {
+            throw new IOException("Unsupported photograph image format.");
         }
-        catch (IOException exception) {
-            BufferedImage source = ImageIO.read(new ByteArrayInputStream(data));
-            if (source == null) {
-                throw exception;
+        NativeImage image = new NativeImage(source.getWidth(), source.getHeight(), false);
+        for (int y = 0; y < source.getHeight(); ++y) {
+            for (int x = 0; x < source.getWidth(); ++x) {
+                int rgb = source.getRGB(x, y);
+                int alpha = rgb >>> 24;
+                int red = rgb >>> 16 & 0xFF;
+                int green = rgb >>> 8 & 0xFF;
+                int blue = rgb & 0xFF;
+                image.setPixelRGBA(x, y, alpha << 24 | blue << 16 | green << 8 | red);
             }
-            NativeImage image = new NativeImage(source.getWidth(), source.getHeight(), false);
-            for (int y = 0; y < source.getHeight(); ++y) {
-                for (int x = 0; x < source.getWidth(); ++x) {
-                    int rgb = source.getRGB(x, y);
-                    int alpha = rgb >>> 24;
-                    int red = rgb >>> 16 & 0xFF;
-                    int green = rgb >>> 8 & 0xFF;
-                    int blue = rgb & 0xFF;
-                    image.setPixelRGBA(x, y, alpha << 24 | blue << 16 | green << 8 | red);
-                }
-            }
-            return image;
         }
+        return image;
     }
 
     private static void evictTextures() {

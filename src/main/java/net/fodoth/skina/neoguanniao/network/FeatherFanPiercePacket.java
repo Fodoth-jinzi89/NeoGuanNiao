@@ -17,7 +17,7 @@ public record FeatherFanPiercePacket() implements CustomPacketPayload {
 
     public static void handle(FeatherFanPiercePacket p, IPayloadContext c) {
         c.enqueueWork(() -> {
-            if (c.player() instanceof net.minecraft.server.level.ServerPlayer sp && sp.getMainHandItem().getItem() instanceof FeatherFanItem fan)
+            if (c.player() instanceof net.minecraft.server.level.ServerPlayer sp && sp.getUseItem().getItem() instanceof FeatherFanItem fan)
                 fan.tryLaunchPiercing(sp);
         });
     }

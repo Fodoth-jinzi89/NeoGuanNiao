@@ -22,6 +22,7 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
 
     private Vec3 frightSource;
     private Vec3 pendingFrightSource;
+    private Vec3 groundEscapeTarget;
     /**
      * 处理受到伤害后的受惊行为
      *
@@ -120,13 +121,14 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         alertNearbyBirds();
 
         if (!bird().canFly() && bird().onGround()) {
-            startGroundEscape(sourcePos);
+            continueGroundEscape();
         } else if (!bird().isBaby() && timer.getBirdFlyingTicker().getTicks() <= 0 && bird().onGround()) {
             startEscapeFlight(sourcePos);
         }
     }
 
-    private void startGroundEscape(Vec3 sourcePos) {
+    public void continueGroundEscape() {
+        Vec3 sourcePos = frightSource == null ? bird().position().subtract(1.0D, 0.0D, 0.0D) : frightSource;
         Vec3 away = bird().position().subtract(sourcePos);
         if (away.lengthSqr() < 0.01D) {
             away = new Vec3(bird().getRandom().nextDouble() - 0.5D, 0.0D,
@@ -134,12 +136,8 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         }
         Vec3 direction = new Vec3(away.x, 0.0D, away.z).normalize();
         double distance = 4.0D + bird().getRandom().nextDouble() * 4.0D;
-        bird().getNavigation().moveTo(
-                bird().getX() + direction.x * distance,
-                bird().getY(),
-                bird().getZ() + direction.z * distance,
-                1.5D
-        );
+        groundEscapeTarget = bird().position().add(direction.scale(distance));
+        bird().getNavigation().moveTo(groundEscapeTarget.x, groundEscapeTarget.y, groundEscapeTarget.z, 1.5D);
     }
 
     /**
@@ -259,6 +257,9 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
 
     public void setFrightSource(Vec3 frightSource) {
         this.frightSource = frightSource;
+        if (frightSource == null) {
+            this.groundEscapeTarget = null;
+        }
     }
 
     public Vec3 getPendingFrightSource() {
@@ -267,5 +268,9 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
 
     public void setPendingFrightSource(Vec3 pendingFrightSource) {
         this.pendingFrightSource = pendingFrightSource;
+    }
+
+    public Vec3 getGroundEscapeTarget() {
+        return groundEscapeTarget;
     }
 }

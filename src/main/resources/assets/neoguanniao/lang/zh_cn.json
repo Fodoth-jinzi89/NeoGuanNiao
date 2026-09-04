@@ -529,5 +529,15 @@
   "enchantment.neoguanniao.riven_plume": "裂翎",
   "enchantment.neoguanniao.riven_plume.desc": "翎羽分裂列阵，重聚时爆发重击。",
   "enchantment.neoguanniao.hunting_return": "猎归",
-  "enchantment.neoguanniao.hunting_return.desc": "回风锁定群敌，在猎物之间连续追击。"
+  "enchantment.neoguanniao.hunting_return.desc": "回风锁定群敌，在猎物之间连续追击。",
+  "message.neoguanniao.feather_fan.mode.burial": "模式：葬翎丨聚敌环斩",
+  "message.neoguanniao.feather_fan.mode.riven": "模式：裂翎丨分裂重击",
+  "message.neoguanniao.feather_fan.mode.hunting": "模式：猎归丨连续追击",
+  "item.neoguanniao.wind_feather_fan.mode.burial": "葬翎",
+  "item.neoguanniao.wind_feather_fan.mode.riven": "裂翎",
+  "item.neoguanniao.wind_feather_fan.mode.hunting": "猎归",
+  "item.neoguanniao.wind_feather_fan.usage": "长按右键蓄力，蓄满松开丢出",
+  "tooltip.neoguanniao.wind_feather_fan.mode": "模式：",
+  "tooltip.neoguanniao.wind_feather_fan.attack_damage": "攻击伤害：",
+  "tooltip.neoguanniao.wind_feather_fan.attack_range": "攻击距离："
 }

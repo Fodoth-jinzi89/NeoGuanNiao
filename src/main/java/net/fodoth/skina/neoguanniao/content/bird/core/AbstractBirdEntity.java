@@ -155,19 +155,20 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         List<Goal> goals = new ArrayList<>();
 
         goals.add(new FloatGoal(this)); //0
-        goals.add(new BirdBreedGoal(this)); //1
-        goals.add(new BirdEatFoodGoal(this));  //2
-        goals.add(new BirdBathUseGoal(this)); //3
-        goals.add(new BirdSentinelGoal(this)); //4
-        goals.add(new BirdWakeUpGoal(this)); //5
-        goals.add(new BirdRoostGoal(this)); //6
-        goals.add(new BirdFollowOwnerGoal(this)); //7
-        goals.add(new BirdFlockGoal(this)); //8
-        goals.add(new BirdCuriousFollowGoal(this));  //9
-        goals.add(new BirdWalkAroundGoal(this)); //10
-        goals.add(new BirdRandomLookAroundGoal(this)); //11
-        goals.add(new BirdSkinValidateGoal(this)); //12
-        goals.add(new BirdModelValidateGoal(this)); //13
+        goals.add(new BirdEscapeGoal(this)); //1
+        goals.add(new BirdBreedGoal(this)); //2
+        goals.add(new BirdEatFoodGoal(this));  //3
+        goals.add(new BirdBathUseGoal(this)); //4
+        goals.add(new BirdSentinelGoal(this)); //5
+        goals.add(new BirdWakeUpGoal(this)); //6
+        goals.add(new BirdRoostGoal(this)); //7
+        goals.add(new BirdFollowOwnerGoal(this)); //8
+        goals.add(new BirdFlockGoal(this)); //9
+        goals.add(new BirdCuriousFollowGoal(this));  //10
+        goals.add(new BirdWalkAroundGoal(this)); //11
+        goals.add(new BirdRandomLookAroundGoal(this)); //12
+        goals.add(new BirdSkinValidateGoal(this)); //13
+        goals.add(new BirdModelValidateGoal(this)); //14
 
         return goals;
     }
@@ -785,6 +786,13 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
 
                 // 地面移动逻辑
+                if (state == BirdBehaviorState.FLEEING && !canFly()) {
+                    var escapeWalk = BIRD_DATA.animation().animationMap().get("walk");
+                    if (escapeWalk != null) {
+                        return animationState.setAndContinue(escapeWalk);
+                    }
+                }
+
                 double deltaMovementSqr = this.getDeltaMovement().lengthSqr();
                 double walkingThreshold = BIRD_DATA.misc().walkingSpeedThreshold();
                 double runningSpeedThreshold = BIRD_DATA.misc().runningSpeedThreshold();
