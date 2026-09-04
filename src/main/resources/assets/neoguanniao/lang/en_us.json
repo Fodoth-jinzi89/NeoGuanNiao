@@ -515,5 +515,9 @@
   "gui.neoguanniao.camera_focus_mode.manual": "MF Manual",
   "key.categories.neoguanniao": "Camera",
   "key.neoguanniao.camera.open_creative_controls": "Open Creative Camera Controls",
-  "key.neoguanniao.camera.focus": "Focus Camera"
+  "key.neoguanniao.camera.focus": "Focus Camera",
+  "tooltip.neoguanniao.photo.time": "Time: ",
+  "tooltip.neoguanniao.photo.dimension": "Dimension: ",
+  "tooltip.neoguanniao.photo.coordinates": "Coordinates: %s, %s, %s",
+  "tooltip.neoguanniao.photo.photographer": "Photographer: %s"
 }

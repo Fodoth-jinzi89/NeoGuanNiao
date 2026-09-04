@@ -29,7 +29,7 @@ extends GeoItemRenderer<NikonD750Item> {
             case GROUND -> {
                 TransformUtil.applyTransform(poseStack, 0.3f, 1.5f / 16f, 0.3f, 0.5f, 0.0f, 0.0f, 0.0f);
             }
-            case FIXED -> poseStack.translate(0.0f, 0.0f, -2.75f / 16f);
+            case FIXED -> poseStack.translate(0.0f, -0.3f, -2.75f / 16f);
             case HEAD -> {
                 TransformUtil.applyTransform(poseStack, 0.0f, 9.5f / 16f, -6.75f / 16f, 2.0f, 0.0f, 0.0f, 0.0f);
             }

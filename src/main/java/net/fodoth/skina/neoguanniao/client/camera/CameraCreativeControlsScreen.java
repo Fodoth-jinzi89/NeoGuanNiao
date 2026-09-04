@@ -16,26 +16,6 @@ import net.minecraft.util.Mth;
 
 public final class CameraCreativeControlsScreen
 extends Screen {
-        private static final int GAP = 8;
-    private static final int FOOTER_HEIGHT = 28;
-    private static final int HEADER_HEIGHT = 27;
-    private static final int TAB_HEIGHT = 24;
-    private static final int INFO_HEIGHT = 58;
-    private static final int CHOICE_ROW_GAP = 4;
-    private static final int MAX_VISIBLE_CHOICE_ROWS = 4;
-    private static final int MIN_CHOICE_ROW_HEIGHT = 24;
-    private static final int SCREEN_SHADE = 0x78000000;
-    private static final int PANEL_BACKGROUND = -233301218;
-    private static final int SECTION_BACKGROUND = -400546776;
-    private static final int ITEM_BACKGROUND = -433706192;
-    private static final int ITEM_HOVER = -298830276;
-    private static final int ITEM_SELECTED = -231523530;
-    private static final int BORDER_DARK = -15921391;
-    private static final int BORDER_LIGHT = -12893624;
-    private static final int TEXT_PRIMARY = -1775897;
-    private static final int TEXT_SECONDARY = -5393480;
-    private static final int ACCENT = -5975188;
-    private static final int ACCENT_DARK = -11111109;
     private final CameraState original;
     private CameraState working;
     private Page page = Page.LENS;
@@ -55,6 +35,8 @@ extends Screen {
     private int tabsTop;
     private int controlsTop;
     private int controlsBottom;
+    private double lensScroll;
+    private double modeScroll;
 
     private CameraCreativeControlsScreen(CameraState original) {
                 super(Component.translatable("gui.neoguanniao.camera_creative.title"));
@@ -218,12 +200,14 @@ extends Screen {
         CameraLens[] lenses = CameraLens.values();
         int visibleRows = this.visibleChoiceRows(lenses.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
-        int scrollOffset = CameraCreativeControlsScreen.choiceScrollOffset(this.working.lens().ordinal(), lenses.length, visibleRows);
+        int maximum = Math.max(0, lenses.length - visibleRows);
+        this.lensScroll = Mth.clamp(this.lensScroll, 0.0, maximum);
+        int scrollOffset = (int)Math.floor(this.lensScroll);
         int contentRight = lenses.length > visibleRows ? this.rightRight - 12 : this.rightRight - 3;
         graphics.enableScissor(this.rightLeft + 2, this.controlsTop, this.rightRight - 2, this.controlsBottom);
         for (int row = 0; row < visibleRows && (lensIndex = scrollOffset + row) < lenses.length; ++row) {
             CameraLens lens = lenses[lensIndex];
-            int y0 = this.controlsTop + row * (rowHeight + 4);
+            int y0 = this.controlsTop + row * (rowHeight + 4) - (int)Math.round((this.lensScroll - scrollOffset) * (rowHeight + 4));
             int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
             boolean selected = this.working.lens() == lens;
             this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, selected, contentRight);
@@ -240,12 +224,14 @@ extends Screen {
         CameraShootingMode[] modes = CameraShootingMode.values();
         int visibleRows = this.visibleChoiceRows(modes.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
-        int scrollOffset = CameraCreativeControlsScreen.choiceScrollOffset(this.working.shootingMode().ordinal(), modes.length, visibleRows);
+        int maximum = Math.max(0, modes.length - visibleRows);
+        this.modeScroll = Mth.clamp(this.modeScroll, 0.0, maximum);
+        int scrollOffset = (int)Math.floor(this.modeScroll);
         int contentRight = modes.length > visibleRows ? this.rightRight - 12 : this.rightRight - 3;
         graphics.enableScissor(this.rightLeft + 2, this.controlsTop, this.rightRight - 2, this.controlsBottom);
         for (int row = 0; row < visibleRows && (modeIndex = scrollOffset + row) < modes.length; ++row) {
             CameraShootingMode mode = modes[modeIndex];
-            int y0 = this.controlsTop + row * (rowHeight + 4);
+            int y0 = this.controlsTop + row * (rowHeight + 4) - (int)Math.round((this.modeScroll - scrollOffset) * (rowHeight + 4));
             int y1 = Math.min(this.controlsBottom, y0 + rowHeight);
             boolean selected = this.working.shootingMode() == mode;
             this.renderChoiceRow(graphics, mouseX, mouseY, y0, y1, selected, contentRight);
@@ -307,7 +293,7 @@ extends Screen {
         }
         List<FormattedCharSequence> lines = this.font.split(Component.translatable(descriptionKey), width);
         if (!lines.isEmpty()) {
-            graphics.drawString(this.font, lines.get(0), x, y + 22, -5393480, false);
+            graphics.drawString(this.font, lines.getFirst(), x, y + 22, -5393480, false);
         }
     }
 
@@ -396,7 +382,7 @@ extends Screen {
         for (int i = 0; i < pages.length; ++i) {
             int x1;
             int x0 = this.rightLeft + 2 + i * tabWidth;
-            int n = x1 = i == pages.length - 1 ? this.rightRight - 2 : x0 + tabWidth;
+            x1 = i == pages.length - 1 ? this.rightRight - 2 : x0 + tabWidth;
             if (!CameraCreativeControlsScreen.contains(mouseX, mouseY, x0, this.tabsTop, x1, this.tabsTop + 24)) continue;
             this.page = pages[i];
             return true;
@@ -411,18 +397,17 @@ extends Screen {
     }
 
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        int rowHeight;
         int row;
-        if (button == 0 && this.page == Page.PARAMETERS && ((row = (int)((mouseY - (double)this.controlsTop) / (double)((rowHeight = this.parameterRowHeight()) + 4))) == 0 || row == 3)) {
+        if (button == 0 && this.page == Page.PARAMETERS && ((row = (int)((mouseY - (double)this.controlsTop) / (double)(this.parameterRowHeight() + 4))) == 0 || row == 3)) {
             return this.clickParameter(mouseX, mouseY);
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
-        private boolean clickLens(double mouseX, double mouseY) {
+    private boolean clickLens(double mouseX, double mouseY) {
         CameraLens[] lenses = CameraLens.values();
         int visibleRows = this.visibleChoiceRows(lenses.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
-        int scrollOffset = CameraCreativeControlsScreen.choiceScrollOffset(this.working.lens().ordinal(), lenses.length, visibleRows);
+        int scrollOffset = (int)Math.floor(this.lensScroll);
         int contentRight = lenses.length > visibleRows ? this.rightRight - 12 : this.rightRight - 3;
         for (int row = 0; row < visibleRows; ++row) {
             int lensIndex = scrollOffset + row;
@@ -433,11 +418,11 @@ extends Screen {
         }
         return true;
     }
-        private boolean clickMode(double mouseX, double mouseY) {
+    private boolean clickMode(double mouseX, double mouseY) {
         CameraShootingMode[] modes = CameraShootingMode.values();
         int visibleRows = this.visibleChoiceRows(modes.length);
         int rowHeight = this.choiceRowHeight(visibleRows);
-        int scrollOffset = CameraCreativeControlsScreen.choiceScrollOffset(this.working.shootingMode().ordinal(), modes.length, visibleRows);
+        int scrollOffset = (int)Math.floor(this.modeScroll);
         int contentRight = modes.length > visibleRows ? this.rightRight - 12 : this.rightRight - 3;
         for (int row = 0; row < visibleRows; ++row) {
             int modeIndex = scrollOffset + row;
@@ -486,12 +471,24 @@ extends Screen {
         }
         return true;
     }
-        public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         int direction;
-        if (delta == 0.0) {
+        if (scrollY == 0.0) {
             return true;
         }
-        int n = direction = delta > 0.0 ? -1 : 1;
+        direction = scrollY > 0.0 ? -1 : 1;
+        if (CameraCreativeControlsScreen.contains(mouseX, mouseY, this.rightLeft + 2, this.controlsTop, this.rightRight - 2, this.controlsBottom)) {
+            if (this.page == Page.LENS) {
+                int visible = this.visibleChoiceRows(CameraLens.values().length);
+                this.lensScroll = Mth.clamp(this.lensScroll - scrollY * 0.5, 0.0, Math.max(0, CameraLens.values().length - visible));
+                return true;
+            }
+            if (this.page == Page.MODE) {
+                int visible = this.visibleChoiceRows(CameraShootingMode.values().length);
+                this.modeScroll = Mth.clamp(this.modeScroll - scrollY * 0.5, 0.0, Math.max(0, CameraShootingMode.values().length - visible));
+                return true;
+            }
+        }
         if (this.page == Page.LENS) {
             CameraLens[] values = CameraLens.values();
             int index = Math.floorMod(this.working.lens().ordinal() + direction, values.length);
@@ -530,10 +527,10 @@ extends Screen {
             return true;
         }
         if (keyCode == 263 || keyCode == 265) {
-            return this.mouseScrolled(0.0, 0.0, 1.0);
+            return this.mouseScrolled(0.0, 0.0, 0.0, 1.0);
         }
         if (keyCode == 262 || keyCode == 264) {
-            return this.mouseScrolled(0.0, 0.0, -1.0);
+            return this.mouseScrolled(0.0, 0.0, 0.0, -1.0);
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }

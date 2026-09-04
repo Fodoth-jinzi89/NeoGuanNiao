@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.camera;
+
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
 import net.fodoth.skina.neoguanniao.content.camera.CameraFilterCategory;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,34 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
 public final class CameraFilterPickerScreen
 extends Screen {
-        private static final int OUTER_GAP = 8;
-    private static final int COLUMN_GAP = 9;
-    private static final int SECTION_GAP = 5;
-    private static final int FOOTER_HEIGHT = 30;
-    private static final int HEADER_HEIGHT = 27;
-    private static final int TAB_HEIGHT = 24;
-    private static final int ORIGINAL_HEIGHT = 21;
-    private static final int INFO_HEIGHT = 54;
-    private static final int ROW_GAP = 3;
-    private static final int MAX_VISIBLE_ROWS = 7;
-    private static final int SCREEN_SHADE = 0x78000000;
-    private static final int PANEL_BACKGROUND = -233301218;
-    private static final int SECTION_BACKGROUND = -400546776;
-    private static final int ITEM_BACKGROUND = -433706192;
-    private static final int ITEM_HOVER = -298830276;
-    private static final int ITEM_SELECTED = -231523530;
-    private static final int BORDER_DARK = -15921391;
-    private static final int BORDER_LIGHT = -12893624;
-    private static final int TEXT_PRIMARY = -1775897;
-    private static final int TEXT_SECONDARY = -5393480;
-    private static final int ACCENT = -5975188;
-    private static final int ACCENT_DARK = -11111109;
     private final CameraFilter original;
     private CameraFilter highlighted;
     private CameraFilterCategory category;
@@ -156,7 +133,7 @@ extends Screen {
     private void syncIndexToHighlighted() {
         List<CameraFilter> filters = this.currentFilters();
         int index = filters.indexOf(this.highlighted);
-        int n = this.highlightedIndex = Math.max(index, 0);
+        this.highlightedIndex = Math.max(index, 0);
         if (!filters.isEmpty() && index < 0) {
             this.highlighted = filters.get(this.highlightedIndex);
         }
@@ -310,7 +287,6 @@ extends Screen {
             int thumbnailHeight;
             int thumbnailY;
             int thumbnailX;
-            boolean thumbnailDrawn;
             CameraFilter filter = filters.get(filterIndex);
             int y0 = this.listTop + row * (this.rowHeight + 3)
                     - (int)Math.round((this.scrollPosition - this.scrollOffset) * (this.rowHeight + 3));
@@ -322,7 +298,7 @@ extends Screen {
             if (selected) {
                 graphics.fill(this.rightLeft + 3, y0, this.rightLeft + 6, y1, -5975188);
             }
-            if (!(thumbnailDrawn = CameraPreviewPostEffect.drawFilterThumbnail(graphics, filter, thumbnailX = this.rightLeft + 10, thumbnailY = y0 + (y1 - y0 - (thumbnailHeight = Math.max(12, y1 - y0 - 8))) / 2, thumbnailX + (thumbnailWidth = Math.clamp(Math.round((float) thumbnailHeight * 1.6f), 24, 72)), thumbnailY + thumbnailHeight))) {
+            if (!CameraPreviewPostEffect.drawFilterThumbnail(graphics, filter, thumbnailX = this.rightLeft + 10, thumbnailY = y0 + (y1 - y0 - (thumbnailHeight = Math.max(12, y1 - y0 - 8))) / 2, thumbnailX + (thumbnailWidth = Math.clamp(Math.round((float) thumbnailHeight * 1.6f), 24, 72)), thumbnailY + thumbnailHeight)) {
                 this.renderPaletteThumbnail(graphics, filter, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
             }
             CameraFilterPickerScreen.drawBorder(graphics, thumbnailX, thumbnailY, thumbnailX + thumbnailWidth, thumbnailY + thumbnailHeight, -15921391);
@@ -330,7 +306,7 @@ extends Screen {
             int textWidth = Math.max(8, contentRight - textX - 6);
             String name = (selected ? "> " : "  ") + String.format(Locale.ROOT, "%02d  %s", filterIndex + 1, Component.translatable(filter.translationKey()).getString());
             if (this.font.width(name) > textWidth) {
-                name = this.font.plainSubstrByWidth(name, Math.max(6, textWidth - 6)) + "\u2026";
+                name = this.font.plainSubstrByWidth(name, Math.max(6, textWidth - 6)) + "…";
             }
             graphics.drawString(this.font, name, textX, y0 + Math.max(4, (y1 - y0 - 8) / 2), selected ? -5975188 : -1775897, false);
         }
@@ -484,7 +460,7 @@ extends Screen {
         for (int i = 0; i < categories.length; ++i) {
             int x1;
             int x0 = this.rightLeft + 2 + i * tabWidth;
-            int n = x1 = i == categories.length - 1 ? this.rightRight - 2 : x0 + tabWidth;
+            x1 = i == categories.length - 1 ? this.rightRight - 2 : x0 + tabWidth;
             if (!CameraFilterPickerScreen.contains(mouseX, mouseY, x0, this.tabsTop, x1, this.tabsTop + 24)) continue;
             this.setCategory(categories[i]);
             return true;
@@ -520,13 +496,16 @@ extends Screen {
         this.scrollOffset = (int)Math.floor(this.scrollPosition);
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (delta == 0.0) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (scrollY == 0.0) {
             return true;
+        }
+        if (!CameraFilterPickerScreen.contains(mouseX, mouseY, this.rightLeft + 2, this.listTop, this.rightRight - 2, this.listBottom)) {
+            return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
         int maximum = Math.max(0, this.currentFilters().size() - this.visibleRows);
         if (maximum > 0) {
-            this.scrollPosition = Mth.clamp(this.scrollPosition - delta * 0.5, 0.0, maximum);
+            this.scrollPosition = Mth.clamp(this.scrollPosition - scrollY * 0.5, 0.0, maximum);
             this.scrollOffset = (int)Math.floor(this.scrollPosition);
         }
         return true;

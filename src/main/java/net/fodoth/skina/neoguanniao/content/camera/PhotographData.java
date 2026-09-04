@@ -2,6 +2,7 @@ package net.fodoth.skina.neoguanniao.content.camera;
 
 import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public final class PhotographData {
@@ -20,6 +21,11 @@ public final class PhotographData {
     public static final String TAG_HEIGHT = "Height";
     public static final String TAG_CONTENT_HASH = "ContentHash";
     public static final String TAG_PIXELS = "Pixels";
+    public static final String TAG_DIMENSION = "Dimension";
+    public static final String TAG_X = "X";
+    public static final String TAG_Y = "Y";
+    public static final String TAG_Z = "Z";
+    public static final String TAG_FRAME_BLOCK = "FrameBlock";
 
     private PhotographData() {
     }
@@ -54,6 +60,18 @@ public final class PhotographData {
         return CameraItemData.read(stack).getString(TAG_CONTENT_HASH);
     }
 
+    public static String dimension(ItemStack stack) { return CameraItemData.read(stack).getString(TAG_DIMENSION); }
+    public static int x(ItemStack stack) { return CameraItemData.read(stack).getInt(TAG_X); }
+    public static int y(ItemStack stack) { return CameraItemData.read(stack).getInt(TAG_Y); }
+    public static int z(ItemStack stack) { return CameraItemData.read(stack).getInt(TAG_Z); }
+    public static ResourceLocation frameBlock(ItemStack stack) {
+        String id = CameraItemData.read(stack).getString(TAG_FRAME_BLOCK);
+        return id.isEmpty() ? ResourceLocation.withDefaultNamespace("oak_planks") : ResourceLocation.parse(id);
+    }
+    public static void setFrameBlock(ItemStack stack, ResourceLocation blockId) {
+        CameraItemData.update(stack, tag -> tag.putString(TAG_FRAME_BLOCK, blockId.toString()));
+    }
+
     public static int width(ItemStack stack) {
         return PhotographData.imageWidth(CameraItemData.read(stack));
     }
@@ -63,6 +81,10 @@ public final class PhotographData {
     }
 
     public static void writeReference(ItemStack stack, String id, String photographer, UUID photographerId, long gameTime, int width, int height, String contentHash) {
+        writeReference(stack, id, photographer, photographerId, gameTime, width, height, contentHash, "", 0, 0, 0);
+    }
+
+    public static void writeReference(ItemStack stack, String id, String photographer, UUID photographerId, long gameTime, int width, int height, String contentHash, String dimension, int x, int y, int z) {
         if (!PhotoTransferLimits.isValidPhotoId(id) || width < MIN_IMAGE_SIZE || height < MIN_IMAGE_SIZE || width > MAX_IMAGE_SIZE || height > MAX_IMAGE_SIZE || !PhotoImageCodec.isSha256(contentHash)) {
             throw new IllegalArgumentException("Invalid photograph reference");
         }
@@ -74,6 +96,10 @@ public final class PhotographData {
             tag.putInt(TAG_WIDTH, width);
             tag.putInt(TAG_HEIGHT, height);
             tag.putString(TAG_CONTENT_HASH, contentHash);
+            tag.putString(TAG_DIMENSION, dimension == null ? "" : dimension);
+            tag.putInt(TAG_X, x);
+            tag.putInt(TAG_Y, y);
+            tag.putInt(TAG_Z, z);
             tag.remove(TAG_PIXELS);
         });
     }
@@ -87,19 +113,7 @@ public final class PhotographData {
     }
 
     private static void copyImageTag(CompoundTag source, CompoundTag target) {
-        copyString(source, target, TAG_PHOTO_ID);
-        copyString(source, target, TAG_PHOTOGRAPHER);
-        if (source.hasUUID(TAG_PHOTOGRAPHER_ID)) {
-            target.putUUID(TAG_PHOTOGRAPHER_ID, source.getUUID(TAG_PHOTOGRAPHER_ID));
-        }
-        if (source.contains(TAG_GAME_TIME)) {
-            target.putLong(TAG_GAME_TIME, source.getLong(TAG_GAME_TIME));
-        }
-        copyString(source, target, TAG_CONTENT_HASH);
-        int width = imageWidth(source);
-        int height = imageHeight(source);
-        target.putInt(TAG_WIDTH, width);
-        target.putInt(TAG_HEIGHT, height);
+        target.merge(source.copy());
     }
 
     private static void copyString(CompoundTag source, CompoundTag target, String key) {

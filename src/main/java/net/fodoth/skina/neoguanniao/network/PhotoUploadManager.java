@@ -244,8 +244,7 @@ public final class PhotoUploadManager {
         }
         try {
             ItemStack film = new ItemStack((ItemLike) NeoGuanNiaoItems.FILM.get());
-            PhotographData.writeReference(film, result.photoId, ownerName, playerId, gameTime, result.width, result.height, result.contentHash);
-            film.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.neoguanniao.film.named", filmName, location));
+            PhotographData.writeReference(film, result.photoId, ownerName, playerId, gameTime, result.width, result.height, result.contentHash, player.level().dimension().location().toString(), player.getBlockX(), player.getBlockY(), player.getBlockZ());
             if (!player.getInventory().add(film)) {
                 player.drop(film, false);
             }

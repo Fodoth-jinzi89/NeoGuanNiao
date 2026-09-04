@@ -31,6 +31,14 @@ CI: .github/workflows/
 - Keep modules separated; check existing APIs before adding new libs.
 - If working directory vanishes, create a new one.
 
+## Localization Encoding
+
+- Keep `src/main/resources/assets/neoguanniao/lang/*.json` as UTF-8 without BOM.
+- Never write Chinese localization files through a shell command or API that uses the system code page (for example PowerShell `Set-Content` without an explicit UTF-8 mode).
+- Prefer `apply_patch` for small localization edits, or write with an explicit UTF-8 encoder.
+- After changing localization, validate both JSON and encoding with:
+  `@'\nimport json\nfrom pathlib import Path\nfor path in Path("src/main/resources/assets/neoguanniao/lang").glob("*.json"):\n    data = path.read_bytes()\n    json.loads(data.decode("utf-8"))\n    assert data.count(b"?") == 0 or path.name != "zh_cn.json"\n'@ | python -`
+
 ## Testing
 
 No formal suite. Verify with:
