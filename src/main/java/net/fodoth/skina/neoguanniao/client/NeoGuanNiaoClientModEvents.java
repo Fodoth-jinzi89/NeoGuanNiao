@@ -75,6 +75,7 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), PhotographEntityRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),

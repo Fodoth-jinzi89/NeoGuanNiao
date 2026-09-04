@@ -220,15 +220,15 @@ public final class PhotoUploadManager {
     }
 
     private static CaptureJobResult validateAndStore(MinecraftServer server, UploadSession session) throws IOException {
-        byte[] jpeg = session.assemble();
-        String actualHash = PhotoImageCodec.sha256(jpeg);
+        byte[] png = session.assemble();
+        String actualHash = PhotoImageCodec.sha256(png);
         if (!session.contentHash.equals(actualHash)) {
             throw new IOException("Photograph hash mismatch");
         }
-        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validateJpeg(jpeg);
+        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validatePng(png);
         String photoId = UUID.randomUUID().toString();
-        PhotoRepository.storeValidated(server, photoId, jpeg);
-        return new CaptureJobResult(photoId, jpeg.length, dimensions.width(), dimensions.height(), actualHash);
+        PhotoRepository.storeValidated(server, photoId, png);
+        return new CaptureJobResult(photoId, png.length, dimensions.width(), dimensions.height(), actualHash);
     }
 
     private static void finishStoredUpload(MinecraftServer server, UUID playerId, String ownerName, long gameTime, String filmName, String location, UUID uploadId, CaptureJobResult result) {
@@ -272,7 +272,7 @@ public final class PhotoUploadManager {
         if (!expectedHash.isEmpty() && !expectedHash.equals(hash)) {
             throw new IOException("Photograph hash mismatch");
         }
-        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validateJpeg(data);
+        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validatePng(data);
         return new LoadedDownload(data, hash, dimensions.width(), dimensions.height());
     }
 

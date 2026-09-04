@@ -13,6 +13,8 @@ final class CameraRenderUtil {
         consumer.addVertex(matrix, x, y, z)
                 .setColor(255, 255, 255, 255)
                 .setUv(u, v)
+                .setUv1(0, 0)
+                .setNormal(0.0f, 0.0f, 1.0f)
                 .setLight(packedLight);
     }
 }

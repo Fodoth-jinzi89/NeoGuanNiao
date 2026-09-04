@@ -45,7 +45,7 @@ public class ClientExtensionHelper {
             private BlockEntityWithoutLevelRenderer renderer;
 
             @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (renderer == null) {
                     renderer = rendererFactory.get();
                 }

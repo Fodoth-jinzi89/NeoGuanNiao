@@ -17,6 +17,7 @@ public final class PhotographData {
     public static final String TAG_PHOTOGRAPHER = "Photographer";
     public static final String TAG_PHOTOGRAPHER_ID = "PhotographerId";
     public static final String TAG_GAME_TIME = "GameTime";
+    public static final String TAG_CAPTURE_TIME = "CaptureTime";
     public static final String TAG_WIDTH = "Width";
     public static final String TAG_HEIGHT = "Height";
     public static final String TAG_CONTENT_HASH = "ContentHash";
@@ -50,6 +51,11 @@ public final class PhotographData {
 
     public static long gameTime(ItemStack stack) {
         return CameraItemData.read(stack).getLong(TAG_GAME_TIME);
+    }
+
+    public static long captureTime(ItemStack stack) {
+        CompoundTag tag = CameraItemData.read(stack);
+        return tag.contains(TAG_CAPTURE_TIME) ? tag.getLong(TAG_CAPTURE_TIME) : 0L;
     }
 
     public static int[] pixels(ItemStack stack) {
@@ -93,6 +99,9 @@ public final class PhotographData {
             tag.putString(TAG_PHOTOGRAPHER, photographer);
             tag.putUUID(TAG_PHOTOGRAPHER_ID, photographerId);
             tag.putLong(TAG_GAME_TIME, gameTime);
+            if (!tag.contains(TAG_CAPTURE_TIME)) {
+                tag.putLong(TAG_CAPTURE_TIME, System.currentTimeMillis());
+            }
             tag.putInt(TAG_WIDTH, width);
             tag.putInt(TAG_HEIGHT, height);
             tag.putString(TAG_CONTENT_HASH, contentHash);

@@ -39,22 +39,22 @@ public final class PhotoClientRepository {
     private PhotoClientRepository() {
     }
 
-    public static void upload(InteractionHand hand, byte[] jpeg) throws IOException {
-        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validateJpeg(jpeg);
+    public static void upload(InteractionHand hand, byte[] png) throws IOException {
+        PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validatePng(png);
         long now = System.currentTimeMillis();
         if (activeRequest != null && now - activeRequestStarted > 10000L) {
             PhotoClientRepository.reject(activeRequest);
         }
         PENDING_UPLOADS.entrySet().removeIf(entry -> now - (Long)entry.getValue() > 60000L);
         UUID uploadId = UUID.randomUUID();
-        String hash = PhotoImageCodec.sha256(jpeg);
+        String hash = PhotoImageCodec.sha256(png);
         PENDING_UPLOADS.put(uploadId, now);
-        NeoGuanNiaoNetwork.sendToServer(new BeginPhotoUploadPacket(uploadId, hand, jpeg.length, dimensions.width(), dimensions.height(), hash));
+        NeoGuanNiaoNetwork.sendToServer(new BeginPhotoUploadPacket(uploadId, hand, png.length, dimensions.width(), dimensions.height(), hash));
         int offset = 0;
         int index = 0;
-        while (offset < jpeg.length) {
-            int end = Math.min(offset + 24576, jpeg.length);
-            NeoGuanNiaoNetwork.sendToServer(new PhotoUploadChunkPacket(uploadId, index, Arrays.copyOfRange(jpeg, offset, end)));
+        while (offset < png.length) {
+            int end = Math.min(offset + 24576, png.length);
+            NeoGuanNiaoNetwork.sendToServer(new PhotoUploadChunkPacket(uploadId, index, Arrays.copyOfRange(png, offset, end)));
             offset += 24576;
             ++index;
         }
@@ -112,7 +112,7 @@ public final class PhotoClientRepository {
     }
 
     public static void acceptDownloadChunk(String photoId, int chunkIndex, byte[] data) {
-        byte[] jpeg;
+        byte[] png;
         DownloadSession session = DOWNLOADS.get(photoId);
         if (session == null || !session.accept(chunkIndex, data)) {
             PhotoClientRepository.reject(photoId);
@@ -124,7 +124,7 @@ public final class PhotoClientRepository {
         DOWNLOADS.remove(photoId);
         PhotoClientRepository.finishActiveRequest(photoId);
         try {
-            jpeg = session.assemble();
+            png = session.assemble();
         }
         catch (IOException exception) {
             PhotoClientRepository.reject(photoId);
@@ -135,9 +135,9 @@ public final class PhotoClientRepository {
         VALIDATION_EXECUTOR.execute(() -> {
             boolean valid;
             try {
-                valid = session.contentHash.equals(PhotoImageCodec.sha256(jpeg));
+                valid = session.contentHash.equals(PhotoImageCodec.sha256(png));
                 if (valid) {
-                    PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validateJpeg(jpeg);
+                    PhotoImageCodec.Dimensions dimensions = PhotoImageCodec.validatePng(png);
                     valid = dimensions.width() == session.width && dimensions.height() == session.height;
                 }
             }
@@ -145,7 +145,7 @@ public final class PhotoClientRepository {
                 valid = false;
             }
             boolean accepted = valid;
-            Minecraft.getInstance().execute(() -> PhotoClientRepository.finishValidation(photoId, session.contentHash, jpeg, validationGeneration, accepted));
+            Minecraft.getInstance().execute(() -> PhotoClientRepository.finishValidation(photoId, session.contentHash, png, validationGeneration, accepted));
         });
     }
 
@@ -196,7 +196,7 @@ public final class PhotoClientRepository {
         }
     }
 
-    private static void finishValidation(String photoId, String contentHash, byte[] jpeg, int validationGeneration, boolean valid) {
+    private static void finishValidation(String photoId, String contentHash, byte[] png, int validationGeneration, boolean valid) {
         VALIDATING.remove(photoId);
         if (validationGeneration != generation) {
             return;
@@ -205,7 +205,7 @@ public final class PhotoClientRepository {
             PhotoClientRepository.reject(photoId);
             return;
         }
-        IMAGES.put(photoId, new CachedImage(jpeg, contentHash));
+        IMAGES.put(photoId, new CachedImage(png, contentHash));
         EXPECTED_HASHES.remove(photoId);
         RETRY_AFTER.remove(photoId);
         FAILURE_COUNTS.remove(photoId);

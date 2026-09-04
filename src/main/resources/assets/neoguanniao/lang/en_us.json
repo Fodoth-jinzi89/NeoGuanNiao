@@ -519,5 +519,15 @@
   "tooltip.neoguanniao.photo.time": "Time: ",
   "tooltip.neoguanniao.photo.dimension": "Dimension: ",
   "tooltip.neoguanniao.photo.coordinates": "Coordinates: %s, %s, %s",
-  "tooltip.neoguanniao.photo.photographer": "Photographer: %s"
+  "tooltip.neoguanniao.photo.photographer": "Photographer: %s",
+  "item.neoguanniao.wind_feather_fan": "Wind Feather Fan",
+  "item.neoguanniao.burial_plume_book": "Burial Plume Book",
+  "item.neoguanniao.riven_plume_book": "Riven Plume Book",
+  "item.neoguanniao.hunting_return_book": "Hunting Return Book",
+  "enchantment.neoguanniao.burial_plume": "Burial Plume",
+  "enchantment.neoguanniao.burial_plume.desc": "Creates a vortex on hit that pulls in and damages nearby enemies before releasing a finishing slash.",
+  "enchantment.neoguanniao.riven_plume": "Riven Plume",
+  "enchantment.neoguanniao.riven_plume.desc": "Splits into feather blades on hit, locks onto nearby enemies, then converges for area damage.",
+  "enchantment.neoguanniao.hunting_return": "Hunting Return",
+  "enchantment.neoguanniao.hunting_return.desc": "Locks onto targets while charging, then tracks and strikes multiple enemies in sequence."
 }

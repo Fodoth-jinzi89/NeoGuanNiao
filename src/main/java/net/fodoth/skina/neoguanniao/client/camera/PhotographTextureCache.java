@@ -3,13 +3,9 @@ import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,12 +24,12 @@ public final class PhotographTextureCache {
         private static final int MAX_TEXTURES = 96;
     private static final int MAX_UPLOADS_PER_FRAME = 2;
     private static final long UNUSED_TEXTURE_MILLIS = 60000L;
-    private static final ResourceLocation FALLBACK = ResourceLocation.fromNamespaceAndPath("neoguanniao", "textures/item/photograph.png");
-    private static final Map<String, CachedTexture> TEXTURES = new LinkedHashMap<String, CachedTexture>(97, 0.75f, true);
+    private static final ResourceLocation FALLBACK = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "textures/item/photograph.png");
+    private static final Map<String, CachedTexture> TEXTURES = new LinkedHashMap<>(97, 0.75f, true);
     private static final Set<String> DECODING = new HashSet<String>();
     private static final ArrayDeque<DecodedImage> READY = new ArrayDeque<>();
     private static final ExecutorService DECODER = Executors.newSingleThreadExecutor(runnable -> {
-        Thread thread = new Thread(runnable, "Guaniao-Photo-Texture-Decode");
+        Thread thread = new Thread(runnable, "NeoGuanNiao-Photo-Texture-Decode");
         thread.setDaemon(true);
         return thread;
     });
@@ -54,16 +50,16 @@ public final class PhotographTextureCache {
             cached.lastUsedMillis = System.currentTimeMillis();
             return cached.location;
         }
-        byte[] jpeg = PhotoClientRepository.getOrRequest(photoId, contentHash);
-        if (jpeg != null && DECODING.add(key)) {
+        byte[] png = PhotoClientRepository.getOrRequest(photoId, contentHash);
+        if (png != null && DECODING.add(key)) {
             int decodeGeneration = generation;
-            DECODER.execute(() -> PhotographTextureCache.decode(key, jpeg, decodeGeneration));
+            DECODER.execute(() -> PhotographTextureCache.decode(key, png, decodeGeneration));
         }
         return FALLBACK;
     }
 
     /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+     * WARNING - Removed try catching itself - possible behavior change.
      */
     public static void pumpUploads() {
         Minecraft minecraft = Minecraft.getInstance();
@@ -82,9 +78,8 @@ public final class PhotographTextureCache {
                 DynamicTexture texture = new DynamicTexture(decoded.image);
                 texture.setFilter(false, false);
                 texture.upload();
-                ResourceLocation location = minecraft.getTextureManager().register("guaniao_photo/" + decoded.key, texture);
+                ResourceLocation location = minecraft.getTextureManager().register(NeoGuanNiao.MODID + "_photos/" + decoded.key, texture);
                 TEXTURES.put(decoded.key, new CachedTexture(location, System.currentTimeMillis()));
-                continue;
             }
             catch (RuntimeException exception) {
                 NeoGuanNiao.LOGGER.error("Failed to upload photograph texture {}", decoded.key, exception);
@@ -95,7 +90,7 @@ public final class PhotographTextureCache {
     }
 
     /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+     * WARNING - Removed try catching itself - possible behavior change.
      */
     public static void clear() {
         Minecraft minecraft = Minecraft.getInstance();
@@ -118,43 +113,24 @@ public final class PhotographTextureCache {
             throw new IOException("Photograph has no pixel data.");
         }
         String photoId = PhotographData.id(stack);
-        byte[] jpeg = PhotoClientRepository.cached(photoId);
-        if (jpeg == null) {
+        byte[] png = PhotoClientRepository.cached(photoId);
+        if (png == null) {
             PhotoClientRepository.getOrRequest(photoId, PhotographData.contentHash(stack));
             throw new IOException("Photograph is still downloading.");
         }
-        Path directory = Minecraft.getInstance().gameDirectory.toPath().resolve("guaniao_photos");
-        Files.createDirectories(directory, new FileAttribute[0]);
-        Path file = directory.resolve(PhotographTextureCache.safe(photoId) + ".jpg");
-        Files.write(file, jpeg);
+        Path directory = Minecraft.getInstance().gameDirectory.toPath().resolve(NeoGuanNiao.MODID + "_photos");
+        Files.createDirectories(directory);
+        Path file = directory.resolve(PhotographTextureCache.safe(photoId) + ".png");
+        Files.write(file, png);
         return file;
     }
 
-    private static NativeImage readJpegAsNativeImage(byte[] jpeg) throws IOException {
-        BufferedImage source = ImageIO.read(new ByteArrayInputStream(jpeg));
-        if (source == null) {
-            throw new IOException("Unable to decode JPEG photograph");
-        }
-        NativeImage image = new NativeImage(source.getWidth(), source.getHeight(), false);
-        for (int y = 0; y < source.getHeight(); ++y) {
-            for (int x = 0; x < source.getWidth(); ++x) {
-                int rgb = source.getRGB(x, y);
-                int alpha = rgb >>> 24;
-                int red = rgb >>> 16 & 0xFF;
-                int green = rgb >>> 8 & 0xFF;
-                int blue = rgb & 0xFF;
-                image.setPixelRGBA(x, y, alpha << 24 | blue << 16 | green << 8 | red);
-            }
-        }
-        return image;
-    }
-
     /*
-     * WARNING - Removed try catching itself - possible behaviour change.
+     * WARNING - Removed try catching itself - possible behavior change.
      */
-    private static void decode(String key, byte[] jpeg, int decodeGeneration) {
+    private static void decode(String key, byte[] png, int decodeGeneration) {
         try {
-            NativeImage image = PhotographTextureCache.readJpegAsNativeImage(jpeg);
+            NativeImage image = NativeImage.read(png);
             synchronized (READY) {
                 READY.addLast(new DecodedImage(key, image, decodeGeneration));
             }

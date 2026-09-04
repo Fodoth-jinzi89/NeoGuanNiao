@@ -23,20 +23,22 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 
 public final class PhotoRepository {
+    private static final byte[] PNG_SIGNATURE = new byte[]{(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
+
     private PhotoRepository() {
     }
 
-    public static void store(MinecraftServer server, String photoId, byte[] jpeg) throws IOException {
-        PhotoImageCodec.validateJpeg(jpeg);
-        PhotoRepository.storeValidated(server, photoId, jpeg);
+    public static void store(MinecraftServer server, String photoId, byte[] png) throws IOException {
+        PhotoImageCodec.validatePng(png);
+        PhotoRepository.storeValidated(server, photoId, png);
     }
 
-    public static void storeValidated(MinecraftServer server, String photoId, byte[] jpeg) throws IOException {
-        if (jpeg == null || jpeg.length == 0 || jpeg.length > CameraConfig.maxCompressedBytes()) {
+    public static void storeValidated(MinecraftServer server, String photoId, byte[] png) throws IOException {
+        if (png == null || png.length == 0 || png.length > CameraConfig.maxCompressedBytes()) {
             throw new IOException("Invalid compressed photograph size");
         }
         Path target = PhotoRepository.photoPath(server, photoId);
-        PhotoRepository.writeAtomically(target, jpeg);
+        PhotoRepository.writeAtomically(target, png);
     }
 
     public static byte[] load(MinecraftServer server, String photoId) throws IOException {
@@ -49,8 +51,8 @@ public final class PhotoRepository {
             throw new IOException("Photograph file has an invalid size");
         }
         byte[] data = Files.readAllBytes(target);
-        if (data.length < 4 || (data[0] & 0xFF) != 255 || (data[1] & 0xFF) != 216 || (data[data.length - 2] & 0xFF) != 255 || (data[data.length - 1] & 0xFF) != 217) {
-            throw new IOException("Photograph file is not JPEG");
+        if (!PhotoRepository.isPngSignature(data)) {
+            throw new IOException("Photograph file is not PNG");
         }
         return data;
     }
@@ -104,7 +106,7 @@ public final class PhotoRepository {
         }
         ArrayList<String> ids = new ArrayList<String>();
         try (Stream<Path> paths = Files.walk(root, 2, new FileVisitOption[0]);){
-            paths.filter(x$0 -> Files.isRegularFile(x$0, new LinkOption[0])).filter(path -> path.getFileName().toString().endsWith(".jpg")).filter(path -> !path.startsWith(root.resolve("trash"))).limit(boundedLimit).forEach(path -> {
+            paths.filter(x$0 -> Files.isRegularFile(x$0, new LinkOption[0])).filter(path -> path.getFileName().toString().endsWith(".png")).filter(path -> !path.startsWith(root.resolve("trash"))).limit(boundedLimit).forEach(path -> {
                 String name = path.getFileName().toString();
                 String id = name.substring(0, name.length() - 4);
                 if (PhotoRepository.isValidPhotoId(id)) {
@@ -128,7 +130,7 @@ public final class PhotoRepository {
             Path directory = root.resolve(String.format(Locale.ROOT, "%02x", shard));
             if (!Files.isDirectory(directory, new LinkOption[0])) continue;
             try (Stream<Path> paths = Files.list(directory);){
-                paths.filter(x$0 -> Files.isRegularFile(x$0, new LinkOption[0])).filter(path -> path.getFileName().toString().endsWith(".jpg")).limit(boundedLimit - ids.size()).forEach(path -> {
+                paths.filter(x$0 -> Files.isRegularFile(x$0, new LinkOption[0])).filter(path -> path.getFileName().toString().endsWith(".png")).limit(boundedLimit - ids.size()).forEach(path -> {
                     String name = path.getFileName().toString();
                     String id = name.substring(0, name.length() - 4);
                     if (PhotoRepository.isValidPhotoId(id)) {
@@ -165,12 +167,12 @@ public final class PhotoRepository {
 
     static Path photoPath(MinecraftServer server, String photoId) {
         PhotoRepository.validatePhotoId(photoId);
-        return PhotoRepository.root(server).resolve(photoId.substring(0, 2).toLowerCase()).resolve(photoId + ".jpg");
+        return PhotoRepository.root(server).resolve(photoId.substring(0, 2).toLowerCase()).resolve(photoId + ".png");
     }
 
     static Path trashPath(MinecraftServer server, String photoId) {
         PhotoRepository.validatePhotoId(photoId);
-        return PhotoRepository.root(server).resolve("trash").resolve(photoId.substring(0, 2).toLowerCase()).resolve(photoId + ".jpg");
+        return PhotoRepository.root(server).resolve("trash").resolve(photoId.substring(0, 2).toLowerCase()).resolve(photoId + ".png");
     }
 
     private static Path legacyPath(MinecraftServer server, String photoId) {
@@ -180,6 +182,18 @@ public final class PhotoRepository {
 
     static Path root(MinecraftServer server) {
         return server.getWorldPath(LevelResource.ROOT).resolve("data").resolve("neoguanniao").resolve("photos");
+    }
+
+    private static boolean isPngSignature(byte[] data) {
+        if (data.length < PNG_SIGNATURE.length) {
+            return false;
+        }
+        for (int index = 0; index < PNG_SIGNATURE.length; ++index) {
+            if (data[index] != PNG_SIGNATURE[index]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void validatePhotoId(String photoId) {

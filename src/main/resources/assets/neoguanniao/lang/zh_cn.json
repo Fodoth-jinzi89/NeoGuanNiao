@@ -519,5 +519,15 @@
   "tooltip.neoguanniao.photo.time": "时间：",
   "tooltip.neoguanniao.photo.dimension": "维度：",
   "tooltip.neoguanniao.photo.coordinates": "坐标：%s, %s, %s",
-  "tooltip.neoguanniao.photo.photographer": "拍摄者：%s"
+  "tooltip.neoguanniao.photo.photographer": "拍摄者：%s",
+  "item.neoguanniao.wind_feather_fan": "风翎扇",
+  "item.neoguanniao.burial_plume_book": "葬翎技能书",
+  "item.neoguanniao.riven_plume_book": "裂翎技能书",
+  "item.neoguanniao.hunting_return_book": "猎归技能书",
+  "enchantment.neoguanniao.burial_plume": "葬翎",
+  "enchantment.neoguanniao.burial_plume.desc": "翎羽化作风眼，聚敌后环斩。",
+  "enchantment.neoguanniao.riven_plume": "裂翎",
+  "enchantment.neoguanniao.riven_plume.desc": "翎羽分裂列阵，重聚时爆发重击。",
+  "enchantment.neoguanniao.hunting_return": "猎归",
+  "enchantment.neoguanniao.hunting_return.desc": "回风锁定群敌，在猎物之间连续追击。"
 }

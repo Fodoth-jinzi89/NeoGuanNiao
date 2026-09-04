@@ -180,5 +180,16 @@
   "entity.myna.death": {
     "subtitle": "subtitles.neoguanniao.entity.myna.death",
     "sounds": ["neoguanniao:entity/myna/call_05"]
-  }
+  },
+  "item.feather_fan.burial_vortex":{"sounds":["neoguanniao:item/feather_fan/burial_vortex"]},
+  "item.feather_fan.burial_slash":{"sounds":["neoguanniao:item/feather_fan/burial_slash"]},
+  "item.feather_fan.riven_pin":{"sounds":["neoguanniao:item/feather_fan/riven_pin"]},
+  "item.feather_fan.riven_split":{"sounds":["neoguanniao:item/feather_fan/riven_split"]},
+  "item.feather_fan.riven_lock":{"sounds":["neoguanniao:item/feather_fan/riven_lock"]},
+  "item.feather_fan.riven_burst":{"sounds":["neoguanniao:item/feather_fan/riven_burst"]},
+  "item.feather_fan.hunt_lock":{"sounds":["neoguanniao:item/feather_fan/hunt_lock"]},
+  "item.feather_fan.hunt_start":{"sounds":["neoguanniao:item/feather_fan/hunt_start"]},
+  "item.feather_fan.hunt_turn":{"sounds":["neoguanniao:item/feather_fan/hunt_turn"]},
+  "item.feather_fan.hunt_hit":{"sounds":["neoguanniao:item/feather_fan/hunt_hit"]}
 }
+

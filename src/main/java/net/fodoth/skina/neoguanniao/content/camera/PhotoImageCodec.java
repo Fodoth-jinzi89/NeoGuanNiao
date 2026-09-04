@@ -14,16 +14,16 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 public final class PhotoImageCodec {
-    private static final float[] JPEG_QUALITIES = new float[]{0.98f, 0.96f, 0.94f, 0.9f};
+    private static final byte[] PNG_SIGNATURE = new byte[]{(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
 
     private PhotoImageCodec() {
     }
 
-    public static byte[] encodeJpeg(int[] nativeAbgrPixels, int width, int height) throws IOException {
+    public static byte[] encodePng(int[] nativeAbgrPixels, int width, int height) throws IOException {
         if (!PhotoTransferLimits.isSupportedDimensions(width, height) || nativeAbgrPixels.length != width * height) {
             throw new IOException("Invalid photograph dimensions");
         }
-        BufferedImage image = new BufferedImage(width, height, 1);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 int abgr = nativeAbgrPixels[y * width + x];
@@ -31,19 +31,14 @@ public final class PhotoImageCodec {
                 image.setRGB(x, y, rgb);
             }
         }
-        for (float quality : JPEG_QUALITIES) {
-            byte[] encoded = PhotoImageCodec.encodeJpeg(image, quality);
-            if (encoded.length > CameraConfig.maxCompressedBytes()) continue;
-            return encoded;
-        }
-        throw new IOException("Photograph remains too large after JPEG compression");
+        return PhotoImageCodec.encodePng(image);
     }
 
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    public static Dimensions validateJpeg(byte[] encoded) throws IOException {
-        if (encoded.length == 0 || encoded.length > CameraConfig.maxCompressedBytes()) {
+    public static Dimensions validatePng(byte[] encoded) throws IOException {
+        if (encoded.length == 0 || encoded.length > CameraConfig.maxCompressedBytes() || !PhotoImageCodec.isPngSignature(encoded)) {
             throw new IOException("Invalid compressed photograph size");
         }
         try (ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(encoded));){
@@ -58,8 +53,8 @@ public final class PhotoImageCodec {
             try {
                 int height;
                 reader.setInput(input, true, true);
-                if (!"JPEG".equalsIgnoreCase(reader.getFormatName())) {
-                    throw new IOException("Photograph must be JPEG");
+                if (!"png".equalsIgnoreCase(reader.getFormatName())) {
+                    throw new IOException("Photograph must be PNG");
                 }
                 int width = reader.getWidth(0);
                 if (!PhotoTransferLimits.isSupportedDimensions(width, height = reader.getHeight(0))) {
@@ -89,28 +84,27 @@ public final class PhotoImageCodec {
         return value != null && value.length() == 64 && value.matches("[0-9a-f]{64}");
     }
 
-    private static byte[] encodeJpeg(BufferedImage image, float quality) throws IOException {
-        var writers = ImageIO.getImageWritersByFormatName("jpg");
-        if (!writers.hasNext()) {
-            throw new IOException("No JPEG writer is available");
-        }
-        var writer = writers.next();
-        try (ByteArrayOutputStream output = new ByteArrayOutputStream();
-             var stream = ImageIO.createImageOutputStream(output)) {
-            writer.setOutput(stream);
-            var params = writer.getDefaultWriteParam();
-            if (params.canWriteCompressed()) {
-                params.setCompressionMode(javax.imageio.ImageWriteParam.MODE_EXPLICIT);
-                params.setCompressionQuality(Math.clamp(quality, 0.1F, 1.0F));
+    private static byte[] encodePng(BufferedImage image) throws IOException {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            if (!ImageIO.write(image, "png", output)) {
+                throw new IOException("No PNG writer is available");
             }
-            writer.write(null, new javax.imageio.IIOImage(image, null, null), params);
             return output.toByteArray();
-        } finally {
-            writer.dispose();
         }
+    }
+
+    private static boolean isPngSignature(byte[] data) {
+        if (data.length < PNG_SIGNATURE.length) {
+            return false;
+        }
+        for (int index = 0; index < PNG_SIGNATURE.length; ++index) {
+            if (data[index] != PNG_SIGNATURE[index]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public record Dimensions(int width, int height) {
     }
 }
-

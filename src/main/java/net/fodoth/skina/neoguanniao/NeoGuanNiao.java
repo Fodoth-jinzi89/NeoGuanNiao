@@ -9,6 +9,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.fodoth.skina.neoguanniao.client.fan.FeatherFanParticleProviders;
 import org.slf4j.Logger;
 
 @Mod(NeoGuanNiao.MODID)
@@ -19,6 +21,7 @@ public class NeoGuanNiao {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public NeoGuanNiao(IEventBus modEventBus, ModContainer container) {
+        modEventBus.addListener((RegisterParticleProvidersEvent event) -> FeatherFanParticleProviders.register(event));
         NeoGuanNiaoBlocks.BLOCKS.register(modEventBus);
         NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         NeoGuanNiaoItems.ITEMS.register(modEventBus);
@@ -29,6 +32,7 @@ public class NeoGuanNiao {
         NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         NeoGuanNiaoBirdData.BIRD_DATA.register(modEventBus);
         NeoGuanNiaoDataComponents.DATA_COMPONENTS.register(modEventBus);
+        NeoGuanNiaoParticleTypes.PARTICLE_TYPES.register(modEventBus);
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register(modEventBus);
         NeoGuanNiaoCriteriaTriggers.register(modEventBus);
         container.registerConfig(ModConfig.Type.COMMON, NeoGuanNiaoCommonConfig.SPEC);

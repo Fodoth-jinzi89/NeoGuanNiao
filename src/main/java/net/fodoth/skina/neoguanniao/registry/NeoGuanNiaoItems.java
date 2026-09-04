@@ -10,6 +10,7 @@ import net.fodoth.skina.neoguanniao.content.camera.NikonD750Item;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographItem;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
+import net.fodoth.skina.neoguanniao.content.fan.FeatherFanItem;
 import net.fodoth.skina.neoguanniao.content.feed.*;
 import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
@@ -68,6 +69,7 @@ public final class NeoGuanNiaoItems {
     public static final DeferredItem<Item> GOLDEN_FOOD_BAG_UNIQUE;
 
     public static final DeferredItem<Item> BIRD_NEST;
+    public static final DeferredItem<Item> WIND_FEATHER_FAN;
 
     private NeoGuanNiaoItems() {
     }
@@ -245,5 +247,6 @@ public final class NeoGuanNiaoItems {
                                 NeoGuanNiaoBlocks.BIRD_NEST.get(),
                                 new Item.Properties()
                         ));
+        WIND_FEATHER_FAN = ITEMS.registerItem("wind_feather_fan", FeatherFanItem::new, new Item.Properties());
     }
 }

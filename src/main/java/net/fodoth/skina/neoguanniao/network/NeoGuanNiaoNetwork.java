@@ -30,6 +30,7 @@ public final class NeoGuanNiaoNetwork {
         registrar.playToClient(PhotoCaptureResultPacket.TYPE, PhotoCaptureResultPacket.STREAM_CODEC, PhotoCaptureResultPacket::handle);
         registrar.playToClient(PhotoDownloadStartPacket.TYPE, PhotoDownloadStartPacket.STREAM_CODEC, PhotoDownloadStartPacket::handle);
         registrar.playToClient(PhotoDownloadChunkPacket.TYPE, PhotoDownloadChunkPacket.STREAM_CODEC, PhotoDownloadChunkPacket::handle);
+        registrar.playToServer(FeatherFanPiercePacket.TYPE, FeatherFanPiercePacket.STREAM_CODEC, FeatherFanPiercePacket::handle);
     }
 
     public static void sendToServer(CustomPacketPayload payload) {

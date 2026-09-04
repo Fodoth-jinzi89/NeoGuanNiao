@@ -3,6 +3,9 @@ package net.fodoth.skina.neoguanniao.content.camera;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.client.camera.PhotographClientActions;
 import java.util.List;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -17,22 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FilmItem
 extends Item {
+    private static final DateTimeFormatter CAPTURE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm");
     private static Component formatTime(long ticks) {
-        int totalSeconds = (int)Math.max(0L, ticks / 20L);
-        int hours = totalSeconds / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        int seconds = totalSeconds % 60;
-        Component result = Component.empty();
-        if (hours > 0) result = result.copy().append(Component.translatable("tooltip.neoguanniao.time.hour", hours));
-        if (minutes > 0) {
-            if (!result.getString().isEmpty()) result = result.copy().append(" ");
-            result = result.copy().append(Component.translatable("tooltip.neoguanniao.time.minute", minutes));
-        }
-        if (seconds > 0 || result.getString().isEmpty()) {
-            if (!result.getString().isEmpty()) result = result.copy().append(" ");
-            result = result.copy().append(Component.translatable("tooltip.neoguanniao.time.second", seconds));
-        }
-        return result;
+        return Component.literal(CAPTURE_TIME_FORMAT.format(Instant.ofEpochMilli(Math.max(0L, ticks)).atZone(ZoneId.systemDefault())));
     }
     public FilmItem(Item.Properties properties) {
         super(properties);
@@ -62,7 +52,7 @@ extends Item {
             return;
         }
         String photographer = PhotographData.photographer(stack);
-        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").append(formatTime(PhotographData.gameTime(stack))));
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.time").append(formatTime(PhotographData.captureTime(stack))));
         tooltip.add(Component.translatable("tooltip.neoguanniao.photo.dimension").append(PhotographData.dimension(stack)));
         tooltip.add(Component.translatable("tooltip.neoguanniao.photo.coordinates", PhotographData.x(stack), PhotographData.y(stack), PhotographData.z(stack)));
         if (!photographer.isEmpty()) {

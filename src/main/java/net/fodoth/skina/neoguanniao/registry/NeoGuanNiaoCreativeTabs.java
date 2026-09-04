@@ -71,6 +71,7 @@ public final class NeoGuanNiaoCreativeTabs {
                                 output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_EGG_MINUS.get());
 
                                 output.accept(NeoGuanNiaoItems.BIRD_NEST.get());
+                                output.accept(NeoGuanNiaoItems.WIND_FEATHER_FAN.get());
                             })
                             .build()
             );

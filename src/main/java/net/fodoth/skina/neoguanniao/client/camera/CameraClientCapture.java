@@ -306,11 +306,11 @@ public final class CameraClientCapture {
             ENCODE_EXECUTOR.execute(() -> {
                 try {
                     CameraImageFilters.apply(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE, filter, System.nanoTime());
-                    byte[] jpeg = PhotoImageCodec.encodeJpeg(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE);
-                    NeoGuanNiao.LOGGER.debug("Captured photograph ({} bytes), starting upload", jpeg.length);
+                    byte[] png = PhotoImageCodec.encodePng(pixels, PhotographData.IMAGE_SIZE, PhotographData.IMAGE_SIZE);
+                    NeoGuanNiao.LOGGER.debug("Captured photograph ({} bytes), starting upload", png.length);
                     Minecraft.getInstance().execute(() -> {
                         try {
-                            PhotoClientRepository.upload(hand, jpeg);
+                            PhotoClientRepository.upload(hand, png);
                         } catch (Exception exception) {
                             NeoGuanNiao.LOGGER.error("Failed to upload photograph", exception);
                         }

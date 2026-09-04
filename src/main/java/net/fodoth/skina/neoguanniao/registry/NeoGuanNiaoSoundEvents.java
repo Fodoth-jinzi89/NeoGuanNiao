@@ -8,9 +8,19 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class NeoGuanNiaoSoundEvents {
-
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(Registries.SOUND_EVENT, NeoGuanNiao.MODID);
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_BURIAL_VORTEX = register("item.feather_fan.burial_vortex");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_BURIAL_SLASH = register("item.feather_fan.burial_slash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_RIVEN_PIN = register("item.feather_fan.riven_pin");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_RIVEN_SPLIT = register("item.feather_fan.riven_split");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_RIVEN_LOCK = register("item.feather_fan.riven_lock");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_RIVEN_BURST = register("item.feather_fan.riven_burst");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_HUNT_LOCK = register("item.feather_fan.hunt_lock");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_HUNT_START = register("item.feather_fan.hunt_start");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_HUNT_TURN = register("item.feather_fan.hunt_turn");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FEATHER_FAN_HUNT_HIT = register("item.feather_fan.hunt_hit");
 
     public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_HERON_AMBIENT =
             register("entity.night_heron.ambient");
@@ -68,6 +78,7 @@ public final class NeoGuanNiaoSoundEvents {
 
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String id) {
+        assert SOUND_EVENTS != null;
         return SOUND_EVENTS.register(
                 id,
                 () -> SoundEvent.createVariableRangeEvent(

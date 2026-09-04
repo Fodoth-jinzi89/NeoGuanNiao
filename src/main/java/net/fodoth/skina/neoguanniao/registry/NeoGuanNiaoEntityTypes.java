@@ -14,6 +14,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographEntity;
+import net.fodoth.skina.neoguanniao.content.fan.FeatherFanProjectileEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -40,6 +41,7 @@ public final class NeoGuanNiaoEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<KiwiEntity>> NEO_KIWI;
     public static final DeferredHolder<EntityType<?>, EntityType<MynaEntity>> NEO_MYNA;
     public static final DeferredHolder<EntityType<?>, EntityType<PhotographEntity>> PHOTOGRAPH;
+    public static final DeferredHolder<EntityType<?>, EntityType<FeatherFanProjectileEntity>> FEATHER_FAN_PROJECTILE;
 
     private NeoGuanNiaoEntityTypes() {
     }
@@ -71,5 +73,11 @@ public final class NeoGuanNiaoEntityTypes {
                 .clientTrackingRange(10)
                 .updateInterval(Integer.MAX_VALUE)
                 .build(NeoGuanNiao.resource("photograph").toString()));
+        FEATHER_FAN_PROJECTILE = ENTITY_TYPES.register("feather_fan_projectile", () -> EntityType.Builder
+                .<FeatherFanProjectileEntity>of(FeatherFanProjectileEntity::new, MobCategory.MISC)
+                .sized(0.25F, 0.25F)
+                .clientTrackingRange(8)
+                .updateInterval(1)
+                .build(NeoGuanNiao.resource("feather_fan_projectile").toString()));
     }
 }
