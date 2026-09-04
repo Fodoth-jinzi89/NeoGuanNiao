@@ -23,7 +23,14 @@ BIRD_TYPES = {
     1: "night_heron",
     2: "dove",
     3: "pigeon",
-    4: "sparrow"
+    4: "sparrow",
+    5: "cockatiel",
+    6: "long_tailed_tit",
+    7: "macaw",
+    8: "crow",
+    9: "seagull",
+    10: "kiwi",
+    11: "myna"
 }
 
 

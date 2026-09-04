@@ -34,6 +34,55 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_common"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 1
       },
@@ -66,6 +115,55 @@
         "neoguanniao:rarity": 1
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_uncommon"
     },
     {
       "predicate": {
@@ -104,6 +202,55 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_rare"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 3
       },
@@ -136,6 +283,55 @@
         "neoguanniao:rarity": 3
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_epic"
     },
     {
       "predicate": {
@@ -174,6 +370,55 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_legendary"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 5
       },
@@ -209,6 +454,55 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_ancient"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 6
       },
@@ -241,6 +535,55 @@
         "neoguanniao:rarity": 6
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_sparrow_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 5,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 6,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 7,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 8,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_crow_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 9,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_unique"
     },
     {
       "predicate": {
@@ -280,251 +623,6 @@
     {
       "predicate": {
         "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 6,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_long_tailed_tit_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 7,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_macaw_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 8,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_crow_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 9,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_seagull_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 5,
         "neoguanniao:rarity": 999
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_cockatiel_hidden"
@@ -556,6 +654,132 @@
         "neoguanniao:rarity": 999
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_seagull_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 10,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_hidden"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_common"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_rare"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_legendary"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_unique"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 11,
+        "neoguanniao:rarity": 999
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_myna_hidden"
     }
   ]
 }

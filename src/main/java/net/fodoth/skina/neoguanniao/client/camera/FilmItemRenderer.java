@@ -17,8 +17,6 @@ import org.joml.Matrix4f;
 public class FilmItemRenderer
 extends BlockEntityWithoutLevelRenderer {
     private static final ResourceLocation FILM_TEXTURE = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "textures/item/film.png");
-        private static final float FILM_WIDTH = 0.78f;
-    private static final float FILM_HEIGHT = 0.54f;
 
     public FilmItemRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
