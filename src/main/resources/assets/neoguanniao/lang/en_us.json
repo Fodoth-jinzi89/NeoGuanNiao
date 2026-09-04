@@ -512,5 +512,8 @@
   "gui.neoguanniao.camera_shooting_mode.landscape.description": "Uses 24mm and F11 to keep near and distant scenery clear.",
   "gui.neoguanniao.camera_focus_mode.af_s": "AF-S Single",
   "gui.neoguanniao.camera_focus_mode.af_c": "AF-C Continuous",
-  "gui.neoguanniao.camera_focus_mode.manual": "MF Manual"
+  "gui.neoguanniao.camera_focus_mode.manual": "MF Manual",
+  "key.categories.neoguanniao": "Camera",
+  "key.neoguanniao.camera.open_creative_controls": "Open Creative Camera Controls",
+  "key.neoguanniao.camera.focus": "Focus Camera"
 }

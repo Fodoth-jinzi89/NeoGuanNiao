@@ -42,6 +42,7 @@ extends Screen {
     private CameraFilterCategory category;
     private int highlightedIndex;
     private int scrollOffset;
+    private double scrollPosition;
     private int visibleRows;
     private int rowHeight;
     private int panelLeft;
@@ -172,6 +173,7 @@ extends Screen {
             }
         }
         this.scrollOffset = Mth.clamp(this.scrollOffset, 0, maximum);
+        this.scrollPosition = this.scrollOffset;
     }
 
     private void setCategory(CameraFilterCategory next) {
@@ -181,6 +183,7 @@ extends Screen {
         this.category = next;
         this.highlightedIndex = 0;
         this.scrollOffset = 0;
+        this.scrollPosition = 0.0;
         List<CameraFilter> filters = this.currentFilters();
         if (!filters.isEmpty()) {
             this.select(filters.getFirst());
@@ -309,7 +312,8 @@ extends Screen {
             int thumbnailX;
             boolean thumbnailDrawn;
             CameraFilter filter = filters.get(filterIndex);
-            int y0 = this.listTop + row * (this.rowHeight + 3);
+            int y0 = this.listTop + row * (this.rowHeight + 3)
+                    - (int)Math.round((this.scrollPosition - this.scrollOffset) * (this.rowHeight + 3));
             int y1 = Math.min(this.listBottom, y0 + this.rowHeight);
             boolean selected = filter == this.highlighted;
             boolean hovered = CameraFilterPickerScreen.contains(mouseX, mouseY, this.rightLeft + 3, y0, contentRight, y1);
@@ -512,14 +516,19 @@ extends Screen {
             return;
         }
         double progress = Mth.clamp((mouseY - (double)this.listTop) / Math.max(1.0, this.listBottom - this.listTop), 0.0, 1.0);
-        this.scrollOffset = Mth.clamp((int)Math.round(progress * (double)maximum), 0, maximum);
+        this.scrollPosition = Mth.clamp(progress * maximum, 0.0, maximum);
+        this.scrollOffset = (int)Math.floor(this.scrollPosition);
     }
 
-        public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (delta == 0.0) {
             return true;
         }
-        this.moveSelection(delta > 0.0 ? -1 : 1);
+        int maximum = Math.max(0, this.currentFilters().size() - this.visibleRows);
+        if (maximum > 0) {
+            this.scrollPosition = Mth.clamp(this.scrollPosition - delta * 0.5, 0.0, maximum);
+            this.scrollOffset = (int)Math.floor(this.scrollPosition);
+        }
         return true;
     }
 

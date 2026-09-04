@@ -478,7 +478,7 @@
   "gui.neoguanniao.camera_filter.night_vision.description": "高亮绿色视野，模拟夜视设备。",
   "gui.neoguanniao.camera_filter.thermal": "热成像",
   "gui.neoguanniao.camera_filter.thermal.description": "按明暗映射热谱色彩，呈现热成像。",
-  "key.neoguanniao.camera.cycle_filter": "打开相机滤镜库",
+  "key.neoguanniao.camera.cycle_filter": "打开滤镜库",
   "gui.neoguanniao.camera_creative.title": "创意拍摄",
   "gui.neoguanniao.camera_creative.tab.lens": "镜头",
   "gui.neoguanniao.camera_creative.tab.mode": "拍摄模式",
@@ -512,5 +512,8 @@
   "gui.neoguanniao.camera_shooting_mode.landscape.description": "24mm 与 F11，让近景和远方都保持清楚。",
   "gui.neoguanniao.camera_focus_mode.af_s": "AF-S 单次",
   "gui.neoguanniao.camera_focus_mode.af_c": "AF-C 连续",
-  "gui.neoguanniao.camera_focus_mode.manual": "MF 手动"
+  "gui.neoguanniao.camera_focus_mode.manual": "MF 手动",
+  "key.categories.neoguanniao": "新观鸟丨相机",
+  "key.neoguanniao.camera.open_creative_controls": "打开创意摄影界面",
+  "key.neoguanniao.camera.focus": "聚焦"
 }

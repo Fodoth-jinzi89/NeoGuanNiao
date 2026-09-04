@@ -1,9 +1,8 @@
 package net.fodoth.skina.neoguanniao.client.camera;
-import net.fodoth.skina.neoguanniao.content.camera.NikonD750Item;
 
+import net.fodoth.skina.neoguanniao.content.camera.NikonD750Item;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.fodoth.skina.neoguanniao.util.TransformUtil;
@@ -23,23 +22,22 @@ extends GeoItemRenderer<NikonD750Item> {
     }
 
     private static void applyDisplayTransform(PoseStack poseStack, ItemDisplayContext context) {
-        // Values mirror the display section of nikon_d750.geo - Converted.json.
         switch (context) {
             case GUI -> {
-                TransformUtil.applyTransform(poseStack, 0.5f, 0.0f, 0.0f, 0.8f, 135.0f, 15.0f, 0.0f);
+                TransformUtil.applyTransform(poseStack, -11.5f / 16f, -5.0f / 16f, 0.0f, 0.8f, 135.0f, -5.0f, 5.0f);
             }
             case GROUND -> {
-                TransformUtil.applyTransform(poseStack, 0.0f, 1.5f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f);
+                TransformUtil.applyTransform(poseStack, 0.3f, 1.5f / 16f, 0.3f, 0.5f, 0.0f, 0.0f, 0.0f);
             }
-            case FIXED -> poseStack.translate(0.0f, 0.0f, -2.75f);
+            case FIXED -> poseStack.translate(0.0f, 0.0f, -2.75f / 16f);
             case HEAD -> {
-                TransformUtil.applyTransform(poseStack, 0.0f, 9.5f, -6.75f, 2.0f, 0.0f, 0.0f, 0.0f);
+                TransformUtil.applyTransform(poseStack, 0.0f, 9.5f / 16f, -6.75f / 16f, 2.0f, 0.0f, 0.0f, 0.0f);
             }
             // First-person transforms are intentionally kept in the camera-specific renderer.
             case FIRST_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND -> {
             }
             case THIRD_PERSON_LEFT_HAND, THIRD_PERSON_RIGHT_HAND -> {
-                TransformUtil.applyTransform(poseStack, 0.0f, 4.75f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f);
+                TransformUtil.applyTransform(poseStack, 0.0f, 4.75f / 16f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f);
             }
             default -> {
             }
