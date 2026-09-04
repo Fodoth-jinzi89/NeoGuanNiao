@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.fodoth.skina.neoguanniao.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "neoguanniao.refmap.json",
+  "mixins": [
+    "AbstractVillagerMixin",
+    "BlockStateBaseMixin",
+    "MerchantOfferMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

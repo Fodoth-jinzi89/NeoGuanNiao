@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="NeoGuanNiao"></stringAttribute>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.neoforged.devlaunch.Main"></stringAttribute>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value=" @E:\\MCreator\\Workspaces\\NeoGuanNiao\\build\\moddev\\clientRunProgramArgs.txt"></stringAttribute>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value=" @E:\\MCreator\\Workspaces\\NeoGuanNiao\\build\\moddev\\clientRunVmArgs.txt -Dfml.modFolders=neoguanniao%%E:\\MCreator\\Workspaces\\NeoGuanNiao\\bin\\main"></stringAttribute>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="E:\MCreator\Workspaces\NeoGuanNiao\run"></stringAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.STOP_IN_MAIN" value="false"></booleanAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"></booleanAttribute>
+</launchConfiguration>

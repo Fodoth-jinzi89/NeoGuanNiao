@@ -177,6 +177,11 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return true;
     }
 
+    /** Species-specific multiplier for the ground walk-around goal. */
+    public double getWalkAroundSpeedMultiplier() {
+        return 1.0D;
+    }
+
     /**
      * 生成规则由 {@link NeoGuanNiaoModEvents} 注册。
      */
@@ -751,6 +756,18 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
             if (state != BirdBehaviorState.EATING && tickTimer.getBirdEatingTicker().getTicks() <= 0) {
 
                 // 睡眠动画：根据行为计时器判断是进入睡眠还是睡眠循环
+                if ((state == BirdBehaviorState.SLEEPING || state == BirdBehaviorState.ROOSTING) && isLeashed()) {
+                    var flyAnimation = BIRD_DATA.animation().animationMap().get("fly");
+                    if (flyAnimation == null) {
+                        flyAnimation = BIRD_DATA.animation().animationMap().get("fly_glide");
+                    }
+                    if (flyAnimation == null) {
+                        flyAnimation = BIRD_DATA.animation().animationMap().get("walk");
+                    }
+                    if (flyAnimation != null) {
+                        return animationState.setAndContinue(flyAnimation);
+                    }
+                }
                 if (state == BirdBehaviorState.SLEEPING) {
                     if (BIRD_DATA.animation().animationMap().containsKey("sleep_1")) {
                         return animationState.setAndContinue(getAnimationController().pickSleepAnimation());

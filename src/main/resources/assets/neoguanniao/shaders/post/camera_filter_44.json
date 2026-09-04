@@ -1,0 +1,25 @@
+{
+  "targets": [
+    "neoguanniao_camera_swap"
+  ],
+  "passes": [
+    {
+      "name": "neoguanniao_camera_universal",
+      "intarget": "minecraft:main",
+      "outtarget": "neoguanniao_camera_swap",
+      "uniforms": [
+        {
+          "name": "FilterMode",
+          "values": [
+            44
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "neoguanniao_camera_swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

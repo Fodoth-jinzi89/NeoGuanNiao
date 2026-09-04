@@ -32,6 +32,10 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
     @Override
     public boolean onUse() {
+        if (!bird().canFly()) {
+            this.roostPos = bird().blockPosition();
+            return true;
+        }
         this.roostPos = findRoostPosition();
         return this.roostPos != null;
     }
@@ -42,7 +46,7 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
             return false;
         }
         // 幼鸟不会飞，只能睡在地上
-        if (bird().isBaby()) {
+        if (bird().isBaby() || !bird().canFly()) {
             return false;
         }
         if (bird().getRoutineController().isSleeping() && isGoodRoostPosition(false, bird().blockPosition())) {
@@ -64,6 +68,10 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
     public void onStart() {
         bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.ROOSTING);
         bird().getNavigation().stop();
+        if (!bird().canFly()) {
+            bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
+            return;
+        }
         if (bird().canFly() && roostPos != null && roostPos.getY() > bird().getY() + 1.0D) {
             bird().getFlyingController().startShortFlight(Vec3.atCenterOf(roostPos), false);
         }

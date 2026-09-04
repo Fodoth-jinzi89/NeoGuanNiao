@@ -13,6 +13,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.camera.PhotographEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -38,6 +39,7 @@ public final class NeoGuanNiaoEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<SeagullEntity>> NEO_SEAGULL;
     public static final DeferredHolder<EntityType<?>, EntityType<KiwiEntity>> NEO_KIWI;
     public static final DeferredHolder<EntityType<?>, EntityType<MynaEntity>> NEO_MYNA;
+    public static final DeferredHolder<EntityType<?>, EntityType<PhotographEntity>> PHOTOGRAPH;
 
     private NeoGuanNiaoEntityTypes() {
     }
@@ -62,6 +64,12 @@ public final class NeoGuanNiaoEntityTypes {
         NEO_CROW = registerCreature("neo_crow", CrowEntity::new, 0.416F, 0.576F);
         NEO_SEAGULL = registerCreature("neo_seagull", SeagullEntity::new, 0.72F, 0.81F);
         NEO_KIWI = registerCreature("neo_kiwi", KiwiEntity::new, 0.58F, 0.7F);
-        NEO_MYNA = registerCreature("neo_myna", MynaEntity::new, 0.49F, 0.68F);
+        NEO_MYNA = registerCreature("neo_myna", MynaEntity::new, 0.416F, 0.576F);
+        PHOTOGRAPH = ENTITY_TYPES.register("photograph", () -> EntityType.Builder
+                .<PhotographEntity>of(PhotographEntity::new, MobCategory.MISC)
+                .sized(0.5F, 0.5F)
+                .clientTrackingRange(10)
+                .updateInterval(Integer.MAX_VALUE)
+                .build(NeoGuanNiao.resource("photograph").toString()));
     }
 }

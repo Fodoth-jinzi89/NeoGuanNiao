@@ -377,5 +377,13 @@
 
   "advancements.neoguanniao.walking_dandelion.description":
   "Pick up a bird feather",
-  "container.neoguanniao.bird_nest": "Bird Nest"
+  "container.neoguanniao.bird_nest": "Bird Nest",
+  "config.neoguanniao.title": "NeoGuanNiao Settings",
+  "config.neoguanniao.camera": "Camera",
+  "config.neoguanniao.camera.uploads_enabled": "Enable photo uploads",
+  "config.neoguanniao.camera.uploads_operator_only": "Operator-only uploads",
+  "config.neoguanniao.camera.max_photos_per_player": "Max photos per player",
+  "config.neoguanniao.camera.max_photo_bytes_per_player": "Max photo bytes per player",
+  "config.neoguanniao.camera.enable_optics_shader": "Enable optics shader",
+  "config.neoguanniao.camera.enable_filter_preview": "Enable filter preview"
 }

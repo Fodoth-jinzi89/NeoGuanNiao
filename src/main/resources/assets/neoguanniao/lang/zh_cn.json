@@ -320,4 +320,12 @@
   ,"subtitles.neoguanniao.entity.myna.ambient":"八哥：鸣叫"
   ,"subtitles.neoguanniao.entity.myna.hurt":"八哥：受伤"
   ,"subtitles.neoguanniao.entity.myna.death":"八哥：死亡"
+  ,"config.neoguanniao.title":"NeoGuanNiao 设置"
+  ,"config.neoguanniao.camera":"相机"
+  ,"config.neoguanniao.camera.uploads_enabled":"启用照片上传"
+  ,"config.neoguanniao.camera.uploads_operator_only":"仅管理员可上传"
+  ,"config.neoguanniao.camera.max_photos_per_player":"玩家照片数量上限"
+  ,"config.neoguanniao.camera.max_photo_bytes_per_player":"玩家照片容量上限"
+  ,"config.neoguanniao.camera.enable_optics_shader":"启用光学着色器"
+  ,"config.neoguanniao.camera.enable_filter_preview":"启用滤镜预览"
 }

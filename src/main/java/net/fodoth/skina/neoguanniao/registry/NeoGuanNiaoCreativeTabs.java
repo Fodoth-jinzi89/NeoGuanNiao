@@ -31,6 +31,9 @@ public final class NeoGuanNiaoCreativeTabs {
                             .displayItems((parameters, output) -> {
                                 output.accept(NeoGuanNiaoItems.BIRD_GUIDE.get());
                                 output.accept(NeoGuanNiaoItems.BREADCRUMBS.get());
+                                output.accept(NeoGuanNiaoItems.NIKON_D750.get());
+                                output.accept(NeoGuanNiaoItems.FILM.get());
+                                output.accept(NeoGuanNiaoItems.PHOTOGRAPH.get());
 
                                 output.accept(NeoGuanNiaoItems.SMALL_BIRD_CAGE.get());
                                 output.accept(NeoGuanNiaoItems.MEDIUM_BIRD_CAGE.get());

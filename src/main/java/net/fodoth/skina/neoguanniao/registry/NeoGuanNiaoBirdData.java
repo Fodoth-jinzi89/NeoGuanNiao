@@ -259,7 +259,7 @@ public final class NeoGuanNiaoBirdData {
                             NeoGuanNiaoSoundEvents.MYNA_DEATH.get(), NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), SoundEvents.PARROT_EAT))
                     .withFlying(flying(BirdFlightProfile.BUDGERIGAR))
                     .withModel(modelData("myna", "myna", genderedSkins("myna", skinVariant("myna", BirdSkinRarity.COMMON)),
-                            BirdModelScaleProfile.COLUMBID, 0.2F, 1.0F))
+                            BirdModelScaleProfile.COLUMBID, 0.2F, 1.15F))
                     .withAnimation(animation("myna", "myna", Map.ofEntries(
                             Map.entry("idle", loop("idle")), Map.entry("preen", playThenIdle("idle_diff_1")),
                             Map.entry("curious", playThenIdle("idle_diff_2")), Map.entry("walk", loop("walk")),

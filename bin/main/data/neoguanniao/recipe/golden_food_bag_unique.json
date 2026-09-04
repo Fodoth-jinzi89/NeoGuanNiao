@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "neoguanniao:golden_food_bag"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "result": {
+    "id": "neoguanniao:golden_food_bag_unique",
+    "count": 1
+  }
+}

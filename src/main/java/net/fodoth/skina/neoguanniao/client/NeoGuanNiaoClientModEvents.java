@@ -8,6 +8,10 @@ import net.fodoth.skina.neoguanniao.client.cage.BirdCageItemRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestItemRenderer;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestRenderer;
+import net.fodoth.skina.neoguanniao.client.camera.FilmItemRenderer;
+import net.fodoth.skina.neoguanniao.client.camera.NikonD750ItemRenderer;
+import net.fodoth.skina.neoguanniao.client.camera.PhotographEntityRenderer;
+import net.fodoth.skina.neoguanniao.client.camera.PhotographItemRenderer;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -70,6 +74,7 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), PhotographEntityRenderer::new);
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),
@@ -97,6 +102,10 @@ public final class NeoGuanNiaoClientModEvents {
                 NeoGuanNiaoItems.BIRD_BATH.get(),
                 BirdBathItemRenderer::new
         );
+
+        ClientExtensionHelper.registerGeoItemRenderer(event, NeoGuanNiaoItems.NIKON_D750.get(), NikonD750ItemRenderer::new);
+        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.FILM.get(), FilmItemRenderer::new);
+        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.PHOTOGRAPH.get(), PhotographItemRenderer::new);
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,

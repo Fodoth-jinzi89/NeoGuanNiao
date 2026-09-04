@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "neoguanniao:green_food_bag"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "result": {
+    "id": "neoguanniao:green_food_bag_growth",
+    "count": 1
+  }
+}

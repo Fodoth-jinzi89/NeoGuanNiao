@@ -5,6 +5,9 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathItem;
 import net.fodoth.skina.neoguanniao.content.bath.BirdBathVariant;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
+import net.fodoth.skina.neoguanniao.content.camera.FilmItem;
+import net.fodoth.skina.neoguanniao.content.camera.NikonD750Item;
+import net.fodoth.skina.neoguanniao.content.camera.PhotographItem;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.fodoth.skina.neoguanniao.content.feed.*;
@@ -24,6 +27,9 @@ public final class NeoGuanNiaoItems {
 
     public static final DeferredItem<Item> BREADCRUMBS;
     public static final DeferredItem<Item> BIRD_GUIDE;
+    public static final DeferredItem<Item> NIKON_D750;
+    public static final DeferredItem<Item> FILM;
+    public static final DeferredItem<Item> PHOTOGRAPH;
 
     public static final DeferredItem<Item> SMALL_BIRD_CAGE;
     public static final DeferredItem<Item> MEDIUM_BIRD_CAGE;
@@ -100,6 +106,10 @@ public final class NeoGuanNiaoItems {
                 "bird_guide",
                 () -> new BirdGuideItem(new Item.Properties().stacksTo(1))
         );
+
+        NIKON_D750 = ITEMS.register("nikon_d750", () -> new NikonD750Item(new Item.Properties().stacksTo(1)));
+        FILM = ITEMS.register("film", () -> new FilmItem(new Item.Properties().stacksTo(1)));
+        PHOTOGRAPH = ITEMS.register("photograph", () -> new PhotographItem(new Item.Properties().stacksTo(16)));
 
 
         SMALL_BIRD_CAGE = registerBirdCageItem(BirdCageVariant.SMALL, NeoGuanNiaoBlocks.SMALL_BIRD_CAGE);

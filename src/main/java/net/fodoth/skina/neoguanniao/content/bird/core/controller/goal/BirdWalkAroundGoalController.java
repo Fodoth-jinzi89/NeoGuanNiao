@@ -43,7 +43,7 @@ public final class BirdWalkAroundGoalController<T extends AbstractBirdEntity<?>>
     public void onStart() {
         bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.WALKING);
         bird().getNavigation().moveTo(target.x, target.y, target.z,
-                goalDatum().randomWalkAroundSpeedModifier());
+                goalDatum().randomWalkAroundSpeedModifier() * bird().getWalkAroundSpeedMultiplier());
     }
 
     @Override

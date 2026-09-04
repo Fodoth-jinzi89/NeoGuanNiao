@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "neoguanniao:green_food_bag_growth",
+    "neoguanniao:green_food_bag_rejuvenate",
+    "neoguanniao:green_food_bag_stop",
+    "neoguanniao:green_food_bag_transmute",
+    "neoguanniao:green_food_bag_feather_add",
+    "neoguanniao:green_food_bag_feather_minus",
+    "neoguanniao:green_food_bag_feather_fast",
+    "neoguanniao:green_food_bag_feather_slow",
+    "neoguanniao:green_food_bag_size_up",
+    "neoguanniao:green_food_bag_size_down",
+    "neoguanniao:golden_food_bag_upgrade",
+    "neoguanniao:golden_food_bag_downgrade",
+    "neoguanniao:golden_food_bag_unique",
+    "neoguanniao:golden_food_bag_egg_add",
+    "neoguanniao:golden_food_bag_egg_minus"
+  ]
+}

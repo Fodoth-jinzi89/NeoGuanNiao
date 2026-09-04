@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "neoguanniao:bird_food_bag_fish",
+    {
+      "id": "#goldentweaks:bird_breed_food_fish",
+      "required": false
+    }
+  ]
+}

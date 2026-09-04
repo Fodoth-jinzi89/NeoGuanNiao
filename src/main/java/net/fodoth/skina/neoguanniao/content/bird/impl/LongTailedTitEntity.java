@@ -18,6 +18,11 @@ public final class LongTailedTitEntity extends SimpleNeoBirdEntity<LongTailedTit
 
     @Override protected LongTailedTitEntity getSelf() { return this; }
 
+    @Override
+    public double getWalkAroundSpeedMultiplier() {
+        return 0.6D;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return SimpleNeoBirdEntity.createAttributes(6.0, 0.25, 0.34, 18.0);
     }

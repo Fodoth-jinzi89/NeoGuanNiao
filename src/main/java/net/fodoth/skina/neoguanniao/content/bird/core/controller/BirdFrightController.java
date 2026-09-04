@@ -56,11 +56,15 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
                 : miscDatum.alertTicksOther();
         stateController.setBehaviorStateFor(BirdBehaviorState.ALERT, alertTicks);
 
-        // 非玩家攻击时延迟触发受惊
-        if (!isPlayer) {
+        boolean delayedFright = bird().getRandom().nextFloat() < 0.25F;
+        if (delayedFright) {
             int delayTicks = frightDatum.frightDelayMin()
                     + bird().getRandom().nextInt(frightDatum.frightDelayVariance());
             queueFrightFrom(sourcePos, delayTicks);
+        } else {
+            int duration = frightDatum.frightenFromTicks()
+                    + bird().getRandom().nextInt(frightDatum.frightenFromTicksVariance());
+            frightenFrom(sourcePos, duration);
         }
 
 
@@ -115,11 +119,27 @@ public class BirdFrightController<T extends AbstractBirdEntity<T>> extends Abstr
         // 警告周围的鸟
         alertNearbyBirds();
 
-        // 如果在地面且未飞行，立即开始逃跑飞行
-        // 幼鸟不会飞
-        if (!bird().isBaby() && timer.getBirdFlyingTicker().getTicks() <= 0 && bird().onGround()) {
+        if (!bird().canFly() && bird().onGround()) {
+            startGroundEscape(sourcePos);
+        } else if (!bird().isBaby() && timer.getBirdFlyingTicker().getTicks() <= 0 && bird().onGround()) {
             startEscapeFlight(sourcePos);
         }
+    }
+
+    private void startGroundEscape(Vec3 sourcePos) {
+        Vec3 away = bird().position().subtract(sourcePos);
+        if (away.lengthSqr() < 0.01D) {
+            away = new Vec3(bird().getRandom().nextDouble() - 0.5D, 0.0D,
+                    bird().getRandom().nextDouble() - 0.5D);
+        }
+        Vec3 direction = new Vec3(away.x, 0.0D, away.z).normalize();
+        double distance = 4.0D + bird().getRandom().nextDouble() * 4.0D;
+        bird().getNavigation().moveTo(
+                bird().getX() + direction.x * distance,
+                bird().getY(),
+                bird().getZ() + direction.z * distance,
+                1.5D
+        );
     }
 
     /**

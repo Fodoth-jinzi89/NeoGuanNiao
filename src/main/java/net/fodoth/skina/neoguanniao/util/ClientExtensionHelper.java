@@ -35,4 +35,22 @@ public class ClientExtensionHelper {
                 item
         );
     }
+
+    public static void registerItemRenderer(
+            RegisterClientExtensionsEvent event,
+            Item item,
+            Supplier<? extends BlockEntityWithoutLevelRenderer> rendererFactory
+    ) {
+        event.registerItem(new IClientItemExtensions() {
+            private BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) {
+                    renderer = rendererFactory.get();
+                }
+                return renderer;
+            }
+        }, item);
+    }
 }

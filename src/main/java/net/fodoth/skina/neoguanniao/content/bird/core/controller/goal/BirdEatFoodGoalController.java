@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.goal;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
             if (bird().getY() >= targetFood.getY()) {
                 bird().getNavigation().setCanFloat(false);
             }
-            bird().getNavigation().moveTo(this.targetFood, goalDatum().eatFoodMoveSpeed());
+            bird().getNavigation().moveTo(this.targetFood, forageSpeed());
         }
 
         if (distance < goalDatum().eatFoodConsumeDistance()) {
@@ -104,5 +105,12 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
         if (bird().getBehaviorStateController().getBehaviorState() == BirdBehaviorState.FORAGING) {
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.IDLE);
         }
+    }
+
+    private double forageSpeed() {
+        double sizeFactor = Mth.clamp(1.5D - bird().getBbWidth() * 0.5D, 1.2D, 1.5D);
+        return goalDatum().randomWalkAroundSpeedModifier()
+                * bird().getWalkAroundSpeedMultiplier()
+                * sizeFactor;
     }
 }

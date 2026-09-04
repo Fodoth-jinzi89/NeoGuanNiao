@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neoguanniao:item/bird_egg/bird_egg_uncommon",
+    "layer1": "neoguanniao:item/bird_egg/rarity/hidden",
+    "layer2": "neoguanniao:item/bird_egg/gender/male"
+  }
+}
