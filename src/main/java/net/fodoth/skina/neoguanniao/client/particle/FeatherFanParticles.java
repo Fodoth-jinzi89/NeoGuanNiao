@@ -8,7 +8,7 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Ported custom particle visuals from guaniao-3.1.4 (official 1.20.1 mappings),
@@ -57,7 +57,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -68,9 +68,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new BurialCycloneParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }
@@ -111,7 +110,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -122,9 +121,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new BurialWindParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }
@@ -167,7 +165,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -178,9 +176,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new HuntingMarkParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }
@@ -224,7 +221,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -235,9 +232,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new HuntingStreakParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }
@@ -353,7 +349,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -364,9 +360,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new KillFeatherParticle(level, x, y, z, this.sprites);
             }
         }
@@ -411,7 +406,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -422,9 +417,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new RivenSplitParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }
@@ -464,7 +458,7 @@ public final class FeatherFanParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
+        public @NotNull ParticleRenderType getRenderType() {
             return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
         }
 
@@ -475,9 +469,8 @@ public final class FeatherFanParticles {
                 this.sprites = sprites;
             }
 
-            @Nullable
             @Override
-            public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            public @NotNull Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
                 return new RivenStreakParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
             }
         }

@@ -4,6 +4,7 @@ import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import java.io.IOException;
 import java.nio.file.Path;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,6 +38,7 @@ extends Screen {
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 15267327);
         graphics.fill(x - 8, y - 8, x + imageSize + 8, y + imageSize + 8, -1449519);
         graphics.fill(x - 4, y - 4, x + imageSize + 4, y + imageSize + 4, -14013910);
+        PhotographTextureCache.pumpUploads();
         ResourceLocation texture = PhotographTextureCache.textureFor(this.photograph);
         PhotographScreen.blitFullTexture(graphics, texture, x, y, imageSize, textureWidth, textureHeight);
         String photographer = PhotographData.photographer(this.photograph);
@@ -58,6 +60,7 @@ extends Screen {
         try {
             graphics.pose().translate((float)x, (float)y, 0.0f);
             graphics.pose().scale((float)imageSize / (float)textureWidth, (float)imageSize / (float)textureHeight, 1.0f);
+            Minecraft.getInstance().getTextureManager().getTexture(texture).setFilter(false, false);
             graphics.blit(texture, 0, 0, 0.0f, 0.0f, textureWidth, textureHeight, textureWidth, textureHeight);
         }
         finally {

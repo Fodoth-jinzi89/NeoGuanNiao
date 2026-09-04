@@ -3,7 +3,10 @@ import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
@@ -134,7 +137,7 @@ public final class PhotographTextureCache {
      */
     private static void decode(String key, byte[] png, int decodeGeneration) {
         try {
-            NativeImage image = NativeImage.read(png);
+            NativeImage image = PhotographTextureCache.readImage(png);
             synchronized (READY) {
                 READY.addLast(new DecodedImage(key, image, decodeGeneration));
             }
@@ -142,6 +145,30 @@ public final class PhotographTextureCache {
         catch (IOException | RuntimeException exception) {
             NeoGuanNiao.LOGGER.error("Failed to decode photograph texture {}", key, exception);
             Minecraft.getInstance().execute(() -> DECODING.remove(key));
+        }
+    }
+
+    private static NativeImage readImage(byte[] data) throws IOException {
+        try {
+            return NativeImage.read(data);
+        }
+        catch (IOException exception) {
+            BufferedImage source = ImageIO.read(new ByteArrayInputStream(data));
+            if (source == null) {
+                throw exception;
+            }
+            NativeImage image = new NativeImage(source.getWidth(), source.getHeight(), false);
+            for (int y = 0; y < source.getHeight(); ++y) {
+                for (int x = 0; x < source.getWidth(); ++x) {
+                    int rgb = source.getRGB(x, y);
+                    int alpha = rgb >>> 24;
+                    int red = rgb >>> 16 & 0xFF;
+                    int green = rgb >>> 8 & 0xFF;
+                    int blue = rgb & 0xFF;
+                    image.setPixelRGBA(x, y, alpha << 24 | blue << 16 | green << 8 | red);
+                }
+            }
+            return image;
         }
     }
 
