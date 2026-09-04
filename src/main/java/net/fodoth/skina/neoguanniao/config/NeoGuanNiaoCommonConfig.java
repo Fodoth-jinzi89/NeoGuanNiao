@@ -24,7 +24,7 @@ public final class NeoGuanNiaoCommonConfig {
         MAX_PHOTOS_PER_WORLD = b.defineInRange("maxPhotosPerWorld", 16384, 1, 1000000);
         MAX_PHOTO_BYTES_PER_WORLD = b.defineInRange("maxPhotoBytesPerWorld", 8L * 1024 * 1024 * 1024, 1048576L, 64L * 1024 * 1024 * 1024);
         PHOTO_TRASH_RETENTION_DAYS = b.defineInRange("photoTrashRetentionDays", 7, 0, 3650);
-        MAX_COMPRESSED_BYTES = b.defineInRange("maxCompressedBytes", 0x200000, 65536, 0x1000000);
+        MAX_COMPRESSED_BYTES = b.defineInRange("maxCompressedBytes", 0xA00000, 65536, 0x1000000);
         UPLOAD_TIMEOUT_TICKS = b.defineInRange("uploadTimeoutTicks", 200, 20, 72000);
         DOWNLOAD_TIMEOUT_TICKS = b.defineInRange("downloadTimeoutTicks", 200, 20, 72000);
         CAPTURE_COOLDOWN_TICKS = b.defineInRange("captureCooldownTicks", 30, 0, 1200);
