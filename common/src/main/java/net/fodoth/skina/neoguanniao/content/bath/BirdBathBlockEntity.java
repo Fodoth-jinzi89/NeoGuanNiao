@@ -52,11 +52,6 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
     public BirdBathBlockEntity(BlockPos pos, BlockState state) {
         super(NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(), pos, state);
         this.environmentalTickOffset = Math.floorMod(Long.hashCode(pos.asLong()), 20000);
-    }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
         BirdBathAttraction.registerBath(this);
     }
 
@@ -435,7 +430,6 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    @Override
     public void onDataPacket(@NotNull Connection connection, ClientboundBlockEntityDataPacket packet,
                              HolderLookup.@NotNull Provider provider) {
         CompoundTag tag = packet.getTag();
@@ -572,3 +566,6 @@ public class BirdBathBlockEntity extends BlockEntity implements GeoBlockEntity {
         return first.ordinal() >= second.ordinal() ? first : second;
     }
 }
+
+
+

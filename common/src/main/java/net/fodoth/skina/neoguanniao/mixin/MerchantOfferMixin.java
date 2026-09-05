@@ -76,10 +76,10 @@ public class MerchantOfferMixin implements MerchantOfferAccessor {
             at = @At("TAIL")
     )
     private void neoguanniao$copy(
-            MerchantOffer other,
+            MerchantOffer merchantOffer,
             CallbackInfo ci
     ) {
-        MerchantOfferAccessor accessor = (MerchantOfferAccessor) other;
+        MerchantOfferAccessor accessor = (MerchantOfferAccessor) merchantOffer;
         this.neoguanniao$displayCost = accessor.neoguanniao$getDisplayCost();
         this.neoguanniao$costBDisplay = accessor.neoguanniao$getCostBDisplay();
         this.neoguanniao$resultDisplay = accessor.neoguanniao$getResultDisplay();
@@ -146,28 +146,28 @@ public class MerchantOfferMixin implements MerchantOfferAccessor {
             at = @At("TAIL")
     )
     private static void neoguanniao$writeDisplay(
-            RegistryFriendlyByteBuf buffer,
-            MerchantOffer offer,
+            RegistryFriendlyByteBuf registryFriendlyByteBuf,
+            MerchantOffer merchantOffer,
             CallbackInfo ci
     ) {
-        MerchantOfferAccessor accessor = (MerchantOfferAccessor) offer;
+        MerchantOfferAccessor accessor = (MerchantOfferAccessor) merchantOffer;
 
         ItemStack display = accessor.neoguanniao$getDisplayCost();
-        buffer.writeBoolean(display != null);
+        registryFriendlyByteBuf.writeBoolean(display != null);
         if (display != null) {
-            ItemStack.STREAM_CODEC.encode(buffer, display);
+            ItemStack.STREAM_CODEC.encode(registryFriendlyByteBuf, display);
         }
 
         ItemStack costBDisplay = accessor.neoguanniao$getCostBDisplay();
-        buffer.writeBoolean(costBDisplay != null);
+        registryFriendlyByteBuf.writeBoolean(costBDisplay != null);
         if (costBDisplay != null) {
-            ItemStack.STREAM_CODEC.encode(buffer, costBDisplay);
+            ItemStack.STREAM_CODEC.encode(registryFriendlyByteBuf, costBDisplay);
         }
 
         ItemStack resultDisplay = accessor.neoguanniao$getResultDisplay();
-        buffer.writeBoolean(resultDisplay != null);
+        registryFriendlyByteBuf.writeBoolean(resultDisplay != null);
         if (resultDisplay != null) {
-            ItemStack.STREAM_CODEC.encode(buffer, resultDisplay);
+            ItemStack.STREAM_CODEC.encode(registryFriendlyByteBuf, resultDisplay);
         }
     }
 
@@ -176,24 +176,24 @@ public class MerchantOfferMixin implements MerchantOfferAccessor {
             at = @At("RETURN")
     )
     private static void neoguanniao$readDisplay(
-            RegistryFriendlyByteBuf buffer,
+            RegistryFriendlyByteBuf registryFriendlyByteBuf,
             CallbackInfoReturnable<MerchantOffer> cir
     ) {
         MerchantOffer offer = cir.getReturnValue();
         MerchantOfferAccessor accessor = (MerchantOfferAccessor) offer;
 
-        if (buffer.readBoolean()) {
-            ItemStack display = ItemStack.STREAM_CODEC.decode(buffer);
+        if (registryFriendlyByteBuf.readBoolean()) {
+            ItemStack display = ItemStack.STREAM_CODEC.decode(registryFriendlyByteBuf);
             accessor.neoguanniao$setDisplayCost(display);
         }
 
-        if (buffer.readBoolean()) {
-            ItemStack costBDisplay = ItemStack.STREAM_CODEC.decode(buffer);
+        if (registryFriendlyByteBuf.readBoolean()) {
+            ItemStack costBDisplay = ItemStack.STREAM_CODEC.decode(registryFriendlyByteBuf);
             accessor.neoguanniao$setCostBDisplay(costBDisplay);
         }
 
-        if (buffer.readBoolean()) {
-            ItemStack resultDisplay = ItemStack.STREAM_CODEC.decode(buffer);
+        if (registryFriendlyByteBuf.readBoolean()) {
+            ItemStack resultDisplay = ItemStack.STREAM_CODEC.decode(registryFriendlyByteBuf);
             accessor.neoguanniao$setResultDisplay(resultDisplay);
         }
     }

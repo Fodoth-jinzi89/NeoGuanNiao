@@ -4,10 +4,7 @@ import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutConfig;
 import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class BirdGuideClient {
     private static ItemStack currentGuideStack;
 

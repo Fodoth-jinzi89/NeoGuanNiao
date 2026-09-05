@@ -25,7 +25,7 @@ public final class NeoGuanNiaoCreativeTabs {
 
     public static final Supplier<CreativeModeTab> MAIN_TAB =
             CREATIVE_MODE_TABS.register("main", () ->
-                    CreativeModeTab.builder()
+                    CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                             .title(Component.translatable("itemGroup.neoguanniao.main"))
                             .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_GUIDE.get()))
                             .displayItems((parameters, output) -> {
@@ -78,7 +78,7 @@ public final class NeoGuanNiaoCreativeTabs {
 
     public static final Supplier<CreativeModeTab> EGG_TAB =
             CREATIVE_MODE_TABS.register("eggs", () ->
-                    CreativeModeTab.builder()
+                    CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                             .title(Component.translatable("itemGroup.neoguanniao.eggs"))
                             .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get()))
                             .displayItems((parameters, output) -> {
@@ -89,7 +89,7 @@ public final class NeoGuanNiaoCreativeTabs {
 
     public static final Supplier<CreativeModeTab> FEATHER_TAB =
             CREATIVE_MODE_TABS.register("feathers", () ->
-                    CreativeModeTab.builder()
+                    CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                             .title(Component.translatable("itemGroup.neoguanniao.feathers"))
                             .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_FEATHER.get()))
                             .displayItems((parameters, output) -> {
@@ -102,7 +102,7 @@ public final class NeoGuanNiaoCreativeTabs {
     }
 
     private static void generateBirdEggs(CreativeModeTab.Output output) {
-        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA) {
             BirdModelSkinDatum modelDatum = holder.get().model();
 
             // 遍历所有模型
@@ -137,7 +137,7 @@ public final class NeoGuanNiaoCreativeTabs {
     }
 
     private static void generateBirdFeathers(CreativeModeTab.Output output) {
-        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA) {
             BirdModelSkinDatum modelDatum = holder.get().model();
 
             // 用于记录当前鸟类已经生成过的稀有度

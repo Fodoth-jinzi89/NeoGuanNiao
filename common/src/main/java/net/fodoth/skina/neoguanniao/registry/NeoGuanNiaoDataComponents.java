@@ -15,12 +15,11 @@ import dev.architectury.registry.registries.DeferredRegister;
 public final class NeoGuanNiaoDataComponents {
 
 
-    public static final DeferredRegister.DataComponents DATA_COMPONENTS =
-            DeferredRegister.createDataComponents(
-                    Registries.DATA_COMPONENT_TYPE,
-                    NeoGuanNiao.MODID
-            );
-
+    public static final ComponentRegister DATA_COMPONENTS = new ComponentRegister();
+    public static final class ComponentRegister {
+        private final DeferredRegister<DataComponentType<?>> delegate = DeferredRegister.create(NeoGuanNiao.MODID, Registries.DATA_COMPONENT_TYPE);
+        public <T> RegistrySupplier<DataComponentType<T>> registerComponentType(String id, java.util.function.UnaryOperator<DataComponentType.Builder<T>> op) { return delegate.register(id, () -> op.apply(DataComponentType.builder()).build()); }
+    }
 
     public static final RegistrySupplier<DataComponentType<BirdGuideLayoutData>> BIRD_GUIDE_LAYOUT =
             DATA_COMPONENTS.registerComponentType(
@@ -94,5 +93,7 @@ public final class NeoGuanNiaoDataComponents {
     );
 
 }
+
+
 
 

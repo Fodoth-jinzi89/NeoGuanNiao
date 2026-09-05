@@ -130,7 +130,7 @@ public class BirdFeatherTrade implements VillagerTrades.ItemListing {
         // 1. 收集所有符合条件的羽毛数据
         List<BirdFeatherData> candidates = new ArrayList<>();
 
-        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA) {
             BirdModelSkinDatum modelDatum = holder.get().model();
             Set<Integer> generatedRarities = new HashSet<>();
 
@@ -182,7 +182,7 @@ public class BirdFeatherTrade implements VillagerTrades.ItemListing {
      * @return true 表示该稀有度至少存在一种羽毛
      */
     private boolean hasFeatherRarity(BirdSkinRarity rarity) {
-        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA) {
             for (BirdSkin skin : holder.get().model().birdSkin()) {
                 if (skin.rarity() == rarity) {
                     return true;

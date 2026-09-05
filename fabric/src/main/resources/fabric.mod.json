@@ -4,10 +4,16 @@
   "version": "${version}",
   "name": "Neo Guan Niao",
   "environment": "*",
-  "entrypoints": { "main": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabric"] },
+  "entrypoints": {
+    "main": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabric"],
+    "client": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabricClient"]
+  },
+  "mixins": ["neoguanniao.mixins.json"],
   "depends": {
     "fabricloader": ">=0.16.9",
     "minecraft": "1.21.1",
-    "architectury": "*"
+    "architectury": "*",
+    "fabric-api": "*",
+    "geckolib": ">=4.8.4"
   }
 }

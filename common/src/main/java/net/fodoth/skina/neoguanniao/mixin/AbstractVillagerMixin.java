@@ -32,7 +32,7 @@ public abstract class AbstractVillagerMixin {
             at = @At("TAIL")
     )
     private void neoguanniao$saveDisplay(
-            CompoundTag tag,
+            CompoundTag compoundTag,
             CallbackInfo ci
     ) {
 
@@ -94,7 +94,7 @@ public abstract class AbstractVillagerMixin {
         }
 
 
-        tag.put(
+        compoundTag.put(
                 NEOGUANNIAO_DISPLAY,
                 list
         );
@@ -110,12 +110,12 @@ public abstract class AbstractVillagerMixin {
             at = @At("TAIL")
     )
     private void neoguanniao$loadDisplay(
-            CompoundTag tag,
+            CompoundTag compoundTag,
             CallbackInfo ci
     ) {
 
 
-        if (!tag.contains(
+        if (!compoundTag.contains(
                 NEOGUANNIAO_DISPLAY
         )) {
             return;
@@ -135,7 +135,7 @@ public abstract class AbstractVillagerMixin {
 
 
         ListTag list =
-                tag.getList(
+                compoundTag.getList(
                         NEOGUANNIAO_DISPLAY,
                         CompoundTag.TAG_COMPOUND
                 );

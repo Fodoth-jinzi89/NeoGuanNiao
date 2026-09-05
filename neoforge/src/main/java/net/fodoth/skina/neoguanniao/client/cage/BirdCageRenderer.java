@@ -5,6 +5,7 @@ import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.AABB;
 
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 
 
@@ -19,7 +20,7 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
 
 
     @Override
-    public AABB getRenderBoundingBox(BirdCageBlockEntity birdCage) {
+    public @NotNull AABB getRenderBoundingBox(BirdCageBlockEntity birdCage) {
         var pos = birdCage.getBlockPos();
         double height = switch (birdCage.variant()) {
             case SMALL -> 1.0D;

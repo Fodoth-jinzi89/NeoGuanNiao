@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.AABB;
 
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 
@@ -26,7 +27,7 @@ public class BirdBathRenderer extends GeoBlockRenderer<BirdBathBlockEntity> {
 
 
     @Override
-    public AABB getRenderBoundingBox(BirdBathBlockEntity birdBath) {
+    public @NotNull AABB getRenderBoundingBox(BirdBathBlockEntity birdBath) {
         var pos = birdBath.getBlockPos();
         return new AABB(
                 pos.getX(), pos.getY(), pos.getZ(),

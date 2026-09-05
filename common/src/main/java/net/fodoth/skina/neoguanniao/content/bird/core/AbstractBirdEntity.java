@@ -23,7 +23,6 @@ import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdTameControl
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestBlockEntity;
-import net.fodoth.skina.neoguanniao.event.NeoGuanNiaoModEvents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockTags;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoCriteriaTriggers;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -184,7 +183,7 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     }
 
     /**
-     * 生成规则由 {@link NeoGuanNiaoModEvents} 注册。
+     * 生成规则由平台事件注册。
      */
     public static boolean canSpawn(EntityType<? extends AbstractBirdEntity<?>> entityType, ServerLevelAccessor level,
                                    MobSpawnType spawnType, BlockPos pos, RandomSource random, BirdData birdData) {

@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.client.camera.PhotographClientActions;
+import net.fodoth.skina.neoguanniao.platform.ClientHooks;
 import java.util.List;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -37,7 +37,7 @@ extends Item {
         if (level.isClientSide && PhotographData.hasImage(stack)) {
             ItemStack copy = stack.copy();
             try {
-                PhotographClientActions.openScreen(copy);
+                ClientHooks.openPhotograph(copy);
             } catch (RuntimeException exception) {
                 NeoGuanNiao.LOGGER.error("Unable to open film preview", exception);
             }

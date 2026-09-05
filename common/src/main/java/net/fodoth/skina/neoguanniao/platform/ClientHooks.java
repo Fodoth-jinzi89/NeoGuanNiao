@@ -7,4 +7,6 @@ public final class ClientHooks {
     private ClientHooks() {}
     @ExpectPlatform
     public static native void openBirdGuide(ItemStack stack);
+    @ExpectPlatform public static native void openCamera(net.minecraft.world.InteractionHand hand);
+    @ExpectPlatform public static native void openPhotograph(ItemStack stack);
 }

@@ -1,7 +1,7 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
+import net.fodoth.skina.neoguanniao.platform.ClientHooks;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,7 +34,7 @@ implements GeoItem {
         level.playSound(player, player.blockPosition(), (SoundEvent)SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.7f, 1.35f);
         if (level.isClientSide) {
             try {
-                CameraClientCapture.openViewfinder(hand);
+                ClientHooks.openCamera(hand);
             } catch (RuntimeException exception) {
                 NeoGuanNiao.LOGGER.error("Unable to open the camera viewfinder", exception);
             }

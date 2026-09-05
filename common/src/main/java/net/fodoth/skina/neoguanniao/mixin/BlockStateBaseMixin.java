@@ -41,14 +41,14 @@ public class BlockStateBaseMixin {
     )
     private VoxelShape neoguanniao$birdLeavesCollision(
             VoxelShape original,
-            BlockGetter level,
-            BlockPos pos,
-            CollisionContext context
+            BlockGetter blockGetter,
+            BlockPos blockPos,
+            CollisionContext collisionContext
     ) {
-        BlockState state = (BlockState) (Object) this;
+        @SuppressWarnings("DataFlowIssue") BlockState state = (BlockState) (Object) this;
 
         if (state.getBlock() instanceof LeavesBlock
-                && context instanceof EntityCollisionContext entityContext) {
+                && collisionContext instanceof EntityCollisionContext entityContext) {
 
             Entity entity = entityContext.getEntity();
 
@@ -59,7 +59,7 @@ public class BlockStateBaseMixin {
                                 && (!entity.onGround() || entity.isPassenger());
 
                 if (!activelyFlying
-                        && entityContext.isAbove(neoguanniao$LEAVES_PERCH_SHAPE, pos, true)) {
+                        && entityContext.isAbove(neoguanniao$LEAVES_PERCH_SHAPE, blockPos, true)) {
 
                     return neoguanniao$LEAVES_PERCH_SHAPE;
 

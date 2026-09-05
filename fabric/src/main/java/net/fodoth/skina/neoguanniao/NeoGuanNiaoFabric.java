@@ -14,5 +14,6 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
         NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register();
         NeoGuanNiaoParticleTypes.PARTICLE_TYPES.register();
         NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register();
+        NeoGuanNiaoFabricSpawns.register();
     }
 }

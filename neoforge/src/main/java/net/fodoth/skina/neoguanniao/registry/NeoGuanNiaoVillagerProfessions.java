@@ -37,7 +37,7 @@ public class NeoGuanNiaoVillagerProfessions {
     public static final DeferredRegister<VillagerProfession> PROFESSIONS =
             DeferredRegister.create(NeoGuanNiao.MODID, Registries.VILLAGER_PROFESSION);
 
-    public static final RegistrySupplier<VillagerProfession, VillagerProfession>
+    public static final RegistrySupplier<VillagerProfession>
             BIRD_KEEPER;
 
     static {
@@ -51,7 +51,7 @@ public class NeoGuanNiaoVillagerProfessions {
 
 
     @SuppressWarnings("SameParameterValue")
-    private static RegistrySupplier<VillagerProfession, VillagerProfession>
+    private static RegistrySupplier<VillagerProfession>
     registerProfession(
             String name,
             Supplier<Block> block,

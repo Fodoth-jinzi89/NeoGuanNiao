@@ -17,29 +17,15 @@ import static net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdDataHelper.*;
 public final class NeoGuanNiaoBirdData {
 
     public static final DeferredRegister<BirdData> BIRD_DATA =
-            DeferredRegister.create(
-                    ResourceKey.createRegistryKey(
-                            resource(
-                                    "bird_data"
-                            )
-                    ),
-                    NeoGuanNiao.MODID
-            );
-
-
-    static {
-        BIRD_DATA.makeRegistry(builder -> builder
-                .sync(true)
-                .defaultKey(resource("default_bird"))
-                .maxId(Integer.MAX_VALUE));
-    }
+            DeferredRegister.create(NeoGuanNiao.MODID,
+                    ResourceKey.createRegistryKey(resource("bird_data")));
 
     private NeoGuanNiaoBirdData() {
     }
 
     // Existing birds
 
-    public static final RegistrySupplier<BirdData, BirdData> BUDGERIGAR =
+    public static final RegistrySupplier<BirdData> BUDGERIGAR =
             BIRD_DATA.register("neo_budgerigar", () ->
                     BirdData.createDefault()
                             .withSound(
@@ -62,7 +48,7 @@ public final class NeoGuanNiaoBirdData {
                             .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(5))
             );
 
-    public static final RegistrySupplier<BirdData, BirdData> NIGHT_HERON =
+    public static final RegistrySupplier<BirdData> NIGHT_HERON =
             BIRD_DATA.register("neo_night_heron", () ->
                     BirdData.createDefault()
                             .withSound(
@@ -94,7 +80,7 @@ public final class NeoGuanNiaoBirdData {
             );
 
 
-    public static final RegistrySupplier<BirdData, BirdData> PIGEON =
+    public static final RegistrySupplier<BirdData> PIGEON =
             BIRD_DATA.register("neo_pigeon", () ->
                     BirdData.createDefault()
                             .withSound(
@@ -121,7 +107,7 @@ public final class NeoGuanNiaoBirdData {
                             .withGoal(BirdGoalDatum.createDefault().withBreedDistance(1.5D).withBreedMoveSpeed(1.1D).withBathUseConsumeChance(0.5F))
             );
 
-    public static final RegistrySupplier<BirdData, BirdData> DOVE =
+    public static final RegistrySupplier<BirdData> DOVE =
             BIRD_DATA.register("neo_dove", () ->
                     BirdData.createDefault()
                             .withSound(
@@ -150,7 +136,7 @@ public final class NeoGuanNiaoBirdData {
             );
 
 
-    public static final RegistrySupplier<BirdData, BirdData> SPARROW =
+    public static final RegistrySupplier<BirdData> SPARROW =
             BIRD_DATA.register("neo_sparrow", () ->
                     BirdData.createDefault()
                             .withSound(
@@ -178,7 +164,7 @@ public final class NeoGuanNiaoBirdData {
 
     // Guaniao 2.1.3 birds
 
-    public static final RegistrySupplier<BirdData, BirdData> COCKATIEL = registerSimpleBird(
+    public static final RegistrySupplier<BirdData> COCKATIEL = registerSimpleBird(
             "neo_cockatiel", "cockatiel", List.of(
                     skinVariant("dark_gray_yellow_face", BirdSkinRarity.COMMON),
                     skinVariant("gray_yellow_face", BirdSkinRarity.COMMON),
@@ -193,7 +179,7 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("walk", "walk"), Map.entry("fly", "fly"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
 
-    public static final RegistrySupplier<BirdData, BirdData> LONG_TAILED_TIT = registerSimpleBird(
+    public static final RegistrySupplier<BirdData> LONG_TAILED_TIT = registerSimpleBird(
             "neo_long_tailed_tit", "long_tailed_tit",
             List.of(skinVariant("long_tailed_tit", BirdSkinRarity.COMMON)),
             BirdFlightProfile.SPARROW, BirdModelScaleProfile.SPARROW, 0.16F, 0.72F, 6,
@@ -204,7 +190,7 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("walk", "walk"), Map.entry("fly", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "idle"), Map.entry("sleep_loop", "idle")));
 
-    public static final RegistrySupplier<BirdData, BirdData> MACAW = registerSimpleBird(
+    public static final RegistrySupplier<BirdData> MACAW = registerSimpleBird(
             "neo_macaw", "macaw", List.of(
                     skinVariant("scarlet", BirdSkinRarity.COMMON),
                     skinVariant("blue_yellow", BirdSkinRarity.UNCOMMON),
@@ -220,7 +206,7 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("eat", "eat"), Map.entry("sleep", "sleep"),
                     Map.entry("sleep_loop", "sleep_loop")));
 
-    public static final RegistrySupplier<BirdData, BirdData> CROW = registerSimpleBird(
+    public static final RegistrySupplier<BirdData> CROW = registerSimpleBird(
             "neo_crow", "crow", List.of(skinVariant("crow", BirdSkinRarity.COMMON)), BirdFlightProfile.COLUMBID,
             BirdModelScaleProfile.COLUMBID, 0.26F, 0.8F, 4, "crow", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
@@ -229,7 +215,7 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_1", "sleep2")));
 
-    public static final RegistrySupplier<BirdData, BirdData> SEAGULL = registerSimpleBird(
+    public static final RegistrySupplier<BirdData> SEAGULL = registerSimpleBird(
             "neo_seagull", "seagull", List.of(skinVariant("seagull", BirdSkinRarity.COMMON)), BirdFlightProfile.NIGHT_HERON,
             BirdModelScaleProfile.COLUMBID, 0.3F, 0.9F, 5, "seagull", Map.ofEntries(
                     Map.entry("idle", "idle"), Map.entry("preen", "idle_diff_1"),
@@ -240,7 +226,7 @@ public final class NeoGuanNiaoBirdData {
                     Map.entry("fly_glide", "fly_loop"), Map.entry("eat", "eat"),
                     Map.entry("sleep", "sleep"), Map.entry("sleep_loop", "sleep_loop")));
 
-    public static final RegistrySupplier<BirdData, BirdData> KIWI = BIRD_DATA.register("neo_kiwi", () ->
+    public static final RegistrySupplier<BirdData> KIWI = BIRD_DATA.register("neo_kiwi", () ->
             BirdData.createDefault()
                     .withSound(sound(240, NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(), NeoGuanNiaoSoundEvents.KIWI_HURT.get(),
                             NeoGuanNiaoSoundEvents.KIWI_DEATH.get(), NeoGuanNiaoSoundEvents.KIWI_AMBIENT.get(), SoundEvents.PARROT_EAT))
@@ -253,7 +239,7 @@ public final class NeoGuanNiaoBirdData {
                             Map.entry("sleep_loop", loop("sleep_loop")))))
                     .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(3)));
 
-    public static final RegistrySupplier<BirdData, BirdData> MYNA = BIRD_DATA.register("neo_myna", () ->
+    public static final RegistrySupplier<BirdData> MYNA = BIRD_DATA.register("neo_myna", () ->
             BirdData.createDefault()
                     .withSound(sound(240, NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), NeoGuanNiaoSoundEvents.MYNA_HURT.get(),
                             NeoGuanNiaoSoundEvents.MYNA_DEATH.get(), NeoGuanNiaoSoundEvents.MYNA_AMBIENT.get(), SoundEvents.PARROT_EAT))
@@ -267,7 +253,7 @@ public final class NeoGuanNiaoBirdData {
                             Map.entry("sleep", playThenLoop("sleep", "sleep_loop")), Map.entry("sleep_loop", loop("sleep_loop")))))
                     .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(4)));
 
-    private static RegistrySupplier<BirdData, BirdData> registerSimpleBird(
+    private static RegistrySupplier<BirdData> registerSimpleBird(
             String id, String assetName, List<SkinVariant> skins, BirdFlightProfile flightProfile,
             BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, int localSpawnCap,
             String animationName,
@@ -279,4 +265,5 @@ public final class NeoGuanNiaoBirdData {
     }
 
 }
+
 

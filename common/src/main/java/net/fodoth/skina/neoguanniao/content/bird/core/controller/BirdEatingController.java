@@ -229,7 +229,6 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
                 flyingStack
         );
         flyingFood.setNeverPickUp();
-        flyingFood.lifespan = 15;
         double dx = bird.getX() - flyingFood.getX();
         double dy = bird.getY() + 0.5 * bird.getBbHeight() - flyingFood.getY();
         double dz = bird.getZ() - flyingFood.getZ();

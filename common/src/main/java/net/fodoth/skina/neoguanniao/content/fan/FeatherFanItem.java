@@ -60,7 +60,6 @@ public class FeatherFanItem
         tooltip.add(Component.translatable("item.neoguanniao.wind_feather_fan.usage").withStyle(ChatFormatting.GRAY));
     }
 
-    @Override
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
         return ItemAttributeModifiers.builder()
                 .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "fan_damage"), attackDamage(stack), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)

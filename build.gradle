@@ -13,6 +13,29 @@ subprojects {
         mappings loom.officialMojangMappings() }
  java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
  tasks.withType(JavaCompile).configureEach { options.release = 21 }
+    def artifactVersion = "${rootProject.mod_version}-${rootProject.minecraft_version}"
+    tasks.named('jar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = project.name
+    }
+    tasks.named('sourcesJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = "${project.name}-sources"
+    }
+    tasks.named('remapJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = project.name
+        doFirst { archiveClassifier.set(project.name) }
+    }
+    tasks.named('remapSourcesJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = "${project.name}-sources"
+        doFirst { archiveClassifier.set("${project.name}-sources") }
+    }
 }
 
 tasks.register('genIntellijRuns') { dependsOn(':fabric:genIntellijRuns', ':neoforge:genIntellijRuns') }

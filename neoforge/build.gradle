@@ -1,2 +1,2 @@
 architectury { platformSetupLoomIde(); neoForge() }
-dependencies { neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"; modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"; implementation project(path: ':common') }
+dependencies { neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"; modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"; modImplementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.8.4"; compileOnly files("../libs/implementation/emi-1.1.24+1.21.1+neoforge.jar"); implementation project(path: ':common') }
