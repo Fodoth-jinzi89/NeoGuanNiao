@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "birdcamera:item/green_food_bag_stop"
-  }
-}
