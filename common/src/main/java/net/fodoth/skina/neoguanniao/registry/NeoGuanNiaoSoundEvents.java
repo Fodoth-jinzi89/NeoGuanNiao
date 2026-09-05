@@ -5,10 +5,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
-import dev.architectury.registry.registries.Registrar;
+import dev.architectury.registry.registries.DeferredRegister;
 
 public final class NeoGuanNiaoSoundEvents {
-    public static final Registrar<SoundEvent> SOUND_EVENTS = NeoGuanNiaoRegistrar.MANAGER.get(Registries.SOUND_EVENT);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(NeoGuanNiao.MODID, Registries.SOUND_EVENT);
 
     public static final RegistrySupplier<SoundEvent> FEATHER_FAN_BURIAL_VORTEX = register("item.feather_fan.burial_vortex");
     public static final RegistrySupplier<SoundEvent> FEATHER_FAN_BURIAL_SLASH = register("item.feather_fan.burial_slash");
@@ -85,4 +85,5 @@ public final class NeoGuanNiaoSoundEvents {
         );
     }
 }
+
 

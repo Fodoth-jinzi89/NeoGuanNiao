@@ -11,13 +11,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import dev.architectury.registry.registries.RegistrySupplier;`r`nimport dev.architectury.registry.registries.Registrar;`r`nimport net.minecraft.core.registries.BuiltInRegistries;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
+import net.minecraft.core.registries.Registries;
 
 
 public final class NeoGuanNiaoBlocks {
 
-    public static final DeferredRegister.Blocks BLOCKS =
-            DeferredRegister.createBlocks(NeoGuanNiao.MODID);
+    public static final DeferredRegister<Block> BLOCKS =
+            DeferredRegister.create(NeoGuanNiao.MODID, Registries.BLOCK);
 
     public static final RegistrySupplier<Block> BREADCRUMBS;
 
@@ -103,3 +105,4 @@ public final class NeoGuanNiaoBlocks {
                         ));
     }
 }
+

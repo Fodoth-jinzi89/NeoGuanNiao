@@ -8,8 +8,8 @@ import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherData;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
 
 
 public final class NeoGuanNiaoDataComponents {
@@ -22,7 +22,7 @@ public final class NeoGuanNiaoDataComponents {
             );
 
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BirdGuideLayoutData>> BIRD_GUIDE_LAYOUT =
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<BirdGuideLayoutData>> BIRD_GUIDE_LAYOUT =
             DATA_COMPONENTS.registerComponentType(
                     "bird_guide_layout",
                     builder -> builder
@@ -31,7 +31,7 @@ public final class NeoGuanNiaoDataComponents {
                             .cacheEncoding()
             );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BirdEggData>> BIRD_EGG_DATA =
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<BirdEggData>> BIRD_EGG_DATA =
             DATA_COMPONENTS.registerComponentType(
                     "bird_egg_data",
                     builder -> builder
@@ -39,7 +39,7 @@ public final class NeoGuanNiaoDataComponents {
                             .networkSynchronized(BirdEggData.STREAM_CODEC)
             );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             BIRD_EGG_RARITY = DATA_COMPONENTS.registerComponentType(
             "bird_egg_rarity",
             builder -> builder
@@ -47,7 +47,7 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             BIRD_EGG_MODEL_RARITY = DATA_COMPONENTS.registerComponentType(
             "bird_egg_model_rarity",
             builder -> builder
@@ -55,7 +55,7 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             BIRD_EGG_GENDER = DATA_COMPONENTS.registerComponentType(
             "bird_egg_gender",
             builder -> builder
@@ -63,7 +63,7 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BirdFeatherData>> BIRD_FEATHER_DATA =
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<BirdFeatherData>> BIRD_FEATHER_DATA =
             DATA_COMPONENTS.registerComponentType(
                     "bird_feather_data",
                     builder -> builder
@@ -71,7 +71,7 @@ public final class NeoGuanNiaoDataComponents {
                             .networkSynchronized(BirdFeatherData.STREAM_CODEC)
             );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             BIRD_FEATHER_BIRD_TYPE = DATA_COMPONENTS.registerComponentType(
             "bird_feather_bird_type",
             builder -> builder
@@ -79,7 +79,7 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             BIRD_FEATHER_SKIN_RARITY = DATA_COMPONENTS.registerComponentType(
             "bird_feather_skin_rarity",
             builder -> builder
@@ -87,10 +87,11 @@ public final class NeoGuanNiaoDataComponents {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>>
+    public static final RegistrySupplier<DataComponentType<?>, DataComponentType<Integer>>
             FEATHER_FAN_MODE = DATA_COMPONENTS.registerComponentType(
             "feather_fan_mode",
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT)
     );
 
 }
+

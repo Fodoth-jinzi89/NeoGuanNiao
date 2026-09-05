@@ -4,37 +4,25 @@ import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.advancement.criterion.*;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
 
 public class NeoGuanNiaoCriteriaTriggers {
 
     public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS =
-            DeferredRegister.create(
-                    Registries.TRIGGER_TYPE,
-                    NeoGuanNiao.MODID
-            );
+            DeferredRegister.create(NeoGuanNiao.MODID, Registries.TRIGGER_TYPE);
 
 
-    public static final DeferredHolder<
-                CriterionTrigger<?>,
-                SpyglassAtBirdTrigger
+    public static final RegistrySupplier<SpyglassAtBirdTrigger
                 > SPYGLASS_AT_BIRD;
 
-    public static final DeferredHolder<
-            CriterionTrigger<?>,
-            BreedBirdEggTrigger
+    public static final RegistrySupplier<BreedBirdEggTrigger
             > BIRD_EGG_BREED;
 
-    public static final DeferredHolder<
-            CriterionTrigger<?>,
-            HatchBirdEggTrigger
+    public static final RegistrySupplier<HatchBirdEggTrigger
             > HATCH_BIRD_EGG;
 
-    public static final DeferredHolder<
-            CriterionTrigger<?>,
-            PickupBirdFeatherTrigger
+    public static final RegistrySupplier<PickupBirdFeatherTrigger
             > PICKUP_BIRD_FEATHER;
 
     static {
@@ -63,7 +51,8 @@ public class NeoGuanNiaoCriteriaTriggers {
     }
 
 
-    public static void register(IEventBus bus) {
-        TRIGGERS.register(bus);
+    public static void register() {
+        TRIGGERS.register();
     }
 }
+

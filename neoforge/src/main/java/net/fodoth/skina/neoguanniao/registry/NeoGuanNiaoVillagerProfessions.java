@@ -14,8 +14,8 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.HashMap;
@@ -35,12 +35,9 @@ public class NeoGuanNiaoVillagerProfessions {
 
 
     public static final DeferredRegister<VillagerProfession> PROFESSIONS =
-            DeferredRegister.create(
-                    Registries.VILLAGER_PROFESSION,
-                    NeoGuanNiao.MODID
-            );
+            DeferredRegister.create(NeoGuanNiao.MODID, Registries.VILLAGER_PROFESSION);
 
-    public static final DeferredHolder<VillagerProfession, VillagerProfession>
+    public static final RegistrySupplier<VillagerProfession, VillagerProfession>
             BIRD_KEEPER;
 
     static {
@@ -54,7 +51,7 @@ public class NeoGuanNiaoVillagerProfessions {
 
 
     @SuppressWarnings("SameParameterValue")
-    private static DeferredHolder<VillagerProfession, VillagerProfession>
+    private static RegistrySupplier<VillagerProfession, VillagerProfession>
     registerProfession(
             String name,
             Supplier<Block> block,
@@ -182,3 +179,4 @@ public class NeoGuanNiaoVillagerProfessions {
         }
     }
 }
+

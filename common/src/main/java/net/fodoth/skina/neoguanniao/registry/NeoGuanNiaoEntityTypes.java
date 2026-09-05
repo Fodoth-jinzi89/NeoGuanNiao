@@ -20,33 +20,33 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
 
 public final class NeoGuanNiaoEntityTypes {
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(Registries.ENTITY_TYPE, NeoGuanNiao.MODID);
+            DeferredRegister.create(NeoGuanNiao.MODID, Registries.ENTITY_TYPE);
 
-    public static final DeferredHolder<EntityType<?>, EntityType<BudgerigarEntity>> NEO_BUDGERIGAR;
-    public static final DeferredHolder<EntityType<?>, EntityType<NightHeronEntity>> NEO_NIGHT_HERON;
-    public static final DeferredHolder<EntityType<?>, EntityType<PigeonEntity>> NEO_PIGEON;
-    public static final DeferredHolder<EntityType<?>, EntityType<DoveEntity>> NEO_DOVE;
-    public static final DeferredHolder<EntityType<?>, EntityType<SparrowEntity>> NEO_SPARROW;
-    public static final DeferredHolder<EntityType<?>, EntityType<CockatielEntity>> NEO_COCKATIEL;
-    public static final DeferredHolder<EntityType<?>, EntityType<LongTailedTitEntity>> NEO_LONG_TAILED_TIT;
-    public static final DeferredHolder<EntityType<?>, EntityType<MacawEntity>> NEO_MACAW;
-    public static final DeferredHolder<EntityType<?>, EntityType<CrowEntity>> NEO_CROW;
-    public static final DeferredHolder<EntityType<?>, EntityType<SeagullEntity>> NEO_SEAGULL;
-    public static final DeferredHolder<EntityType<?>, EntityType<KiwiEntity>> NEO_KIWI;
-    public static final DeferredHolder<EntityType<?>, EntityType<MynaEntity>> NEO_MYNA;
-    public static final DeferredHolder<EntityType<?>, EntityType<PhotographEntity>> PHOTOGRAPH;
-    public static final DeferredHolder<EntityType<?>, EntityType<FeatherFanProjectileEntity>> FEATHER_FAN_PROJECTILE;
+    public static final RegistrySupplier<EntityType<BudgerigarEntity>> NEO_BUDGERIGAR;
+    public static final RegistrySupplier<EntityType<NightHeronEntity>> NEO_NIGHT_HERON;
+    public static final RegistrySupplier<EntityType<PigeonEntity>> NEO_PIGEON;
+    public static final RegistrySupplier<EntityType<DoveEntity>> NEO_DOVE;
+    public static final RegistrySupplier<EntityType<SparrowEntity>> NEO_SPARROW;
+    public static final RegistrySupplier<EntityType<CockatielEntity>> NEO_COCKATIEL;
+    public static final RegistrySupplier<EntityType<LongTailedTitEntity>> NEO_LONG_TAILED_TIT;
+    public static final RegistrySupplier<EntityType<MacawEntity>> NEO_MACAW;
+    public static final RegistrySupplier<EntityType<CrowEntity>> NEO_CROW;
+    public static final RegistrySupplier<EntityType<SeagullEntity>> NEO_SEAGULL;
+    public static final RegistrySupplier<EntityType<KiwiEntity>> NEO_KIWI;
+    public static final RegistrySupplier<EntityType<MynaEntity>> NEO_MYNA;
+    public static final RegistrySupplier<EntityType<PhotographEntity>> PHOTOGRAPH;
+    public static final RegistrySupplier<EntityType<FeatherFanProjectileEntity>> FEATHER_FAN_PROJECTILE;
 
     private NeoGuanNiaoEntityTypes() {
     }
 
-    private static <T extends Mob> DeferredHolder<EntityType<?>, EntityType<T>> registerCreature(
+    private static <T extends Mob> RegistrySupplier<EntityType<T>> registerCreature(
             String id, EntityType.EntityFactory<T> factory, float width, float height) {
         return ENTITY_TYPES.register(id, () -> EntityType.Builder.of(factory, MobCategory.CREATURE)
                 .sized(width, height)
@@ -81,3 +81,4 @@ public final class NeoGuanNiaoEntityTypes {
                 .build(NeoGuanNiao.resource("feather_fan_projectile").toString()));
     }
 }
+

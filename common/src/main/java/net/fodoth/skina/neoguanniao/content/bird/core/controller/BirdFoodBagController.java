@@ -15,7 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.DeferredItem;
+import java.util.function.Supplier;
 
 /**
  * 鸟食袋控制器 - 处理各种食物袋对鸟类的交互效果
@@ -436,7 +436,7 @@ public class BirdFoodBagController<T extends AbstractBirdEntity<T>> extends Abst
         private final Item item;              // 对应的物品
         private final FoodBagAction action;   // 业务逻辑
 
-        FoodBagStrategy(DeferredItem<Item> item, FoodBagAction action) {
+        FoodBagStrategy(Supplier<Item> item, FoodBagAction action) {
             this.item = item.get();
             this.action = action;
         }

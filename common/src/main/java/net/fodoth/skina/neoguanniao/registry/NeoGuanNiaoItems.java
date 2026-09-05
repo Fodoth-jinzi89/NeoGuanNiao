@@ -17,14 +17,14 @@ import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import dev.architectury.registry.registries.RegistrySupplier;
-import dev.architectury.registry.registries.Registrar;
-import net.minecraft.core.registries.BuiltInRegistries;
+import dev.architectury.registry.registries.DeferredRegister;
+import net.minecraft.core.registries.Registries;
 
 import java.util.function.Supplier;
 
 public final class NeoGuanNiaoItems {
 
-    public static final Registrar<Item> ITEMS = NeoGuanNiaoRegistrar.MANAGER.get(BuiltInRegistries.ITEM);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(NeoGuanNiao.MODID, Registries.ITEM);
 
     public static final RegistrySupplier<Item> BREADCRUMBS;
     public static final RegistrySupplier<Item> BIRD_GUIDE;
@@ -127,118 +127,70 @@ public final class NeoGuanNiaoItems {
         BIRD_BATH_2 = registerBirdBathItem(BirdBathVariant.BIRD_BATH_2, NeoGuanNiaoBlocks.BIRD_BATH_2);
 
         BIRD_EGG =
-                ITEMS.registerItem(
-                        "bird_egg",
-                        BirdEggItem::new,
-                        new Item.Properties()
-                );
+                ITEMS.register("bird_egg", () -> new BirdEggItem(new Item.Properties()));
 
         BIRD_FEATHER =
-                ITEMS.registerItem(
-                        "bird_feather",
-                        BirdFeatherItem::new,
-                        new Item.Properties()
-                );
+                ITEMS.register("bird_feather", () -> new BirdFeatherItem(new Item.Properties()));
 
         BIRD_FOOD_BAG =
-                ITEMS.registerItem("bird_food_bag",
-                        BirdFoodBagItem::new,
-                        new Item.Properties());
+                ITEMS.register("bird_food_bag", () -> new BirdFoodBagItem(new Item.Properties()));
 
         BIRD_FOOD_BAG_SEED =
-                ITEMS.registerItem("bird_food_bag_seed",
-                        BirdFoodBagSeedItem::new,
-                        new Item.Properties());
+                ITEMS.register("bird_food_bag_seed", () -> new BirdFoodBagSeedItem(new Item.Properties()));
 
         BIRD_FOOD_BAG_FISH =
-                ITEMS.registerItem("bird_food_bag_fish",
-                        BirdFoodBagFishItem::new,
-                        new Item.Properties());
+                ITEMS.register("bird_food_bag_fish", () -> new BirdFoodBagFishItem(new Item.Properties()));
 
         GREEN_FOOD_BAG =
-                ITEMS.registerItem("green_food_bag",
-                        GreenFoodBagItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag", () -> new GreenFoodBagItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_GROWTH =
-                ITEMS.registerItem("green_food_bag_growth",
-                        GreenFoodBagGrowthItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_growth", () -> new GreenFoodBagGrowthItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_REJUVENATE =
-                ITEMS.registerItem("green_food_bag_rejuvenate",
-                        GreenFoodBagRejuvenateItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_rejuvenate", () -> new GreenFoodBagRejuvenateItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_STOP =
-                ITEMS.registerItem("green_food_bag_stop",
-                        GreenFoodBagStopItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_stop", () -> new GreenFoodBagStopItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_TRANSMUTE =
-                ITEMS.registerItem("green_food_bag_transmute",
-                        GreenFoodBagTransmuteItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_transmute", () -> new GreenFoodBagTransmuteItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_FEATHER_ADD =
-                ITEMS.registerItem("green_food_bag_feather_add",
-                        GreenFoodBagFeatherAddItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_feather_add", () -> new GreenFoodBagFeatherAddItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_FEATHER_MINUS =
-                ITEMS.registerItem("green_food_bag_feather_minus",
-                        GreenFoodBagFeatherMinusItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_feather_minus", () -> new GreenFoodBagFeatherMinusItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_FEATHER_FAST =
-                ITEMS.registerItem("green_food_bag_feather_fast",
-                        GreenFoodBagFeatherFastItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_feather_fast", () -> new GreenFoodBagFeatherFastItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_FEATHER_SLOW =
-                ITEMS.registerItem("green_food_bag_feather_slow",
-                        GreenFoodBagFeatherSlowItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_feather_slow", () -> new GreenFoodBagFeatherSlowItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_SIZE_UP =
-                ITEMS.registerItem("green_food_bag_size_up",
-                        GreenFoodBagSizeUpItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_size_up", () -> new GreenFoodBagSizeUpItem(new Item.Properties()));
 
         GREEN_FOOD_BAG_SIZE_DOWN =
-                ITEMS.registerItem("green_food_bag_size_down",
-                        GreenFoodBagSizeDownItem::new,
-                        new Item.Properties());
+                ITEMS.register("green_food_bag_size_down", () -> new GreenFoodBagSizeDownItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG =
-                ITEMS.registerItem("golden_food_bag",
-                        GoldenFoodBagItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag", () -> new GoldenFoodBagItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG_UPGRADE =
-                ITEMS.registerItem("golden_food_bag_upgrade",
-                        GoldenFoodBagUpgradeItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag_upgrade", () -> new GoldenFoodBagUpgradeItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG_DOWNGRADE =
-                ITEMS.registerItem("golden_food_bag_downgrade",
-                        GoldenFoodBagDowngradeItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag_downgrade", () -> new GoldenFoodBagDowngradeItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG_UNIQUE =
-                ITEMS.registerItem("golden_food_bag_unique",
-                        GoldenFoodBagUniqueItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag_unique", () -> new GoldenFoodBagUniqueItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG_EGG_ADD =
-                ITEMS.registerItem("golden_food_bag_egg_add",
-                        GoldenFoodBagEggAddItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag_egg_add", () -> new GoldenFoodBagEggAddItem(new Item.Properties()));
 
         GOLDEN_FOOD_BAG_EGG_MINUS =
-                ITEMS.registerItem("golden_food_bag_egg_minus",
-                        GoldenFoodBagEggMinusItem::new,
-                        new Item.Properties());
+                ITEMS.register("golden_food_bag_egg_minus", () -> new GoldenFoodBagEggMinusItem(new Item.Properties()));
 
 
         BIRD_NEST =
@@ -247,7 +199,8 @@ public final class NeoGuanNiaoItems {
                                 NeoGuanNiaoBlocks.BIRD_NEST.get(),
                                 new Item.Properties()
                         ));
-        WIND_FEATHER_FAN = ITEMS.registerItem("wind_feather_fan", FeatherFanItem::new, new Item.Properties());
+        WIND_FEATHER_FAN = ITEMS.register("wind_feather_fan", () -> new FeatherFanItem(new Item.Properties()));
     }
 }
+
 

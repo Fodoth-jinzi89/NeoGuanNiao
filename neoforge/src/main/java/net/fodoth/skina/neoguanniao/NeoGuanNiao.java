@@ -20,20 +20,20 @@ public class NeoGuanNiao {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public NeoGuanNiao(IEventBus modEventBus, ModContainer container) {
-        NeoGuanNiaoBlocks.BLOCKS.register(modEventBus);
-        NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
-        NeoGuanNiaoItems.ITEMS.register(modEventBus);
+        NeoGuanNiaoBlocks.BLOCKS.register();
+        NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register();
+        NeoGuanNiaoItems.ITEMS.register();
         NeoGuanNiaoItemTags.register();
         modEventBus.addListener(FeatherFanParticleProviders::register);
-        NeoGuanNiaoEntityTypes.ENTITY_TYPES.register(modEventBus);
-        NeoGuanNiaoRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
-        NeoGuanNiaoSoundEvents.SOUND_EVENTS.register(modEventBus);
-        NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        NeoGuanNiaoEntityTypes.ENTITY_TYPES.register();
+        NeoGuanNiaoRecipeSerializers.RECIPE_SERIALIZERS.register();
+        NeoGuanNiaoSoundEvents.SOUND_EVENTS.register();
+        NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register();
         NeoGuanNiaoBirdData.BIRD_DATA.register(modEventBus);
         NeoGuanNiaoDataComponents.DATA_COMPONENTS.register(modEventBus);
         NeoGuanNiaoParticleTypes.PARTICLE_TYPES.register(modEventBus);
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register(modEventBus);
-        NeoGuanNiaoCriteriaTriggers.register(modEventBus);
+        NeoGuanNiaoCriteriaTriggers.register();
         container.registerConfig(ModConfig.Type.COMMON, NeoGuanNiaoCommonConfig.SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, NeoGuanNiaoClientConfig.SPEC);
     }

@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.neoforged.neoforge.registries.DeferredItem;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -105,5 +105,5 @@ public class BirdBagTrade implements VillagerTrades.ItemListing {
         };
     }
 
-    private record TradeEntry(DeferredItem<Item> item, int price, int count) {}
+    private record TradeEntry(Supplier<Item> item, int price, int count) {}
 }

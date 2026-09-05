@@ -6,16 +6,16 @@ import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
 
 @SuppressWarnings("ConstantConditions")
 public final class NeoGuanNiaoBlockEntityTypes {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, NeoGuanNiao.MODID);
+            DeferredRegister.create(NeoGuanNiao.MODID, Registries.BLOCK_ENTITY_TYPE);
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BirdCageBlockEntity>> BIRD_CAGE =
+    public static final RegistrySupplier<BlockEntityType<BirdCageBlockEntity>> BIRD_CAGE =
             BLOCK_ENTITY_TYPES.register(
                     "bird_cage",
                     () -> BlockEntityType.Builder.of(
@@ -26,7 +26,7 @@ public final class NeoGuanNiaoBlockEntityTypes {
                     ).build(null)
             );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BirdBathBlockEntity>> BIRD_BATH =
+    public static final RegistrySupplier<BlockEntityType<BirdBathBlockEntity>> BIRD_BATH =
             BLOCK_ENTITY_TYPES.register(
                     "bird_bath",
                     () -> BlockEntityType.Builder.of(
@@ -40,7 +40,7 @@ public final class NeoGuanNiaoBlockEntityTypes {
                     ).build(null)
             );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BirdNestBlockEntity>> BIRD_NEST =
+    public static final RegistrySupplier<BlockEntityType<BirdNestBlockEntity>> BIRD_NEST =
             BLOCK_ENTITY_TYPES.register(
                     "bird_nest",
                     () -> BlockEntityType.Builder.of(
