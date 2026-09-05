@@ -13,6 +13,8 @@
 - [ ] 注册系统拆分暂停：当前注册类同时依赖 NeoForge DeferredRegister 与 GeckoLib，需要先设计平台桥接。
 - [x] 添加 Architectury `RegistrarManager` 公共注册桥接入口。
 - [ ] 下沉 57 个 NeoForge API 引用（网络、配置、事件和客户端）。
+- [x] 将客户端、网络、配置、事件和 NeoForge 兼容实现移至 `neoforge`。
+- [ ] 为公共逻辑补充平台桥接（鸟巢方块实体、指南界面、客户端能力）。
 - [x] 清理误复制的 `birdcamera` Fabric 源码与资源。
 - [x] 将 NeoGuanNiao 源码迁入 `common` 作为拆分起点。
 
