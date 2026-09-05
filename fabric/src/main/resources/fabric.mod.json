@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "neoguanniao",
+  "version": "${version}",
+  "name": "Neo Guan Niao",
+  "environment": "*",
+  "entrypoints": { "main": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabric"] },
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "1.21.1",
+    "architectury": "*"
+  }
+}
