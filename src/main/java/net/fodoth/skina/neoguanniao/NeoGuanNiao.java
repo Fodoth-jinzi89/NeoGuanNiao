@@ -9,7 +9,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.fodoth.skina.neoguanniao.client.fan.FeatherFanParticleProviders;
 import org.slf4j.Logger;
 
@@ -21,11 +20,11 @@ public class NeoGuanNiao {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public NeoGuanNiao(IEventBus modEventBus, ModContainer container) {
-        modEventBus.addListener((RegisterParticleProvidersEvent event) -> FeatherFanParticleProviders.register(event));
         NeoGuanNiaoBlocks.BLOCKS.register(modEventBus);
         NeoGuanNiaoBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         NeoGuanNiaoItems.ITEMS.register(modEventBus);
         NeoGuanNiaoItemTags.register();
+        modEventBus.addListener(FeatherFanParticleProviders::register);
         NeoGuanNiaoEntityTypes.ENTITY_TYPES.register(modEventBus);
         NeoGuanNiaoRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         NeoGuanNiaoSoundEvents.SOUND_EVENTS.register(modEventBus);

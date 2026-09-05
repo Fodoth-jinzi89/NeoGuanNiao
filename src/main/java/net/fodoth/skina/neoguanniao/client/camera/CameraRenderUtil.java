@@ -3,7 +3,6 @@ package net.fodoth.skina.neoguanniao.client.camera;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Matrix4f;
 
-/** Shared low-level drawing primitive for all flat camera assets. */
 final class CameraRenderUtil {
     private CameraRenderUtil() {
     }

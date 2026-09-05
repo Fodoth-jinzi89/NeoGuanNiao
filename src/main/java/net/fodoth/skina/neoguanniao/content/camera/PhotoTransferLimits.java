@@ -1,16 +1,18 @@
 package net.fodoth.skina.neoguanniao.content.camera;
 
 public final class PhotoTransferLimits {
+    private static final int CAPTURE_SIZE = 1024;
+    private static final int PREVIEW_SIZE = 512;
 
     private PhotoTransferLimits() {
     }
 
     public static boolean isCaptureDimensions(int width, int height) {
-        return width == 1024 && height == 1024;
+        return width == CAPTURE_SIZE && height == CAPTURE_SIZE;
     }
 
     public static boolean isSupportedDimensions(int width, int height) {
-        return PhotoTransferLimits.isCaptureDimensions(width, height) || width == 512 && height == 512;
+        return isCaptureDimensions(width, height) || width == PREVIEW_SIZE && height == PREVIEW_SIZE;
     }
 
     public static boolean isValidPhotoId(String photoId) {
@@ -18,11 +20,11 @@ public final class PhotoTransferLimits {
             return false;
         }
         for (int index = 0; index < photoId.length(); ++index) {
-            boolean asciiLetterOrDigit;
             char character = photoId.charAt(index);
-            asciiLetterOrDigit = character >= '0' && character <= '9' || character >= 'A' && character <= 'Z' || character >= 'a' && character <= 'z';
-            if (asciiLetterOrDigit || character == '_' || character == '-') continue;
-            return false;
+            boolean ascii = character >= '0' && character <= '9' || character >= 'A' && character <= 'Z' || character >= 'a' && character <= 'z';
+            if (!ascii && character != '_' && character != '-') {
+                return false;
+            }
         }
         return true;
     }
