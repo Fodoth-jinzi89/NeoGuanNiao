@@ -2,6 +2,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.platform.EnvironmentHooks;
 
 /**
  * 鸟类 Tick 计时器抽象基类
@@ -345,7 +346,7 @@ public abstract class AbstractBirdTicker<T extends AbstractBirdEntity<T>> {
     }
 
     public final boolean enableLifecycleLog() {
-        return !false;
+        return !EnvironmentHooks.isProduction();
     }
 
     public boolean isFrozen() {

@@ -66,7 +66,7 @@ public final class CameraClientEvents {
 
     @SubscribeEvent
     public static void onComputeFov(ViewportEvent.ComputeFov event) {
-        CameraClientCapture.modifyFov(event);
+        double fov = CameraClientCapture.currentFovOverride(); if (event.usedConfiguredFov() && fov >= 0.0) event.setFOV(fov);
     }
 
     @SubscribeEvent
@@ -201,4 +201,5 @@ public final class CameraClientEvents {
         return equip * equip * (3.0f - 2.0f * equip);
     }
 }
+
 

@@ -38,11 +38,22 @@ public final class NeoGuanNiaoModEvents {
     @SubscribeEvent
     public static void registerBirdSkins(RegisterEvent event) {
 
-        if (event.getRegistryKey()
-                .equals(NeoGuanNiaoBirdData.BIRD_DATA.getRegistryKey())) {
+        if (event.getRegistryKey().location().equals(NeoGuanNiao.resource("bird_data"))) {
 
 
-            for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+            for (var holder : java.util.List.of(
+                    NeoGuanNiaoBirdData.BUDGERIGAR,
+                    NeoGuanNiaoBirdData.NIGHT_HERON,
+                    NeoGuanNiaoBirdData.PIGEON,
+                    NeoGuanNiaoBirdData.DOVE,
+                    NeoGuanNiaoBirdData.SPARROW,
+                    NeoGuanNiaoBirdData.COCKATIEL,
+                    NeoGuanNiaoBirdData.LONG_TAILED_TIT,
+                    NeoGuanNiaoBirdData.MACAW,
+                    NeoGuanNiaoBirdData.CROW,
+                    NeoGuanNiaoBirdData.SEAGULL,
+                    NeoGuanNiaoBirdData.KIWI,
+                    NeoGuanNiaoBirdData.MYNA)) {
 
                 BirdData birdData = holder.get();
 

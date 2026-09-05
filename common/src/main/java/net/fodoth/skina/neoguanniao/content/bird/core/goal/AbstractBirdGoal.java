@@ -5,6 +5,7 @@ import net.fodoth.skina.neoguanniao.content.bird.core.controller.BirdGoalControl
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.goal.AbstractGoalController;
 import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdGoalDatum;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.fodoth.skina.neoguanniao.platform.EnvironmentHooks;
 
 import java.util.EnumSet;
 
@@ -44,7 +45,7 @@ public abstract class AbstractBirdGoal extends Goal {
     }
 
     protected void debugStart() {
-        if (!false) {
+        if (!EnvironmentHooks.isProduction()) {
             var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
             if (debugTicker.enableLifecycleLog()) {
                 debugTicker.debugGoalStart(this.getClass().getSimpleName());
@@ -81,7 +82,7 @@ public abstract class AbstractBirdGoal extends Goal {
     }
 
     protected void debugStop() {
-        if (!false) {
+        if (!EnvironmentHooks.isProduction()) {
             var debugTicker = bird().getTickController().getTickTimer().getDebugLoopTicker();
             if (debugTicker.enableLifecycleLog()) {
                 debugTicker.debugGoalStop(this.getClass().getSimpleName());

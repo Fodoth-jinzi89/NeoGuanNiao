@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.content.bird.core.controller.tick;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.controller.tick.ticker.*;
+import net.fodoth.skina.neoguanniao.platform.EnvironmentHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,7 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
                 birdFeatherLoopTicker
         ));
 
-        if (!false) {
+        if (!EnvironmentHooks.isProduction()) {
             tickers.add(debugLoopTicker);
             NeoGuanNiao.LOGGER.info("[NeoGuanNiao] Dev environment, register DebugLoopTicker");
         }
@@ -271,7 +272,7 @@ public class BirdTickTimer<T extends AbstractBirdEntity<T>> extends AbstractBird
     }
 
     public DebugLoopTicker<T> getDebugLoopTicker() {
-        if (false) {
+        if (EnvironmentHooks.isProduction()) {
             NeoGuanNiao.LOGGER.warn("[NeoGuanNiao] Warn: Trying to get debug loop ticker in production environment! It will not tick.");
         }
         return debugLoopTicker;
