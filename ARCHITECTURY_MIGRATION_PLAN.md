@@ -9,6 +9,12 @@
 - [x] 配置 Architectury Loom、Fabric 1.21.1 和 NeoForge 1.21.1。
 - [x] 修复模块依赖配置并通过 Gradle 构建。
 - [ ] 拆分公共代码与平台实现。
+- [ ] 替换 14 个注册类中的 NeoForge `Deferred*` 类型。
+- [ ] 注册系统拆分暂停：当前注册类同时依赖 NeoForge DeferredRegister 与 GeckoLib，需要先设计平台桥接。
+- [x] 添加 Architectury `RegistrarManager` 公共注册桥接入口。
+- [ ] 下沉 57 个 NeoForge API 引用（网络、配置、事件和客户端）。
+- [x] 清理误复制的 `birdcamera` Fabric 源码与资源。
+- [x] 将 NeoGuanNiao 源码迁入 `common` 作为拆分起点。
 
 ## 1. 盘点代码依赖
 
