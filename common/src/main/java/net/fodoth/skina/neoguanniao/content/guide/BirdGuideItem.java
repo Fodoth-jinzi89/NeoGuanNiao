@@ -1,6 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.guide;
 
-import net.fodoth.skina.neoguanniao.client.guide.BirdGuideClient;
+import net.fodoth.skina.neoguanniao.platform.ClientHooks;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +24,7 @@ public class BirdGuideItem extends Item {
 
         if (level.isClientSide) {
             // 在客户端打开 GUI，传递物品堆以便加载布局
-            BirdGuideClient.open(stack);
+            ClientHooks.openBirdGuide(stack);
         }
 
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
