@@ -14,7 +14,9 @@
 
 # 📖 简介
 
-Neo Guan Niao 是原 [Guaniao](https://github.com/EdDYON/there-is-a-bird) 模组的非官方 NeoForge 重构版本。
+Neo Guan Niao 是原 [Guaniao](https://github.com/EdDYON/there-is-a-bird) 模组的 NeoForge 社区版，由社区维护和发布。
+
+本项目经原作者沟通确认，作为社区版独立维护，不再计划合并回原项目主线。
 
 经过重新设计后，模组不仅完成了 Minecraft 1.21.1 NeoForge 适配，还加入了大量新的生态系统：
 
