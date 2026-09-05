@@ -1,0 +1,36 @@
+package net.fodoth.skina.neoguanniao.network;
+
+import net.fodoth.skina.neoguanniao.content.camera.CameraFilter;
+import net.fodoth.skina.neoguanniao.content.camera.CameraSettingsData;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
+
+public record SetCameraFilterPacket(InteractionHand hand, CameraFilter filter) implements CustomPacketPayload {
+    public static final Type<SetCameraFilterPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("neoguanniao", "set_camera_filter"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SetCameraFilterPacket> STREAM_CODEC = StreamCodec.of((b, p) -> {
+        b.writeEnum(p.hand);
+        b.writeVarInt(p.filter.id());
+    }, b -> new SetCameraFilterPacket(b.readEnum(InteractionHand.class), CameraFilter.byId(b.readVarInt())));
+
+    public static void handle(SetCameraFilterPacket p, IPayloadContext c) {
+        c.enqueueWork(() -> {
+            if (c.player() instanceof ServerPlayer s) {
+                ItemStack stack = s.getItemInHand(p.hand);
+                if (stack.is(NeoGuanNiaoItems.NIKON_D750.get())) CameraSettingsData.setFilter(stack, p.filter);
+            }
+        });
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+}

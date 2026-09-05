@@ -1,0 +1,168 @@
+package net.fodoth.skina.neoguanniao.registry;
+
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+import net.fodoth.skina.neoguanniao.content.bird.core.data.datum.BirdModelSkinDatum;
+import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModel;
+import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkin;
+import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
+import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
+import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherData;
+import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Supplier;
+
+public final class NeoGuanNiaoCreativeTabs {
+
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, NeoGuanNiao.MODID);
+
+    public static final Supplier<CreativeModeTab> MAIN_TAB =
+            CREATIVE_MODE_TABS.register("main", () ->
+                    CreativeModeTab.builder()
+                            .title(Component.translatable("itemGroup.neoguanniao.main"))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_GUIDE.get()))
+                            .displayItems((parameters, output) -> {
+                                output.accept(NeoGuanNiaoItems.BIRD_GUIDE.get());
+                                output.accept(NeoGuanNiaoItems.BREADCRUMBS.get());
+                                output.accept(NeoGuanNiaoItems.NIKON_D750.get());
+                                output.accept(NeoGuanNiaoItems.FILM.get());
+                                output.accept(NeoGuanNiaoItems.PHOTOGRAPH.get());
+
+                                output.accept(NeoGuanNiaoItems.SMALL_BIRD_CAGE.get());
+                                output.accept(NeoGuanNiaoItems.MEDIUM_BIRD_CAGE.get());
+                                output.accept(NeoGuanNiaoItems.LARGE_BIRD_CAGE.get());
+
+                                output.accept(NeoGuanNiaoItems.WOODEN_BIRD_BATH.get());
+                                output.accept(NeoGuanNiaoItems.STONE_BIRD_BATH.get());
+                                output.accept(NeoGuanNiaoItems.BIRD_BATH.get());
+
+                                output.accept(NeoGuanNiaoItems.WOODEN_BIRD_BATH_2.get());
+                                output.accept(NeoGuanNiaoItems.STONE_BIRD_BATH_2.get());
+                                output.accept(NeoGuanNiaoItems.BIRD_BATH_2.get());
+
+                                output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG.get());
+                                output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_SEED.get());
+                                output.accept(NeoGuanNiaoItems.BIRD_FOOD_BAG_FISH.get());
+
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_GROWTH.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_REJUVENATE.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_STOP.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_TRANSMUTE.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_ADD.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_MINUS.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_FAST.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_FEATHER_SLOW.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_SIZE_UP.get());
+                                output.accept(NeoGuanNiaoItems.GREEN_FOOD_BAG_SIZE_DOWN.get());
+
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_UPGRADE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_DOWNGRADE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_UNIQUE.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_EGG_ADD.get());
+                                output.accept(NeoGuanNiaoItems.GOLDEN_FOOD_BAG_EGG_MINUS.get());
+
+                                output.accept(NeoGuanNiaoItems.BIRD_NEST.get());
+                                output.accept(NeoGuanNiaoItems.WIND_FEATHER_FAN.get());
+                            })
+                            .build()
+            );
+
+    public static final Supplier<CreativeModeTab> EGG_TAB =
+            CREATIVE_MODE_TABS.register("eggs", () ->
+                    CreativeModeTab.builder()
+                            .title(Component.translatable("itemGroup.neoguanniao.eggs"))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get()))
+                            .displayItems((parameters, output) -> {
+                                generateBirdEggs(output);
+                            })
+                            .build()
+            );
+
+    public static final Supplier<CreativeModeTab> FEATHER_TAB =
+            CREATIVE_MODE_TABS.register("feathers", () ->
+                    CreativeModeTab.builder()
+                            .title(Component.translatable("itemGroup.neoguanniao.feathers"))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_FEATHER.get()))
+                            .displayItems((parameters, output) -> {
+                                generateBirdFeathers(output);
+                            })
+                            .build()
+            );
+
+    private NeoGuanNiaoCreativeTabs() {
+    }
+
+    private static void generateBirdEggs(CreativeModeTab.Output output) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+            BirdModelSkinDatum modelDatum = holder.get().model();
+
+            // 遍历所有模型
+            for (BirdModel model : modelDatum.birdModel()) {
+                // 遍历所有皮肤
+                for (BirdSkin skin : modelDatum.birdSkin()) {
+                    // 检查皮肤是否被当前模型支持
+                    if (!model.supportsSkin(skin.id())) continue;
+
+                    for (boolean gender : new boolean[]{true, false}) {
+                        // 如果皮肤是雄性，生成雄性蛋；如果是雌性，生成雌性蛋；如果是通用皮肤，则生成两种
+                        if ((skin.male() && gender) || (skin.female() && !gender)) {
+                            ItemStack egg = new ItemStack(NeoGuanNiaoItems.BIRD_EGG.get());
+                            BirdEggItem.setEggData(egg, BirdEggData.create(
+                                    holder.getId(),
+                                    gender,
+                                    model.id(),
+                                    skin.id(),
+                                    2,
+                                    3,
+                                    24000,
+                                    1.0F,
+                                    20,
+                                    true
+                            ));
+                            output.accept(egg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void generateBirdFeathers(CreativeModeTab.Output output) {
+        for (var holder : NeoGuanNiaoBirdData.BIRD_DATA.getEntries()) {
+            BirdModelSkinDatum modelDatum = holder.get().model();
+
+            // 用于记录当前鸟类已经生成过的稀有度
+            Set<Integer> generatedRarities = new HashSet<>();
+
+            // 遍历所有皮肤
+            for (BirdSkin skin : modelDatum.birdSkin()) {
+                int rarityValue = skin.rarity().getRarity();
+
+                // 如果这个稀有度已经生成过了，跳过
+                if (generatedRarities.contains(rarityValue)) {
+                    continue;
+                }
+
+                // 记录这个稀有度
+                generatedRarities.add(rarityValue);
+
+                // 生成羽毛
+                ItemStack feather = new ItemStack(NeoGuanNiaoItems.BIRD_FEATHER.get());
+                BirdFeatherItem.setFeatherData(feather, BirdFeatherData.create(
+                        holder.getId(),
+                        rarityValue
+                ));
+                output.accept(feather);
+            }
+        }
+    }
+}
