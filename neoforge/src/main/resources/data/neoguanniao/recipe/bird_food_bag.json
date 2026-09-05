@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "B B",
+    " B "
+  ],
+  "key": {
+    "A": {
+      "tag": "c:strings"
+    },
+    "B": {
+      "tag": "neoguanniao:papers"
+    }
+  },
+  "result": {
+    "id": "neoguanniao:bird_food_bag",
+    "count": 3
+  }
+}

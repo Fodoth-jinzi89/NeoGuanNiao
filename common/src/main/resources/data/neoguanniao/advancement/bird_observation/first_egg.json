@@ -1,0 +1,27 @@
+{
+  "parent": "neoguanniao:bird_observation/root",
+
+  "display": {
+    "icon": {
+      "id": "neoguanniao:bird_egg"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.first_egg.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.first_egg.description"
+    }
+  },
+
+  "criteria": {
+    "breed_egg": {
+      "trigger": "neoguanniao:bird_egg_breed"
+    }
+  },
+
+  "requirements": [
+    [
+      "breed_egg"
+    ]
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "birdcamera:item/bird_egg/bird_egg_hidden",
+    "layer1": "birdcamera:item/bird_egg/rarity/epic",
+    "layer2": "birdcamera:item/bird_egg/gender/male"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "parent": "birdcamera:bird_observation/first_egg",
+
+  "display": {
+    "icon": {
+      "id": "birdcamera:bird_nest"
+    },
+    "title": {
+      "translate": "advancements.birdcamera.hatch_first_bird.title"
+    },
+    "description": {
+      "translate": "advancements.birdcamera.hatch_first_bird.description"
+    },
+    "hidden": true
+  },
+
+  "criteria": {
+    "hatch": {
+      "trigger": "birdcamera:hatch_bird_egg"
+    }
+  },
+
+  "requirements": [
+    [
+      "hatch"
+    ]
+  ]
+}

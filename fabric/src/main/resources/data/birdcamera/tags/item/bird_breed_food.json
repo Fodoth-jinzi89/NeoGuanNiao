@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "birdcamera:bird_food_bag_seed",
+    {
+      "id": "#goldentweaks:bird_breed_food",
+      "required": false
+    }
+  ]
+}

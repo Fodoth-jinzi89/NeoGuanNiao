@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "birdcamera",
+  "version": "${version}",
+  "name": "观鸟相机",
+  "description": "一个为Minecraft添加真实鸟类生态的模组，让你观察、投喂、驯服各种鸟类。",
+  "authors": [
+    "BirdCamera"
+  ],
+  "contact": {
+    "homepage": "https://github.com/birdcamera",
+    "sources": "https://github.com/birdcamera"
+  },
+  "license": "GPL-3.0-only",
+  "icon": "assets/birdcamera/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.birdcamera.BirdCameraMod"
+    ],
+    "client": [
+      "com.birdcamera.client.BirdCameraClient"
+    ]
+  },
+  "mixins": [
+    "birdcamera.mixins.json",
+    {
+      "config": "birdcamera.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "fabric-api": ">=0.116.15",
+    "minecraft": "~1.21.1",
+    "java": ">=21"
+  },
+  "suggests": {
+    "geckolib": ">=4.9.0"
+  }
+}

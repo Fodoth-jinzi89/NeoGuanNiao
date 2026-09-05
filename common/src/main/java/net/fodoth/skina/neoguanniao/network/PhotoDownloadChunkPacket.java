@@ -1,0 +1,27 @@
+package net.fodoth.skina.neoguanniao.network;
+
+import net.fodoth.skina.neoguanniao.client.camera.PhotoClientRepository;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
+
+public record PhotoDownloadChunkPacket(String photoId, int chunkIndex, byte[] data) implements CustomPacketPayload {
+    public static final Type<PhotoDownloadChunkPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("neoguanniao", "photo_download_chunk"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, PhotoDownloadChunkPacket> STREAM_CODEC = StreamCodec.of((b, p) -> {
+        b.writeUtf(p.photoId, 80);
+        b.writeVarInt(p.chunkIndex);
+        b.writeByteArray(p.data);
+    }, b -> new PhotoDownloadChunkPacket(b.readUtf(80), b.readVarInt(), b.readByteArray(24576)));
+
+    public static void handle(PhotoDownloadChunkPacket p, IPayloadContext c) {
+        c.enqueueWork(() -> PhotoClientRepository.acceptDownloadChunk(p.photoId, p.chunkIndex, p.data));
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+}

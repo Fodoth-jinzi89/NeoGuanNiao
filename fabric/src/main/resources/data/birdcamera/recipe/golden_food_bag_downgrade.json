@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "birdcamera:golden_food_bag"
+    },
+    {
+      "item": "minecraft:flint"
+    }
+  ],
+  "result": {
+    "id": "birdcamera:golden_food_bag_downgrade",
+    "count": 1
+  }
+}

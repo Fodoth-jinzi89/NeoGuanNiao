@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:leaves",
+    "#minecraft:logs",
+    "#minecraft:walls",
+    "#minecraft:fences",
+    "#minecraft:fence_gates",
+    "#minecraft:beds",
+    "birdcamera:wooden_bird_bath",
+    "birdcamera:wooden_bird_bath_2",
+    "birdcamera:stone_bird_bath",
+    "birdcamera:stone_bird_bath_2",
+    "birdcamera:bird_bath",
+    "birdcamera:bird_bath_2",
+    "birdcamera:bird_nest"
+  ]
+}

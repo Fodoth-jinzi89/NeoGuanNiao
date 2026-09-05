@@ -1,103 +1,18 @@
 plugins {
-    id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.141'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+}
+architectury { minecraft = project.minecraft_version }
+allprojects { group = rootProject.maven_group; version = rootProject.mod_version }
+subprojects {
+    apply plugin: 'dev.architectury.loom'; apply plugin: 'architectury-plugin'; apply plugin: 'maven-publish'
+    repositories { mavenCentral(); maven { url = 'https://maven.neoforged.net/releases' };
+        maven { url = 'https://maven.fabricmc.net/' };
+        maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' } }
+    dependencies { minecraft "net.minecraft:minecraft:$rootProject.minecraft_version";
+        mappings loom.officialMojangMappings() }
+ java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+ tasks.withType(JavaCompile).configureEach { options.release = 21 }
 }
 
-version = mod_version
-group = mod_group_id
-
-base {
-    archivesName = mod_id
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-}
-
-repositories {
-    mavenLocal()
-
-    maven { url = "https://api.modrinth.com/maven"}
-    maven { url = "https://cursemaven.com" }
-    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
-    maven { url = "https://maven.createmod.net" }
-    maven { url = "https://maven.blamejared.com" }
-
-    flatDir {
-        dir("libs")
-    }
-    mavenCentral()
-}
-
-neoForge {
-    version = neo_version
-
-    parchment {
-        mappingsVersion = parchment_mappings_version
-        minecraftVersion = parchment_minecraft_version
-    }
-
-    runs {
-        client {
-            client()
-        }
-
-        server {
-            server()
-            programArgument '--nogui'
-        }
-    }
-
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
-def generatedResources = layout.buildDirectory.dir("generated/sources/modMetadata")
-
-tasks.register("generateModMetadata", ProcessResources) {
-    def props = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
-            geckolib_version       : geckolib_version,
-            geckolib_version_range : geckolib_version_range,
-            loader_version_range   : loader_version_range,
-            mod_id                 : mod_id,
-            mod_name               : mod_name,
-            mod_license            : mod_license,
-            mod_version            : mod_version,
-            mod_authors            : mod_authors,
-            mod_description        : mod_description
-    ]
-
-    inputs.properties(props)
-
-    expand(props)
-
-    from("src/main/templates")
-    into(generatedResources)
-}
-
-sourceSets.main.resources.srcDir(generatedResources)
-
-tasks.named("processResources") {
-    dependsOn("generateModMetadata")
-}
-
-
-neoForge.ideSyncTask tasks.named("generateModMetadata")
-
-
-
-dependencies {
-    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
-
-    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
-
-    implementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
-}
+tasks.register('genIntellijRuns') { dependsOn(':fabric:genIntellijRuns', ':neoforge:genIntellijRuns') }

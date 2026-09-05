@@ -1,0 +1,561 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "birdcamera:item/bird_feather/bird_feather_budgerigar_common"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 0,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_budgerigar_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 1,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_night_heron_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 2,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_dove_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 3,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_pigeon_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 4,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_sparrow_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 0
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_common"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 1
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_uncommon"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 2
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_rare"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 3
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_epic"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 4
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_legendary"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 5
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_ancient"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 6
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_unique"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 5,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_cockatiel_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 6,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_long_tailed_tit_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 7,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_macaw_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 8,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_crow_hidden"
+    },
+    {
+      "predicate": {
+        "birdcamera:bird_type": 9,
+        "birdcamera:rarity": 999
+      },
+      "model": "birdcamera:item/bird_feather/bird_feather_seagull_hidden"
+    }
+  ]
+}

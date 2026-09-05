@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "birdcamera:green_food_bag_growth",
+    "birdcamera:green_food_bag_rejuvenate",
+    "birdcamera:green_food_bag_stop",
+    "birdcamera:green_food_bag_transmute",
+    "birdcamera:green_food_bag_feather_add",
+    "birdcamera:green_food_bag_feather_minus",
+    "birdcamera:green_food_bag_feather_fast",
+    "birdcamera:green_food_bag_feather_slow",
+    "birdcamera:green_food_bag_size_up",
+    "birdcamera:green_food_bag_size_down",
+    "birdcamera:golden_food_bag_upgrade",
+    "birdcamera:golden_food_bag_downgrade",
+    "birdcamera:golden_food_bag_unique",
+    "birdcamera:golden_food_bag_egg_add",
+    "birdcamera:golden_food_bag_egg_minus"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "birdcamera:green_food_bag"
+    },
+    {
+      "item": "minecraft:dandelion"
+    }
+  ],
+  "result": {
+    "id": "birdcamera:green_food_bag_stop",
+    "count": 1
+  }
+}

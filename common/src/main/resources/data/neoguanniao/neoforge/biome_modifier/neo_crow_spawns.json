@@ -1,0 +1,1 @@
+{"type":"neoforge:add_spawns","biomes":"#neoguanniao:crow_habitat","spawners":{"type":"neoguanniao:neo_crow","weight":3,"minCount":1,"maxCount":2}}

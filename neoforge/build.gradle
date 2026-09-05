@@ -1,0 +1,2 @@
+architectury { platformSetupLoomIde(); neoForge() }
+dependencies { modImplementation "net.neoforged:neoforge:$rootProject.neoforge_version"; modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"; implementation project(path: ':common') }

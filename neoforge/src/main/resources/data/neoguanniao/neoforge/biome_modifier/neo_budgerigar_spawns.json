@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#neoguanniao:budgerigar_habitat",
+  "spawners": {
+    "type": "neoguanniao:neo_budgerigar",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

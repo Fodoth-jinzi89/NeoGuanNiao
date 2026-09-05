@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.birdcamera.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractVillagerMixin",
+    "BlockStateBaseMixin",
+    "MerchantOfferMixin",
+    "ItemEntityPickupMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "birdcamera:green_food_bag"
+    },
+    {
+      "item": "minecraft:prismarine_crystals"
+    }
+  ],
+  "result": {
+    "id": "birdcamera:green_food_bag_transmute",
+    "count": 1
+  }
+}

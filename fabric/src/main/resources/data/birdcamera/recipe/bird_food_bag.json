@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "B B",
+    " B "
+  ],
+  "key": {
+    "A": {
+      "tag": "c:strings"
+    },
+    "B": {
+      "tag": "birdcamera:papers"
+    }
+  },
+  "result": {
+    "id": "birdcamera:bird_food_bag",
+    "count": 3
+  }
+}

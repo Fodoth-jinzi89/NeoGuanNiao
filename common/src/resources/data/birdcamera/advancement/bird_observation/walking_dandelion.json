@@ -1,0 +1,27 @@
+{
+  "parent": "birdcamera:bird_observation/root",
+
+  "display": {
+    "icon": {
+      "id": "birdcamera:bird_feather"
+    },
+    "title": {
+      "translate": "advancements.birdcamera.walking_dandelion.title"
+    },
+    "description": {
+      "translate": "advancements.birdcamera.walking_dandelion.description"
+    }
+  },
+
+  "criteria": {
+    "pickup_feather": {
+      "trigger": "birdcamera:pickup_bird_feather"
+    }
+  },
+
+  "requirements": [
+    [
+      "pickup_feather"
+    ]
+  ]
+}

@@ -1,0 +1,1 @@
+{"type":"neoforge:add_spawns","biomes":"#neoguanniao:myna_habitat","spawners":{"type":"neoguanniao:neo_myna","weight":4,"minCount":1,"maxCount":3}}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "neoguanniao:bird_food_bag"
+    },
+    {
+      "tag": "c:foods/raw_fish"
+    }
+  ],
+  "result": {
+    "id": "neoguanniao:bird_food_bag_fish",
+    "count": 1
+  }
+}
