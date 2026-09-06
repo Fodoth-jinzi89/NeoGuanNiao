@@ -6,5 +6,6 @@ import net.minecraft.world.InteractionHand;
 
 public final class CameraNetworkHooks {
     private CameraNetworkHooks() {}
-    @ExpectPlatform public static native void sendSettings(InteractionHand hand, CameraState state);
+    @ExpectPlatform public static void sendSettings(InteractionHand hand, CameraState state) {
+    }
 }

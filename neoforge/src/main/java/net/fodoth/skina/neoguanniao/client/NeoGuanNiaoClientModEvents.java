@@ -24,6 +24,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import dev.architectury.registry.registries.RegistrySupplier;
 
 @EventBusSubscriber(
         modid = NeoGuanNiao.MODID,
@@ -44,6 +51,26 @@ public final class NeoGuanNiaoClientModEvents {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+
+        if (!NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_NIGHT_HERON.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_PIGEON.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_DOVE.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_SPARROW.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_COCKATIEL.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_LONG_TAILED_TIT.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_MACAW.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_CROW.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_SEAGULL.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_KIWI.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_MYNA.isPresent()
+                || !NeoGuanNiaoEntityTypes.PHOTOGRAPH.isPresent()
+                || !NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.isPresent()
+                || !NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.isPresent()
+                || !NeoGuanNiaoBlockEntityTypes.BIRD_BATH.isPresent()
+                || !NeoGuanNiaoBlockEntityTypes.BIRD_NEST.isPresent()) {
+            return;
+        }
 
         event.registerEntityRenderer(
                 NeoGuanNiaoEntityTypes.NEO_BUDGERIGAR.get(),
@@ -102,66 +129,66 @@ public final class NeoGuanNiaoClientModEvents {
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.BIRD_BATH.get(),
+                NeoGuanNiaoItems.BIRD_BATH,
                 BirdBathItemRenderer::new
         );
 
-        ClientExtensionHelper.registerGeoItemRenderer(event, NeoGuanNiaoItems.NIKON_D750.get(), NikonD750ItemRenderer::new);
-        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.FILM.get(), FilmItemRenderer::new);
-        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.PHOTOGRAPH.get(), PhotographItemRenderer::new);
+        ClientExtensionHelper.registerGeoItemRenderer(event, NeoGuanNiaoItems.NIKON_D750, NikonD750ItemRenderer::new);
+        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.FILM, FilmItemRenderer::new);
+        ClientExtensionHelper.registerItemRenderer(event, NeoGuanNiaoItems.PHOTOGRAPH, PhotographItemRenderer::new);
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.WOODEN_BIRD_BATH.get(),
-                BirdBathItemRenderer::new
-        );
-
-        ClientExtensionHelper.registerGeoItemRenderer(
-                event,
-                NeoGuanNiaoItems.STONE_BIRD_BATH.get(),
+                NeoGuanNiaoItems.WOODEN_BIRD_BATH,
                 BirdBathItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.BIRD_BATH_2.get(),
+                NeoGuanNiaoItems.STONE_BIRD_BATH,
                 BirdBathItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.WOODEN_BIRD_BATH_2.get(),
+                NeoGuanNiaoItems.BIRD_BATH_2,
                 BirdBathItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.STONE_BIRD_BATH_2.get(),
+                NeoGuanNiaoItems.WOODEN_BIRD_BATH_2,
+                BirdBathItemRenderer::new
+        );
+
+        ClientExtensionHelper.registerGeoItemRenderer(
+                event,
+                NeoGuanNiaoItems.STONE_BIRD_BATH_2,
                 BirdBathItemRenderer::new
         );
 
         // Bird cages
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.SMALL_BIRD_CAGE.get(),
+                NeoGuanNiaoItems.SMALL_BIRD_CAGE,
                 BirdCageItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.MEDIUM_BIRD_CAGE.get(),
+                NeoGuanNiaoItems.MEDIUM_BIRD_CAGE,
                 BirdCageItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.LARGE_BIRD_CAGE.get(),
+                NeoGuanNiaoItems.LARGE_BIRD_CAGE,
                 BirdCageItemRenderer::new
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
-                NeoGuanNiaoItems.BIRD_NEST.get(),
+                NeoGuanNiaoItems.BIRD_NEST,
                 BirdNestItemRenderer::new
         );
 
@@ -169,3 +196,6 @@ public final class NeoGuanNiaoClientModEvents {
 
     }
 }
+
+
+

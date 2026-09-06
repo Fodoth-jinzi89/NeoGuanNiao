@@ -22,6 +22,9 @@ public final class FeatherFanItemExtensions {
     }
 
     public static void register(RegisterClientExtensionsEvent event) {
+        if (!NeoGuanNiaoItems.WIND_FEATHER_FAN.isPresent()) {
+            return;
+        }
         event.registerItem(new IClientItemExtensions() {
             @Override
             public boolean applyForgeHandTransform(@NotNull PoseStack poseStack, @NotNull LocalPlayer player, @NotNull HumanoidArm arm, @NotNull ItemStack itemInHand, float partialTick, float equipProgress, float swingProgress) {

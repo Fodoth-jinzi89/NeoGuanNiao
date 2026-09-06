@@ -8,6 +8,10 @@ public class NeoGuanNiaoCapabilities {
 
     public static void register(RegisterCapabilitiesEvent event) {
 
+        if (!NeoGuanNiaoBlockEntityTypes.BIRD_NEST.isPresent()) {
+            return;
+        }
+
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(),

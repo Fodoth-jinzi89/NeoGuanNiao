@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.client;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItemProperties;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoConfigScreen;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;

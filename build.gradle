@@ -12,7 +12,7 @@ subprojects {
     dependencies { minecraft "net.minecraft:minecraft:$rootProject.minecraft_version";
         mappings loom.officialMojangMappings() }
  java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
- tasks.withType(JavaCompile).configureEach { options.release = 21 }
+    tasks.withType(JavaCompile).configureEach { options.release = 21; options.encoding = 'UTF-8' }
     def artifactVersion = "${rootProject.mod_version}-${rootProject.minecraft_version}"
     tasks.named('jar') {
         archiveBaseName = rootProject.archives_name

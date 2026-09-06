@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
@@ -51,11 +50,18 @@ public class BlockStateBaseMixin {
                 && collisionContext instanceof EntityCollisionContext entityContext) {
 
             Entity entity = entityContext.getEntity();
+            if (entity == null) {
+                return original;
+            }
 
-            if (entity instanceof BirdFlightAware bird) {
+            try {
+                var flightMethod = entity.getClass().getMethod("isBirdFlightActive");
+                if (flightMethod.getReturnType() != boolean.class) {
+                    return original;
+                }
 
                 boolean activelyFlying =
-                        bird.isBirdFlightActive()
+                        (boolean) flightMethod.invoke(entity)
                                 && (!entity.onGround() || entity.isPassenger());
 
                 if (!activelyFlying
@@ -68,6 +74,8 @@ public class BlockStateBaseMixin {
                     return Shapes.empty();
 
                 }
+            } catch (ReflectiveOperationException ignored) {
+                return original;
             }
         }
         return original;

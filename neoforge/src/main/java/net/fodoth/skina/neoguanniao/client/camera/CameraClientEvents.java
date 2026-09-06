@@ -1,9 +1,11 @@
 package net.fodoth.skina.neoguanniao.client.camera;
 
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -30,6 +32,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber(modid="neoguanniao", value=Dist.CLIENT)
 public final class CameraClientEvents {
+    private static boolean attackWasDown;
+    private static int debugTick;
+
     private CameraClientEvents() {
     }
 
@@ -37,6 +42,27 @@ public final class CameraClientEvents {
     public static void onClientTick(ClientTickEvent.Post event) {
             Minecraft minecraft;
             CameraClientCapture.tickViewfinder();
+            if ((debugTick++ % 20) == 0) {
+                NeoGuanNiao.LOGGER.info("Camera tick open={} pending={}", CameraClientCapture.isViewfinderOpen(), CameraClientCapture.isCleanCapturePending());
+            }
+            minecraft = Minecraft.getInstance();
+            if (CameraClientCapture.isViewfinderOpen() && (++debugTick % 40) == 0) {
+                NeoGuanNiao.LOGGER.info("Camera viewfinder active; screen={}, attack={}, glfw={}", minecraft.screen, minecraft.options.keyAttack.isDown(), GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT));
+            }
+            boolean attackDown = minecraft.options.keyAttack.isDown()
+                    || GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
+            if (CameraClientCapture.isViewfinderOpen() && minecraft.screen == null && attackDown && !attackWasDown) {
+                NeoGuanNiao.LOGGER.info("Camera left click detected (keyDown={}, glfw={})", minecraft.options.keyAttack.isDown(), attackDown);
+                CameraClientCapture.handleMouseButton(0, 1);
+            }
+            attackWasDown = attackDown;
+            if (!CameraClientCapture.isViewfinderOpen()) {
+                attackWasDown = false;
+            }
+            if (CameraClientCapture.isCleanCapturePending()) {
+                NeoGuanNiao.LOGGER.info("Camera clean capture pending; advancing capture tick");
+                CameraClientCapture.captureImmediately();
+            }
             while (CameraKeyMappings.OPEN_FILTER_LIBRARY.consumeClick()) {
                 minecraft = Minecraft.getInstance();
                 if (minecraft.screen != null || !CameraClientCapture.isViewfinderOpen() || CameraClientCapture.isCleanCapturePending()) continue;
@@ -115,6 +141,14 @@ public final class CameraClientEvents {
 
     @SubscribeEvent
     public static void onMouseButton(InputEvent.MouseButton.Pre event) {
+        if (CameraClientCapture.isViewfinderOpen()) {
+            NeoGuanNiao.LOGGER.info("Camera mouse event button={} action={}", event.getButton(), event.getAction());
+            if (event.getButton() == 0 && event.getAction() == 1 && Minecraft.getInstance().screen == null) {
+                CameraClientCapture.handleMouseButton(0, 1);
+                event.setCanceled(true);
+                return;
+            }
+        }
         if (CameraClientEvents.isCameraControlScreenOpen()) {
             return;
         }

@@ -6,5 +6,5 @@ public final class EnvironmentHooks {
     private EnvironmentHooks() {}
 
     @ExpectPlatform
-    public static native boolean isProduction();
+    public static boolean isProduction() { return false; }
 }

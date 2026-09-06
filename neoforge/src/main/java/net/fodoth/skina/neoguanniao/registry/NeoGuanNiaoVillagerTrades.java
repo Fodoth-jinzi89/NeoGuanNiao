@@ -13,7 +13,11 @@ public class NeoGuanNiaoVillagerTrades {
 
     @SubscribeEvent
     public static void registerTrades(VillagerTradesEvent event) {
-        if (event.getType() == NeoGuanNiaoVillagerProfessions.BIRD_KEEPER.get()) {
+        if (!NeoGuanNiaoVillagerProfessions.BIRD_KEEPER.isPresent()
+                || event.getType() != NeoGuanNiaoVillagerProfessions.BIRD_KEEPER.get()) {
+            return;
+        }
+        if (event.getTrades().size() >= 6) {
             event.getTrades().get(1).add(new BirdFeatherTrade());  // 新手
             event.getTrades().get(2).add(new BirdFeatherTrade());  // 学徒
             event.getTrades().get(3).add(new BirdFeatherTrade());  // 老手

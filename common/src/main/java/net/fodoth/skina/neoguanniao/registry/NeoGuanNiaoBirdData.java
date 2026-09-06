@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrarManager;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,16 @@ import static net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdDataHelper.*;
 public final class NeoGuanNiaoBirdData {
 
     public static final DeferredRegister<BirdData> BIRD_DATA =
-            DeferredRegister.create(NeoGuanNiao.MODID,
-                    ResourceKey.createRegistryKey(resource("bird_data")));
+            createBirdDataRegister();
+
+    private static DeferredRegister<BirdData> createBirdDataRegister() {
+        RegistrarManager.get(NeoGuanNiao.MODID)
+                .builder(resource("bird_data"))
+                .syncToClients()
+                .build();
+        return DeferredRegister.create(NeoGuanNiao.MODID,
+                ResourceKey.createRegistryKey(resource("bird_data")));
+    }
 
     private NeoGuanNiaoBirdData() {
     }

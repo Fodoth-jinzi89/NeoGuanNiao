@@ -6,7 +6,9 @@ public final class ConfigHooks {
     private ConfigHooks() {}
 
     @ExpectPlatform
-    public static native Limits cameraLimits();
+    public static Limits cameraLimits() {
+        return Limits.defaults();
+    }
 
     public record Limits(boolean uploadsEnabled, boolean uploadsOperatorOnly, boolean uploadsWhitelistedOnly,
                          int maxConcurrentDownloads, int downloadBytesPerTick, int maxPhotosPerPlayer,

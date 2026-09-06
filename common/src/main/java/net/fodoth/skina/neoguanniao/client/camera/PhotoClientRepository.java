@@ -69,6 +69,7 @@ public final class PhotoClientRepository {
     }
 
     public static byte[] getOrRequest(String photoId, String expectedHash) {
+        net.fodoth.skina.neoguanniao.NeoGuanNiao.LOGGER.info("Photo preview request id={} hash={}", photoId, expectedHash);
         CachedImage cached = IMAGES.get(photoId);
         if (cached != null && (expectedHash == null || expectedHash.isEmpty() || expectedHash.equals(cached.contentHash()))) {
             return cached.data();
@@ -185,6 +186,7 @@ public final class PhotoClientRepository {
         activeRequestStarted = System.currentTimeMillis();
         String expectedHash = next.getValue();
         iterator.remove();
+        net.fodoth.skina.neoguanniao.NeoGuanNiao.LOGGER.info("Dispatching photo request id={}", activeRequest);
         PhotoNetworkHooks.requestPhoto(activeRequest, expectedHash);
     }
 

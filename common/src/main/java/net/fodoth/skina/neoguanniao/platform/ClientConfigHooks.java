@@ -5,14 +5,14 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 public final class ClientConfigHooks {
     private ClientConfigHooks() {}
 
-    @ExpectPlatform public static native boolean showCameraUi();
-    @ExpectPlatform public static native boolean showViewfinderHint();
-    @ExpectPlatform public static native boolean enablePreviewPostEffect();
-    @ExpectPlatform public static native boolean enableOpticsShader();
-    @ExpectPlatform public static native boolean enableFilterPreview();
-    @ExpectPlatform public static native boolean hideGui();
-    @ExpectPlatform public static native boolean hideHand();
-    @ExpectPlatform public static native double viewfinderOpacity();
-    @ExpectPlatform public static native int wheelFocusStep();
-    @ExpectPlatform public static native double mouseSensitivity();
+    @ExpectPlatform public static boolean showCameraUi() { return true; }
+    @ExpectPlatform public static boolean showViewfinderHint() { return true; }
+    @ExpectPlatform public static boolean enablePreviewPostEffect() { return true; }
+    @ExpectPlatform public static boolean enableOpticsShader() { return true; }
+    @ExpectPlatform public static boolean enableFilterPreview() { return true; }
+    @ExpectPlatform public static boolean hideGui() { return false; }
+    @ExpectPlatform public static boolean hideHand() { return false; }
+    @ExpectPlatform public static double viewfinderOpacity() { return 0.9; }
+    @ExpectPlatform public static int wheelFocusStep() { return 1; }
+    @ExpectPlatform public static double mouseSensitivity() { return 1.0; }
 }

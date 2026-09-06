@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.mixin;
 
-import net.fodoth.skina.neoguanniao.content.villager.MerchantOfferAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -50,20 +49,18 @@ public abstract class AbstractVillagerMixin {
 
 
         for (MerchantOffer offer : offers) {
-            if (!(offer instanceof MerchantOfferAccessor accessor)) {
-                continue;
-            }
+            if (!hasDisplayAccessors(offer)) continue;
 
             CompoundTag offerTag = new CompoundTag();
 
             ItemStack display =
-                    accessor.neoguanniao$getDisplayCost();
+                    (ItemStack) invoke(offer, "neoguanniao$getDisplayCost");
 
             ItemStack costB =
-                    accessor.neoguanniao$getCostBDisplay();
+                    (ItemStack) invoke(offer, "neoguanniao$getCostBDisplay");
 
             ItemStack result =
-                    accessor.neoguanniao$getResultDisplay();
+                    (ItemStack) invoke(offer, "neoguanniao$getResultDisplay");
 
 
             if (display != null) {
@@ -159,7 +156,7 @@ public abstract class AbstractVillagerMixin {
             MerchantOffer offer =
                     offers.get(i);
 
-            if (!(offer instanceof MerchantOfferAccessor accessor)) {
+            if (!hasDisplayAccessors(offer)) {
                 continue;
             }
 
@@ -172,7 +169,7 @@ public abstract class AbstractVillagerMixin {
                                 offerTag.getCompound("DisplayCost")
                         );
 
-                accessor.neoguanniao$setDisplayCost(stack);
+                invoke(offer, "neoguanniao$setDisplayCost", stack);
             }
 
 
@@ -185,7 +182,7 @@ public abstract class AbstractVillagerMixin {
                                 offerTag.getCompound("CostBDisplay")
                         );
 
-                accessor.neoguanniao$setCostBDisplay(stack);
+                invoke(offer, "neoguanniao$setCostBDisplay", stack);
             }
 
 
@@ -198,8 +195,29 @@ public abstract class AbstractVillagerMixin {
                                 offerTag.getCompound("ResultDisplay")
                         );
 
-                accessor.neoguanniao$setResultDisplay(stack);
+                invoke(offer, "neoguanniao$setResultDisplay", stack);
             }
         }
+    }
+
+    @Unique
+    private static boolean hasDisplayAccessors(MerchantOffer offer) {
+        try {
+            offer.getClass().getMethod("neoguanniao$getDisplayCost");
+            return true;
+        } catch (ReflectiveOperationException ignored) {
+            return false;
+        }
+    }
+
+    @Unique
+    private static Object invoke(MerchantOffer offer, String name, Object... args) {
+        try {
+            for (var method : offer.getClass().getMethods()) {
+                if (method.getName().equals(name)) return method.invoke(offer, args);
+            }
+        } catch (ReflectiveOperationException ignored) {
+        }
+        return null;
     }
 }

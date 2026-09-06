@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.network;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ public record PhotoRequestPacket(String photoId, String expectedHash) implements
     }, b -> new PhotoRequestPacket(b.readUtf(80), b.readUtf(64)));
 
     public static void handle(PhotoRequestPacket p, IPayloadContext c) {
+        NeoGuanNiao.LOGGER.info("Photo request received id={}", p.photoId);
         c.enqueueWork(() -> {
             if (c.player() instanceof ServerPlayer s) PhotoUploadManager.requestDownload(s, p.photoId, p.expectedHash);
         });

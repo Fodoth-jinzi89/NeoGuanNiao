@@ -2,6 +2,7 @@ package net.fodoth.skina.neoguanniao.util;
 
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
+import dev.architectury.registry.registries.RegistrySupplier;
 
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -15,10 +16,13 @@ public class ClientExtensionHelper {
 
     public static void registerGeoItemRenderer(
             RegisterClientExtensionsEvent event,
-            Item item,
+            RegistrySupplier<Item> item,
             Supplier<BlockEntityWithoutLevelRenderer> rendererSupplier
     ) {
 
+        if (!item.isPresent()) {
+            return;
+        }
         event.registerItem(
                 new IClientItemExtensions() {
 
@@ -32,15 +36,18 @@ public class ClientExtensionHelper {
                     }
                 },
 
-                item
+                item.get()
         );
     }
 
     public static void registerItemRenderer(
             RegisterClientExtensionsEvent event,
-            Item item,
+            RegistrySupplier<Item> item,
             Supplier<? extends BlockEntityWithoutLevelRenderer> rendererFactory
     ) {
+        if (!item.isPresent()) {
+            return;
+        }
         event.registerItem(new IClientItemExtensions() {
             private BlockEntityWithoutLevelRenderer renderer;
 
@@ -51,6 +58,6 @@ public class ClientExtensionHelper {
                 }
                 return renderer;
             }
-        }, item);
+        }, item.get());
     }
 }

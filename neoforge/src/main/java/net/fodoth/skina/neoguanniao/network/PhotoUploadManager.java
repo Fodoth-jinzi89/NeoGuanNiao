@@ -42,6 +42,7 @@ public final class PhotoUploadManager {
     }
 
     public static void begin(ServerPlayer player, UUID uploadId, InteractionHand hand, int totalBytes, int width, int height, String contentHash) {
+        NeoGuanNiao.LOGGER.info("Photo upload received {} bytes={} hand={}", uploadId, totalBytes, hand);
         long now = PhotoUploadManager.gameTime(player.server);
         PhotoUploadManager.cleanupExpired(player.server, now);
         if (!PhotoUploadManager.canUpload(player) || ACTIVE_UPLOADS.containsKey(player.getUUID()) || PROCESSING_UPLOADS.containsKey(player.getUUID()) || totalBytes <= 0 || totalBytes > CameraConfig.maxCompressedBytes() || !PhotoTransferLimits.isCaptureDimensions(width, height) || !PhotoImageCodec.isSha256(contentHash) || !PhotoUploadManager.quotaAllows(player.server, player.getUUID(), totalBytes)) {
@@ -75,6 +76,7 @@ public final class PhotoUploadManager {
     }
 
     public static void finish(ServerPlayer player, UUID uploadId) {
+        NeoGuanNiao.LOGGER.info("Photo upload finish received {}", uploadId);
         UUID playerId = player.getUUID();
         UploadSession session = ACTIVE_UPLOADS.remove(playerId);
         if (session == null) {
