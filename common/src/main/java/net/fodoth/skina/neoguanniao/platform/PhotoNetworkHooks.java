@@ -6,6 +6,12 @@ import java.util.UUID;
 
 public final class PhotoNetworkHooks {
     private PhotoNetworkHooks() {}
+    @ExpectPlatform public static int activeUploads() {
+        throw new AssertionError();
+    }
+    @ExpectPlatform public static int activeDownloads() {
+        throw new AssertionError();
+    }
     @ExpectPlatform public static void beginUpload(UUID id, InteractionHand hand, int bytes, int width, int height, String hash) {
         throw new AssertionError();
     }

@@ -11,6 +11,9 @@ public final class PhotoNetworkHooksImpl {
     private PhotoNetworkHooksImpl() {
     }
 
+    public static int activeUploads() { return PhotoUploadManager.activeUploads(); }
+    public static int activeDownloads() { return PhotoUploadManager.activeDownloads(); }
+
     public static void beginUpload(UUID id, InteractionHand hand, int bytes, int width, int height, String hash) {
         NeoGuanNiao.LOGGER.info("Photo upload begin {} bytes={}", id, bytes);
         NeoGuanNiaoNetwork.sendToServer(new BeginPhotoUploadPacket(id, hand, bytes, width, height, hash));

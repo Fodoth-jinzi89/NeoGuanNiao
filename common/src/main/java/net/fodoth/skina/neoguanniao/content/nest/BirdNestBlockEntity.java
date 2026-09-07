@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.fodoth.skina.neoguanniao.content.nest.SimpleItemStackHandler;
+import net.fodoth.skina.neoguanniao.platform.BirdNestInventoryHooks;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -38,16 +38,7 @@ import software.bernie.geckolib.animation.RawAnimation;
 public class BirdNestBlockEntity extends BlockEntity implements Container, GeoBlockEntity {
 
     // ==================== 库存系统 ====================
-    private final SimpleItemStackHandler itemHandler = new SimpleItemStackHandler(4) {
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return 1;
-        }
-        protected void onContentsChanged(int slot) {
-            BirdNestBlockEntity.this.setChanged();
-        }
-    };
+    private final SimpleItemStackHandler itemHandler = BirdNestInventoryHooks.create(this);
 
     // ==================== 动画相关 ====================
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
