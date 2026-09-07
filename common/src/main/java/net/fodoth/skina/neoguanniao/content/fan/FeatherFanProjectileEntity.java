@@ -70,6 +70,7 @@ extends ThrowableItemProjectile {
     private float attackDamage = 3.0f;
     private float returnSpeed = 1.45f;
     private InteractionHand returnHand = InteractionHand.MAIN_HAND;
+    private int returnSlot = -1;
     private UUID ownerUuid;
     private UUID stuckEntityUuid;
     private UUID huntingTargetUuid;
@@ -109,10 +110,11 @@ extends ThrowableItemProjectile {
         builder.define(DATA_RIVEN_TICKS, 0);
     }
 
-    public void configureThrow(ItemStack fanStack, InteractionHand hand, float charge) {
+    public void configureThrow(ItemStack fanStack, InteractionHand hand, int slot, float charge) {
         float clampedCharge = Mth.clamp(charge, 0.0f, 1.0f);
         this.setItem(fanStack);
         this.returnHand = hand;
+        this.returnSlot = slot;
         this.setFanState(FanState.OUTBOUND_SPIN);
         this.entityData.set(DATA_CHARGE, clampedCharge);
         this.throwOrigin = this.position();
@@ -121,9 +123,10 @@ extends ThrowableItemProjectile {
         this.returnSpeed = Mth.lerp(clampedCharge, 1.45f, 1.85f);
     }
 
-    public void configurePiercing(ItemStack fanStack, InteractionHand hand) {
+    public void configurePiercing(ItemStack fanStack, InteractionHand hand, int slot) {
         this.setItem(fanStack);
         this.returnHand = hand;
+        this.returnSlot = slot;
         this.setFanState(FanState.PIERCING);
         this.entityData.set(DATA_CHARGE, 1.0f);
         this.throwOrigin = this.position();
@@ -132,10 +135,11 @@ extends ThrowableItemProjectile {
         this.returnSpeed = 1.95f;
     }
 
-    public void configureHunting(ItemStack fanStack, InteractionHand hand, float charge, List<LivingEntity> targets) {
+    public void configureHunting(ItemStack fanStack, InteractionHand hand, int slot, float charge, List<LivingEntity> targets) {
         float clampedCharge = Mth.clamp(charge, 0.0f, 1.0f);
         this.setItem(fanStack);
         this.returnHand = hand;
+        this.returnSlot = slot;
         this.setFanState(FanState.HUNTING);
         this.entityData.set(DATA_CHARGE, clampedCharge);
         this.throwOrigin = this.position();
@@ -1508,7 +1512,12 @@ extends ThrowableItemProjectile {
         this.deliverReturnCargo(owner);
         ItemStack fan = this.getItem().copy();
         fan.setCount(1);
-        if (owner.getItemInHand(this.returnHand).isEmpty()) {
+        if (this.returnSlot >= 0 && this.returnSlot < owner.getInventory().items.size()
+                && (owner.getInventory().getItem(this.returnSlot).isEmpty()
+                || FeatherFanItem.isReservedBy(owner.getInventory().getItem(this.returnSlot), this.getUUID()))) {
+            FeatherFanItem.freeReservation(fan);
+            owner.getInventory().setItem(this.returnSlot, fan);
+        } else if (owner.getItemInHand(this.returnHand).isEmpty()) {
             owner.setItemInHand(this.returnHand, fan);
         } else if (!owner.getInventory().add(fan)) {
             owner.drop(fan, false);
@@ -1622,6 +1631,7 @@ extends ThrowableItemProjectile {
         tag.putFloat("AttackDamage", this.attackDamage);
         tag.putFloat("ReturnSpeed", this.returnSpeed);
         tag.putBoolean("ReturnOffhand", this.returnHand == InteractionHand.OFF_HAND);
+        tag.putInt("ReturnSlot", this.returnSlot);
         tag.putInt("OwnerMissingTicks", this.ownerMissingTicks);
         tag.putInt("LifeTicks", this.lifeTicks);
         tag.putInt("ReturningTicks", this.returningTicks);
@@ -1671,6 +1681,7 @@ extends ThrowableItemProjectile {
         this.attackDamage = tag.getFloat("AttackDamage");
         this.returnSpeed = tag.getFloat("ReturnSpeed");
         this.returnHand = tag.getBoolean("ReturnOffhand") ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        this.returnSlot = tag.contains("ReturnSlot", 3) ? tag.getInt("ReturnSlot") : -1;
         this.ownerMissingTicks = tag.getInt("OwnerMissingTicks");
         this.lifeTicks = tag.getInt("LifeTicks");
         this.returningTicks = tag.getInt("ReturningTicks");

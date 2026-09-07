@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.fodoth.skina.neoguanniao.client.NeoGuanNiaoFabricProjectileRenderer;
 import net.fodoth.skina.neoguanniao.client.bird.BirdModelRenderer;
-import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
-import net.fodoth.skina.neoguanniao.client.bath.BirdBathRenderer;
+import net.fodoth.skina.neoguanniao.platform.BirdCageRendererHooks;
+import net.fodoth.skina.neoguanniao.platform.BirdBathRendererHooks;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestRenderer;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -34,8 +34,8 @@ public final class NeoGuanNiaoFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
-        BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(), BirdCageRenderer::new);
-        BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(), BirdBathRenderer::new);
+        BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(), BirdCageRendererHooks::create);
+        BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(), BirdBathRendererHooks::create);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(), BirdNestRenderer::new);
     }
 }

@@ -2,10 +2,10 @@ package net.fodoth.skina.neoguanniao.client;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.client.bath.BirdBathItemRenderer;
-import net.fodoth.skina.neoguanniao.client.bath.BirdBathRenderer;
+import net.fodoth.skina.neoguanniao.platform.BirdBathRendererHooks;
 import net.fodoth.skina.neoguanniao.client.bird.BirdModelRenderer;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageItemRenderer;
-import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
+import net.fodoth.skina.neoguanniao.platform.BirdCageRendererHooks;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestItemRenderer;
 import net.fodoth.skina.neoguanniao.client.nest.BirdNestRenderer;
 import net.fodoth.skina.neoguanniao.client.camera.FilmItemRenderer;
@@ -108,12 +108,12 @@ public final class NeoGuanNiaoClientModEvents {
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(),
-                BirdCageRenderer::new
+                BirdCageRendererHooks::create
         );
 
         event.registerBlockEntityRenderer(
                 NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(),
-                BirdBathRenderer::new
+                BirdBathRendererHooks::create
         );
 
         event.registerBlockEntityRenderer(

@@ -4,6 +4,7 @@ import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.bird.core.model.BirdModelRarity;
 import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.content.fan.FeatherFanEnchantments;
+import net.fodoth.skina.neoguanniao.content.fan.FeatherFanItem;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -20,6 +21,7 @@ public final class NeoGuanNiaoItemProperties {
         ItemProperties.register(NeoGuanNiaoItems.BIRD_EGG.get(), id("gender"), (stack, level, entity, seed) -> (float) stack.getOrDefault(NeoGuanNiaoDataComponents.BIRD_EGG_GENDER.get(), 0));
         ItemProperties.register(NeoGuanNiaoItems.BIRD_FEATHER.get(), id("bird_type"), (stack, level, entity, seed) -> (float) stack.getOrDefault(NeoGuanNiaoDataComponents.BIRD_FEATHER_BIRD_TYPE.get(), 0));
         ItemProperties.register(NeoGuanNiaoItems.WIND_FEATHER_FAN.get(), id("mode"), (stack, level, entity, seed) -> FeatherFanEnchantments.mode(stack));
+        ItemProperties.register(NeoGuanNiaoItems.WIND_FEATHER_FAN.get(), id("reserved"), (stack, level, entity, seed) -> FeatherFanItem.isReserved(stack) ? 1.0f : 0.0f);
         ItemProperties.register(NeoGuanNiaoItems.BIRD_FEATHER.get(), id("rarity"), (stack, level, entity, seed) -> (float) stack.getOrDefault(NeoGuanNiaoDataComponents.BIRD_FEATHER_SKIN_RARITY.get(), 0));
     }
 

@@ -28,6 +28,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -107,6 +108,9 @@ public class FeatherFanItem
         if (player.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.fail(stack);
         }
+        if (isReserved(stack)) {
+            return InteractionResultHolder.fail(stack);
+        }
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(stack);
     }
@@ -167,6 +171,7 @@ public class FeatherFanItem
             return;
         }
         InteractionHand hand = player.getUsedItemHand();
+        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : -1;
         float charge = FeatherFanItem.getCharge(chargeTicks);
         List<LivingEntity> huntingTargets = List.of();
         boolean fullyCharged = chargeTicks >= 30;
@@ -178,7 +183,7 @@ public class FeatherFanItem
                 return;
             }
         }
-        this.launchFan(stack, level, player, hand, charge, fullyCharged && !FeatherFanEnchantments.hasHuntingReturn(stack), huntingTargets);
+        this.launchFan(stack, level, player, hand, slot, charge, fullyCharged && !FeatherFanEnchantments.hasHuntingReturn(stack), huntingTargets);
     }
 
     public static boolean isFullyCharged(LivingEntity living) {
@@ -196,12 +201,13 @@ public class FeatherFanItem
             return;
         }
         InteractionHand hand = player.getUsedItemHand();
+        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : -1;
         ItemStack stack = player.getUseItem();
         player.stopUsingItem();
-        this.launchFan(stack, player.level(), player, hand, 1.0f, true, List.of());
+        this.launchFan(stack, player.level(), player, hand, slot, 1.0f, true, List.of());
     }
 
-    private void launchFan(ItemStack stack, Level level, Player player, InteractionHand hand, float charge, boolean piercing, List<LivingEntity> huntingTargets) {
+    private void launchFan(ItemStack stack, Level level, Player player, InteractionHand hand, int slot, float charge, boolean piercing, List<LivingEntity> huntingTargets) {
         LivingEntity primaryHuntingTarget;
         boolean hunting = !piercing && !huntingTargets.isEmpty();
         primaryHuntingTarget = hunting ? huntingTargets.getFirst() : null;
@@ -210,11 +216,11 @@ public class FeatherFanItem
         thrownStack.setCount(1);
         FeatherFanProjectileEntity projectile = new FeatherFanProjectileEntity(level, player);
         if (piercing) {
-            projectile.configurePiercing(thrownStack, hand);
+            projectile.configurePiercing(thrownStack, hand, slot);
         } else if (hunting) {
-            projectile.configureHunting(thrownStack, hand, charge, huntingTargets);
+            projectile.configureHunting(thrownStack, hand, slot, charge, huntingTargets);
         } else {
-            projectile.configureThrow(thrownStack, hand, charge);
+            projectile.configureThrow(thrownStack, hand, slot, charge);
         }
         if (hunting) {
             Vec3 direction = primaryHuntingTarget.getBoundingBox().getCenter().subtract(projectile.position());
@@ -225,7 +231,11 @@ public class FeatherFanItem
             projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, speed, 0.0f);
         }
         if (level.addFreshEntity(projectile)) {
-            stack.shrink(1);
+            if (slot >= 0) {
+                FeatherFanItem.reserve(stack, projectile.getUUID());
+            } else {
+                stack.shrink(1);
+            }
             player.awardStat(Stats.ITEM_USED.get(this));
             player.swing(hand, true);
             if (piercing) {
@@ -306,6 +316,27 @@ public class FeatherFanItem
 
     private static boolean isBird(Entity entity) {
         return entity instanceof AbstractBirdEntity<?>;
+    }
+
+    public static boolean isReserved(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().hasUUID("FeatherFanReserver");
+    }
+
+    public static boolean isReservedBy(ItemStack stack, java.util.UUID id) {
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        return tag.hasUUID("FeatherFanReserver") && id.equals(tag.getUUID("FeatherFanReserver"));
+    }
+
+    public static void freeReservation(ItemStack stack) {
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        tag.remove("FeatherFanReserver");
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+
+    private static void reserve(ItemStack stack, java.util.UUID id) {
+        net.minecraft.nbt.CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        tag.putUUID("FeatherFanReserver", id);
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
 }

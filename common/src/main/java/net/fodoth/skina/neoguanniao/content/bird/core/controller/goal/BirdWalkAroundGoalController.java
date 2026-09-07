@@ -16,7 +16,7 @@ public final class BirdWalkAroundGoalController<T extends AbstractBirdEntity<?>>
     @Override
     public boolean canUse() {
         BirdBehaviorState state = bird().getBehaviorStateController().getBehaviorState();
-        return bird().onGround()
+        return !bird().isBaby() && bird().onGround()
                 && !bird().getFlyingController().isFlightInProgress()
                 && (state == BirdBehaviorState.IDLE || state == BirdBehaviorState.SENTINEL)
                 && !bird().hasControllingPassenger()

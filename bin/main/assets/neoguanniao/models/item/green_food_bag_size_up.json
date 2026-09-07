@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "neoguanniao:item/green_food_bag_size_up"
-  }
-}

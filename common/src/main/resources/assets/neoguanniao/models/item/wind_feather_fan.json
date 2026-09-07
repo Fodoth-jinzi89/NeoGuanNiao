@@ -18,6 +18,9 @@
   "overrides": [
     {"predicate": {"neoguanniao:mode": 0.0}, "model": "neoguanniao:item/wind_feather_fan_burial"},
     {"predicate": {"neoguanniao:mode": 1.0}, "model": "neoguanniao:item/wind_feather_fan_riven"},
-    {"predicate": {"neoguanniao:mode": 2.0}, "model": "neoguanniao:item/wind_feather_fan_hunting"}
+    {"predicate": {"neoguanniao:mode": 2.0}, "model": "neoguanniao:item/wind_feather_fan_hunting"},
+    {"predicate": {"neoguanniao:mode": 0.0, "neoguanniao:reserved": 1.0}, "model": "neoguanniao:item/wind_feather_fan_burial_reserved"},
+    {"predicate": {"neoguanniao:mode": 1.0, "neoguanniao:reserved": 1.0}, "model": "neoguanniao:item/wind_feather_fan_riven_reserved"},
+    {"predicate": {"neoguanniao:mode": 2.0, "neoguanniao:reserved": 1.0}, "model": "neoguanniao:item/wind_feather_fan_hunting_reserved"}
   ]
 }

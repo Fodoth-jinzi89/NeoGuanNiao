@@ -2,6 +2,7 @@ package net.fodoth.skina.neoguanniao.client.keybind;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+import net.fodoth.skina.neoguanniao.client.camera.CameraKeyMappings;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -46,5 +47,8 @@ public class NeoGuanNiaoClientKeyBindings {
         event.register(TOGGLE_LAYOUT_EDIT);
         event.register(SAVE_LAYOUT);
         event.register(RELOAD_LAYOUT);
+        event.register(CameraKeyMappings.OPEN_FILTER_LIBRARY);
+        event.register(CameraKeyMappings.OPEN_CREATIVE_CONTROLS);
+        event.register(CameraKeyMappings.FOCUS);
     }
 }

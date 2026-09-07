@@ -1,2 +1,12 @@
 architectury { platformSetupLoomIde(); fabric() }
+sourceSets.main.resources.srcDir project(':common').sourceSets.main.resources.srcDirs
+tasks.named('processResources') { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+tasks.named('sourcesJar') { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+tasks.named('jar') {
+    dependsOn(':common:transformProductionFabric')
+    from({ zipTree(project(':common').layout.buildDirectory.file('libs/common-' + rootProject.mod_version + '-transformProductionFabric.jar').get().asFile) }) {
+        exclude 'META-INF/**'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 dependencies { modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"; modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"; modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"; modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.1:4.8.4"; implementation project(path: ':common') }
