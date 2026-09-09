@@ -38,4 +38,34 @@ subprojects {
     }
 }
 
-tasks.register('genIntellijRuns') { dependsOn(':fabric:genIntellijRuns', ':neoforge:genIntellijRuns') }
+configure([project(':fabric'), project(':neoforge')]) {
+    tasks.register('genIntellijRuns') {
+        group = 'ide'
+        description = 'Generates IntelliJ Gradle launch configurations.'
+        def platform = project.name
+        def outputDir = rootProject.layout.projectDirectory.dir('.idea/runConfigurations')
+        outputs.files(['Client', 'Server'].collect { outputDir.file("NeoGuanNiao_${platform}_${it}.xml") })
+        doLast {
+            outputDir.asFile.mkdirs()
+            ['Client', 'Server'].each { side ->
+                outputDir.file("NeoGuanNiao_${platform}_${side}.xml").asFile.setText("""<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="NeoGuanNiao ${platform} ${side}" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="externalProjectPath" value="\$PROJECT_DIR\$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="taskNames"><list><option value=":${platform}:run${side}" /></list></option>
+      <option name="taskDescriptions"><list /></option>
+    </ExternalSystemSettings>
+    <method v="2" />
+  </configuration>
+</component>
+""", 'UTF-8')
+            }
+        }
+    }
+}
+tasks.register('genIntellijRuns') {
+    group = 'ide'
+    description = 'Generates IntelliJ launch configurations for both platforms.'
+    dependsOn(':fabric:genIntellijRuns', ':neoforge:genIntellijRuns')
+}

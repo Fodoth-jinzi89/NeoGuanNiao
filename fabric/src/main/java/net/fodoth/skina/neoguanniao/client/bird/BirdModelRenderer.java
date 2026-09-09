@@ -11,7 +11,9 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class BirdModelRenderer<T extends AbstractBirdEntity<?>> extends GeoEntityRenderer<T> {
-    public BirdModelRenderer(EntityRendererProvider.Context context) { super(context, new BirdModel<>()); }
+    public BirdModelRenderer(EntityRendererProvider.Context context) {
+        super(context, new BirdModel<>());
+    }
 
     @Override
     public void preRender(@NotNull PoseStack poseStack, @NotNull T bird, @NotNull BakedGeoModel model,

@@ -539,5 +539,8 @@
   "item.neoguanniao.wind_feather_fan.usage": "长按右键蓄力，蓄满松开丢出",
   "tooltip.neoguanniao.wind_feather_fan.mode": "模式：",
   "tooltip.neoguanniao.wind_feather_fan.attack_damage": "攻击伤害：",
-  "tooltip.neoguanniao.wind_feather_fan.attack_range": "攻击距离："
+  "tooltip.neoguanniao.wind_feather_fan.attack_range": "攻击距离：",
+  "config.neoguanniao.camera.show_camera_ui": "显示相机界面",
+  "config.neoguanniao.camera.viewfinder_opacity": "取景器不透明度",
+  "config.neoguanniao.cloth_required": "安装 Cloth Config 可打开配置界面，也可编辑 config/neoguanniao.properties；服务器限制请在服务器端修改。"
 }

@@ -4,10 +4,6 @@
     {
       "id": "#c:foods/raw_fish",
       "required": false
-    },
-    {
-      "id": "#goldentweaks:bird_food_fish",
-      "required": false
     }
   ]
 }

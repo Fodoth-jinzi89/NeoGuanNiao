@@ -6,7 +6,6 @@ import net.fodoth.skina.neoguanniao.content.bird.core.skin.BirdSkinRarity;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherData;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.fodoth.skina.neoguanniao.content.villager.MerchantOfferBuilder;
-import net.fodoth.skina.neoguanniao.content.villager.compat.QuestShopCompat;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBirdData;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
@@ -16,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +69,7 @@ public class BirdFeatherTrade implements VillagerTrades.ItemListing {
         FeatherTradeData tradeData = createFeatherCost(rarity, featherCount, random);
 
         // 7. 构建交易结果（村民支付代币）
-        ItemStack result = QuestShopCompat.createCurrency(priceCount);
+        ItemStack result = new ItemStack(Items.EMERALD, priceCount);
 
         // 8. 创建基础交易对象
         MerchantOffer offer = new MerchantOffer(

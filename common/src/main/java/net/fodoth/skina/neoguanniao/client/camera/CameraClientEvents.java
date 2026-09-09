@@ -28,6 +28,10 @@ public final class CameraClientEvents {
     }
 
     public static void onClientTick() {
+        onClientTick(true);
+    }
+
+    public static void onClientTick(boolean pollCapture) {
             Minecraft minecraft;
             CameraClientCapture.tickViewfinder();
             if ((debugTick++ % 20) == 0) {
@@ -39,7 +43,7 @@ public final class CameraClientEvents {
             }
             boolean attackDown = minecraft.options.keyAttack.isDown()
                     || GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
-            if (CameraClientCapture.isViewfinderOpen() && minecraft.screen == null && attackDown && !attackWasDown) {
+            if (pollCapture && CameraClientCapture.isViewfinderOpen() && minecraft.screen == null && attackDown && !attackWasDown) {
                 NeoGuanNiao.LOGGER.info("Camera left click detected (keyDown={}, glfw={})", minecraft.options.keyAttack.isDown(), attackDown);
                 CameraClientCapture.handleMouseButton(0, 1);
             }
@@ -47,7 +51,7 @@ public final class CameraClientEvents {
             if (!CameraClientCapture.isViewfinderOpen()) {
                 attackWasDown = false;
             }
-            if (CameraClientCapture.isCleanCapturePending()) {
+            if (pollCapture && CameraClientCapture.isCleanCapturePending()) {
                 NeoGuanNiao.LOGGER.info("Camera clean capture pending; advancing capture tick");
                 CameraClientCapture.captureImmediately();
             }

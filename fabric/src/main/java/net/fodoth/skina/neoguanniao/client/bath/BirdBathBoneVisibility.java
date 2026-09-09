@@ -135,37 +135,31 @@ final class BirdBathBoneVisibility {
 
         return switch (type) {
 
-            case WATER ->
+            case WATER -> boneName.equals(
+                    "water_" + levelName
+            );
+
+            case FROZEN_WATER -> boneName.equals(
+                    "water_" + levelName
+            )
+                    ||
                     boneName.equals(
-                            "water_" + levelName
+                            "ice_" + levelName
                     );
 
-            case FROZEN_WATER ->
-                    boneName.equals(
-                            "water_" + levelName
-                    )
-                            ||
-                            boneName.equals(
-                                    "ice_" + levelName
-                            );
+            case FISH -> boneName.equals(
+                    "fish_" + levelName
+            );
 
-            case FISH ->
-                    boneName.equals(
-                            "fish_" + levelName
-                    );
+            case MEAT -> boneName.equals(
+                    "meat_" + levelName
+            );
 
-            case MEAT ->
-                    boneName.equals(
-                            "meat_" + levelName
-                    );
+            case BREAD -> boneName.equals(
+                    "bread_" + levelName
+            );
 
-            case BREAD ->
-                    boneName.equals(
-                            "bread_" + levelName
-                    );
-
-            default ->
-                    false;
+            default -> false;
         };
     }
 
@@ -184,17 +178,13 @@ final class BirdBathBoneVisibility {
                             : visualType
                     ) {
 
-                case FISH ->
-                        TINT_SPOILED_FISH;
+                case FISH -> TINT_SPOILED_FISH;
 
-                case MEAT ->
-                        TINT_SPOILED_MEAT;
+                case MEAT -> TINT_SPOILED_MEAT;
 
-                case BREAD ->
-                        TINT_SPOILED_BREAD;
+                case BREAD -> TINT_SPOILED_BREAD;
 
-                default ->
-                        TINT_SPOILED_DEFAULT;
+                default -> TINT_SPOILED_DEFAULT;
             };
         }
 
@@ -209,17 +199,13 @@ final class BirdBathBoneVisibility {
 
             return switch (clean) {
 
-                case CLEAN ->
-                        TINT_WHITE;
+                case CLEAN -> TINT_WHITE;
 
-                case USED ->
-                        TINT_WATER_USED;
+                case USED -> TINT_WATER_USED;
 
-                case DIRTY ->
-                        TINT_WATER_DIRTY;
+                case DIRTY -> TINT_WATER_DIRTY;
 
-                case FILTHY ->
-                        TINT_WATER_FILTHY;
+                case FILTHY -> TINT_WATER_FILTHY;
             };
         }
 
@@ -261,17 +247,13 @@ final class BirdBathBoneVisibility {
 
         return switch (clean) {
 
-            case CLEAN ->
-                    TINT_WHITE;
+            case CLEAN -> TINT_WHITE;
 
-            case USED ->
-                    TINT_DIRT_USED;
+            case USED -> TINT_DIRT_USED;
 
-            case DIRTY ->
-                    TINT_DIRT_DIRTY;
+            case DIRTY -> TINT_DIRT_DIRTY;
 
-            case FILTHY ->
-                    TINT_DIRT_FILTHY;
+            case FILTHY -> TINT_DIRT_FILTHY;
         };
     }
 
@@ -306,23 +288,19 @@ final class BirdBathBoneVisibility {
 
         return switch (clean) {
 
-            case CLEAN ->
-                    false;
+            case CLEAN -> false;
 
-            case USED ->
-                    boneName.equals(
-                            "dirty_spots_light"
-                    );
+            case USED -> boneName.equals(
+                    "dirty_spots_light"
+            );
 
-            case DIRTY ->
-                    boneName.equals(
-                            "dirty_spots_medium"
-                    );
+            case DIRTY -> boneName.equals(
+                    "dirty_spots_medium"
+            );
 
-            case FILTHY ->
-                    boneName.equals(
-                            "dirty_spots_heavy"
-                    );
+            case FILTHY -> boneName.equals(
+                    "dirty_spots_heavy"
+            );
         };
     }
 

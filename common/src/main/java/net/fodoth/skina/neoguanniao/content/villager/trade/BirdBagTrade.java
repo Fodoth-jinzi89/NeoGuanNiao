@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.content.villager.trade;
 
 import net.fodoth.skina.neoguanniao.content.villager.MerchantOfferBuilder;
-import net.fodoth.skina.neoguanniao.content.villager.compat.QuestShopCompat;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -9,6 +8,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import java.util.function.Supplier;
@@ -53,7 +53,7 @@ public class BirdBagTrade implements VillagerTrades.ItemListing {
         int count = entry.count();
 
         ItemStack result = new ItemStack(entry.item().get(), count);
-        ItemStack cost = QuestShopCompat.createCurrency(entry.price());
+        ItemStack cost = new ItemStack(Items.EMERALD, entry.price());
 
         MerchantOffer offer = new MerchantOffer(
                 new ItemCost(cost.getItem(), cost.getCount()),

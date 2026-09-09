@@ -8,10 +8,6 @@
     {
       "id": "#fid:seeds",
       "required": false
-    },
-    {
-      "id": "#goldentweaks:bird_food",
-      "required": false
     }
   ]
 }

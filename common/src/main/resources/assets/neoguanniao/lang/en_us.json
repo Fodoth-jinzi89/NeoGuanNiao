@@ -539,5 +539,8 @@
   "item.neoguanniao.wind_feather_fan.usage": "Hold right-click to charge, then release to throw",
   "tooltip.neoguanniao.wind_feather_fan.mode": "Mode: ",
   "tooltip.neoguanniao.wind_feather_fan.attack_damage": "Attack Damage: ",
-  "tooltip.neoguanniao.wind_feather_fan.attack_range": "Attack Range: "
+  "tooltip.neoguanniao.wind_feather_fan.attack_range": "Attack Range: ",
+  "config.neoguanniao.camera.show_camera_ui": "Show camera UI",
+  "config.neoguanniao.camera.viewfinder_opacity": "Viewfinder opacity",
+  "config.neoguanniao.cloth_required": "Install Cloth Config to open this screen, or edit config/neoguanniao.properties. Change server limits on the server."
 }
