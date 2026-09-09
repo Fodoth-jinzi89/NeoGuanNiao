@@ -513,7 +513,7 @@
   "gui.neoguanniao.camera_focus_mode.af_s": "AF-S 单次",
   "gui.neoguanniao.camera_focus_mode.af_c": "AF-C 连续",
   "gui.neoguanniao.camera_focus_mode.manual": "MF 手动",
-  "key.categories.neoguanniao": "新观鸟丨相机",
+  "key.categories.neoguanniao": "新观鸟丨相机",`n  "tag.neoguanniao.enchantable.feather_fan": "风翎扇可附魔",
   "key.neoguanniao.camera.open_creative_controls": "打开创意摄影界面",
   "key.neoguanniao.camera.focus": "聚焦",
   "tooltip.neoguanniao.photo.time": "时间：",

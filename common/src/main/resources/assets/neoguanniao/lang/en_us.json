@@ -513,7 +513,7 @@
   "gui.neoguanniao.camera_focus_mode.af_s": "AF-S Single",
   "gui.neoguanniao.camera_focus_mode.af_c": "AF-C Continuous",
   "gui.neoguanniao.camera_focus_mode.manual": "MF Manual",
-  "key.categories.neoguanniao": "Camera",
+  "tag.neoguanniao.enchantable.feather_fan": "Feather Fans",`n  "key.categories.neoguanniao": "Camera",
   "key.neoguanniao.camera.open_creative_controls": "Open Creative Camera Controls",
   "key.neoguanniao.camera.focus": "Focus Camera",
   "tooltip.neoguanniao.photo.time": "Time: ",

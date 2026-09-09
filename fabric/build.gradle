@@ -29,10 +29,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
-    modImplementation files('libs/geckolib-fabric-1.21.1-4.8.4.jar')
-    modImplementation files('libs/cloth-config-15.0.140-fabric.jar')
-    modCompileOnly files('libs/emi-1.1.24+1.21.1+fabric.jar')
-    modRuntimeOnly files('libs/emi-1.1.24+1.21.1+fabric.jar')
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
+    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
+    modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
     implementation project(path: ':common')
 }
 sourceSets.finalJarRun.runtimeClasspath = files(

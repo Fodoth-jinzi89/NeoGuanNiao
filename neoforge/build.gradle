@@ -24,7 +24,9 @@ dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version";
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version";
     modImplementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.8.4";
-    compileOnly files("libs/implementation/emi-1.1.24+1.21.1+neoforge.jar");
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
+    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
+    modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
     implementation project(path: ':common', configuration: 'namedElements')
 }
 sourceSets.finalJarRun.runtimeClasspath = files(
