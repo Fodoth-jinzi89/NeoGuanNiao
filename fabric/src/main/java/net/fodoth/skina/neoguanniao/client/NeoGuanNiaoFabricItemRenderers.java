@@ -15,9 +15,9 @@ public final class NeoGuanNiaoFabricItemRenderers {
     private NeoGuanNiaoFabricItemRenderers() {}
 
     public static void register() {
-        register(NeoGuanNiaoItems.SMALL_BIRD_CAGE.get(), new BirdCageItemRenderer());
-        register(NeoGuanNiaoItems.MEDIUM_BIRD_CAGE.get(), new BirdCageItemRenderer());
-        register(NeoGuanNiaoItems.LARGE_BIRD_CAGE.get(), new BirdCageItemRenderer());
+        register(NeoGuanNiaoItems.SMALL_BIRD_CAGE.get(), new BirdCageItemRenderer(1.2F));
+        register(NeoGuanNiaoItems.MEDIUM_BIRD_CAGE.get(), new BirdCageItemRenderer(0.7F));
+        register(NeoGuanNiaoItems.LARGE_BIRD_CAGE.get(), new BirdCageItemRenderer(0.5F));
         register(NeoGuanNiaoItems.WOODEN_BIRD_BATH.get(), new BirdBathItemRenderer());
         register(NeoGuanNiaoItems.STONE_BIRD_BATH.get(), new BirdBathItemRenderer());
         register(NeoGuanNiaoItems.BIRD_BATH.get(), new BirdBathItemRenderer());

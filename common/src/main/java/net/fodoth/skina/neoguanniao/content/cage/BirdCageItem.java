@@ -59,11 +59,11 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
         return variant;
     }
 
-    @Override public @NotNull EquipmentSlot getEquipmentSlot() { return EquipmentSlot.HEAD; }
+    @Override public @NotNull EquipmentSlot getEquipmentSlot() { return variant == BirdCageVariant.SMALL ? EquipmentSlot.HEAD : EquipmentSlot.MAINHAND; }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        if (isFull(player.getItemInHand(hand))) {
+        if (variant != BirdCageVariant.SMALL || isFull(player.getItemInHand(hand))) {
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         return swapWithEquipmentSlot(this, level, player, hand);

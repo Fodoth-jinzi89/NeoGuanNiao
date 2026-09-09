@@ -1,6 +1,7 @@
 package net.fodoth.skina.neoguanniao.client.cage;
 
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -37,7 +38,12 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
         poseStack.translate(0.5, 0.15, 0.5);
         float scale = 0.45F / Math.max(0.1F, Math.max(entity.getBbWidth(), entity.getBbHeight()));
         poseStack.scale(scale, scale, scale);
-        Minecraft.getInstance().getEntityRenderDispatcher().render(entity, 0, 0, 0, 0, partialTick, poseStack, buffer, light);
+        var entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        var entityRenderer = entityRenderDispatcher.getRenderer(entity);
+        var renderOffset = entityRenderer.getRenderOffset(entity, partialTick);
+        poseStack.translate(renderOffset.x, renderOffset.y, renderOffset.z);
+        entityRenderer.render(entity, 0, partialTick, poseStack, buffer, light);
+        poseStack.translate(-renderOffset.x, -renderOffset.y, -renderOffset.z);
         if (entity.hasCustomName()) {
             try {
                 var renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
@@ -50,7 +56,15 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
     }
 
     public @NotNull AABB getRenderBoundingBox(@NotNull BirdCageBlockEntity cage) {
-        return new AABB(cage.getBlockPos()).inflate(2);
+        var pos = cage.getBlockPos();
+        double width = cage.variant() == BirdCageVariant.SMALL ? 1.0D : 3.0D;
+        double height = switch (cage.variant()) {
+            case SMALL -> 1.0D;
+            case MEDIUM -> 3.0D;
+            case LARGE -> 4.0D;
+        };
+        return new AABB(pos.getX(), pos.getY(), pos.getZ(),
+                pos.getX() + width, pos.getY() + height, pos.getZ() + width);
     }
 
 

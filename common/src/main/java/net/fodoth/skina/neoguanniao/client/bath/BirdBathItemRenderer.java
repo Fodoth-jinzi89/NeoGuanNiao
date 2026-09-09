@@ -10,16 +10,27 @@ import net.fodoth.skina.neoguanniao.content.bath.BirdBathItem;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.item.ItemDisplayContext;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 public class BirdBathItemRenderer extends DefaultBlockItemRenderer<BirdBathItem> {
 
-    // ============ 构造函数 ============
+    @Override
+    protected float additionalOffsetX(BirdBathItem item, ItemDisplayContext context) {
+        if (context != ItemDisplayContext.GUI) return 0.0F;
+        return 0.19F;
+    }
+
+    @Override
+    protected float additionalOffsetY(BirdBathItem item, ItemDisplayContext context) {
+        if (context != ItemDisplayContext.GUI) return 0.0F;
+        return -0.1F;
+    }
+
     public BirdBathItemRenderer() {
         super(new BirdBathItemModel());
     }
 
-    // ============ 渲染方法 ============
     @Override
     public void renderRecursively(PoseStack poseStack, BirdBathItem animatable, GeoBone bone,
                                   RenderType renderType, MultiBufferSource bufferSource,

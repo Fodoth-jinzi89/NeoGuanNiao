@@ -20,9 +20,10 @@ public final class NeoGuanNiaoConfigScreen {
             type.getMethod("setParentScreen", Screen.class).invoke(builder, parent);
             type.getMethod("setTitle", Component.class).invoke(builder, Component.translatable("config.neoguanniao.title"));
             Object entries = type.getMethod("entryBuilder").invoke(builder);
-            Object category = type.getMethod("getOrCreateCategory", Component.class).invoke(builder, Component.translatable("config.neoguanniao.camera"));
+            Object cameraCategory = type.getMethod("getOrCreateCategory", Component.class).invoke(builder, Component.translatable("config.neoguanniao.camera"));
+            Object birdCagesCategory = type.getMethod("getOrCreateCategory", Component.class).invoke(builder, Component.translatable("config.neoguanniao.bird_cages"));
             for (Entry entry : ConfigScreenHooks.entries()) {
-                add(entries, category, entry);
+                add(entries, entry.key().startsWith("config.neoguanniao.bird_cages.") ? birdCagesCategory : cameraCategory, entry);
             }
             type.getMethod("setSavingRunnable", Runnable.class).invoke(builder, (Runnable) ConfigScreenHooks::save);
             return (Screen) type.getMethod("build").invoke(builder);

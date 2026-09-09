@@ -24,13 +24,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import dev.architectury.registry.registries.RegistrySupplier;
 
 @EventBusSubscriber(
         modid = NeoGuanNiao.MODID,
@@ -171,19 +164,19 @@ public final class NeoGuanNiaoClientModEvents {
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
                 NeoGuanNiaoItems.SMALL_BIRD_CAGE,
-                BirdCageItemRenderer::new
+                () -> new BirdCageItemRenderer(1.2F)
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
                 NeoGuanNiaoItems.MEDIUM_BIRD_CAGE,
-                BirdCageItemRenderer::new
+                () -> new BirdCageItemRenderer(0.6F)
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(
                 event,
                 NeoGuanNiaoItems.LARGE_BIRD_CAGE,
-                BirdCageItemRenderer::new
+                () -> new BirdCageItemRenderer(0.5F)
         );
 
         ClientExtensionHelper.registerGeoItemRenderer(

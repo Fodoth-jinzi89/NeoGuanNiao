@@ -48,7 +48,10 @@ public final class NeoGuanNiaoBlocks {
                         Properties.of()
                                 .strength(1.5F, 6.0F)
                                 .sound(SoundType.WOOD)
-                                .noOcclusion().requiresCorrectToolForDrops()
+                                .noOcclusion()
+                                .isSuffocating((state, level, pos) -> false)
+                                .isViewBlocking((state, level, pos) -> false)
+                                .requiresCorrectToolForDrops()
                                 .destroyTime(1.5F)
                 )
         );

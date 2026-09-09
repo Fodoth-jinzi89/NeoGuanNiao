@@ -1,7 +1,6 @@
 {
-  "variants": {
-    "": {
-      "model": "neoguanniao:block/large_bird_cage"
-    }
-  }
+  "multipart": [
+    { "when": { "part": "false" }, "apply": { "model": "neoguanniao:block/large_bird_cage" } },
+    { "when": { "part": "true" }, "apply": { "model": "minecraft:block/air" } }
+  ]
 }

@@ -12,7 +12,7 @@ import net.fodoth.skina.neoguanniao.client.DefaultBlockItemRenderer;
 public class BirdNestItemRenderer extends DefaultBlockItemRenderer<BirdNestItem> {
 
     public BirdNestItemRenderer() {
-        super(new BirdNestItemModel());
+        super(new BirdNestItemModel(), 1.25F);
     }
 
     @Override
