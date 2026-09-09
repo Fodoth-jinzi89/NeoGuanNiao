@@ -38,14 +38,16 @@ void main() {
     float relativeDistance = abs(sceneDistance - FocusDistance) / max(FocusDistance, 0.5);
     float apertureStrength = 2.8 / max(Aperture, 1.4);
     float focalStrength = pow(clamp(FocalLength / 85.0, 0.20, 2.50), 0.78);
-    float coc = smoothstep(0.055, 1.55, relativeDistance)
+    // Keep the live viewfinder readable; depth-buffer quantization at long range
+    // otherwise turns small distance errors into a visibly smeared preview.
+    float coc = smoothstep(0.18, 2.40, relativeDistance)
         * apertureStrength
         * focalStrength
-        * DofMultiplier;
+        * DofMultiplier * 0.35;
     if (sceneDistance < FocusDistance) {
         coc *= 1.15;
     }
-    float radius = clamp(coc * 6.5, 0.0, 9.0);
+    float radius = clamp(coc * 4.0, 0.0, 4.0);
     vec2 texel = radius / max(OutSize, vec2(1.0));
 
     vec3 color = center * 0.26;

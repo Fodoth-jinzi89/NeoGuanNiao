@@ -1,6 +1,8 @@
 package net.fodoth.skina.neoguanniao.event;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,6 +32,18 @@ public final class NeoForgeGameplayEvents {
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         if (FeatherFanInteractionEvents.onRightClickItem(event.getEntity(), event.getItemStack())) {
             event.setCancellationResult(InteractionResult.sidedSuccess(event.getEntity().level().isClientSide));
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
+        ItemStack stack = event.getItemStack();
+        if (!(stack.getItem() instanceof BirdCageItem cage)) return;
+        InteractionResult result = cage.capture(stack, event.getEntity(), event.getTarget());
+        if (result.consumesAction()) {
+            event.getEntity().setItemInHand(event.getHand(), stack);
+            event.setCancellationResult(result);
             event.setCanceled(true);
         }
     }

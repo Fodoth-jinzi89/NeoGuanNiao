@@ -12,21 +12,21 @@ public enum BirdCageVariant {
             "small_bird_cage",
             "geo/small_bird_cage.geo.json",
             "textures/block/small_bird_cage.png",
-            Block.box(1, 0, 1, 15, 16, 15)
+            Block.box(1, 0, 1, 15, 16, 15), 0.55F
     ),
 
     MEDIUM(
             "medium_bird_cage",
             "geo/medium_bird_cage.geo.json",
             "textures/block/medium_bird_cage.png",
-            Block.box(0, 0, 0, 16, 32, 16)
+            Block.box(0, 0, 0, 16, 32, 16), 1.0F
     ),
 
     LARGE(
             "large_bird_cage",
             "geo/large_bird_cage.geo.json",
             "textures/block/large_bird_cage.png",
-            Block.box(0, 0, 0, 16, 48, 16)
+            Block.box(0, 0, 0, 16, 48, 16), 2.0F
     );
 
 
@@ -41,13 +41,14 @@ public enum BirdCageVariant {
     private final ResourceLocation model;
     private final ResourceLocation texture;
     private final VoxelShape shape;
+    private final float maxEntitySize;
 
 
     BirdCageVariant(
             String id,
             String modelPath,
             String texturePath,
-            VoxelShape shape
+            VoxelShape shape, float maxEntitySize
     ) {
         this.id = id;
 
@@ -62,6 +63,7 @@ public enum BirdCageVariant {
         );
 
         this.shape = shape;
+        this.maxEntitySize = maxEntitySize;
     }
 
 
@@ -83,4 +85,6 @@ public enum BirdCageVariant {
     public VoxelShape shape() {
         return shape;
     }
+
+    public float maxEntitySize() { return maxEntitySize; }
 }

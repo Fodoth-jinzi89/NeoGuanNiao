@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -14,13 +16,12 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 
-
 public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
+    private CompoundTag capturedBird;
 
 
     private final AnimatableInstanceCache animationCache =
             GeckoLibUtil.createInstanceCache(this);
-
 
 
     public BirdCageBlockEntity(
@@ -33,7 +34,6 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
                 state
         );
     }
-
 
 
     public BirdCageVariant variant() {
@@ -50,6 +50,39 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
         return BirdCageVariant.SMALL;
     }
 
+    public boolean isEmpty() {
+        return capturedBird == null;
+    }
+
+    public CompoundTag capturedBird() {
+        return capturedBird;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public boolean setCapturedBird(CompoundTag tag) {
+        this.capturedBird = tag == null || tag.isEmpty() ? null : tag.copy();
+        setChanged();
+        return true;
+    }
+
+    public CompoundTag removeCapturedBird() {
+        CompoundTag tag = capturedBird;
+        capturedBird = null;
+        setChanged();
+        return tag;
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        if (capturedBird != null) tag.put("CapturedBird", capturedBird);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        capturedBird = tag.contains("CapturedBird") ? tag.getCompound("CapturedBird").copy() : null;
+    }
 
 
     @Override
@@ -58,7 +91,6 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
     ) {
 
     }
-
 
 
     @Override

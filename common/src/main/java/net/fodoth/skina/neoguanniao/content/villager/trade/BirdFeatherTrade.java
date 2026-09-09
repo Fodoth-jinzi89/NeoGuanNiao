@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -157,7 +158,7 @@ public class BirdFeatherTrade implements VillagerTrades.ItemListing {
                     .build();
 
             return new FeatherTradeData(
-                    new ItemCost(NeoGuanNiaoItems.BIRD_FEATHER, count, predicate),
+                    new ItemCost(BuiltInRegistries.ITEM.wrapAsHolder(NeoGuanNiaoItems.BIRD_FEATHER.get()), count, predicate),
                     fallback
             );
         }
@@ -169,7 +170,7 @@ public class BirdFeatherTrade implements VillagerTrades.ItemListing {
                 .build();
 
         return new FeatherTradeData(
-                new ItemCost(NeoGuanNiaoItems.BIRD_FEATHER, count, predicate),
+                new ItemCost(BuiltInRegistries.ITEM.wrapAsHolder(NeoGuanNiaoItems.BIRD_FEATHER.get()), count, predicate),
                 data
         );
     }

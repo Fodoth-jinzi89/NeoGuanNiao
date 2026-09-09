@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 
 public final class CameraClientCapture {
     private static final ExecutorService ENCODE_EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
-        Thread thread = new Thread(runnable, "Guaniao-Photo-Encode");
+        Thread thread = new Thread(runnable, "NeoGuanNiao-Photo-Encode");
         thread.setDaemon(true);
         return thread;
     });
@@ -150,7 +150,6 @@ public final class CameraClientCapture {
     }
 
     public static boolean handleMouseButton(int button, int action) {
-        NeoGuanNiao.LOGGER.info("Camera handleMouseButton button={} action={} open={} pending={}", button, action, viewfinderOpen, cleanCapturePending);
         if (!viewfinderOpen || cleanCapturePending || action != 1) {
             return false;
         }
@@ -282,12 +281,10 @@ public final class CameraClientCapture {
 
     public static void captureAndSend(InteractionHand hand) {
         Minecraft minecraft = Minecraft.getInstance();
-        NeoGuanNiao.LOGGER.info("Camera captureAndSend entered hand={} pending={}", hand, cleanCapturePending);
         if (minecraft.player == null) {
             return;
         }
         RenderTarget captureTarget = CameraPreviewPostEffect.cleanCaptureTarget(minecraft.getMainRenderTarget());
-        NeoGuanNiao.LOGGER.info("Camera capture target {}x{}", captureTarget == null ? -1 : captureTarget.width, captureTarget == null ? -1 : captureTarget.height);
         if (captureTarget == null || captureTarget.width <= 0 || captureTarget.height <= 0) {
             NeoGuanNiao.LOGGER.error("Unable to capture photograph: render target is unavailable");
             return;
@@ -319,7 +316,6 @@ public final class CameraClientCapture {
     }
 
     public static void captureImmediately() {
-        NeoGuanNiao.LOGGER.info("Camera captureImmediately pending={} hand={}", cleanCapturePending, pendingCaptureHand);
         if (!cleanCapturePending) {
             return;
         }
@@ -347,7 +343,6 @@ public final class CameraClientCapture {
     }
 
     private static void beginCleanCapture(InteractionHand hand, double fov) {
-        NeoGuanNiao.LOGGER.info("Camera begin clean capture hand={} fov={}", hand, fov);
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || !CameraClientCapture.isCameraStillHeld(minecraft, hand)) {
             CameraClientCapture.closeViewfinder();

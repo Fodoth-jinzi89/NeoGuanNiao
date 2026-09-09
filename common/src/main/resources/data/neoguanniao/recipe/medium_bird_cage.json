@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "decorations",
+  "pattern": [
+    " S ",
+    "SCS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "item": "neoguanniao:small_bird_cage"
+    }
+  },
+  "result": {
+    "item": "neoguanniao:medium_bird_cage"
+  }
+}

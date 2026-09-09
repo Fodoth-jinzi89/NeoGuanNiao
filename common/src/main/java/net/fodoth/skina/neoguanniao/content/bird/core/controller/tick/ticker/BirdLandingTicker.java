@@ -40,11 +40,9 @@ public class BirdLandingTicker<T extends AbstractBirdEntity<T>> extends Abstract
         T bird = bird();
 
         boolean onGround = bird.onGround();
-        boolean isSleepingOrRoosting = bird().getRoutineController().isSleepingOrRoosting();
-
-        if (onGround || isSleepingOrRoosting) {
+        if (onGround) {
             if (enableLifecycleLog()) {
-                NeoGuanNiao.LOGGER.info("[Ticker] Landing: Bird on ground = {}, sleeping or roosting = {}", onGround, isSleepingOrRoosting);
+                NeoGuanNiao.LOGGER.info("[Ticker] Landing: Bird on ground = {}", onGround);
             }
             setTicks(0);
             bird.getTickController().getTickTimer().getBirdBehaviorStateTicker().setTicks(5);

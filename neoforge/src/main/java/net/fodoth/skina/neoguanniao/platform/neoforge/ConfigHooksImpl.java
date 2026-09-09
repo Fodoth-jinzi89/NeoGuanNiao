@@ -24,4 +24,16 @@ public final class ConfigHooksImpl {
                 NeoGuanNiaoNeoForgeCommonConfig.CAPTURE_COOLDOWN_TICKS.get(),
                 NeoGuanNiaoNeoForgeCommonConfig.MAX_UPLOAD_BYTES_PER_MINUTE.get());
     }
+
+    public static float birdCageMaxEntitySize(int variant) {
+        return switch (variant) {
+            case 1 -> NeoGuanNiaoNeoForgeCommonConfig.MEDIUM_CAGE_MAX_ENTITY_SIZE.get().floatValue();
+            case 2 -> NeoGuanNiaoNeoForgeCommonConfig.LARGE_CAGE_MAX_ENTITY_SIZE.get().floatValue();
+            default -> NeoGuanNiaoNeoForgeCommonConfig.SMALL_CAGE_MAX_ENTITY_SIZE.get().floatValue();
+        };
+    }
+    public static boolean birdCagesAllowHostile() { return NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_HOSTILE.get(); }
+    public static boolean birdCagesAllowAllEntities() { return NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_ALL_ENTITIES.get(); }
+    public static boolean birdCagesAllowNeutral() { return NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_NEUTRAL.get(); }
+    public static boolean birdCagesAllowFriendly() { return NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_FRIENDLY.get(); }
 }

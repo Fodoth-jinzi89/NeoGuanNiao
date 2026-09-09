@@ -37,7 +37,8 @@ extends GeoItemRenderer<NikonD750Item> {
             case FIRST_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND -> {
             }
             case THIRD_PERSON_LEFT_HAND, THIRD_PERSON_RIGHT_HAND -> {
-                TransformUtil.applyTransform(poseStack, 0.0f, 4.75f / 16f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f);
+                float handOffset = 3.0f / 16.0f;
+                TransformUtil.applyTransform(poseStack, handOffset, 2.75f / 16f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f);
             }
             default -> {
             }

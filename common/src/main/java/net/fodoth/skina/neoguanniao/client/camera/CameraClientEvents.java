@@ -1,14 +1,12 @@
 package net.fodoth.skina.neoguanniao.client.camera;
 
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoItems;
-import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import org.lwjgl.glfw.GLFW;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -16,7 +14,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
@@ -32,43 +29,41 @@ public final class CameraClientEvents {
     }
 
     public static void onClientTick(boolean pollCapture) {
-            Minecraft minecraft;
-            CameraClientCapture.tickViewfinder();
-            if ((debugTick++ % 20) == 0) {
-                NeoGuanNiao.LOGGER.info("Camera tick open={} pending={}", CameraClientCapture.isViewfinderOpen(), CameraClientCapture.isCleanCapturePending());
-            }
+        Minecraft minecraft;
+        CameraClientCapture.tickViewfinder();
+        debugTick++;
+        minecraft = Minecraft.getInstance();
+        if (CameraClientCapture.isViewfinderOpen()) {
+            ++debugTick;
+        }
+        boolean attackDown = minecraft.options.keyAttack.isDown()
+                || GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
+        if (pollCapture && CameraClientCapture.isViewfinderOpen() && minecraft.screen == null && attackDown && !attackWasDown) {
+            CameraClientCapture.handleMouseButton(0, 1);
+        }
+        attackWasDown = attackDown;
+        if (!CameraClientCapture.isViewfinderOpen()) {
+            attackWasDown = false;
+        }
+        if (pollCapture && CameraClientCapture.isCleanCapturePending()) {
+            CameraClientCapture.captureImmediately();
+        }
+        while (CameraKeyMappings.OPEN_FILTER_LIBRARY.consumeClick()) {
             minecraft = Minecraft.getInstance();
-            if (CameraClientCapture.isViewfinderOpen() && (++debugTick % 40) == 0) {
-                NeoGuanNiao.LOGGER.info("Camera viewfinder active; screen={}, attack={}, glfw={}", minecraft.screen, minecraft.options.keyAttack.isDown(), GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT));
-            }
-            boolean attackDown = minecraft.options.keyAttack.isDown()
-                    || GLFW.glfwGetMouseButton(minecraft.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
-            if (pollCapture && CameraClientCapture.isViewfinderOpen() && minecraft.screen == null && attackDown && !attackWasDown) {
-                NeoGuanNiao.LOGGER.info("Camera left click detected (keyDown={}, glfw={})", minecraft.options.keyAttack.isDown(), attackDown);
-                CameraClientCapture.handleMouseButton(0, 1);
-            }
-            attackWasDown = attackDown;
-            if (!CameraClientCapture.isViewfinderOpen()) {
-                attackWasDown = false;
-            }
-            if (pollCapture && CameraClientCapture.isCleanCapturePending()) {
-                NeoGuanNiao.LOGGER.info("Camera clean capture pending; advancing capture tick");
-                CameraClientCapture.captureImmediately();
-            }
-            while (CameraKeyMappings.OPEN_FILTER_LIBRARY.consumeClick()) {
-                minecraft = Minecraft.getInstance();
-                if (minecraft.screen != null || !CameraClientCapture.isViewfinderOpen() || CameraClientCapture.isCleanCapturePending()) continue;
-                CameraFilterPickerScreen.open();
-            }
-            while (CameraKeyMappings.OPEN_CREATIVE_CONTROLS.consumeClick()) {
-                minecraft = Minecraft.getInstance();
-                if (minecraft.screen != null || !CameraClientCapture.isViewfinderOpen() || CameraClientCapture.isCleanCapturePending()) continue;
-                CameraCreativeControlsScreen.open();
-            }
-            while (CameraKeyMappings.FOCUS.consumeClick()) {
-                if (Minecraft.getInstance().screen != null) continue;
-                CameraClientCapture.focusAtCrosshair();
-            }
+            if (minecraft.screen != null || !CameraClientCapture.isViewfinderOpen() || CameraClientCapture.isCleanCapturePending())
+                continue;
+            CameraFilterPickerScreen.open();
+        }
+        while (CameraKeyMappings.OPEN_CREATIVE_CONTROLS.consumeClick()) {
+            minecraft = Minecraft.getInstance();
+            if (minecraft.screen != null || !CameraClientCapture.isViewfinderOpen() || CameraClientCapture.isCleanCapturePending())
+                continue;
+            CameraCreativeControlsScreen.open();
+        }
+        while (CameraKeyMappings.FOCUS.consumeClick()) {
+            if (Minecraft.getInstance().screen != null) continue;
+            CameraClientCapture.focusAtCrosshair();
+        }
     }
 
     public static void onRenderFrameStart() {
@@ -121,7 +116,6 @@ public final class CameraClientEvents {
 
     public static boolean onMouseButton(int button, int action) {
         if (CameraClientCapture.isViewfinderOpen()) {
-            NeoGuanNiao.LOGGER.info("Camera mouse event button={} action={}", button, action);
             if (button == 0 && action == 1 && Minecraft.getInstance().screen == null) {
                 CameraClientCapture.handleMouseButton(0, 1);
                 return true;
@@ -151,7 +145,7 @@ public final class CameraClientEvents {
     }
 
     private static boolean holdsCamera(LocalPlayer player) {
-        return player.getMainHandItem().is((Item)NeoGuanNiaoItems.NIKON_D750.get()) || player.getOffhandItem().is((Item)NeoGuanNiaoItems.NIKON_D750.get());
+        return player.getMainHandItem().is(NeoGuanNiaoItems.NIKON_D750.get()) || player.getOffhandItem().is(NeoGuanNiaoItems.NIKON_D750.get());
     }
 
     private static boolean isCameraControlScreenOpen() {
@@ -159,7 +153,7 @@ public final class CameraClientEvents {
     }
 
     private static boolean isCameraHand(LocalPlayer player, InteractionHand hand) {
-        return player.getItemInHand(hand).is((Item)NeoGuanNiaoItems.NIKON_D750.get());
+        return player.getItemInHand(hand).is(NeoGuanNiaoItems.NIKON_D750.get());
     }
 
     private static void renderFirstPersonCamera(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, float swingProgress, float equipProgress, LocalPlayer player, ItemStack camera) {
@@ -180,11 +174,11 @@ public final class CameraClientEvents {
     private static void renderCameraArm(PlayerRenderer renderer, LocalPlayer player, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, float swingProgress, float equipProgress, HumanoidArm arm) {
         boolean right = arm == HumanoidArm.RIGHT;
         float side = right ? 1.0f : -1.0f;
-        float swing = Mth.clamp((float)swingProgress, (float)0.0f, (float)0.25f);
-        float rootSwing = Mth.sqrt((float)swing);
-        float swingX = -0.18f * Mth.sin((float)(rootSwing * (float)Math.PI));
-        float swingY = 0.14f * Mth.sin((float)(rootSwing * ((float)Math.PI * 2)));
-        float swingZ = -0.18f * Mth.sin((float)(swing * (float)Math.PI));
+        float swing = Mth.clamp(swingProgress, 0.0f, 0.25f);
+        float rootSwing = Mth.sqrt(swing);
+        float swingX = -0.18f * Mth.sin(rootSwing * (float) Math.PI);
+        float swingY = 0.14f * Mth.sin(rootSwing * ((float) Math.PI * 2));
+        float swingZ = -0.18f * Mth.sin(swing * (float) Math.PI);
         float equip = CameraClientEvents.equipAnimation(equipProgress);
         poseStack.pushPose();
         poseStack.translate(side * (0.84f + swingX + equip * 0.14f), -0.44f + swingY - equip * 0.82f, -1.0f + swingZ + equip * 0.08f);
@@ -196,15 +190,15 @@ public final class CameraClientEvents {
         poseStack.mulPose(Axis.YP.rotationDegrees(side * -124.0f));
         poseStack.translate(side * 5.45f, -0.2f, 0.0f);
         if (right) {
-            renderer.renderRightHand(poseStack, bufferSource, packedLight, (AbstractClientPlayer)player);
+            renderer.renderRightHand(poseStack, bufferSource, packedLight, player);
         } else {
-            renderer.renderLeftHand(poseStack, bufferSource, packedLight, (AbstractClientPlayer)player);
+            renderer.renderLeftHand(poseStack, bufferSource, packedLight, player);
         }
         poseStack.popPose();
     }
 
     private static float equipAnimation(float equipProgress) {
-        float equip = 1.0f - Mth.clamp((float)equipProgress, (float)0.0f, (float)1.0f);
+        float equip = 1.0f - Mth.clamp(equipProgress, 0.0f, 1.0f);
         return equip * equip * (3.0f - 2.0f * equip);
     }
 }

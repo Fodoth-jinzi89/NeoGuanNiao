@@ -1,98 +1,35 @@
 package net.fodoth.skina.neoguanniao.client.cage;
 
-import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
-import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fodoth.skina.neoguanniao.client.DefaultBlockItemRenderer;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-
-public class BirdCageItemRenderer extends GeoItemRenderer<BirdCageItem> {
-
-
+public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem> {
     public BirdCageItemRenderer() {
         super(new BirdCageItemModel());
     }
 
-
     @Override
-    public void preRender(
-            PoseStack poseStack,
-            BirdCageItem animatable,
-            BakedGeoModel model,
-            MultiBufferSource bufferSource,
-            com.mojang.blaze3d.vertex.VertexConsumer buffer,
-            boolean isReRender,
-            float partialTick,
-            int packedLight,
-            int packedOverlay,
-            int colour
-    ) {
-
-        BirdCageVariant variant = animatable.variant();
-
-        poseStack.translate(
-                itemOffsetX(variant),
-                itemOffsetY(variant),
-                0.0F
-        );
-
-        float scale = itemScale(variant);
-
-        poseStack.scale(
-                scale,
-                scale,
-                scale
-        );
-
-
-        super.preRender(
-                poseStack,
-                animatable,
-                model,
-                bufferSource,
-                buffer,
-                isReRender,
-                partialTick,
-                packedLight,
-                packedOverlay,
-                colour
-        );
-    }
-
-
-
-    private static float itemScale(BirdCageVariant variant) {
-
-        return switch (variant) {
-            case SMALL -> 0.78F;
-            case MEDIUM -> 0.3F;
-            case LARGE -> 0.22F;
-        };
-    }
-
-
-
-    private static float itemOffsetX(BirdCageVariant variant) {
-
-        return switch (variant) {
-            case SMALL -> 0.08F;
-            case MEDIUM -> 0.3F;
-            case LARGE -> 0.37F;
-        };
-    }
-
-
-
-    private static float itemOffsetY(BirdCageVariant variant) {
-
-        return switch (variant) {
-            case SMALL -> -0.4F;
-            case MEDIUM, LARGE -> -0.1F;
-        };
+    public void preRender(PoseStack poseStack, BirdCageItem item, BakedGeoModel model, MultiBufferSource buffers, VertexConsumer vertex, boolean rerender, float partialTick, int light, int overlay, int colour) {
+        super.preRender(poseStack, item, model, buffers, vertex, rerender, partialTick, light, overlay, colour);
+        CompoundTag data = getCurrentItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (!data.contains("CapturedBird") || Minecraft.getInstance().level == null) return;
+        Entity entity = EntityType.create(data.getCompound("CapturedBird"), Minecraft.getInstance().level).orElse(null);
+        if (entity == null) return;
+        poseStack.pushPose();
+        poseStack.translate(0.5F, 0.45F, 0.5F);
+        float scale = 0.35F / Math.max(0.1F, Math.max(entity.getBbWidth(), entity.getBbHeight()));
+        poseStack.scale(scale, scale, scale);
+        Minecraft.getInstance().getEntityRenderDispatcher().render(entity, 0, 0, 0, 0, partialTick, poseStack, buffers, light);
+        poseStack.popPose();
     }
 }

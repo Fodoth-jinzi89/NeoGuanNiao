@@ -23,10 +23,9 @@ loom {
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version";
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version";
-    modImplementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.8.4";
     compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
     runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
-    modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
+    implementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
     implementation project(path: ':common', configuration: 'namedElements')
 }
 sourceSets.finalJarRun.runtimeClasspath = files(

@@ -6,6 +6,14 @@ import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoFabricNetwork;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoFabricConfig;
 import java.io.IOException;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 public final class NeoGuanNiaoFabric implements ModInitializer {
     @Override
@@ -35,10 +43,25 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
         NeoGuanNiaoCreativeTabs.CREATIVE_MODE_TABS.register();
         NeoGuanNiaoVillagerProfessions.registerPoi();
         NeoGuanNiaoVillagerProfessions.POI_TYPES_REGISTER.register();
+        registerPoiBlockStates();
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register();
         NeoGuanNiaoFabricVillagerTrades.register();
         NeoGuanNiaoFabricSpawns.register();
         NeoGuanNiaoFabricNetwork.register();
         NeoGuanNiaoFabricServerEvents.register();
+    }
+
+    private static void registerPoiBlockStates() {
+        try {
+            Method method = PoiTypes.class.getDeclaredMethod("registerBlockStates", Holder.class, Set.class);
+            method.setAccessible(true);
+            var holder = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(
+                    ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE,
+                            NeoGuanNiao.resource("bird_keeper")));
+            Set<BlockState> states = Set.copyOf(NeoGuanNiaoBlocks.BIRD_NEST.get().getStateDefinition().getPossibleStates());
+            method.invoke(null, holder, (Object) states);
+        } catch (ReflectiveOperationException exception) {
+            NeoGuanNiao.LOGGER.error("Unable to register bird nest POI block states", exception);
+        }
     }
 }

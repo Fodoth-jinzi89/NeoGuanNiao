@@ -50,7 +50,7 @@ public final class PhotoIoService {
 
     private static ThreadPoolExecutor createExecutor() {
         ThreadFactory factory = runnable -> {
-            Thread thread = new Thread(runnable, "Guaniao-Photo-IO");
+            Thread thread = new Thread(runnable, "NeoGuanNiao-Photo-IO");
             thread.setDaemon(true);
             thread.setUncaughtExceptionHandler((ignored, throwable) -> NeoGuanNiao.LOGGER.error("Uncaught photograph I/O error", throwable));
             return thread;

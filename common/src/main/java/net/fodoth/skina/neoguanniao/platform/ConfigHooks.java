@@ -10,6 +10,13 @@ public final class ConfigHooks {
         return Limits.defaults();
     }
 
+    @ExpectPlatform
+    public static float birdCageMaxEntitySize(int variant) { return variant == 0 ? 0.55F : variant == 1 ? 1.0F : 2.0F; }
+    @ExpectPlatform public static boolean birdCagesAllowHostile() { return false; }
+    @ExpectPlatform public static boolean birdCagesAllowNeutral() { return false; }
+    @ExpectPlatform public static boolean birdCagesAllowFriendly() { return true; }
+    @ExpectPlatform public static boolean birdCagesAllowAllEntities() { return false; }
+
     public record Limits(boolean uploadsEnabled, boolean uploadsOperatorOnly, boolean uploadsWhitelistedOnly,
                          int maxConcurrentDownloads, int downloadBytesPerTick, int maxPhotosPerPlayer,
                          long maxPhotoBytesPerPlayer, int maxPhotosPerWorld, long maxPhotoBytesPerWorld,

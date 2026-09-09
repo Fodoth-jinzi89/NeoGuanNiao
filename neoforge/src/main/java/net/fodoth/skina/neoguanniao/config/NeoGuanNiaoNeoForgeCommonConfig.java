@@ -10,6 +10,9 @@ public final class NeoGuanNiaoNeoForgeCommonConfig {
             MAX_PHOTOS_PER_WORLD, PHOTO_TRASH_RETENTION_DAYS, MAX_COMPRESSED_BYTES,
             UPLOAD_TIMEOUT_TICKS, DOWNLOAD_TIMEOUT_TICKS, CAPTURE_COOLDOWN_TICKS, MAX_UPLOAD_BYTES_PER_MINUTE;
     public static final ModConfigSpec.LongValue MAX_PHOTO_BYTES_PER_PLAYER, MAX_PHOTO_BYTES_PER_WORLD;
+    public static final ModConfigSpec.DoubleValue SMALL_CAGE_MAX_ENTITY_SIZE, MEDIUM_CAGE_MAX_ENTITY_SIZE, LARGE_CAGE_MAX_ENTITY_SIZE;
+    public static final ModConfigSpec.BooleanValue BIRD_CAGES_ALLOW_HOSTILE, BIRD_CAGES_ALLOW_ALL_ENTITIES;
+    public static final ModConfigSpec.BooleanValue BIRD_CAGES_ALLOW_NEUTRAL, BIRD_CAGES_ALLOW_FRIENDLY;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -29,6 +32,15 @@ public final class NeoGuanNiaoNeoForgeCommonConfig {
         DOWNLOAD_TIMEOUT_TICKS = b.defineInRange("downloadTimeoutTicks", 200, 20, 72000);
         CAPTURE_COOLDOWN_TICKS = b.defineInRange("captureCooldownTicks", 30, 0, 1200);
         MAX_UPLOAD_BYTES_PER_MINUTE = b.defineInRange("maxUploadBytesPerMinute", 0x4000000, 65536, 0x10000000);
+        b.pop();
+        b.push("birdCages");
+        SMALL_CAGE_MAX_ENTITY_SIZE = b.defineInRange("smallMaxEntitySize", 0.55D, 0.1D, 8.0D);
+        MEDIUM_CAGE_MAX_ENTITY_SIZE = b.defineInRange("mediumMaxEntitySize", 1.0D, 0.1D, 8.0D);
+        LARGE_CAGE_MAX_ENTITY_SIZE = b.defineInRange("largeMaxEntitySize", 2.0D, 0.1D, 8.0D);
+        BIRD_CAGES_ALLOW_HOSTILE = b.define("allowHostileEntities", false);
+        BIRD_CAGES_ALLOW_ALL_ENTITIES = b.define("allowAllEntities", false);
+        BIRD_CAGES_ALLOW_NEUTRAL = b.define("allowNeutralEntities", false);
+        BIRD_CAGES_ALLOW_FRIENDLY = b.define("allowFriendlyEntities", true);
         b.pop();
         SPEC = b.build();
     }

@@ -51,7 +51,7 @@ public final class NeoGuanNiaoEntityTypes {
         return ENTITY_TYPES.register(id, () -> EntityType.Builder.of(factory, MobCategory.CREATURE)
                 .sized(width, height)
                 .clientTrackingRange(8)
-                .build(String.valueOf(ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, id))));
+                .build(NeoGuanNiao.resource(id).toString()));
     }
 
     static {

@@ -31,7 +31,6 @@ extends BlockEntityWithoutLevelRenderer {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    @SuppressWarnings("deprecation")
     public void renderByItem(@NotNull ItemStack stack, @NotNull ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         poseStack.pushPose();
         try {

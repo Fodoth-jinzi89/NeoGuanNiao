@@ -25,7 +25,7 @@ public final class PhotoClientRepository {
     private static final Map<String, Integer> FAILURE_COUNTS = new HashMap<>();
     private static final Set<String> VALIDATING = new HashSet<>();
     private static final ExecutorService VALIDATION_EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
-        Thread thread = new Thread(runnable, "Guaniao-Photo-Decode");
+        Thread thread = new Thread(runnable, "NeoGuanNiao-Photo-Decode");
         thread.setDaemon(true);
         return thread;
     });

@@ -32,7 +32,14 @@ public final class ConfigScreenHooksImpl {
                 entry("config.neoguanniao.camera.hide_hand_while_aiming", NeoGuanNiaoNeoForgeClientConfig.HIDE_HAND),
                 entry("config.neoguanniao.camera.preview_max_size", NeoGuanNiaoNeoForgeClientConfig.PREVIEW_MAX_SIZE),
                 entry("config.neoguanniao.camera.wheel_focus_step", NeoGuanNiaoNeoForgeClientConfig.WHEEL_FOCUS_STEP),
-                entry("config.neoguanniao.camera.mouse_sensitivity", NeoGuanNiaoNeoForgeClientConfig.MOUSE_SENSITIVITY));
+                entry("config.neoguanniao.camera.mouse_sensitivity", NeoGuanNiaoNeoForgeClientConfig.MOUSE_SENSITIVITY),
+                entry("config.neoguanniao.bird_cages.small_max_entity_size", NeoGuanNiaoNeoForgeCommonConfig.SMALL_CAGE_MAX_ENTITY_SIZE),
+                entry("config.neoguanniao.bird_cages.medium_max_entity_size", NeoGuanNiaoNeoForgeCommonConfig.MEDIUM_CAGE_MAX_ENTITY_SIZE),
+                entry("config.neoguanniao.bird_cages.large_max_entity_size", NeoGuanNiaoNeoForgeCommonConfig.LARGE_CAGE_MAX_ENTITY_SIZE),
+                entry("config.neoguanniao.bird_cages.allow_hostile", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_HOSTILE),
+                entry("config.neoguanniao.bird_cages.allow_neutral", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_NEUTRAL),
+                entry("config.neoguanniao.bird_cages.allow_friendly", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_FRIENDLY),
+                entry("config.neoguanniao.bird_cages.allow_all", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_ALL_ENTITIES));
     }
 
     private static <T> Entry entry(String key, ModConfigSpec.ConfigValue<T> config) {

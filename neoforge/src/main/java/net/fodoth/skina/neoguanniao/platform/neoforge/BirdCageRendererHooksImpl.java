@@ -13,7 +13,7 @@ public final class BirdCageRendererHooksImpl {
         // Compile the override on NeoForge so its generic bridge is generated.
         return new BirdCageRenderer(context) {
             @Override
-            public @NotNull AABB getRenderBoundingBox(BirdCageBlockEntity birdCage) {
+            public @NotNull AABB getRenderBoundingBox(@NotNull BirdCageBlockEntity birdCage) {
                 var pos = birdCage.getBlockPos();
                 double height = switch (birdCage.variant()) {
                     case SMALL -> 1.0D;

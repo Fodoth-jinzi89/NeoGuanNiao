@@ -270,7 +270,8 @@ public final class BirdSkinUtils {
             if (!model.supportsSkin(skin.id())) {
                 continue;
             }
-            if (!isSkinAvailable(bird, skin)) {
+            // Check age here; gender is checked against the target below, not the current bird.
+            if (bird.isBaby() ? !skin.baby() : !skin.mature()) {
                 continue;
             }
             // 双性皮肤优先

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PhotoIndexSavedData
 extends SavedData {
-    private static final String DATA_NAME = "guaniao_photo_index";
+    private static final String DATA_NAME = "neoguanniao_photo_index";
 
     private static final long ACCESS_UPDATE_INTERVAL_MILLIS = 21_600_000L;
 
