@@ -53,11 +53,11 @@ public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem>
         if (!data.contains("CapturedBird") || Minecraft.getInstance().level == null) return;
         Entity entity = EntityType.create(data.getCompound("CapturedBird"), Minecraft.getInstance().level).orElse(null);
         if (entity == null) return;
+        BirdCageEntityRender.resetRotation(entity);
         poseStack.pushPose();
-        poseStack.translate(0.5F, 0.45F, 0.5F);
-        float scale = 0.35F / Math.max(0.1F, Math.max(entity.getBbWidth(), entity.getBbHeight()));
-        poseStack.scale(scale, scale, scale);
-        Minecraft.getInstance().getEntityRenderDispatcher().render(entity, 0, 0, 0, 0, partialTick, poseStack, buffers, light);
+        // 物品模型空间的原点已经是笼子中心，这里只需要抬到笼子几何中心的高度。
+        poseStack.translate(0.0F, (float) BirdCageEntityRender.centerY(item.variant()), 0.0F);
+        BirdCageEntityRender.render(entity, item.variant(), 0.0F, partialTick, poseStack, buffers, light);
         poseStack.popPose();
     }
 }

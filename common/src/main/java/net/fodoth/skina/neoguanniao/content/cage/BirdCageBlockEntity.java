@@ -4,11 +4,14 @@ package net.fodoth.skina.neoguanniao.content.cage;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+
+import org.jetbrains.annotations.NotNull;
 
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -82,6 +85,24 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         capturedBird = tag.contains("CapturedBird") ? tag.getCompound("CapturedBird").copy() : null;
+    }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 
 

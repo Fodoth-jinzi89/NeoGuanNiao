@@ -194,6 +194,10 @@ public class BirdCageBlock extends BaseEntityBlock {
     public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
                             @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
+        if (level.getBlockEntity(pos) instanceof BirdCageBlockEntity cage) {
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+            if (tag.contains("CapturedBird")) cage.setCapturedBird(tag.getCompound("CapturedBird"));
+        }
         if (state.getValue(PART) || variant == BirdCageVariant.SMALL) return;
         int height = structureHeight();
         BlockState part = state.setValue(PART, true).setValue(LAYERS, 8);
@@ -203,10 +207,6 @@ public class BirdCageBlock extends BaseEntityBlock {
                     if (x != 0 || y != 0 || z != 0)
                         level.setBlock(offset(pos, state.getValue(FACING), x, y, z), part, 3);
                 }
-        if (level.getBlockEntity(pos) instanceof BirdCageBlockEntity cage) {
-            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-            if (tag.contains("CapturedBird")) cage.setCapturedBird(tag.getCompound("CapturedBird"));
-        }
     }
 
     @Override
