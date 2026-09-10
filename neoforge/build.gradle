@@ -1,0 +1,35 @@
+architectury { platformSetupLoomIde(); neoForge() }
+sourceSets {
+    finalJarRun
+}
+sourceSets.main.resources.srcDir project(':common').sourceSets.main.resources.srcDirs
+tasks.named('processResources') { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+tasks.named('sourcesJar') { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+tasks.named('jar') {
+    dependsOn(':common:transformProductionNeoForge')
+    from({ zipTree(project(':common').layout.buildDirectory.file('libs/common-' + rootProject.mod_version + '-transformProductionNeoForge.jar').get().asFile) }) {
+        exclude 'META-INF/**'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+loom {
+    mods.clear()
+    runs {
+        client {
+            source sourceSets.finalJarRun
+        }
+    }
+}
+dependencies {
+    neoForge "net.neoforged:neoforge:$rootProject.neoforge_version";
+    modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version";
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
+    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
+    implementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
+    implementation project(path: ':common', configuration: 'namedElements')
+}
+sourceSets.finalJarRun.runtimeClasspath = files(
+        configurations.runtimeClasspath.filter { !it.toPath().startsWith(project(':common').layout.buildDirectory.get().asFile.toPath()) },
+        tasks.named('remapJar').flatMap { it.archiveFile }
+)
+tasks.named('runClient') { dependsOn tasks.named('remapJar') }

@@ -1,103 +1,71 @@
 plugins {
-    id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.141'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
 }
-
-version = mod_version
-group = mod_group_id
-
-base {
-    archivesName = mod_id
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-}
-
-repositories {
-    mavenLocal()
-
-    maven { url = "https://api.modrinth.com/maven"}
-    maven { url = "https://cursemaven.com" }
-    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
-    maven { url = "https://maven.createmod.net" }
-    maven { url = "https://maven.blamejared.com" }
-
-    flatDir {
-        dir("libs")
+architectury { minecraft = project.minecraft_version }
+allprojects { group = rootProject.maven_group; version = rootProject.mod_version }
+subprojects {
+    apply plugin: 'dev.architectury.loom'; apply plugin: 'architectury-plugin'; apply plugin: 'maven-publish'
+    repositories { mavenCentral(); maven { url = 'https://maven.neoforged.net/releases' };
+        maven { url = 'https://maven.fabricmc.net/' };
+        maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' } }
+    dependencies { minecraft "net.minecraft:minecraft:$rootProject.minecraft_version";
+        mappings loom.officialMojangMappings() }
+ java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+    tasks.withType(JavaCompile).configureEach { options.release = 21; options.encoding = 'UTF-8' }
+    def artifactVersion = "${rootProject.mod_version}-${rootProject.minecraft_version}"
+    tasks.named('jar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = project.name
     }
-    mavenCentral()
+    tasks.named('sourcesJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = "${project.name}-sources"
+    }
+    tasks.named('remapJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = project.name
+        doFirst { archiveClassifier.set(project.name) }
+    }
+    tasks.named('remapSourcesJar') {
+        archiveBaseName = rootProject.archives_name
+        archiveVersion = artifactVersion
+        archiveClassifier = "${project.name}-sources"
+        doFirst { archiveClassifier.set("${project.name}-sources") }
+    }
 }
 
-neoForge {
-    version = neo_version
-
-    parchment {
-        mappingsVersion = parchment_mappings_version
-        minecraftVersion = parchment_minecraft_version
-    }
-
-    runs {
-        client {
-            client()
+configure([project(':fabric'), project(':neoforge')]) {
+    tasks.register('genIntellijRuns') {
+        group = 'ide'
+        description = 'Generates IntelliJ Gradle launch configurations.'
+        def platform = project.name
+        def outputDir = rootProject.layout.projectDirectory.dir('.idea/runConfigurations')
+        outputs.files(['Client', 'Server'].collect { outputDir.file("NeoGuanNiao_${platform}_${it}.xml") })
+        doLast {
+            outputDir.asFile.mkdirs()
+            ['Client', 'Server'].each { side ->
+                outputDir.file("NeoGuanNiao_${platform}_${side}.xml").asFile.setText("""<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="NeoGuanNiao ${platform} ${side}" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="externalProjectPath" value="\$PROJECT_DIR\$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="taskNames"><list><option value=":${platform}:run${side}" /></list></option>
+      <option name="taskDescriptions"><list /></option>
+    </ExternalSystemSettings>
+    <method v="2" />
+  </configuration>
+</component>
+""", 'UTF-8')
+            }
         }
-
-        server {
-            server()
-            programArgument '--nogui'
-        }
-    }
-
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-        }
     }
 }
-
-def generatedResources = layout.buildDirectory.dir("generated/sources/modMetadata")
-
-tasks.register("generateModMetadata", ProcessResources) {
-    def props = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
-            geckolib_version       : geckolib_version,
-            geckolib_version_range : geckolib_version_range,
-            loader_version_range   : loader_version_range,
-            mod_id                 : mod_id,
-            mod_name               : mod_name,
-            mod_license            : mod_license,
-            mod_version            : mod_version,
-            mod_authors            : mod_authors,
-            mod_description        : mod_description
-    ]
-
-    inputs.properties(props)
-
-    expand(props)
-
-    from("src/main/templates")
-    into(generatedResources)
-}
-
-sourceSets.main.resources.srcDir(generatedResources)
-
-tasks.named("processResources") {
-    dependsOn("generateModMetadata")
-}
-
-
-neoForge.ideSyncTask tasks.named("generateModMetadata")
-
-
-
-dependencies {
-    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'])
-
-    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
-
-    implementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
+tasks.register('genIntellijRuns') {
+    group = 'ide'
+    description = 'Generates IntelliJ launch configurations for both platforms.'
+    dependsOn(':fabric:genIntellijRuns', ':neoforge:genIntellijRuns')
 }

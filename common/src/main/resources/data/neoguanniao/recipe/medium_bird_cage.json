@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "decorations",
+  "pattern": [
+    "AAA",
+    "A A",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "B": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "id": "neoguanniao:medium_bird_cage"
+  }
+}

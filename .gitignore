@@ -12,6 +12,7 @@ out/
 .gradle/
 build/
 **/build/
+**/bin/
 
 # Gradle Wrapper
 !gradlew
@@ -89,8 +90,10 @@ desktop.ini
 *.jar
 
 # 保留本地依赖与 Gradle Wrapper
-!libs/
-!libs/**
+!neoforge/libs/
+!neoforge/libs/**
+!fabric/libs/
+!fabric/libs/**
 !gradle/wrapper/gradle-wrapper.jar
 
 # =========================
@@ -99,4 +102,5 @@ desktop.ini
 .env
 .env.*
 .deepcode/settings.json
-/libs/观鸟1.21.1-Fabric模组源码/
+/fabric/libs/观鸟1.21.1-Fabric模组源码/
+/fabric/修复计划.md

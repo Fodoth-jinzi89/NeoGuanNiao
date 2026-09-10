@@ -1,0 +1,44 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "neoguanniao"
+version = "3.2"
+logoFile = "icon.png"
+displayName = "Neo Guan Niao"
+displayURL = "https://space.bilibili.com/38982471"
+authors = "Fodoth"
+
+description = '''Neo Guan Niao bird and camera content.'''
+
+[[mixins]]
+config = "neoguanniao.mixins.json"
+
+[[dependencies.neoguanniao]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.neoguanniao]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.neoguanniao]]
+modId = "geckolib"
+type = "required"
+versionRange = "[4.8.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.neoguanniao]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,44 @@
+architectury { platformSetupLoomIde(); fabric() }
+sourceSets {
+    finalJarRun
+}
+sourceSets.main.resources.srcDir project(':common').sourceSets.main.resources.srcDirs
+loom {
+    mods.clear()
+    runs.configureEach {
+        source sourceSets.finalJarRun
+        property 'fabric.addMods', tasks.named('remapJar').get().archiveFile.get().asFile.absolutePath
+    }
+}
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+tasks.named('sourcesJar') { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+tasks.named('jar') {
+    dependsOn(':common:transformProductionFabric')
+    from({ zipTree(project(':common').layout.buildDirectory.file('libs/common-' + rootProject.mod_version + '-transformProductionFabric.jar').get().asFile) }) {
+        exclude 'META-INF/**'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'], exclude: ['Jade-*.jar'])
+    modCompileOnly fileTree(dir: 'libs/compileOnly', include: ['Jade-*.jar'])
+    runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
+    modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
+    implementation project(path: ':common')
+}
+sourceSets.finalJarRun.runtimeClasspath = files(
+        configurations.runtimeClasspath.filter { !it.toPath().startsWith(project(':common').layout.buildDirectory.get().asFile.toPath()) }
+)
+tasks.matching { it.name == 'runClient' || it.name == 'runServer' }.configureEach {
+    dependsOn tasks.named('remapJar')
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+}

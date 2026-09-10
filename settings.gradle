@@ -1,16 +1,3 @@
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven { url = 'https://maven.neoforged.net/releases' }
-    }
-    plugins {
-        id 'org.jetbrains.kotlin.jvm' version '2.4.0'
-    }
-}
-
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
-}
-
-ext.licenseName = "GPL-3.0-only"
+pluginManagement { repositories { maven { url="https://maven.fabricmc.net/" }; maven { url="https://maven.architectury.dev/" }; maven { url="https://maven.neoforged.net/releases" }; gradlePluginPortal() } }
+rootProject.name='neoguanniao'
+include 'common','fabric','neoforge'
