@@ -93,35 +93,46 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
     public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context,
                                 @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        List<CompoundTag> birds = capturedBirds(stack);
-        for (int i = 0; i < birds.size(); i++) {
-            if (i > 0) tooltip.add(Component.empty());
-            appendBirdTooltip(tooltip, birds.get(i));
-        }
+        tooltip.addAll(birdLines(capturedBirds(stack)));
     }
 
-    private static void appendBirdTooltip(List<Component> tooltip, CompoundTag bird) {
-        Component name = null;
-        if (bird.contains("CustomName")) {
-            try { name = Component.Serializer.fromJson(bird.getString("CustomName"), RegistryAccess.EMPTY); }
-            catch (Exception ignored) { }
-        }
-        if (name == null) {
+    /**
+     * 把每只笼中实体格式化成三行提示（槽位 + 实体名 / 注册名 / 生命值），
+     * 槽位之间空一行。物品提示与 Jade 共用同一份实现。
+     */
+    public static List<Component> birdLines(List<CompoundTag> birds) {
+        List<Component> lines = new ArrayList<>();
+        for (int i = 0; i < birds.size(); i++) {
+            if (i > 0) lines.add(Component.empty());
+            CompoundTag bird = birds.get(i);
+            lines.add(Component.translatable("item.neoguanniao.bird_cage.slot", i + 1).withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
+                    .append(birdName(bird).copy().withStyle(ChatFormatting.AQUA)));
             String id = bird.getString("id");
-            name = id.isEmpty() ? Component.translatable("entity.minecraft.generic") : Component.translatable("entity." + id.replace(':', '.'));
+            lines.add(Component.translatable("item.neoguanniao.bird_cage.registry").withStyle(ChatFormatting.YELLOW)
+                    .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
+                    .append(Component.literal(id).withStyle(ChatFormatting.WHITE)));
+            float health = bird.contains("Health") ? bird.getFloat("Health") : 0.0F;
+            float maxHealth = bird.contains("MaxHealth") ? bird.getFloat("MaxHealth") : health;
+            lines.add(Component.translatable("item.neoguanniao.bird_cage.health").withStyle(ChatFormatting.YELLOW)
+                    .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
+                    .append(Component.literal(formatHealth(health) + "/" + formatHealth(maxHealth)).withStyle(ChatFormatting.WHITE)));
         }
-        tooltip.add(Component.translatable("item.neoguanniao.bird_cage.contains").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
-                .append(name.copy().withStyle(ChatFormatting.AQUA)));
+        return lines;
+    }
+
+    private static Component birdName(CompoundTag bird) {
+        if (bird.contains("CustomName")) {
+            try {
+                Component name = Component.Serializer.fromJson(bird.getString("CustomName"), RegistryAccess.EMPTY);
+                if (name != null) return name;
+            } catch (Exception ignored) {
+            }
+        }
         String id = bird.getString("id");
-        tooltip.add(Component.translatable("item.neoguanniao.bird_cage.registry").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
-                .append(Component.literal(id).withStyle(ChatFormatting.AQUA)));
-        float health = bird.contains("Health") ? bird.getFloat("Health") : 0.0F;
-        float maxHealth = bird.contains("MaxHealth") ? bird.getFloat("MaxHealth") : health;
-        tooltip.add(Component.translatable("item.neoguanniao.bird_cage.health").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
-                .append(Component.literal(formatHealth(health) + "/" + formatHealth(maxHealth)).withStyle(ChatFormatting.AQUA)));
+        return id.isEmpty()
+                ? Component.translatable("entity.minecraft.generic")
+                : Component.translatable("entity." + id.replace(':', '.'));
     }
 
     private static String formatHealth(float value) {

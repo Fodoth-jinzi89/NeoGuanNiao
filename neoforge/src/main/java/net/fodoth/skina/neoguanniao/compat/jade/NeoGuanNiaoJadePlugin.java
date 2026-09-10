@@ -2,9 +2,11 @@ package net.fodoth.skina.neoguanniao.compat.jade;
 
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlock;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -15,6 +17,9 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.WailaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @WailaPlugin("neoguanniao")
 public final class NeoGuanNiaoJadePlugin implements IWailaPlugin, IBlockComponentProvider {
@@ -54,12 +59,10 @@ public final class NeoGuanNiaoJadePlugin implements IWailaPlugin, IBlockComponen
         @Override public void appendServerData(CompoundTag data, BlockAccessor accessor) {
             BlockEntityInfo info = findCage(accessor);
             if (info == null) return;
-            CompoundTag bird = info.cage.lastCapturedBird();
-            if (bird == null) return;
-            data.putString("id", bird.getString("id"));
-            data.putString("name", bird.contains("CustomName") ? bird.getString("CustomName") : "");
-            data.putFloat("health", bird.contains("Health") ? bird.getFloat("Health") : 0);
-            data.putFloat("maxHealth", bird.contains("MaxHealth") ? bird.getFloat("MaxHealth") : data.getFloat("health"));
+            // 直接同步笼中实体的原始 NBT，客户端复用 BirdCageItem 的提示格式化逻辑。
+            ListTag birds = new ListTag();
+            for (CompoundTag bird : info.cage.capturedBirds()) birds.add(bird.copy());
+            if (!birds.isEmpty()) data.put("birds", birds);
         }
         @Override public net.minecraft.resources.ResourceLocation getUid() {
             return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("neoguanniao", "cage_data");
@@ -70,21 +73,9 @@ public final class NeoGuanNiaoJadePlugin implements IWailaPlugin, IBlockComponen
     }
 
     @Override public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-        CompoundTag data = accessor.getServerData();
-        if (!data.contains("id")) return;
-        String id = data.getString("id");
-        Component name = Component.translatable("entity." + id.replace(':', '.'));
-        if (!data.getString("name").isEmpty()) {
-            try { name = Component.Serializer.fromJson(data.getString("name"), accessor.getLevel().registryAccess()); }
-            catch (Exception ignored) { }
-        }
-        if (name != null) {
-            tooltip.add(Component.translatable("item.neoguanniao.bird_cage.contains").append(": ").append(name));
-        }
-        tooltip.add(Component.translatable("item.neoguanniao.bird_cage.registry").append(": ").append(Component.literal(id)));
-        tooltip.add(Component.translatable("item.neoguanniao.bird_cage.health").append(": ")
-                .append(Component.literal(format(data.getFloat("health")) + "/" + format(data.getFloat("maxHealth")))));
+        ListTag birds = accessor.getServerData().getList("birds", Tag.TAG_COMPOUND);
+        List<CompoundTag> list = new ArrayList<>(birds.size());
+        for (int i = 0; i < birds.size(); i++) list.add(birds.getCompound(i));
+        tooltip.addAll(BirdCageItem.birdLines(list));
     }
-
-    private static String format(float value) { return value == (int) value ? Integer.toString((int) value) : String.format(java.util.Locale.ROOT, "%.1f", value); }
 }

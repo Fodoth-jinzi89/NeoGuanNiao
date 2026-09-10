@@ -16,7 +16,7 @@
   "block.neoguanniao.small_bird_cage": "小型鸟笼",
   "block.neoguanniao.medium_bird_cage": "中型鸟笼",
   "block.neoguanniao.large_bird_cage": "大型鸟笼",
-  "item.neoguanniao.bird_cage.contains": "内含",
+  "item.neoguanniao.bird_cage.slot": "槽位%s",
   "item.neoguanniao.bird_cage.registry": "注册名",
   "item.neoguanniao.bird_cage.health": "生命值",
   "subtitles.neoguanniao.entity.night_heron.ambient": "夜鹭：鸣叫",
