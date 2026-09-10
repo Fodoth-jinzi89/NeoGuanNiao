@@ -229,7 +229,7 @@ public class BirdCageBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull BlockState playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos,
-                                                  @NotNull BlockState state, @NotNull Player player) {
+                                                 @NotNull BlockState state, @NotNull Player player) {
         if (player.isCreative() && state.getValue(PART)) {
             BlockPos origin = findOrigin(level, pos, state.getValue(FACING));
             if (origin != null) level.removeBlock(origin, false);
@@ -274,7 +274,8 @@ public class BirdCageBlock extends BaseEntityBlock {
     @Override
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hit) {
         BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
-        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
+        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage))
+            return InteractionResult.PASS;
         // 主手和副手会在同一个游戏刻各触发一次交互，避免同一次右键被处理两次。
         if (!cage.tryInteract(level.getGameTime())) return InteractionResult.PASS;
         if (!cage.isFull() && storeCarriedEntity(level, pos, player)) {
@@ -325,7 +326,8 @@ public class BirdCageBlock extends BaseEntityBlock {
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof BirdCageBlock cageBlock)) return false;
         BlockPos origin = state.getValue(PART) ? cageBlock.findOrigin(level, pos, state.getValue(FACING)) : pos;
-        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || cage.isFull()) return false;
+        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || cage.isFull())
+            return false;
         if (!cage.tryInteract(level.getGameTime())) return false;
         if (!(cageBlock.asItem() instanceof BirdCageItem item)) return false;
         Entity carried = CarryOnHooks.carriedEntity(player);
