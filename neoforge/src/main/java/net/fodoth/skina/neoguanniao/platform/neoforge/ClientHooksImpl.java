@@ -1,6 +1,5 @@
-package net.fodoth.skina.neoguanniao.platform.neoforge;
+package net.fodoth.skina.neoguanniao.platform;
 
-import net.fodoth.skina.neoguanniao.platform.ConfigHooks;
 import net.fodoth.skina.neoguanniao.client.guide.BirdGuideClient;
 import net.fodoth.skina.neoguanniao.client.camera.CameraClientCapture;
 import net.fodoth.skina.neoguanniao.client.camera.PhotographClientActions;

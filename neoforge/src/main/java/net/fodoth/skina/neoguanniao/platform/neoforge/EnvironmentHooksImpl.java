@@ -1,4 +1,4 @@
-package net.fodoth.skina.neoguanniao.platform.neoforge;
+package net.fodoth.skina.neoguanniao.platform;
 
 import net.neoforged.fml.loading.FMLEnvironment;
 
