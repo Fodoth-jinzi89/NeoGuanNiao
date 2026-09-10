@@ -278,7 +278,7 @@ public class BirdCageBlock extends BaseEntityBlock {
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hit) {
         BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
         if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
-        Entity carried = CarryOnHooks.carriedEntity(player);
+        Entity carried = CarryOnHooks.isLoaded() ? CarryOnHooks.carriedEntity(player) : null;
         if (cage.isEmpty() && carried != null && !level.isClientSide) {
             BirdCageItem item = (BirdCageItem) asItem();
             if (item.canFit(carried) && BirdCageItem.canCapture(carried)) {
@@ -295,9 +295,13 @@ public class BirdCageBlock extends BaseEntityBlock {
             if (!level.isClientSide) {
                 CompoundTag preview = cage.capturedBird();
                 Entity carriedEntity = EntityType.create(preview, level).orElse(null);
-                if (carriedEntity != null && CarryOnHooks.tryCarryEntity(player, carriedEntity)) {
-                    cage.removeCapturedBird();
-                    return InteractionResult.sidedSuccess(false);
+                if (carriedEntity != null && CarryOnHooks.isLoaded()) {
+                    // Carry On 会检查实体与玩家的距离，先把实体挪到玩家身上再交给它。
+                    carriedEntity.moveTo(player.getX(), player.getY(), player.getZ());
+                    if (CarryOnHooks.tryCarryEntity(player, carriedEntity)) {
+                        cage.removeCapturedBird();
+                        return InteractionResult.sidedSuccess(false);
+                    }
                 }
             }
             if (!level.isClientSide) {

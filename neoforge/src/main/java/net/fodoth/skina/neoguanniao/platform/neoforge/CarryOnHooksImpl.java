@@ -19,7 +19,8 @@ public final class CarryOnHooksImpl {
     public static @Nullable Entity carriedEntity(Player player) {
         if (!(player instanceof ServerPlayer)) return null;
         CarryOnData data = CarryOnDataManager.getCarryData(player);
-        return data.isCarrying() ? data.getEntity(player.level()) : null;
+        // 只有抱着实体时才能调用 getEntity，抱着方块/玩家时它会抛 IllegalStateException。
+        return data.isCarrying(CarryOnData.CarryType.ENTITY) ? data.getEntity(player.level()) : null;
     }
 
     public static void clearCarriedEntity(Player player) {
