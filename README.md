@@ -11,7 +11,9 @@
 不同于传统宠物模组，Neo Guan Niao 致力于创造一个充满生命感的鸟类世界：
 鸟类拥有独特的行为、习性、个体差异和成长过程，玩家可以通过观察、投喂、驯服和照顾，与这些天空中的居民建立联系。
 
-> **前置要求：** 从 **3.2** 版本开始，本模组基于 Architectury API 构建，**必须**同时安装 **Architectury API 13.0.8 或更高版本**（对应 Minecraft 1.21.1）才能启动游戏。下载：[CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api) ｜ [Modrinth](https://modrinth.com/mod/architectury-api)
+> **前置要求（缺一不可）：**
+> - **Architectury API 13.0.8+**（对应 Minecraft 1.21.1）—— 从 **3.2** 版本开始本模组基于 Architectury API 构建，不安装无法启动游戏。下载：[CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api) ｜ [Modrinth](https://modrinth.com/mod/architectury-api)
+> - **GeckoLib 4.8.4+**（对应 Minecraft 1.21.1）—— 全部鸟类动画由 GeckoLib 驱动，不安装无法启动游戏。下载：[CurseForge](https://www.curseforge.com/minecraft/mc-mods/geckolib) ｜ [Modrinth](https://modrinth.com/mod/geckolib)
 
 ---
 
@@ -207,14 +209,14 @@ Neo Guan Niao 使用模块化 Controller + Ticker 架构。
 - Fabric: **Fabric Loader 0.17.0+** + Fabric API（对应 `neoguanniao-3.2-1.21.1-fabric.jar`）
 - Architectury API: **13.0.8+**（**3.2 起必需**，两个加载器都需要）
 - Java: **21**
-- GeckoLib: **4.7.2+**
+- GeckoLib: **4.8.4+**（两个加载器都需要）
 
 ---
 
 # 🔧 安装
 
 1. 安装 NeoForge 1.21.1（或 Fabric Loader + Fabric API）
-2. 安装 GeckoLib
+2. 安装 **GeckoLib 4.8.4+**
 3. 安装 **Architectury API 13.0.8+**（3.2 起必需，缺失会导致游戏无法启动）
 4. 按加载器选择 `neoguanniao-3.2-1.21.1-neoforge.jar` 或 `neoguanniao-3.2-1.21.1-fabric.jar`，放入 `.minecraft/mods`
 5. 启动游戏
