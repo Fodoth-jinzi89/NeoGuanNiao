@@ -24,6 +24,11 @@ public final class CarryOnHooksImpl {
     }
 
     public static void clearCarriedEntity(Player player) {
-        if (player instanceof ServerPlayer) CarryOnDataManager.getCarryData(player).clear();
+        if (!(player instanceof ServerPlayer)) return;
+        CarryOnData data = CarryOnDataManager.getCarryData(player);
+        data.clear();
+        // clear() 只改服务端数据，必须再 setCarryData 一次才会给客户端发包，
+        // 否则客户端手里的实体要等下一次 Carry On 同步才消失。
+        CarryOnDataManager.setCarryData(player, data);
     }
 }
