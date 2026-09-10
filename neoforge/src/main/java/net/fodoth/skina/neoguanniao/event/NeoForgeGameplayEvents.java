@@ -1,9 +1,11 @@
 package net.fodoth.skina.neoguanniao.event;
 
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlock;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResult;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -32,6 +34,16 @@ public final class NeoForgeGameplayEvents {
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         if (FeatherFanInteractionEvents.onRightClickItem(event.getEntity(), event.getItemStack())) {
             event.setCancellationResult(InteractionResult.sidedSuccess(event.getEntity().level().isClientSide));
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        // Carry On 以 HIGH 优先级把抱着的实体放到地上并取消事件，
+        // 这里抢在它之前把能装笼的实体装进鸟笼。
+        if (BirdCageBlock.storeCarriedEntity(event.getLevel(), event.getPos(), event.getEntity())) {
+            event.setCancellationResult(InteractionResult.SUCCESS);
             event.setCanceled(true);
         }
     }

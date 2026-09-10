@@ -278,18 +278,10 @@ public class BirdCageBlock extends BaseEntityBlock {
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hit) {
         BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
         if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
-        Entity carried = CarryOnHooks.isLoaded() ? CarryOnHooks.carriedEntity(player) : null;
-        if (cage.isEmpty() && carried != null && !level.isClientSide) {
-            BirdCageItem item = (BirdCageItem) asItem();
-            if (item.canFit(carried) && BirdCageItem.canCapture(carried)) {
-                CompoundTag bird = new CompoundTag();
-                carried.saveWithoutId(bird);
-                bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());
-                if (carried instanceof LivingEntity living) bird.putFloat("MaxHealth", living.getMaxHealth());
-                cage.setCapturedBird(bird);
-                CarryOnHooks.clearCarriedEntity(player);
-                return InteractionResult.sidedSuccess(false);
-            }
+        // 主手和副手会在同一个游戏刻各触发一次交互，避免同一次右键被处理两次。
+        if (!cage.tryInteract(level.getGameTime())) return InteractionResult.PASS;
+        if (cage.isEmpty() && storeCarriedEntity(level, pos, player)) {
+            return InteractionResult.sidedSuccess(false);
         }
         if (player.isShiftKeyDown() && !cage.isEmpty()) {
             if (!level.isClientSide) {
@@ -320,5 +312,33 @@ public class BirdCageBlock extends BaseEntityBlock {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    /**
+     * 尝试把玩家（Carry On）抱着的实体放进 {@code pos} 处的鸟笼。
+     * <p>
+     * Carry On 以 HIGH 优先级处理右键事件，会把抱着的实体直接放到地上并取消事件，
+     * 方块自身的 {@link #useWithoutItem} 因此不会执行；平台事件需要在它之前调用本方法。
+     * </p>
+     *
+     * @return 是否成功把实体装进鸟笼
+     */
+    public static boolean storeCarriedEntity(Level level, BlockPos pos, Player player) {
+        if (level.isClientSide || !CarryOnHooks.isLoaded()) return false;
+        BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof BirdCageBlock cageBlock)) return false;
+        BlockPos origin = state.getValue(PART) ? cageBlock.findOrigin(level, pos, state.getValue(FACING)) : pos;
+        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || !cage.isEmpty()) return false;
+        if (!cage.tryInteract(level.getGameTime())) return false;
+        if (!(cageBlock.asItem() instanceof BirdCageItem item)) return false;
+        Entity carried = CarryOnHooks.carriedEntity(player);
+        if (carried == null || !item.canFit(carried) || !BirdCageItem.canCapture(carried)) return false;
+        CompoundTag bird = new CompoundTag();
+        carried.saveWithoutId(bird);
+        bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());
+        if (carried instanceof LivingEntity living) bird.putFloat("MaxHealth", living.getMaxHealth());
+        cage.setCapturedBird(bird);
+        CarryOnHooks.clearCarriedEntity(player);
+        return true;
     }
 }

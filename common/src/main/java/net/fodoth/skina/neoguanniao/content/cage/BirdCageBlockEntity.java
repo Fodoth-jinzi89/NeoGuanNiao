@@ -75,6 +75,19 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
         return tag;
     }
 
+    private long lastInteractTick = Long.MIN_VALUE;
+
+    /**
+     * 主手和副手会在同一个游戏刻各触发一次右键交互，这里保证每个游戏刻只处理一次。
+     *
+     * @return 本次交互是否应当生效
+     */
+    public boolean tryInteract(long gameTime) {
+        if (lastInteractTick == gameTime) return false;
+        lastInteractTick = gameTime;
+        return true;
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
