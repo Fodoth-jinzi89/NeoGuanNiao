@@ -1,6 +1,0 @@
-{
-  "multipart": [
-    { "when": { "part": "false" }, "apply": { "model": "neoguanniao:block/medium_bird_cage" } },
-    { "when": { "part": "true" }, "apply": { "model": "minecraft:block/air" } }
-  ]
-}

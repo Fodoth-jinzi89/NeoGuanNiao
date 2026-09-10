@@ -12,6 +12,7 @@ out/
 .gradle/
 build/
 **/build/
+**/bin/
 
 # Gradle Wrapper
 !gradlew
