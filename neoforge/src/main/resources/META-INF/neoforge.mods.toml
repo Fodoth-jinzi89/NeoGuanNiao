@@ -4,7 +4,7 @@ license = "MIT"
 
 [[mods]]
 modId = "neoguanniao"
-version = "3.1"
+version = "3.2"
 logoFile = "icon.png"
 displayName = "Neo Guan Niao"
 displayURL = "https://space.bilibili.com/38982471"
@@ -33,5 +33,12 @@ side = "BOTH"
 modId = "geckolib"
 type = "required"
 versionRange = "[4.8.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.neoguanniao]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
 ordering = "NONE"
 side = "BOTH"
