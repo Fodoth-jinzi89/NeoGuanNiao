@@ -352,6 +352,8 @@
   "config.neoguanniao.bird_cages.allow_neutral": "Allow neutral entities",
   "config.neoguanniao.bird_cages.allow_friendly": "Allow friendly entities",
   "config.neoguanniao.bird_cages.allow_all": "Allow all entities",
+  "config.neoguanniao.bird_cages.show_registry_name": "Show entity registry name",
+  "config.neoguanniao.bird_cages.show_health": "Show entity health",
   "config.neoguanniao.camera.uploads_enabled": "Enable photo uploads",
   "config.neoguanniao.camera.uploads_operator_only": "Operator-only uploads",
   "config.neoguanniao.camera.max_photos_per_player": "Max photos per player",

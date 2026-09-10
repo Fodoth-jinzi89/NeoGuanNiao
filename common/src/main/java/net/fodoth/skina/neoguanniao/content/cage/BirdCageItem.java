@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
+import net.fodoth.skina.neoguanniao.platform.ClientConfigHooks;
 import net.fodoth.skina.neoguanniao.platform.ConfigHooks;
 
 
@@ -97,8 +98,9 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
     }
 
     /**
-     * 把每只笼中实体格式化成三行提示（槽位 + 实体名 / 注册名 / 生命值），
-     * 槽位之间空一行。物品提示与 Jade 共用同一份实现。
+     * 把每只笼中实体格式化成提示行（槽位 + 实体名 / 注册名 / 生命值），
+     * 槽位之间空一行；注册名与生命值行由配置开关控制。
+     * 物品提示与 Jade 共用同一份实现。
      */
     public static List<Component> birdLines(List<CompoundTag> birds) {
         List<Component> lines = new ArrayList<>();
@@ -110,14 +112,18 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
                     .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
                     .append(birdName(bird).copy().withStyle(ChatFormatting.AQUA)));
             String id = bird.getString("id");
-            lines.add(Component.translatable("item.neoguanniao.bird_cage.registry").withStyle(ChatFormatting.YELLOW)
-                    .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
-                    .append(Component.literal(id).withStyle(ChatFormatting.WHITE)));
-            float health = bird.contains("Health") ? bird.getFloat("Health") : 0.0F;
-            float maxHealth = bird.contains("MaxHealth") ? bird.getFloat("MaxHealth") : health;
-            lines.add(Component.translatable("item.neoguanniao.bird_cage.health").withStyle(ChatFormatting.YELLOW)
-                    .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
-                    .append(Component.literal(formatHealth(health) + "/" + formatHealth(maxHealth)).withStyle(ChatFormatting.WHITE)));
+            if (ClientConfigHooks.showCageRegistryName()) {
+                lines.add(Component.translatable("item.neoguanniao.bird_cage.registry").withStyle(ChatFormatting.YELLOW)
+                        .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
+                        .append(Component.literal(id).withStyle(ChatFormatting.WHITE)));
+            }
+            if (ClientConfigHooks.showCageHealth()) {
+                float health = bird.contains("Health") ? bird.getFloat("Health") : 0.0F;
+                float maxHealth = bird.contains("MaxHealth") ? bird.getFloat("MaxHealth") : health;
+                lines.add(Component.translatable("item.neoguanniao.bird_cage.health").withStyle(ChatFormatting.YELLOW)
+                        .append(Component.literal(": ").withStyle(ChatFormatting.YELLOW))
+                        .append(Component.literal(formatHealth(health) + "/" + formatHealth(maxHealth)).withStyle(ChatFormatting.WHITE)));
+            }
         }
         return lines;
     }

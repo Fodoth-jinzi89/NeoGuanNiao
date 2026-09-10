@@ -41,6 +41,8 @@ public final class NeoGuanNiaoFabricConfig {
     public static final Setting WHEEL_FOCUS_STEP = define("wheelFocusStep", int.class, 1, 1, 32);
     public static final Setting MOUSE_SENSITIVITY = define("mouseSensitivity", double.class, 1.0D, 0.1D, 4.0D);
     public static final Setting ENABLE_PREVIEW_POST_EFFECT = define("enablePreviewPostEffect", boolean.class, true, 0, 1);
+    public static final Setting BIRD_CAGES_SHOW_REGISTRY_NAME = define("birdCagesShowRegistryName", boolean.class, false, 0, 1);
+    public static final Setting BIRD_CAGES_SHOW_HEALTH = define("birdCagesShowHealth", boolean.class, true, 0, 1);
 
     private NeoGuanNiaoFabricConfig() {}
 

@@ -6,7 +6,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class NeoGuanNiaoNeoForgeClientConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.BooleanValue SHOW_VIEWFINDER_HINT, SHOW_CAMERA_UI, ENABLE_OPTICS_SHADER,
-            ENABLE_FILTER_PREVIEW, HIDE_GUI, HIDE_HAND, ENABLE_PREVIEW_POST_EFFECT;
+            ENABLE_FILTER_PREVIEW, HIDE_GUI, HIDE_HAND, ENABLE_PREVIEW_POST_EFFECT,
+            BIRD_CAGES_SHOW_REGISTRY_NAME, BIRD_CAGES_SHOW_HEALTH;
     public static final ModConfigSpec.DoubleValue VIEWFINDER_OPACITY, MOUSE_SENSITIVITY;
     public static final ModConfigSpec.IntValue PREVIEW_MAX_SIZE, WHEEL_FOCUS_STEP;
     static {
@@ -23,6 +24,10 @@ public final class NeoGuanNiaoNeoForgeClientConfig {
         WHEEL_FOCUS_STEP = b.defineInRange("wheelFocusStep", 1, 1, 32);
         MOUSE_SENSITIVITY = b.defineInRange("mouseSensitivity", 1.0D, 0.1D, 4.0D);
         ENABLE_PREVIEW_POST_EFFECT = b.define("enablePreviewPostEffect", true);
+        b.pop();
+        b.push("birdCages");
+        BIRD_CAGES_SHOW_REGISTRY_NAME = b.define("showRegistryName", false);
+        BIRD_CAGES_SHOW_HEALTH = b.define("showHealth", true);
         b.pop();
         SPEC = b.build();
     }

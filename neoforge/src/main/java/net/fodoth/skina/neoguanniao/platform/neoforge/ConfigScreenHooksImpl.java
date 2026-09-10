@@ -39,7 +39,9 @@ public final class ConfigScreenHooksImpl {
                 entry("config.neoguanniao.bird_cages.allow_hostile", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_HOSTILE),
                 entry("config.neoguanniao.bird_cages.allow_neutral", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_NEUTRAL),
                 entry("config.neoguanniao.bird_cages.allow_friendly", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_FRIENDLY),
-                entry("config.neoguanniao.bird_cages.allow_all", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_ALL_ENTITIES));
+                entry("config.neoguanniao.bird_cages.allow_all", NeoGuanNiaoNeoForgeCommonConfig.BIRD_CAGES_ALLOW_ALL_ENTITIES),
+                entry("config.neoguanniao.bird_cages.show_registry_name", NeoGuanNiaoNeoForgeClientConfig.BIRD_CAGES_SHOW_REGISTRY_NAME),
+                entry("config.neoguanniao.bird_cages.show_health", NeoGuanNiaoNeoForgeClientConfig.BIRD_CAGES_SHOW_HEALTH));
     }
 
     private static <T> Entry entry(String key, ModConfigSpec.ConfigValue<T> config) {

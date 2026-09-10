@@ -15,4 +15,6 @@ public final class ClientConfigHooks {
     @ExpectPlatform public static double viewfinderOpacity() { return 0.9; }
     @ExpectPlatform public static int wheelFocusStep() { return 1; }
     @ExpectPlatform public static double mouseSensitivity() { return 1.0; }
+    @ExpectPlatform public static boolean showCageRegistryName() { return false; }
+    @ExpectPlatform public static boolean showCageHealth() { return true; }
 }

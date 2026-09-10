@@ -45,4 +45,12 @@ public final class ClientConfigHooksImpl {
     public static double mouseSensitivity() {
         return (double) NeoGuanNiaoFabricConfig.MOUSE_SENSITIVITY.get();
     }
+
+    public static boolean showCageRegistryName() {
+        return (boolean) NeoGuanNiaoFabricConfig.BIRD_CAGES_SHOW_REGISTRY_NAME.get();
+    }
+
+    public static boolean showCageHealth() {
+        return (boolean) NeoGuanNiaoFabricConfig.BIRD_CAGES_SHOW_HEALTH.get();
+    }
 }
