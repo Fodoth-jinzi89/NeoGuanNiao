@@ -2,7 +2,6 @@ package net.fodoth.skina.neoguanniao.content.cage;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -162,21 +161,29 @@ public class BirdCageBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        if (!hasRoomFor(context)) return null;
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    /**
+     * 放置体积（3×{@link #structureHeight()}×3）是否都能被替换。
+     * <p>
+     * 这里只做无副作用的判断：{@code getStateForPlacement} 也会在客户端预测等场合被调用，
+     * 放置失败提示改由 {@link BirdCageItem#place} 在服务端发出。
+     * </p>
+     */
+    public boolean hasRoomFor(@NotNull BlockPlaceContext context) {
+        if (variant == BirdCageVariant.SMALL) return true;
         Direction facing = context.getHorizontalDirection().getOpposite();
-        if (variant == BirdCageVariant.SMALL) return defaultBlockState().setValue(FACING, facing);
         BlockPos origin = context.getClickedPos();
         int height = structureHeight();
         for (int x = -1; x <= 1; x++)
             for (int y = 0; y < height; y++)
                 for (int z = -1; z <= 1; z++) {
                     BlockPos pos = offset(origin, facing, x, y, z);
-                    if (!context.getLevel().getBlockState(pos).canBeReplaced(context)) {
-                        if (context.getPlayer() != null) context.getPlayer().displayClientMessage(
-                                Component.translatable("message.neoguanniao.bird_cage.place_failed", 3, height, 3), true);
-                        return null;
-                    }
+                    if (!context.getLevel().getBlockState(pos).canBeReplaced(context)) return false;
                 }
-        return defaultBlockState().setValue(FACING, facing);
+        return true;
     }
 
     @Override
@@ -259,7 +266,7 @@ public class BirdCageBlock extends BaseEntityBlock {
         return null;
     }
 
-    private int structureHeight() {
+    public int structureHeight() {
         return switch (variant) {
             case SMALL, MEDIUM -> variant == BirdCageVariant.SMALL ? 1 : 3;
             case LARGE -> 4;
@@ -286,11 +293,13 @@ public class BirdCageBlock extends BaseEntityBlock {
         BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
         if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage))
             return InteractionResult.PASS;
-        // 主手和副手会在同一个游戏刻各触发一次交互，避免同一次右键被处理两次。
-        if (!cage.tryInteract(level.getGameTime())) return InteractionResult.PASS;
+        // 装笼放在去重标记之前：空手右键时 storeCarriedEntity 不会消耗标记，而 Fabric 没有
+        // NeoForge 的 RightClickBlock 预处理，抱着实体装笼只能靠这里（NeoForge 侧仍由事件抢先处理）。
         if (!cage.isFull() && storeCarriedEntity(level, pos, player)) {
             return InteractionResult.sidedSuccess(false);
         }
+        // 主手和副手会在同一个游戏刻各触发一次交互，避免同一次右键被处理两次。
+        if (!cage.tryInteract(level.getGameTime())) return InteractionResult.PASS;
         if (player.isShiftKeyDown() && !cage.isEmpty()) {
             // 优先抱出/放出玩家视线命中的那个笼位上的鸟；没命中（或该笼位是空的）就退回最后装进去的一只。
             int index = cage.indexOfSlot(hitSlot(origin, cage.variant(), state.getValue(FACING), player));
@@ -380,10 +389,12 @@ public class BirdCageBlock extends BaseEntityBlock {
         BlockPos origin = state.getValue(PART) ? cageBlock.findOrigin(level, pos, state.getValue(FACING)) : pos;
         if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || cage.isFull())
             return false;
-        if (!cage.tryInteract(level.getGameTime())) return false;
         if (!(cageBlock.asItem() instanceof BirdCageItem item)) return false;
         Entity carried = CarryOnHooks.carriedEntity(player);
         if (carried == null || !item.canFit(carried) || !BirdCageItem.canCapture(carried)) return false;
+        // 只有真的要装笼时才消耗本刻的交互去重标记；否则笼子没装满时会挡住同一次右键的
+        // useWithoutItem（取出/放出）逻辑，中/大型鸟笼因此取不出鸟。
+        if (!cage.tryInteract(level.getGameTime())) return false;
         CompoundTag bird = new CompoundTag();
         carried.saveWithoutId(bird);
         bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());

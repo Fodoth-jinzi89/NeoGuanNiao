@@ -1,0 +1,11 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "net.fodoth.skina.neoguanniao.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "fabric-fabric-refmap.json",
+  "mixins": [
+    "PlacementHandlerMixin"
+  ],
+  "injectors": { "defaultRequire": 0 }
+}

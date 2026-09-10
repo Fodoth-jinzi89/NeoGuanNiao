@@ -29,8 +29,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
-    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'], exclude: ['Jade-*.jar'])
-    modCompileOnly fileTree(dir: 'libs/compileOnly', include: ['Jade-*.jar'])
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'], exclude: ['Jade-*.jar', 'carryon-*.jar'])
+    modCompileOnly fileTree(dir: 'libs/compileOnly', include: ['Jade-*.jar', 'carryon-*.jar'])
     runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
     modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
     implementation project(path: ':common')

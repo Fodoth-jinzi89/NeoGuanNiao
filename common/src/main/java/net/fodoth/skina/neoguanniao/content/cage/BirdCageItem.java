@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.InteractionHand;
@@ -71,6 +72,29 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         return swapWithEquipmentSlot(this, level, player, hand);
+    }
+
+    /**
+     * 放置失败提示：仅在服务端、且玩家瞄准的是可替换方块（即确实是体积不够，而不是
+     * 在对着已经放好的鸟笼重复右键）时提示一次，避免放置成功后继续按住右键刷屏。
+     * <p>
+     * {@code getStateForPlacement} 会在客户端预测等场合被调用，不能在里面对玩家发消息。
+     * </p>
+     */
+    @Override
+    public @NotNull InteractionResult place(@NotNull BlockPlaceContext context) {
+        if (!context.getLevel().isClientSide
+                && getBlock() instanceof BirdCageBlock cage
+                && context.getLevel().getBlockState(context.getClickedPos()).canBeReplaced(context)
+                && !cage.hasRoomFor(context)) {
+            Player player = context.getPlayer();
+            if (player != null) {
+                player.displayClientMessage(Component.translatable(
+                        "message.neoguanniao.bird_cage.place_failed", 3, cage.structureHeight(), 3), true);
+            }
+            return InteractionResult.FAIL;
+        }
+        return super.place(context);
     }
 
     public boolean isFull(ItemStack stack) {
