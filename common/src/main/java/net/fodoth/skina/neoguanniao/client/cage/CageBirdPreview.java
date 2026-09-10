@@ -40,6 +40,9 @@ final class CageBirdPreview {
             this.tag = created == null ? null : tag.copy();
             this.tickedAt = Long.MIN_VALUE;
             if (created instanceof AbstractBirdEntity<?> bird) {
+                // 预览实体不会被 tick，捕捉时存档下来的残余 Motion 永远不会衰减，
+                // 会让鸟一直被判定为“移动中”而播放行走/奔跑动画，这里直接让它静止。
+                created.setDeltaMovement(0.0D, 0.0D, 0.0D);
                 // 笼中鸟不再与玩家互动，清掉捕捉时残留的好奇计时，避免一直播放好奇动画。
                 bird.getTickController().getTickTimer().getBirdCuriousTicker().setTicks(0);
             }
