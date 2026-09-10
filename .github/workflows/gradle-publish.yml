@@ -39,7 +39,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Build
-          path: build/libs/*.jar
+          path: |
+            fabric/build/libs/*.jar
+            neoforge/build/libs/*.jar
 
       # 自动上传 release jar 到 GitHub Release
       - name: Upload Release Assets
@@ -47,4 +49,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/libs/*.jar
+            fabric/build/libs/*.jar
+            neoforge/build/libs/*.jar
