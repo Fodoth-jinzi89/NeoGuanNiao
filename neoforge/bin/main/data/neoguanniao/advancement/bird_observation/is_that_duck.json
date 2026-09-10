@@ -1,0 +1,31 @@
+{
+  "parent": "neoguanniao:bird_observation/root",
+
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.is_that_duck.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.is_that_duck.description"
+    },
+    "hidden": true
+  },
+
+  "criteria": {
+    "observe": {
+      "trigger": "neoguanniao:spyglass_at_bird",
+      "conditions": {
+        "type": "NIGHT_HERON_RIVER"
+      }
+    }
+  },
+
+  "requirements": [
+    [
+      "observe"
+    ]
+  ]
+}

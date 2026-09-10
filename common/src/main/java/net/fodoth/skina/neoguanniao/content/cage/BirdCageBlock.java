@@ -25,12 +25,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -272,13 +276,42 @@ public class BirdCageBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hit) {
-        if (!(level.getBlockEntity(pos) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
+        BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
+        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
+        Entity carried = CarryOnHooks.carriedEntity(player);
+        if (cage.isEmpty() && carried != null && !level.isClientSide) {
+            BirdCageItem item = (BirdCageItem) asItem();
+            if (item.canFit(carried) && BirdCageItem.canCapture(carried)) {
+                CompoundTag bird = new CompoundTag();
+                carried.saveWithoutId(bird);
+                bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());
+                if (carried instanceof LivingEntity living) bird.putFloat("MaxHealth", living.getMaxHealth());
+                cage.setCapturedBird(bird);
+                CarryOnHooks.clearCarriedEntity(player);
+                return InteractionResult.sidedSuccess(false);
+            }
+        }
         if (player.isShiftKeyDown() && !cage.isEmpty()) {
             if (!level.isClientSide) {
-                ItemStack item = new ItemStack(this);
+                CompoundTag preview = cage.capturedBird();
+                Entity carriedEntity = EntityType.create(preview, level).orElse(null);
+                if (carriedEntity != null && CarryOnHooks.tryCarryEntity(player, carriedEntity)) {
+                    cage.removeCapturedBird();
+                    return InteractionResult.sidedSuccess(false);
+                }
+            }
+            if (!level.isClientSide) {
                 CompoundTag bird = cage.removeCapturedBird();
-                CustomData.update(DataComponents.CUSTOM_DATA, item, t -> t.put("CapturedBird", bird));
-                if (!player.getInventory().add(item)) player.drop(item, false);
+                Entity entity = EntityType.create(bird, level).orElse(null);
+                if (entity != null) {
+                    double centerX = origin.getX() + 0.5D;
+                    double centerY = origin.getY() + structureHeight() * 0.5D;
+                    double centerZ = origin.getZ() + 0.5D;
+                    entity.moveTo(centerX, centerY - entity.getBbHeight() * 0.5D, centerZ, player.getYRot(), 0.0F);
+                    level.addFreshEntity(entity);
+                } else {
+                    cage.setCapturedBird(bird);
+                }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

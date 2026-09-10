@@ -1,0 +1,31 @@
+{
+  "parent": "neoguanniao:bird_observation/is_that_duck",
+
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.is_that_penguin.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.is_that_penguin.description"
+    },
+    "hidden": true
+  },
+
+  "criteria": {
+    "observe": {
+      "trigger": "neoguanniao:spyglass_at_bird",
+      "conditions": {
+        "type": "NIGHT_HERON_SNOW"
+      }
+    }
+  },
+
+  "requirements": [
+    [
+      "observe"
+    ]
+  ]
+}

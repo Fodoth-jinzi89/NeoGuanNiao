@@ -1,0 +1,31 @@
+{
+  "parent": "neoguanniao:bird_observation/is_that_penguin",
+
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.is_that_cockroach.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.is_that_cockroach.description"
+    },
+    "hidden": true
+  },
+
+  "criteria": {
+    "observe": {
+      "trigger": "neoguanniao:spyglass_at_bird",
+      "conditions": {
+        "type": "NIGHT_HERON_SPECIAL"
+      }
+    }
+  },
+
+  "requirements": [
+    [
+      "observe"
+    ]
+  ]
+}

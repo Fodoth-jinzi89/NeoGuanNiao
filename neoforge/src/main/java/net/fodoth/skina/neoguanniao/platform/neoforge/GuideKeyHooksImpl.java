@@ -1,4 +1,4 @@
-package net.fodoth.skina.neoguanniao.platform;
+package net.fodoth.skina.neoguanniao.platform.neoforge;
 import net.fodoth.skina.neoguanniao.client.keybind.NeoGuanNiaoClientKeyBindings;
 public final class GuideKeyHooksImpl {
     private GuideKeyHooksImpl() {}

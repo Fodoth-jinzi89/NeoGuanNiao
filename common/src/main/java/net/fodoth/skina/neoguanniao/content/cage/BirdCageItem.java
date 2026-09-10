@@ -124,7 +124,7 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
         }
         return InteractionResult.sidedSuccess(player.level().isClientSide);
     }
-    private static boolean canCapture(Entity entity) {
+    static boolean canCapture(Entity entity) {
         if (ConfigHooks.birdCagesAllowAllEntities()) return true;
         if (!(entity instanceof LivingEntity)) return false;
         if (entity instanceof Enemy) return ConfigHooks.birdCagesAllowHostile();
@@ -132,7 +132,7 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
         return ConfigHooks.birdCagesAllowFriendly() || entity instanceof AbstractBirdEntity<?>;
     }
 
-    private boolean canFit(Entity entity) {
+    boolean canFit(Entity entity) {
         return Math.max(entity.getBbWidth(), entity.getBbHeight()) <= ConfigHooks.birdCageMaxEntitySize(variant.ordinal());
     }
 

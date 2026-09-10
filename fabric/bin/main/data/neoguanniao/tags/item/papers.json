@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:paper",
+      "required": false
+    },
+    {
+      "id": "#c:plates/cardboard",
+      "required": false
+    }
+  ]
+}

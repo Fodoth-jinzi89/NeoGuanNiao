@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:french_fries",
+      "required": false
+    },
+    {
+      "id": "#c:sweet_potato_friess",
+      "required": false
+    },
+    {
+      "id": "#c:fish_and_chips",
+      "required": false
+    },
+    {
+      "id": "flavor_immersed_daily:frenchfries",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_nether:nether_fries_platter",
+      "required": false
+    }
+  ]
+}

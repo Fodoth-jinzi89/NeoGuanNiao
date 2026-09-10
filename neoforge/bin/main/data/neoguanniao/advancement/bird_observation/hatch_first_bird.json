@@ -1,0 +1,28 @@
+{
+  "parent": "neoguanniao:bird_observation/first_egg",
+
+  "display": {
+    "icon": {
+      "id": "neoguanniao:bird_nest"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.hatch_first_bird.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.hatch_first_bird.description"
+    },
+    "hidden": true
+  },
+
+  "criteria": {
+    "hatch": {
+      "trigger": "neoguanniao:hatch_bird_egg"
+    }
+  },
+
+  "requirements": [
+    [
+      "hatch"
+    ]
+  ]
+}

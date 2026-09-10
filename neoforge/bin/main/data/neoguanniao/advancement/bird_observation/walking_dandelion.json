@@ -1,0 +1,27 @@
+{
+  "parent": "neoguanniao:bird_observation/root",
+
+  "display": {
+    "icon": {
+      "id": "neoguanniao:bird_feather"
+    },
+    "title": {
+      "translate": "advancements.neoguanniao.walking_dandelion.title"
+    },
+    "description": {
+      "translate": "advancements.neoguanniao.walking_dandelion.description"
+    }
+  },
+
+  "criteria": {
+    "pickup_feather": {
+      "trigger": "neoguanniao:pickup_bird_feather"
+    }
+  },
+
+  "requirements": [
+    [
+      "pickup_feather"
+    ]
+  ]
+}
