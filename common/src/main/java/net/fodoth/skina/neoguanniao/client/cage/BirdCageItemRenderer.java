@@ -7,14 +7,19 @@ import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 
 public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem> {
+
+    /**
+     * 物品栏中同时只会展示一个鸟笼，这里只缓存最近使用的预览实体
+     */
+    private final CageBirdPreview preview = new CageBirdPreview();
 
     @Override
     protected float additionalOffsetX(BirdCageItem item, ItemDisplayContext context) {
@@ -49,10 +54,13 @@ public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem>
     @Override
     public void preRender(PoseStack poseStack, BirdCageItem item, BakedGeoModel model, MultiBufferSource buffers, VertexConsumer vertex, boolean rerender, float partialTick, int light, int overlay, int colour) {
         super.preRender(poseStack, item, model, buffers, vertex, rerender, partialTick, light, overlay, colour);
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
         CompoundTag data = getCurrentItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (!data.contains("CapturedBird") || Minecraft.getInstance().level == null) return;
-        Entity entity = EntityType.create(data.getCompound("CapturedBird"), Minecraft.getInstance().level).orElse(null);
+        if (!data.contains("CapturedBird")) return;
+        Entity entity = preview.entity(level, data.getCompound("CapturedBird"));
         if (entity == null) return;
+        preview.tick(level);
         BirdCageEntityRender.resetRotation(entity);
         poseStack.pushPose();
         // 物品模型空间的原点已经是笼子中心，这里只需要抬到笼子几何中心的高度。
