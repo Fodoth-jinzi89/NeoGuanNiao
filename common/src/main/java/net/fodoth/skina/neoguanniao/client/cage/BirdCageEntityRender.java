@@ -22,6 +22,18 @@ final class BirdCageEntityRender {
     }
 
 
+    /**
+     * 每个笼位的落点，单位为像素：{左右偏移, 脚踩的支撑面高度, 前后偏移}。
+     * 数组下标与 {@link BirdCageVariant#ordinal()} 对应，笼位下标与捕捉顺序一致。
+     * 前方为 -Z；中型/大型鸟笼分别站在下（前）杠与上（后）杠上。
+     */
+    private static final double[][][] SLOT_OFFSETS = {
+            {{0, 2, 0}},
+            {{5, 14.525, -8.5}, {-5, 19.525, 4.5}},
+            {{7, 24.525, -4.5}, {-7, 24.525, -4.5}, {7, 35.425, 3.2}, {-7, 35.425, 3.2}},
+    };
+
+
     /** 鸟笼几何中心相对方块原点的纵向偏移（水平方向即方块中心）。 */
     static double centerY(BirdCageVariant variant) {
         return switch (variant) {
@@ -47,16 +59,23 @@ final class BirdCageEntityRender {
     }
 
 
-    /** 调用前需要先把当前坐标系原点移动到鸟笼中心。 */
-    static void render(Entity entity, BirdCageVariant variant, float yaw, float partialTick,
+    /**
+     * 调用前需要先把当前坐标系原点移动到鸟笼中心，实体随后会被摆到 {@code slot} 号笼位上。
+     */
+    static void render(Entity entity, BirdCageVariant variant, int slot, float yaw, float partialTick,
                        PoseStack poseStack, MultiBufferSource buffer, int light) {
         AABB bounds = entity.getBoundingBox();
         double maxEntitySize = variant.maxEntitySize();
         float scale = (float) Math.min(1.0D, Math.min(maxEntitySize / bounds.getXsize(),
                 Math.min(maxEntitySize / bounds.getYsize(), maxEntitySize / bounds.getZsize())));
         Vec3 entityCenter = bounds.getCenter().subtract(entity.position());
+        double[] slotOffset = slotOffset(variant, slot);
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        // 笼位落点相对鸟笼中心的位置；纵向要再补上缩放后的碰撞箱中心偏移，脚底才会正好踩在支撑面上。
+        poseStack.translate(slotOffset[0] / 16.0D,
+                slotOffset[1] / 16.0D - centerY(variant) + scale * entityCenter.y,
+                slotOffset[2] / 16.0D);
         poseStack.scale(scale, scale, scale);
         poseStack.translate(-entityCenter.x, -entityCenter.y, -entityCenter.z);
         var entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
@@ -73,5 +92,12 @@ final class BirdCageEntityRender {
             } catch (ReflectiveOperationException ignored) { }
         }
         poseStack.popPose();
+    }
+
+
+    /** 取出某笼位的落点；笼位下标越界时退回最后一个笼位。 */
+    private static double[] slotOffset(BirdCageVariant variant, int slot) {
+        double[][] slots = SLOT_OFFSETS[variant.ordinal()];
+        return slots[Math.min(Math.max(slot, 0), slots.length - 1)];
     }
 }

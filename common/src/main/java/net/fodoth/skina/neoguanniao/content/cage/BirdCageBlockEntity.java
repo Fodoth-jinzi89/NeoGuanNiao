@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,9 +20,13 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
-    private CompoundTag capturedBird;
+    /** 笼中的实体 NBT，按捕捉顺序排列；取出时从末尾拿（后进先出）。 */
+    private final List<CompoundTag> capturedBirds = new ArrayList<>();
 
 
     private final AnimatableInstanceCache animationCache =
@@ -54,23 +60,32 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
     }
 
     public boolean isEmpty() {
-        return capturedBird == null;
+        return capturedBirds.isEmpty();
     }
 
-    public CompoundTag capturedBird() {
-        return capturedBird;
+    public boolean isFull() {
+        return capturedBirds.size() >= variant().capacity();
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean setCapturedBird(CompoundTag tag) {
-        this.capturedBird = tag == null || tag.isEmpty() ? null : tag.copy();
+    /** 笼中的实体 NBT 列表，下标即捕捉顺序。 */
+    public List<CompoundTag> capturedBirds() {
+        return capturedBirds;
+    }
+
+    /** 最后被装进笼子的实体（后进先出的那一个）。 */
+    public CompoundTag lastCapturedBird() {
+        return capturedBirds.isEmpty() ? null : capturedBirds.get(capturedBirds.size() - 1);
+    }
+
+    public void addCapturedBird(CompoundTag tag) {
+        if (tag == null || tag.isEmpty()) return;
+        capturedBirds.add(tag.copy());
         setChanged();
-        return true;
     }
 
-    public CompoundTag removeCapturedBird() {
-        CompoundTag tag = capturedBird;
-        capturedBird = null;
+    public CompoundTag removeLastCapturedBird() {
+        if (capturedBirds.isEmpty()) return null;
+        CompoundTag tag = capturedBirds.remove(capturedBirds.size() - 1);
         setChanged();
         return tag;
     }
@@ -91,13 +106,24 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        if (capturedBird != null) tag.put("CapturedBird", capturedBird);
+        if (!capturedBirds.isEmpty()) {
+            ListTag list = new ListTag();
+            for (CompoundTag bird : capturedBirds) list.add(bird.copy());
+            tag.put("CapturedBirds", list);
+        }
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        capturedBird = tag.contains("CapturedBird") ? tag.getCompound("CapturedBird").copy() : null;
+        capturedBirds.clear();
+        if (tag.contains("CapturedBirds", Tag.TAG_LIST)) {
+            ListTag list = tag.getList("CapturedBirds", Tag.TAG_COMPOUND);
+            for (int i = 0; i < list.size(); i++) capturedBirds.add(list.getCompound(i).copy());
+        } else if (tag.contains("CapturedBird")) {
+            // 兼容只存了一只鸟的旧存档。
+            capturedBirds.add(tag.getCompound("CapturedBird").copy());
+        }
     }
 
     @Override

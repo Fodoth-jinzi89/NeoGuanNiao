@@ -19,10 +19,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
@@ -70,16 +73,34 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
     }
 
     public boolean isFull(ItemStack stack) {
-        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("CapturedBird");
+        return capturedBirds(stack).size() >= variant.capacity();
+    }
+
+    /** 读取鸟笼物品中按捕捉顺序排列的实体 NBT；兼容只存一只的旧格式。 */
+    public static List<CompoundTag> capturedBirds(ItemStack stack) {
+        CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        List<CompoundTag> birds = new ArrayList<>();
+        if (data.contains("CapturedBirds", Tag.TAG_LIST)) {
+            ListTag list = data.getList("CapturedBirds", Tag.TAG_COMPOUND);
+            for (int i = 0; i < list.size(); i++) birds.add(list.getCompound(i));
+        } else if (data.contains("CapturedBird")) {
+            birds.add(data.getCompound("CapturedBird"));
+        }
+        return birds;
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context,
                                 @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (!data.contains("CapturedBird")) return;
-        CompoundTag bird = data.getCompound("CapturedBird");
+        List<CompoundTag> birds = capturedBirds(stack);
+        for (int i = 0; i < birds.size(); i++) {
+            if (i > 0) tooltip.add(Component.empty());
+            appendBirdTooltip(tooltip, birds.get(i));
+        }
+    }
+
+    private static void appendBirdTooltip(List<Component> tooltip, CompoundTag bird) {
         Component name = null;
         if (bird.contains("CustomName")) {
             try { name = Component.Serializer.fromJson(bird.getString("CustomName"), RegistryAccess.EMPTY); }
@@ -119,7 +140,13 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
             target.saveWithoutId(tag);
             tag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()).toString());
             if (target instanceof LivingEntity living) tag.putFloat("MaxHealth", living.getMaxHealth());
-            CustomData.update(DataComponents.CUSTOM_DATA, stack, t -> t.put("CapturedBird", tag));
+            ListTag list = new ListTag();
+            for (CompoundTag bird : capturedBirds(stack)) list.add(bird.copy());
+            list.add(tag);
+            CustomData.update(DataComponents.CUSTOM_DATA, stack, t -> {
+                t.remove("CapturedBird");
+                t.put("CapturedBirds", list);
+            });
             target.discard();
         }
         return InteractionResult.sidedSuccess(player.level().isClientSide);

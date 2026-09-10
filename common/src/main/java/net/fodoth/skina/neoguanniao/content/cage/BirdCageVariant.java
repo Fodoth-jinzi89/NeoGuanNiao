@@ -87,4 +87,14 @@ public enum BirdCageVariant {
     }
 
     public float maxEntitySize() { return maxEntitySize; }
+
+
+    /** 该规格鸟笼最多能装下的实体数量。 */
+    public int capacity() {
+        return switch (this) {
+            case SMALL -> 1;
+            case MEDIUM -> 2;
+            case LARGE -> 4;
+        };
+    }
 }

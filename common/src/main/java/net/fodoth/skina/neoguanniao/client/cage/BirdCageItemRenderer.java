@@ -8,18 +8,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem> {
 
     /**
      * 物品栏中同时只会展示一个鸟笼，这里只缓存最近使用的预览实体
      */
-    private final CageBirdPreview preview = new CageBirdPreview();
+    private final List<CageBirdPreview> previews = new ArrayList<>();
 
     @Override
     protected float additionalOffsetX(BirdCageItem item, ItemDisplayContext context) {
@@ -56,16 +57,19 @@ public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem>
         super.preRender(poseStack, item, model, buffers, vertex, rerender, partialTick, light, overlay, colour);
         Level level = Minecraft.getInstance().level;
         if (level == null) return;
-        CompoundTag data = getCurrentItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (!data.contains("CapturedBird")) return;
-        Entity entity = preview.entity(level, data.getCompound("CapturedBird"));
-        if (entity == null) return;
-        preview.tick(level);
-        BirdCageEntityRender.resetRotation(entity);
-        poseStack.pushPose();
-        // 物品模型空间的原点已经是笼子中心，这里只需要抬到笼子几何中心的高度。
-        poseStack.translate(0.0F, (float) BirdCageEntityRender.centerY(item.variant()), 0.0F);
-        BirdCageEntityRender.render(entity, item.variant(), 0.0F, partialTick, poseStack, buffers, light);
-        poseStack.popPose();
+        List<CompoundTag> birds = BirdCageItem.capturedBirds(getCurrentItemStack());
+        if (birds.isEmpty()) return;
+        CageBirdPreview.sync(previews, birds.size());
+        for (int slot = 0; slot < birds.size(); slot++) {
+            Entity entity = previews.get(slot).entity(level, birds.get(slot));
+            if (entity == null) continue;
+            previews.get(slot).tick(level);
+            BirdCageEntityRender.resetRotation(entity);
+            poseStack.pushPose();
+            // 物品模型空间的原点已经是笼子中心，这里只需要抬到笼子几何中心的高度。
+            poseStack.translate(0.0F, (float) BirdCageEntityRender.centerY(item.variant()), 0.0F);
+            BirdCageEntityRender.render(entity, item.variant(), slot, 0.0F, partialTick, poseStack, buffers, light);
+            poseStack.popPose();
+        }
     }
 }

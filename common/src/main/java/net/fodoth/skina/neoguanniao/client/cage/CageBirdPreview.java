@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * 鸟笼中预览实体的缓存与行为驱动。
  *
@@ -29,6 +31,18 @@ final class CageBirdPreview {
     private CompoundTag tag;
     private Entity entity;
     private long tickedAt = Long.MIN_VALUE;
+
+    /**
+     * 把预览列表的长度调整到与笼中实体数量一致；后进先出只会在末尾增删，索引因此始终对应笼中第几只。
+     */
+    static void sync(List<CageBirdPreview> previews, int count) {
+        while (previews.size() > count) {
+            previews.remove(previews.size() - 1);
+        }
+        while (previews.size() < count) {
+            previews.add(new CageBirdPreview());
+        }
+    }
 
     /**
      * 获取与给定 NBT 对应的预览实体，NBT 变化时重新创建。

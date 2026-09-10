@@ -54,7 +54,8 @@ public final class NeoGuanNiaoJadePlugin implements IWailaPlugin, IBlockComponen
         @Override public void appendServerData(CompoundTag data, BlockAccessor accessor) {
             BlockEntityInfo info = findCage(accessor);
             if (info == null) return;
-            CompoundTag bird = info.cage.capturedBird();
+            CompoundTag bird = info.cage.lastCapturedBird();
+            if (bird == null) return;
             data.putString("id", bird.getString("id"));
             data.putString("name", bird.contains("CustomName") ? bird.getString("CustomName") : "");
             data.putFloat("health", bird.contains("Health") ? bird.getFloat("Health") : 0);

@@ -29,8 +29,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
@@ -195,8 +193,7 @@ public class BirdCageBlock extends BaseEntityBlock {
                             @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (level.getBlockEntity(pos) instanceof BirdCageBlockEntity cage) {
-            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-            if (tag.contains("CapturedBird")) cage.setCapturedBird(tag.getCompound("CapturedBird"));
+            for (CompoundTag bird : BirdCageItem.capturedBirds(stack)) cage.addCapturedBird(bird);
         }
         if (state.getValue(PART) || variant == BirdCageVariant.SMALL) return;
         int height = structureHeight();
@@ -280,24 +277,24 @@ public class BirdCageBlock extends BaseEntityBlock {
         if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage)) return InteractionResult.PASS;
         // 主手和副手会在同一个游戏刻各触发一次交互，避免同一次右键被处理两次。
         if (!cage.tryInteract(level.getGameTime())) return InteractionResult.PASS;
-        if (cage.isEmpty() && storeCarriedEntity(level, pos, player)) {
+        if (!cage.isFull() && storeCarriedEntity(level, pos, player)) {
             return InteractionResult.sidedSuccess(false);
         }
         if (player.isShiftKeyDown() && !cage.isEmpty()) {
             if (!level.isClientSide) {
-                CompoundTag preview = cage.capturedBird();
+                CompoundTag preview = cage.lastCapturedBird();
                 Entity carriedEntity = EntityType.create(preview, level).orElse(null);
                 if (carriedEntity != null && CarryOnHooks.isLoaded()) {
                     // Carry On 会检查实体与玩家的距离，先把实体挪到玩家身上再交给它。
                     carriedEntity.moveTo(player.getX(), player.getY(), player.getZ());
                     if (CarryOnHooks.tryCarryEntity(player, carriedEntity)) {
-                        cage.removeCapturedBird();
+                        cage.removeLastCapturedBird();
                         return InteractionResult.sidedSuccess(false);
                     }
                 }
             }
             if (!level.isClientSide) {
-                CompoundTag bird = cage.removeCapturedBird();
+                CompoundTag bird = cage.removeLastCapturedBird();
                 Entity entity = EntityType.create(bird, level).orElse(null);
                 if (entity != null) {
                     double centerX = origin.getX() + 0.5D;
@@ -306,7 +303,7 @@ public class BirdCageBlock extends BaseEntityBlock {
                     entity.moveTo(centerX, centerY - entity.getBbHeight() * 0.5D, centerZ, player.getYRot(), 0.0F);
                     level.addFreshEntity(entity);
                 } else {
-                    cage.setCapturedBird(bird);
+                    cage.addCapturedBird(bird);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -328,7 +325,7 @@ public class BirdCageBlock extends BaseEntityBlock {
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof BirdCageBlock cageBlock)) return false;
         BlockPos origin = state.getValue(PART) ? cageBlock.findOrigin(level, pos, state.getValue(FACING)) : pos;
-        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || !cage.isEmpty()) return false;
+        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage) || cage.isFull()) return false;
         if (!cage.tryInteract(level.getGameTime())) return false;
         if (!(cageBlock.asItem() instanceof BirdCageItem item)) return false;
         Entity carried = CarryOnHooks.carriedEntity(player);
@@ -337,7 +334,7 @@ public class BirdCageBlock extends BaseEntityBlock {
         carried.saveWithoutId(bird);
         bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());
         if (carried instanceof LivingEntity living) bird.putFloat("MaxHealth", living.getMaxHealth());
-        cage.setCapturedBird(bird);
+        cage.addCapturedBird(bird);
         CarryOnHooks.clearCarriedEntity(player);
         return true;
     }
