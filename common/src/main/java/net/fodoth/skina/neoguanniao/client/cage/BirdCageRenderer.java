@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
@@ -41,7 +42,11 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
             cachedPreviews.remove(cage);
             return;
         }
-        preview.tick(cage.getLevel());
+        // 笼中鸟不会 tick，环境音（鸣叫）由预览驱动按 Mob.baseTick 的规则补上，
+        // 声源取鸟笼几何中心，听起来就和笼外的鸟一样。
+        var cagePos = cage.getBlockPos();
+        preview.tick(cage.getLevel(), new Vec3(cagePos.getX() + 0.5D,
+                cagePos.getY() + BirdCageEntityRender.centerY(cage.variant()), cagePos.getZ() + 0.5D));
         BirdCageEntityRender.resetRotation(entity);
         float entityPartialTick = entity instanceof AbstractBirdEntity<?> ? partialTick : 0.0F;
         poseStack.pushPose();

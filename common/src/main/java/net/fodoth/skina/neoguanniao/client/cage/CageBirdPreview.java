@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 鸟笼中预览实体的缓存与行为驱动。
@@ -54,6 +56,15 @@ final class CageBirdPreview {
      * 按游戏 tick 推进预览鸟自身的计时器与行为状态，同一 tick 内重复调用（重渲染）不会重复推进。
      */
     void tick(Level level) {
+        tick(level, null);
+    }
+
+    /**
+     * 同上，并让笼中鸟在 {@code soundAnchor} 处像笼外的鸟一样鸣叫。
+     *
+     * @param soundAnchor 鸣叫的声源位置，{@code null} 表示没有世界位置（例如物品栏、手中的鸟笼）而不发声
+     */
+    void tick(Level level, @Nullable Vec3 soundAnchor) {
         if (!(this.entity instanceof AbstractBirdEntity<?> bird)) {
             return;
         }
@@ -66,6 +77,17 @@ final class CageBirdPreview {
         bird.tickCount = (int) gameTime;
         // 推进待机动画等客户端计时器，待机动画会像真实鸟一样按自己的节奏更换。
         bird.getTickController().tickClient();
+
+        if (soundAnchor != null) {
+            // 预览实体不在世界里，声源位置得自己摆到鸟笼上，否则会从捕捉时记录的坐标发声。
+            bird.setPos(soundAnchor.x, soundAnchor.y, soundAnchor.z);
+            // 预览实体不会被 tick，Mob.baseTick 里的环境音判定不会执行；这里按同样的规则补一次：
+            // 计时每刻 +1，命中后按 interval 复位并播放环境音，鸣叫频率与笼外的鸟一致。
+            if (bird.getRandom().nextInt(1000) < bird.ambientSoundTime++) {
+                bird.ambientSoundTime = -bird.getAmbientSoundInterval();
+                bird.playAmbientSound();
+            }
+        }
 
         var stateController = bird.getBehaviorStateController();
         var routineController = bird.getRoutineController();
