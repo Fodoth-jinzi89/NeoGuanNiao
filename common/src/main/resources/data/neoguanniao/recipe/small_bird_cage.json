@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "decorations",
   "pattern": [
-    "SSS",
-    "S S",
-    "PPP"
+    "AAA",
+    "A A",
+    "BBB"
   ],
   "key": {
-    "S": {
+    "A": {
       "item": "minecraft:stick"
     },
-    "P": {
-      "tag": "minecraft:planks"
+    "B": {
+      "tag": "minecraft:wooden_slabs"
     }
   },
   "result": {

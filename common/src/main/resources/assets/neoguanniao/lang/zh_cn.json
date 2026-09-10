@@ -352,6 +352,7 @@
   "config.neoguanniao.bird_cages.allow_neutral": "允许中立生物",
   "config.neoguanniao.bird_cages.allow_friendly": "允许友好生物",
   "config.neoguanniao.bird_cages.allow_all": "允许所有生物",
+  "config.neoguanniao.bird_cages.allow_all_entities": "允许所有生物",
   "config.neoguanniao.bird_cages.show_registry_name": "提示实体注册名",
   "config.neoguanniao.bird_cages.show_health": "提示实体生命值",
   "config.neoguanniao.camera.uploads_enabled": "启用照片上传",

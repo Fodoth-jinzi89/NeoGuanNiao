@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "decorations",
   "pattern": [
-    " S ",
-    "SCS",
-    " S "
+    "AAA",
+    "A A",
+    "BBB"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
+    "A": {
+      "tag": "minecraft:wooden_fences"
     },
-    "C": {
-      "item": "neoguanniao:small_bird_cage"
+    "B": {
+      "tag": "minecraft:logs"
     }
   },
   "result": {

@@ -41,6 +41,13 @@ public final class NeoGuanNiaoFabricConfig {
     public static final Setting WHEEL_FOCUS_STEP = define("wheelFocusStep", int.class, 1, 1, 32);
     public static final Setting MOUSE_SENSITIVITY = define("mouseSensitivity", double.class, 1.0D, 0.1D, 4.0D);
     public static final Setting ENABLE_PREVIEW_POST_EFFECT = define("enablePreviewPostEffect", boolean.class, true, 0, 1);
+    public static final Setting BIRD_CAGES_SMALL_MAX_ENTITY_SIZE = define("birdCagesSmallMaxEntitySize", double.class, 0.55D, 0.1D, 8.0D);
+    public static final Setting BIRD_CAGES_MEDIUM_MAX_ENTITY_SIZE = define("birdCagesMediumMaxEntitySize", double.class, 1.0D, 0.1D, 8.0D);
+    public static final Setting BIRD_CAGES_LARGE_MAX_ENTITY_SIZE = define("birdCagesLargeMaxEntitySize", double.class, 2.0D, 0.1D, 8.0D);
+    public static final Setting BIRD_CAGES_ALLOW_HOSTILE = define("birdCagesAllowHostile", boolean.class, false, 0, 1);
+    public static final Setting BIRD_CAGES_ALLOW_NEUTRAL = define("birdCagesAllowNeutral", boolean.class, false, 0, 1);
+    public static final Setting BIRD_CAGES_ALLOW_FRIENDLY = define("birdCagesAllowFriendly", boolean.class, true, 0, 1);
+    public static final Setting BIRD_CAGES_ALLOW_ALL_ENTITIES = define("birdCagesAllowAllEntities", boolean.class, false, 0, 1);
     public static final Setting BIRD_CAGES_SHOW_REGISTRY_NAME = define("birdCagesShowRegistryName", boolean.class, false, 0, 1);
     public static final Setting BIRD_CAGES_SHOW_HEALTH = define("birdCagesShowHealth", boolean.class, true, 0, 1);
 

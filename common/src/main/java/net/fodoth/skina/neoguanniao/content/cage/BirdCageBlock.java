@@ -33,6 +33,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -309,11 +311,13 @@ public class BirdCageBlock extends BaseEntityBlock {
                 CompoundTag bird = cage.removeCapturedBird(index);
                 Entity entity = EntityType.create(bird, level).orElse(null);
                 if (entity != null) {
-                    double centerX = origin.getX() + 0.5D;
-                    double centerY = origin.getY() + structureHeight() * 0.5D;
-                    double centerZ = origin.getZ() + 0.5D;
-                    entity.moveTo(centerX, centerY - entity.getBbHeight() * 0.5D, centerZ, player.getYRot(), 0.0F);
+                    Vec3 spawn = findReleasePos(level, origin, state.getValue(FACING), entity);
+                    entity.moveTo(spawn.x, spawn.y, spawn.z, player.getYRot(), 0.0F);
                     level.addFreshEntity(entity);
+                    // 刚放出来的鸟先落地站定一段时间，不要一出笼就起飞。
+                    if (entity instanceof AbstractBirdEntity<?> releasedBird) {
+                        releasedBird.settleAfterRelease();
+                    }
                 } else {
                     cage.addCapturedBird(bird, BirdCageBlockEntity.slotOf(bird, index));
                 }
@@ -321,6 +325,43 @@ public class BirdCageBlock extends BaseEntityBlock {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    /**
+     * 找笼子外侧的放出位置。
+     * <p>
+     * 笼子占地 3×3，实体放在笼内会和占位方块重合，因此从笼子正面开始绕笼一圈，隔一格找一个外侧位置：
+     * 用高度图取该列的地面高度，并要求实体的碰撞箱放得下。优先取与笼底高度接近的地面，
+     * 一个可用位置都没有时退回笼子中心（旧行为）。
+     * </p>
+     */
+    private Vec3 findReleasePos(Level level, BlockPos origin, Direction facing, Entity entity) {
+        // 中/大型鸟笼占地 3×3，外墙在 origin ±1，再多隔一格（±2）才在笼子外面；小型鸟笼只有 origin 一格，贴边即可。
+        int distance = variant == BirdCageVariant.SMALL ? 1 : 2;
+        Vec3 firstValid = null;
+        Direction side = facing;
+        for (int i = 0; i < 4; i++) {
+            int x = origin.getX() + side.getStepX() * distance;
+            int z = origin.getZ() + side.getStepZ() * distance;
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            Vec3 pos = new Vec3(x + 0.5D, y, z + 0.5D);
+            if (y > level.getMinBuildHeight()
+                    && !level.getBlockState(new BlockPos(x, y - 1, z)).isAir()
+                    && level.noCollision(entity, entity.getDimensions(entity.getPose()).makeBoundingBox(pos))) {
+                if (Math.abs(y - origin.getY()) <= 2) {
+                    return pos;
+                }
+                if (firstValid == null) {
+                    firstValid = pos;
+                }
+            }
+            side = side.getClockWise();
+        }
+        if (firstValid != null) {
+            return firstValid;
+        }
+        double centerY = origin.getY() + structureHeight() * 0.5D - entity.getBbHeight() * 0.5D;
+        return new Vec3(origin.getX() + 0.5D, centerY, origin.getZ() + 0.5D);
     }
 
     /**

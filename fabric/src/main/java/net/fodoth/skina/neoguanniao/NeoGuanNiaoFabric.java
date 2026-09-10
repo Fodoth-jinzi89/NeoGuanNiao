@@ -1,6 +1,8 @@
 package net.fodoth.skina.neoguanniao;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoFabricNetwork;
 import net.fabricmc.loader.api.FabricLoader;
@@ -44,11 +46,18 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
         NeoGuanNiaoVillagerProfessions.registerPoi();
         NeoGuanNiaoVillagerProfessions.POI_TYPES_REGISTER.register();
         registerPoiBlockStates();
+        registerNestItemStorage();
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register();
         NeoGuanNiaoFabricVillagerTrades.register();
         NeoGuanNiaoFabricSpawns.register();
         NeoGuanNiaoFabricNetwork.register();
         NeoGuanNiaoFabricServerEvents.register();
+    }
+
+    // 漏斗/自动化：把鸟巢暴露为 fabric-transfer 的物品存储（对应 NeoForge 的 Capabilities.ItemHandler.BLOCK）。
+    private static void registerNestItemStorage() {
+        ItemStorage.SIDED.registerForBlockEntity(InventoryStorage::of,
+                NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get());
     }
 
     private static void registerPoiBlockStates() {

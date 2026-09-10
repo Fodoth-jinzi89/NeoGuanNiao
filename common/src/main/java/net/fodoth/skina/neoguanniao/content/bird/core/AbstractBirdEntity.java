@@ -177,6 +177,32 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
         return true;
     }
 
+    /**
+     * 被放出后的落地缓冲时间（Tick）：先落地站定，过了这段时间才恢复自主行动。
+     */
+    public static final int RELEASE_SETTLE_TICKS = 100;
+
+    private int releaseSettleTicks;
+
+    /**
+     * 刚从鸟笼里放出来：落到地面站定一段时间，期间不走动也不主动起飞。
+     */
+    public void settleAfterRelease() {
+        this.releaseSettleTicks = RELEASE_SETTLE_TICKS;
+        setNoGravity(false);
+        setDeltaMovement(Vec3.ZERO);
+        hasImpulse = true;
+        fallDistance = 0.0F;
+        getNavigation().stop();
+        // ALERT 属于逃逸状态，会挡住所有地面移动目标，让鸟先站在原地。
+        getBehaviorStateController().setBehaviorStateFor(BirdBehaviorState.ALERT, RELEASE_SETTLE_TICKS);
+    }
+
+    /** 是否还在“刚被放出”的缓冲时间内。 */
+    public boolean isSettlingAfterRelease() {
+        return releaseSettleTicks > 0;
+    }
+
     /** Species-specific multiplier for the ground walk-around goal. */
     public double getWalkAroundSpeedMultiplier() {
         return 1.0D;
@@ -561,6 +587,9 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
     @Override
     public void aiStep() {
         super.aiStep();
+        if (releaseSettleTicks > 0) {
+            --releaseSettleTicks;
+        }
         if (this.level().isClientSide) {
             getTickController().tickClient();
         } else {

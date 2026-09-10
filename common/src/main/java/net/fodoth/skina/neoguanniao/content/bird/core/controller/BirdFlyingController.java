@@ -108,7 +108,7 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
      * @param fleeing 是否为逃跑飞行
      */
     public void startShortFlight(Vec3 target, boolean fleeing) {
-        if (!bird().canFly() || bird().isLeashed()) {
+        if (!bird().canFly() || bird().isLeashed() || bird().isSettlingAfterRelease()) {
             return;
         }
         var timer = bird.getTickController().getTickTimer();

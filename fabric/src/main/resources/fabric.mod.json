@@ -7,7 +7,8 @@
   "entrypoints": {
     "main": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabric"],
     "client": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabricClient"],
-    "emi": ["net.fodoth.skina.neoguanniao.compat.emi.NeoGuanNiaoFabricEmiPlugin"]
+    "emi": ["net.fodoth.skina.neoguanniao.compat.emi.NeoGuanNiaoFabricEmiPlugin"],
+    "jade": ["net.fodoth.skina.neoguanniao.compat.jade.NeoGuanNiaoFabricJadePlugin"]
   },
   "mixins": [
     "neoguanniao.mixins.json",
@@ -26,6 +27,7 @@
   },
   "suggests": {
     "cloth-config": ">=15.0.140",
-    "emi": ">=1.1.24"
+    "emi": ">=1.1.24",
+    "jade": ">=15.10.6"
   }
 }
