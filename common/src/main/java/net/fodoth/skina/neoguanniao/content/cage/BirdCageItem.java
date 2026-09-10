@@ -105,7 +105,8 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
         for (int i = 0; i < birds.size(); i++) {
             if (i > 0) lines.add(Component.empty());
             CompoundTag bird = birds.get(i);
-            lines.add(Component.translatable("item.neoguanniao.bird_cage.slot", i + 1).withStyle(ChatFormatting.GOLD)
+            lines.add(Component.translatable("item.neoguanniao.bird_cage.slot",
+                            BirdCageBlockEntity.slotOf(bird, i) + 1).withStyle(ChatFormatting.GOLD)
                     .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
                     .append(birdName(bird).copy().withStyle(ChatFormatting.AQUA)));
             String id = bird.getString("id");
@@ -151,8 +152,11 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
             target.saveWithoutId(tag);
             tag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()).toString());
             if (target instanceof LivingEntity living) tag.putFloat("MaxHealth", living.getMaxHealth());
+            List<CompoundTag> birds = capturedBirds(stack);
+            // 鸟笼物品没有朝向，笼位只影响它在笼中的站位，挑编号最小的空笼位即可。
+            tag.putInt(BirdCageBlockEntity.SLOT_KEY, BirdCageBlockEntity.freeSlot(birds, variant.capacity(), -1));
             ListTag list = new ListTag();
-            for (CompoundTag bird : capturedBirds(stack)) list.add(bird.copy());
+            for (CompoundTag bird : birds) list.add(bird.copy());
             list.add(tag);
             CustomData.update(DataComponents.CUSTOM_DATA, stack, t -> {
                 t.remove("CapturedBird");

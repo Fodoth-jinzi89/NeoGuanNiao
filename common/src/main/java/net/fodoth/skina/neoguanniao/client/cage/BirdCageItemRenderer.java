@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.client.cage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fodoth.skina.neoguanniao.client.DefaultBlockItemRenderer;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -60,15 +61,16 @@ public class BirdCageItemRenderer extends DefaultBlockItemRenderer<BirdCageItem>
         List<CompoundTag> birds = BirdCageItem.capturedBirds(getCurrentItemStack());
         if (birds.isEmpty()) return;
         CageBirdPreview.sync(previews, birds.size());
-        for (int slot = 0; slot < birds.size(); slot++) {
-            Entity entity = previews.get(slot).entity(level, birds.get(slot));
+        for (int index = 0; index < birds.size(); index++) {
+            Entity entity = previews.get(index).entity(level, birds.get(index));
             if (entity == null) continue;
-            previews.get(slot).tick(level);
+            previews.get(index).tick(level);
             BirdCageEntityRender.resetRotation(entity);
             poseStack.pushPose();
             // 物品模型空间的原点已经是笼子中心，这里只需要抬到笼子几何中心的高度。
             poseStack.translate(0.0F, (float) BirdCageEntityRender.centerY(item.variant()), 0.0F);
-            BirdCageEntityRender.render(entity, item.variant(), slot, 0.0F, partialTick, poseStack, buffers, light);
+            BirdCageEntityRender.render(entity, item.variant(),
+                    BirdCageBlockEntity.slotOf(birds.get(index), index), 0.0F, partialTick, poseStack, buffers, light);
             poseStack.popPose();
         }
     }

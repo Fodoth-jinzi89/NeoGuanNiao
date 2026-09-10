@@ -67,7 +67,7 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
         return capturedBirds.size() >= variant().capacity();
     }
 
-    /** 笼中的实体 NBT 列表，下标即捕捉顺序。 */
+    /** 笼中的实体 NBT 列表，下标即捕捉顺序；每只实体占哪个笼位存在 {@link #SLOT_KEY} 里。 */
     public List<CompoundTag> capturedBirds() {
         return capturedBirds;
     }
@@ -78,16 +78,64 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
     }
 
     public void addCapturedBird(CompoundTag tag) {
+        addCapturedBird(tag, -1);
+    }
+
+    /**
+     * 追加一只实体，并让它优先占用 {@code preferredSlot} 号笼位；该笼位已被占用（或下标不合法）
+     * 时退回编号最小的空闲笼位。列表顺序始终是捕捉顺序，取出时的“最后一只”不受笼位影响。
+     */
+    public void addCapturedBird(CompoundTag tag, int preferredSlot) {
         if (tag == null || tag.isEmpty()) return;
-        capturedBirds.add(tag.copy());
+        CompoundTag copy = tag.copy();
+        copy.putInt(SLOT_KEY, freeSlot(capturedBirds, variant().capacity(), preferredSlot));
+        capturedBirds.add(copy);
         setChanged();
     }
 
     public CompoundTag removeLastCapturedBird() {
-        if (capturedBirds.isEmpty()) return null;
-        CompoundTag tag = capturedBirds.remove(capturedBirds.size() - 1);
+        return removeCapturedBird(capturedBirds.size() - 1);
+    }
+
+    /** 取出列表下标 {@code index} 处的实体；下标越界（含笼子为空）时返回 null。 */
+    public CompoundTag removeCapturedBird(int index) {
+        if (index < 0 || index >= capturedBirds.size()) return null;
+        CompoundTag tag = capturedBirds.remove(index);
         setChanged();
         return tag;
+    }
+
+    /** 占着 {@code slot} 号笼位的实体在列表里的下标；该笼位是空的时返回 -1。 */
+    public int indexOfSlot(int slot) {
+        if (slot < 0) return -1;
+        for (int i = 0; i < capturedBirds.size(); i++) {
+            if (slotOf(capturedBirds.get(i), i) == slot) return i;
+        }
+        return -1;
+    }
+
+    /** 实体 NBT 里记录笼位的键；旧存档没有这个键，按下标处理。 */
+    public static final String SLOT_KEY = "CageSlot";
+
+    /** 实体所在的笼位下标；没有 {@link #SLOT_KEY} 的旧数据按列表下标处理。 */
+    public static int slotOf(CompoundTag bird, int index) {
+        return bird.contains(SLOT_KEY) ? bird.getInt(SLOT_KEY) : index;
+    }
+
+    /** 优先使用 {@code preferredSlot} 号笼位；它不空闲时退回编号最小的空闲笼位。 */
+    public static int freeSlot(List<CompoundTag> birds, int capacity, int preferredSlot) {
+        if (preferredSlot >= 0 && preferredSlot < capacity && !isSlotTaken(birds, preferredSlot)) return preferredSlot;
+        for (int slot = 0; slot < capacity; slot++) {
+            if (!isSlotTaken(birds, slot)) return slot;
+        }
+        return Math.max(capacity - 1, 0);
+    }
+
+    private static boolean isSlotTaken(List<CompoundTag> birds, int slot) {
+        for (int i = 0; i < birds.size(); i++) {
+            if (slotOf(birds.get(i), i) == slot) return true;
+        }
+        return false;
     }
 
     private long lastInteractTick = Long.MIN_VALUE;
@@ -123,6 +171,11 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
         } else if (tag.contains("CapturedBird")) {
             // 兼容只存了一只鸟的旧存档。
             capturedBirds.add(tag.getCompound("CapturedBird").copy());
+        }
+        for (int i = 0; i < capturedBirds.size(); i++) {
+            // 旧存档没有笼位信息，按列表下标补一份，之后取出中间的鸟也不会让其他鸟换笼位。
+            CompoundTag bird = capturedBirds.get(i);
+            if (!bird.contains(SLOT_KEY)) bird.putInt(SLOT_KEY, i);
         }
     }
 

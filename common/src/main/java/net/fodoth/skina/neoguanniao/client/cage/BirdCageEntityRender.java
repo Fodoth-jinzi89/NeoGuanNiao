@@ -22,21 +22,6 @@ final class BirdCageEntityRender {
     }
 
 
-    /**
-     * 每个笼位的落点，单位为像素：{左右偏移, 脚踩的支撑面高度, 前后偏移}。
-     * 数组下标与 {@link BirdCageVariant#ordinal()} 对应，笼位下标与捕捉顺序一致。
-     *
-     * <p>GeoBlockRenderer 用 {@code 180 - FACING.toYRot()} 旋转笼子模型，而这里传入的 yaw 是
-     * {@code -FACING.toYRot()}，两套旋转相差 180°，所以本表的水平坐标与模型坐标互为反号：
-     * 表中 z 为正对应模型里的前方（-Z）。中型/大型鸟笼分别站在下（前）杠与上（后）杠上。</p>
-     */
-    private static final double[][][] SLOT_OFFSETS = {
-            {{0, 2, 0}},
-            {{5, 14.525, 8.5}, {-5, 19.525, -4.5}},
-            {{7, 24.525, 4.5}, {-7, 24.525, 4.5}, {7, 35.425, -3.2}, {-7, 35.425, -3.2}},
-    };
-
-
     /** 鸟笼几何中心相对方块原点的纵向偏移（水平方向即方块中心）。 */
     static double centerY(BirdCageVariant variant) {
         return switch (variant) {
@@ -72,7 +57,7 @@ final class BirdCageEntityRender {
         float scale = (float) Math.min(1.0D, Math.min(maxEntitySize / bounds.getXsize(),
                 Math.min(maxEntitySize / bounds.getYsize(), maxEntitySize / bounds.getZsize())));
         Vec3 entityCenter = bounds.getCenter().subtract(entity.position());
-        double[] slotOffset = slotOffset(variant, slot);
+        double[] slotOffset = variant.slotOffset(slot);
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         // 笼位落点相对鸟笼中心的位置；纵向要再补上缩放后的碰撞箱中心偏移，脚底才会正好踩在支撑面上。
@@ -95,12 +80,5 @@ final class BirdCageEntityRender {
             } catch (ReflectiveOperationException ignored) { }
         }
         poseStack.popPose();
-    }
-
-
-    /** 取出某笼位的落点；笼位下标越界时退回最后一个笼位。 */
-    private static double[] slotOffset(BirdCageVariant variant, int slot) {
-        double[][] slots = SLOT_OFFSETS[variant.ordinal()];
-        return slots[Math.min(Math.max(slot, 0), slots.length - 1)];
     }
 }

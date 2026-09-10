@@ -28,11 +28,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
 import net.minecraft.core.registries.BuiltInRegistries;
+
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -193,7 +197,11 @@ public class BirdCageBlock extends BaseEntityBlock {
                             @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (level.getBlockEntity(pos) instanceof BirdCageBlockEntity cage) {
-            for (CompoundTag bird : BirdCageItem.capturedBirds(stack)) cage.addCapturedBird(bird);
+            List<CompoundTag> birds = BirdCageItem.capturedBirds(stack);
+            // 逐个保留物品里记下的笼位，避免放下来之后笼中站位被打乱。
+            for (int i = 0; i < birds.size(); i++) {
+                cage.addCapturedBird(birds.get(i), BirdCageBlockEntity.slotOf(birds.get(i), i));
+            }
         }
         if (state.getValue(PART) || variant == BirdCageVariant.SMALL) return;
         int height = structureHeight();
@@ -282,20 +290,23 @@ public class BirdCageBlock extends BaseEntityBlock {
             return InteractionResult.sidedSuccess(false);
         }
         if (player.isShiftKeyDown() && !cage.isEmpty()) {
+            // 优先抱出/放出玩家视线命中的那个笼位上的鸟；没命中（或该笼位是空的）就退回最后装进去的一只。
+            int index = cage.indexOfSlot(hitSlot(origin, cage.variant(), state.getValue(FACING), player));
+            if (index < 0) index = cage.capturedBirds().size() - 1;
             if (!level.isClientSide) {
-                CompoundTag preview = cage.lastCapturedBird();
+                CompoundTag preview = cage.capturedBirds().get(index);
                 Entity carriedEntity = EntityType.create(preview, level).orElse(null);
                 if (carriedEntity != null && CarryOnHooks.isLoaded()) {
                     // Carry On 会检查实体与玩家的距离，先把实体挪到玩家身上再交给它。
                     carriedEntity.moveTo(player.getX(), player.getY(), player.getZ());
                     if (CarryOnHooks.tryCarryEntity(player, carriedEntity)) {
-                        cage.removeLastCapturedBird();
+                        cage.removeCapturedBird(index);
                         return InteractionResult.sidedSuccess(false);
                     }
                 }
             }
             if (!level.isClientSide) {
-                CompoundTag bird = cage.removeLastCapturedBird();
+                CompoundTag bird = cage.removeCapturedBird(index);
                 Entity entity = EntityType.create(bird, level).orElse(null);
                 if (entity != null) {
                     double centerX = origin.getX() + 0.5D;
@@ -304,7 +315,7 @@ public class BirdCageBlock extends BaseEntityBlock {
                     entity.moveTo(centerX, centerY - entity.getBbHeight() * 0.5D, centerZ, player.getYRot(), 0.0F);
                     level.addFreshEntity(entity);
                 } else {
-                    cage.addCapturedBird(bird);
+                    cage.addCapturedBird(bird, BirdCageBlockEntity.slotOf(bird, index));
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -336,8 +347,33 @@ public class BirdCageBlock extends BaseEntityBlock {
         carried.saveWithoutId(bird);
         bird.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(carried.getType()).toString());
         if (carried instanceof LivingEntity living) bird.putFloat("MaxHealth", living.getMaxHealth());
-        cage.addCapturedBird(bird);
+        // 优先放进玩家视线命中的空笼位，没命中就退回追加到末尾。
+        cage.addCapturedBird(bird, hitSlot(origin, cageBlock.variant(), state.getValue(FACING), player));
         CarryOnHooks.clearCarriedEntity(player);
         return true;
+    }
+
+    /**
+     * 玩家视线命中的笼位下标（多个候选取最近的一个）；什么都没命中时返回 -1。
+     * 笼位体积按支撑面上方一个 0.6 宽、0.5 高的盒子估算，大致就是笼中实体占据的空间。
+     */
+    private static int hitSlot(BlockPos origin, BirdCageVariant variant, Direction facing, Player player) {
+        Vec3 eye = player.getEyePosition();
+        Vec3 end = eye.add(player.getViewVector(1.0F).scale(player.blockInteractionRange()));
+        int best = -1;
+        double bestDistance = Double.MAX_VALUE;
+        for (int slot = 0; slot < variant.capacity(); slot++) {
+            Vec3 perch = variant.slotPos(origin, facing, slot);
+            AABB box = new AABB(perch.x - 0.3D, perch.y, perch.z - 0.3D,
+                    perch.x + 0.3D, perch.y + 0.5D, perch.z + 0.3D);
+            var hit = box.clip(eye, end);
+            if (hit.isEmpty()) continue;
+            double distance = hit.get().distanceToSqr(eye);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                best = slot;
+            }
+        }
+        return best;
     }
 }

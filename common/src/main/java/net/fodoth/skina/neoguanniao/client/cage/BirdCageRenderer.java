@@ -49,14 +49,15 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
                 cagePos.getY() + BirdCageEntityRender.centerY(cage.variant()), cagePos.getZ() + 0.5D);
         poseStack.pushPose();
         poseStack.translate(0.5, BirdCageEntityRender.centerY(cage.variant()), 0.5);
-        for (int slot = 0; slot < birds.size(); slot++) {
-            Entity entity = previews.get(slot).entity(cage.getLevel(), birds.get(slot));
+        for (int index = 0; index < birds.size(); index++) {
+            Entity entity = previews.get(index).entity(cage.getLevel(), birds.get(index));
             if (entity == null) continue;
-            previews.get(slot).tick(cage.getLevel(), soundAnchor);
+            previews.get(index).tick(cage.getLevel(), soundAnchor);
             BirdCageEntityRender.resetRotation(entity);
             float entityPartialTick = entity instanceof AbstractBirdEntity<?> ? partialTick : 0.0F;
             // 鸟笼模型已经被 GeoBlockRenderer 按 FACING 旋转，笼中的实体跟随同一朝向。
-            BirdCageEntityRender.render(entity, cage.variant(), slot, -getFacing(cage).toYRot(),
+            BirdCageEntityRender.render(entity, cage.variant(),
+                    BirdCageBlockEntity.slotOf(birds.get(index), index), -getFacing(cage).toYRot(),
                     entityPartialTick, poseStack, buffer, light);
         }
         poseStack.popPose();
