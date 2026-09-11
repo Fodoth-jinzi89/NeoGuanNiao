@@ -40,22 +40,20 @@ extends EntityRenderer<PhotographEntity> {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void render(@NotNull PhotographEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         // 边长（格）：1x1 ~ 8x8，与实体碰撞箱一致；每格 16 像素。
         int size = PhotographData.frameSize(entity.getItem());
-        float frameSize = size;
         float gap = FRAME_GAP_PIXELS / FRAME_TEXTURE_SIZE;
         // 1x1 的边框只有 1 像素，照片相应外扩 1 像素。
         float border = (size == 1 ? SMALL_FRAME_BORDER_PIXELS : FRAME_BORDER_PIXELS) / FRAME_TEXTURE_SIZE;
-        float photoSize = frameSize - (gap + border) * 2.0f;
+        float photoSize = (float) size - (gap + border) * 2.0f;
         float photoMin = gap + border;
         float photoCenter = photoMin + photoSize / 2.0f;
         poseStack.pushPose();
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entity.getYRot()));
-        poseStack.translate(-frameSize / 2.0f, -frameSize / 2.0f, 0.026f);
+        poseStack.translate(-(float) size / 2.0f, -(float) size / 2.0f, 0.026f);
         Matrix4f matrix = poseStack.last().pose();
         var block = BuiltInRegistries.BLOCK.get(PhotographData.frameBlock(entity.getItem()));
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(block.defaultBlockState()).getParticleIcon();
@@ -78,7 +76,6 @@ extends EntityRenderer<PhotographEntity> {
      * （边框总长不是整数格时按剩余长度裁剪 UV，不拉伸纹理）。
      */
     private static void renderFrame(VertexConsumer consumer, Matrix4f matrix, int size, float gap, float border, int light, TextureAtlasSprite sprite) {
-        float min = gap;
         float max = size - gap;
         float edge = max - border;
         float u0 = sprite.getU0();
@@ -87,19 +84,19 @@ extends EntityRenderer<PhotographEntity> {
         float v1 = sprite.getV1();
         float uBorder = (u1 - u0) * border;
         float vBorder = (v1 - v0) * border;
-        for (float x = min; x < max - EPSILON; ) {
+        for (float x = gap; x < max - EPSILON; ) {
             float width = Math.min(1.0f, max - x);
             float uEnd = u0 + (u1 - u0) * width;
             PhotographEntityRenderer.renderSprite(consumer, matrix, x, edge, width, border, 0.002f, light, u0, uEnd, v0, v0 + vBorder);
-            PhotographEntityRenderer.renderSprite(consumer, matrix, x, min, width, border, 0.002f, light, u0, uEnd, v1 - vBorder, v1);
+            PhotographEntityRenderer.renderSprite(consumer, matrix, x, gap, width, border, 0.002f, light, u0, uEnd, v1 - vBorder, v1);
             x += width;
         }
-        float verticalMin = min + border;
+        float verticalMin = gap + border;
         float verticalMax = max - border;
         for (float y = verticalMin; y < verticalMax - EPSILON; ) {
             float height = Math.min(1.0f, verticalMax - y);
             float vEnd = v0 + (v1 - v0) * height;
-            PhotographEntityRenderer.renderSprite(consumer, matrix, min, y, border, height, 0.002f, light, u0, u0 + uBorder, v0, vEnd);
+            PhotographEntityRenderer.renderSprite(consumer, matrix, gap, y, border, height, 0.002f, light, u0, u0 + uBorder, v0, vEnd);
             PhotographEntityRenderer.renderSprite(consumer, matrix, edge, y, border, height, 0.002f, light, u1 - uBorder, u1, v0, vEnd);
             y += height;
         }

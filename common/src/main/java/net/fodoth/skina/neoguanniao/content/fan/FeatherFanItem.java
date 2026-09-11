@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
@@ -120,7 +121,7 @@ public class FeatherFanItem
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
             int mode = (FeatherFanEnchantments.mode(stack) + 1) % 3;
-            stack.set(net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoDataComponents.FEATHER_FAN_MODE.get(), mode);
+            stack.set(NeoGuanNiaoDataComponents.FEATHER_FAN_MODE.get(), mode);
             if (!level.isClientSide)
                 player.displayClientMessage(Component.translatable("tooltip.neoguanniao.wind_feather_fan.mode").withStyle(ChatFormatting.GOLD)
                         .append(Component.translatable("item.neoguanniao.wind_feather_fan.mode." + FeatherFanEnchantments.modeName(stack)).withStyle(ChatFormatting.AQUA)), true);
@@ -355,7 +356,7 @@ public class FeatherFanItem
     }
 
     private static void reserve(ItemStack stack, java.util.UUID id) {
-        net.minecraft.nbt.CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         tag.putUUID("FeatherFanReserver", id);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }

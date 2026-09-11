@@ -3,6 +3,7 @@ package net.fodoth.skina.neoguanniao.client.camera;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.fodoth.skina.neoguanniao.NeoGuanNiao;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -20,9 +21,7 @@ import org.joml.Matrix4f;
 
 public class PhotographItemRenderer
 extends BlockEntityWithoutLevelRenderer {
-    private static final ResourceLocation CARD_TEXTURE = ResourceLocation.fromNamespaceAndPath("neoguanniao", "textures/item/photograph_card.png");
-    private static final float CARD_WIDTH = 0.82f;
-    private static final float CARD_HEIGHT = 0.62f;
+    private static final ResourceLocation CARD_TEXTURE = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "textures/item/photograph_card.png");
 
     public PhotographItemRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());

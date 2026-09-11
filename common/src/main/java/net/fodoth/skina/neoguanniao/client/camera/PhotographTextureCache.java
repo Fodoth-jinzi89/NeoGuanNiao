@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public final class PhotographTextureCache {
-        private static final int MAX_TEXTURES = 96;
+    private static final int MAX_TEXTURES = 96;
     private static final int MAX_UPLOADS_PER_FRAME = 2;
     private static final long UNUSED_TEXTURE_MILLIS = 60000L;
     private static final ResourceLocation FALLBACK = ResourceLocation.fromNamespaceAndPath(NeoGuanNiao.MODID, "textures/item/photograph.png");
