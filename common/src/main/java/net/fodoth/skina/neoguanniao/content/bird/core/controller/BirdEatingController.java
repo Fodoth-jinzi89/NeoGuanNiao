@@ -229,6 +229,8 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
                 flyingStack
         );
         flyingFood.setNeverPickUp();
+        // 这份食物只是飞向鸟的展示，短暂存在后自动消失，不会留在地上（旧版的 ItemEntity#lifespan = 15）。
+        limitDisplayLifetime(flyingFood, 15);
         double dx = bird.getX() - flyingFood.getX();
         double dy = bird.getY() + 0.5 * bird.getBbHeight() - flyingFood.getY();
         double dz = bird.getZ() - flyingFood.getZ();
@@ -238,6 +240,20 @@ public class BirdEatingController<T extends AbstractBirdEntity<T>> extends Abstr
             flyingFood.setDeltaMovement((dx / distance) * speed, (dy / distance) * speed, (dz / distance) * speed);
         }
         bird.level().addFreshEntity(flyingFood);
+    }
+
+    /**
+     * 让展示用的掉落物实体在 {@code ticks} 刻后自动消失。
+     * <p>
+     * 1.21 原版移除了 {@code ItemEntity#lifespan}，这里通过存档数据把实体年龄推到接近原版上限，
+     * 让它飞回鸟身边后就被原版的掉落物清理逻辑移除，而不是永远留在地上。
+     * </p>
+     */
+    private static void limitDisplayLifetime(ItemEntity item, int ticks) {
+        CompoundTag tag = new CompoundTag();
+        item.addAdditionalSaveData(tag);
+        tag.putShort("Age", (short) (6000 - ticks));
+        item.readAdditionalSaveData(tag);
     }
 
     /**

@@ -1,7 +1,9 @@
 package net.fodoth.skina.neoguanniao.content.fan;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -31,6 +33,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -69,20 +72,31 @@ public class FeatherFanItem
     }
 
     private static float attackDamage(ItemStack stack) {
-        return 4.0f + rarityBonus(stack);
+        return 4.0f + featherBonus(stack);
     }
 
     public static float attackRange(ItemStack stack) {
-        return 6.0f + rarityBonus(stack);
+        return 6.0f + featherBonus(stack);
     }
 
-    private static float rarityBonus(ItemStack stack) {
+    /**
+     * 羽扇用不同种类的羽毛制作时的加成：每多一种羽毛 +0.5 攻击力 / +0.5 攻击距离。
+     */
+    private static float featherBonus(ItemStack stack) {
         ListTag feathers = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getList("Feathers", 10);
-        float bonus = 0.0f;
+        Set<String> kinds = new HashSet<>();
         for (int i = 0; i < Math.min(6, feathers.size()); i++) {
-            bonus += Math.clamp(feathers.getCompound(i).getInt("rarity"), 0, 3) * 0.5f;
+            String kind = feathers.getCompound(i).getString("bird_type");
+            if (!kind.isEmpty()) {
+                kinds.add(kind);
+            }
         }
-        return bonus;
+        return kinds.size() * 0.5f;
+    }
+
+    /** 实体是否为 {@code player} 自己驯服的生物（狗、女仆、魔宠等）。 */
+    public static boolean isTamedBy(Player player, Entity entity) {
+        return player != null && entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID());
     }
 
     public boolean hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
@@ -262,7 +276,7 @@ public class FeatherFanItem
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle().normalize();
         AABB searchArea = player.getBoundingBox().inflate(18.0);
-        List<LivingEntity> candidates = player.level().getEntitiesOfClass(LivingEntity.class, searchArea, target -> target.isAlive() && !target.isSpectator() && target != player && !isBird(target) && player.canAttack(target));
+        List<LivingEntity> candidates = player.level().getEntitiesOfClass(LivingEntity.class, searchArea, target -> target.isAlive() && !target.isSpectator() && target != player && !isBird(target) && !isTamedBy(player, target) && player.canAttack(target));
         candidates.removeIf(target -> {
             Vec3 offset = target.getBoundingBox().getCenter().subtract(eye);
             double distance = offset.length();

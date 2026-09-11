@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -30,9 +31,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -254,6 +259,27 @@ public class BirdCageBlock extends BaseEntityBlock {
         return super.playerWillDestroy(level, pos, state, player);
     }
 
+    /**
+     * 破坏鸟笼时把笼中的实体写回鸟笼物品，避免笼中鸟随方块一起消失。
+     * <p>
+     * 中/大型鸟笼破坏任一部件都会走到原点方块的掉落，因此这里按方块实体统一处理；
+     * 笼位信息存在每只实体的 NBT 里，随物品重新放置时会原样恢复。
+     * </p>
+     */
+    @Override
+    protected @NotNull List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootParams.Builder params) {
+        if (!state.getValue(PART)
+                && params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof BirdCageBlockEntity cage
+                && !cage.isEmpty()) {
+            ItemStack stack = new ItemStack(this);
+            ListTag list = new ListTag();
+            for (CompoundTag bird : cage.capturedBirds()) list.add(bird.copy());
+            CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.put("CapturedBirds", list));
+            return List.of(stack);
+        }
+        return super.getDrops(state, params);
+    }
+
     private @Nullable BlockPos findOrigin(BlockGetter level, BlockPos pos, Direction facing) {
         int height = structureHeight();
         for (int x = -1; x <= 1; x++)
@@ -392,8 +418,6 @@ public class BirdCageBlock extends BaseEntityBlock {
         if (!(cageBlock.asItem() instanceof BirdCageItem item)) return false;
         Entity carried = CarryOnHooks.carriedEntity(player);
         if (carried == null || !item.canFit(carried) || !BirdCageItem.canCapture(carried)) return false;
-        // 只有真的要装笼时才消耗本刻的交互去重标记；否则笼子没装满时会挡住同一次右键的
-        // useWithoutItem（取出/放出）逻辑，中/大型鸟笼因此取不出鸟。
         if (!cage.tryInteract(level.getGameTime())) return false;
         CompoundTag bird = new CompoundTag();
         carried.saveWithoutId(bird);
