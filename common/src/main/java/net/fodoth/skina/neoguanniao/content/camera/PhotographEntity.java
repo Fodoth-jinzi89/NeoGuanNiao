@@ -24,15 +24,15 @@ import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DiodeBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PhotographEntity
 extends HangingEntity {
-    public static final int FRAME_SIZE_PIXELS = 12;
+    /** 相框每格 16 像素（1 格），与原版画一致。 */
+    public static final int FRAME_CELL_PIXELS = 16;
 
     private static final EntityDataAccessor<ItemStack> DATA_ITEM = SynchedEntityData.defineId(PhotographEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_ROTATION = SynchedEntityData.defineId(PhotographEntity.class, EntityDataSerializers.INT);
@@ -100,11 +100,11 @@ extends HangingEntity {
     }
 
     public int getWidth() {
-        return FRAME_SIZE_PIXELS;
+        return PhotographData.frameSize(this.getItem()) * FRAME_CELL_PIXELS;
     }
 
     public int getHeight() {
-        return FRAME_SIZE_PIXELS;
+        return PhotographData.frameSize(this.getItem()) * FRAME_CELL_PIXELS;
     }
 
     @Nullable
@@ -112,37 +112,19 @@ extends HangingEntity {
         return this.getItem().copy();
     }
 
-    @SuppressWarnings("deprecation")
-    public boolean survives() {
-        if (!this.level().noCollision((Entity)this)) {
-            return false;
-        }
-        BlockState state = this.level().getBlockState(this.pos.relative(this.direction.getOpposite()));
-        return (state.isSolid() || this.direction.getAxis().isHorizontal() && DiodeBlock.isDiode((BlockState)state)) && this.level().getEntities((Entity)this, this.getBoundingBox(), HANGING_ENTITY).isEmpty();
-    }
-
+    /**
+     * 挂载几何：相框占 size×size 格，玩家点击的方块是整张相片的左下角（向视线右侧与上方展开）。
+     * 是否放得下（空间与支撑面）交给继承自 {@link HangingEntity} 的原版画判定。
+     */
     protected @NotNull AABB calculateBoundingBox(BlockPos pos, Direction direction) {
-        double hangOffset = 0.46875;
-        double x = pos.getX() + 0.5 - direction.getStepX() * hangOffset;
-        double y = pos.getY() + 0.5 - direction.getStepY() * hangOffset;
-        double z = pos.getZ() + 0.5 - direction.getStepZ() * hangOffset;
-        double xSize = this.getWidth();
-        double ySize = this.getHeight();
-        double zSize = this.getWidth();
-        switch (direction.getAxis()) {
-            case X: {
-                xSize = 1.0;
-                break;
-            }
-            case Y: {
-                ySize = 1.0;
-                break;
-            }
-            case Z: {
-                zSize = 1.0;
-            }
-        }
-        return new AABB(x - (xSize /= 32.0), y - (ySize /= 32.0), z - (zSize /= 32.0), x + xSize, y + ySize, z + zSize);
+        int size = PhotographData.frameSize(this.getItem());
+        // 几何中心相对锚点（左下角方块的中心）偏移 size/2 - 0.5 格。
+        double offset = size / 2.0 - 0.5;
+        Vec3 center = Vec3.atCenterOf(pos).relative(direction, -0.46875);
+        Vec3 origin = center.relative(direction.getCounterClockWise(), offset).relative(Direction.UP, offset);
+        double width = direction.getAxis() == Direction.Axis.X ? 0.0625 : size;
+        double depth = direction.getAxis() == Direction.Axis.Z ? 0.0625 : size;
+        return AABB.ofSize(origin, width, size, depth);
     }
 
     public ItemStack getItem() {

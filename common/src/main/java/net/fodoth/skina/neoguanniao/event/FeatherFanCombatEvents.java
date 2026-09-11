@@ -34,14 +34,19 @@ public final class FeatherFanCombatEvents {
     }
 
     public static boolean onIncomingDamage(LivingEntity entity, DamageSource source) {
-        if (!(entity instanceof AbstractBirdEntity<?>)) {
-            return false;
-        }
-        if (source.getDirectEntity() instanceof FeatherFanProjectileEntity) {
-            return true;
+        boolean bird = entity instanceof AbstractBirdEntity<?>;
+        if (source.getDirectEntity() instanceof FeatherFanProjectileEntity projectile) {
+            if (bird) {
+                return true;
+            }
+            return projectile.getOwner() instanceof Player player && FeatherFanItem.isTamedBy(player, entity);
         }
         if (source.getEntity() instanceof Player p && p.getMainHandItem().getItem() instanceof FeatherFanItem) {
-            return true;
+            // 鸟类不吃羽扇伤害；投掷者自己驯服的生物（狗、女仆、魔宠等）也同样不受羽扇伤害。
+            if (bird) {
+                return true;
+            }
+            return source.getDirectEntity() == p && FeatherFanItem.isTamedBy(p, entity);
         }
         return false;
     }

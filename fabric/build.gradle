@@ -29,8 +29,11 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
-    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'], exclude: ['Jade-*.jar'])
-    modCompileOnly fileTree(dir: 'libs/compileOnly', include: ['Jade-*.jar'])
+    compileOnly fileTree(dir: 'libs/compileOnly', include: ['*.jar'], exclude: ['Jade-*.jar', 'carryon-*.jar', 'jei-*.jar'])
+    // JEI 的 Fabric 包是 intermediary 映射、且由更新的 Loom 构建，本仓库的 Loom 无法重映射它。
+    // 两个平台的 JEI API 类完全一致，所以编译期借用 NeoForge 包，运行时由 Fabric 的 JEI 提供。
+    compileOnly fileTree(dir: '../neoforge/libs/compileOnly', include: ['jei-*.jar'])
+    modCompileOnly fileTree(dir: 'libs/compileOnly', include: ['Jade-*.jar', 'carryon-*.jar'])
     runtimeOnly fileTree(dir: 'libs/runtimeOnly', include: ['*.jar'])
     modImplementation fileTree(dir: 'libs/implementation', include: ['*.jar'])
     implementation project(path: ':common')

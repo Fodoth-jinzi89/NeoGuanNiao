@@ -30,6 +30,7 @@ public final class NeoGuanNiaoItems {
     public static final RegistrySupplier<Item> BIRD_GUIDE;
     public static final RegistrySupplier<Item> NIKON_D750;
     public static final RegistrySupplier<Item> FILM;
+    public static final RegistrySupplier<Item> BLANK_FILM;
     public static final RegistrySupplier<Item> PHOTOGRAPH;
 
     public static final RegistrySupplier<Item> SMALL_BIRD_CAGE;
@@ -110,8 +111,9 @@ public final class NeoGuanNiaoItems {
         );
 
         NIKON_D750 = ITEMS.register("nikon_d750", () -> new NikonD750Item(new Item.Properties().stacksTo(1)));
-        FILM = ITEMS.register("film", () -> new FilmItem(new Item.Properties().stacksTo(1)));
-        PHOTOGRAPH = ITEMS.register("photograph", () -> new PhotographItem(new Item.Properties().stacksTo(16)));
+        FILM = ITEMS.register("film", () -> new FilmItem(new Item.Properties().stacksTo(64)));
+        BLANK_FILM = ITEMS.register("blank_film", () -> new Item(new Item.Properties().stacksTo(64)));
+        PHOTOGRAPH = ITEMS.register("photograph", () -> new PhotographItem(new Item.Properties().stacksTo(64)));
 
 
         SMALL_BIRD_CAGE = registerBirdCageItem(BirdCageVariant.SMALL, NeoGuanNiaoBlocks.SMALL_BIRD_CAGE);

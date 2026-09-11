@@ -74,7 +74,7 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
 
     /** 最后被装进笼子的实体（后进先出的那一个）。 */
     public CompoundTag lastCapturedBird() {
-        return capturedBirds.isEmpty() ? null : capturedBirds.get(capturedBirds.size() - 1);
+        return capturedBirds.isEmpty() ? null : capturedBirds.getLast();
     }
 
     public void addCapturedBird(CompoundTag tag) {
@@ -151,14 +151,18 @@ public class BirdCageBlockEntity extends BlockEntity implements GeoBlockEntity {
         return true;
     }
 
+    /**
+     * 笼中最后一只鸟被取走后不会再写入任何数据，更新标签变为空。
+     * NeoForge 的 {@code IBlockEntityExtension.onDataPacket} 默认实现会跳过空标签，
+     * 客户端就会一直保留已取走那只鸟的渲染，所以这里始终写入 {@code CapturedBirds}
+     * （允许为空列表），保证同步标签永远非空。
+     */
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        if (!capturedBirds.isEmpty()) {
-            ListTag list = new ListTag();
-            for (CompoundTag bird : capturedBirds) list.add(bird.copy());
-            tag.put("CapturedBirds", list);
-        }
+        ListTag list = new ListTag();
+        for (CompoundTag bird : capturedBirds) list.add(bird.copy());
+        tag.put("CapturedBirds", list);
     }
 
     @Override
