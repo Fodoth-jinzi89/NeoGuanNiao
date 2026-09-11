@@ -80,18 +80,25 @@ public class FeatherFanItem
     }
 
     /**
-     * 羽扇用不同种类的羽毛制作时的加成：每多一种羽毛 +0.5 攻击力 / +0.5 攻击距离。
+     * 羽毛带来的加成 = 稀有度加成 + 种类加成，两者叠加：
+     * <ul>
+     *     <li>稀有度：每根羽毛按 rarity(0~3) × 0.5 累加；</li>
+     *     <li>种类：每多用一种不同 bird_type 的羽毛 +0.5。</li>
+     * </ul>
      */
     private static float featherBonus(ItemStack stack) {
         ListTag feathers = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getList("Feathers", 10);
+        float rarity = 0.0f;
         Set<String> kinds = new HashSet<>();
         for (int i = 0; i < Math.min(6, feathers.size()); i++) {
-            String kind = feathers.getCompound(i).getString("bird_type");
+            CompoundTag feather = feathers.getCompound(i);
+            rarity += Math.clamp(feather.getInt("rarity"), 0, 3) * 0.5f;
+            String kind = feather.getString("bird_type");
             if (!kind.isEmpty()) {
                 kinds.add(kind);
             }
         }
-        return kinds.size() * 0.5f;
+        return rarity + kinds.size() * 0.5f;
     }
 
     /** 实体是否为 {@code player} 自己驯服的生物（狗、女仆、魔宠等）。 */
