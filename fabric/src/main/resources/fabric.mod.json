@@ -8,6 +8,7 @@
     "main": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabric"],
     "client": ["net.fodoth.skina.neoguanniao.NeoGuanNiaoFabricClient"],
     "emi": ["net.fodoth.skina.neoguanniao.compat.emi.NeoGuanNiaoFabricEmiPlugin"],
+    "jei_mod_plugin": ["net.fodoth.skina.neoguanniao.compat.jei.NeoGuanNiaoFabricJeiPlugin"],
     "jade": ["net.fodoth.skina.neoguanniao.compat.jade.NeoGuanNiaoFabricJadePlugin"]
   },
   "mixins": [
@@ -29,6 +30,7 @@
   "suggests": {
     "cloth-config": ">=15.0.140",
     "emi": ">=1.1.24",
+    "jei": ">=19.54.0",
     "jade": ">=15.10.6"
   }
 }

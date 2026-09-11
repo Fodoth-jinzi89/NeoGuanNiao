@@ -33,6 +33,7 @@ public final class NeoGuanNiaoCreativeTabs {
                                 output.accept(NeoGuanNiaoItems.BREADCRUMBS.get());
                                 output.accept(NeoGuanNiaoItems.NIKON_D750.get());
                                 output.accept(NeoGuanNiaoItems.FILM.get());
+                                output.accept(NeoGuanNiaoItems.BLANK_FILM.get());
                                 output.accept(NeoGuanNiaoItems.PHOTOGRAPH.get());
 
                                 output.accept(NeoGuanNiaoItems.SMALL_BIRD_CAGE.get());

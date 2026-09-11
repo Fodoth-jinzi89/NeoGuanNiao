@@ -76,6 +76,9 @@ extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+        int frameSize = PhotographData.frameSize(stack);
+        tooltip.add(Component.translatable("tooltip.neoguanniao.photo.size").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(frameSize + "x" + frameSize).withStyle(ChatFormatting.AQUA)));
         if (!PhotographData.hasImage(stack)) {
             tooltip.add((Component)Component.translatable((String)"item.neoguanniao.photograph.tooltip.empty").withStyle(ChatFormatting.GRAY));
             return;

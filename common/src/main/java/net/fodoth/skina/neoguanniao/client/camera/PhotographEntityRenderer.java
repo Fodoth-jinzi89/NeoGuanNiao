@@ -20,9 +20,14 @@ import org.joml.Matrix4f;
 public class PhotographEntityRenderer
 extends EntityRenderer<PhotographEntity> {
 
-    private static final float FRAME_SIZE = 0.75f;
-    private static final float FRAME_BORDER_PIXELS = 1.0f;
+    /** 相框整体离方块外沿的留白（像素）。 */
+    private static final float FRAME_GAP_PIXELS = 2.0f;
+    /** 相框边框厚度（像素）。 */
+    private static final float FRAME_BORDER_PIXELS = 2.0f;
+    /** 1x1 相框的边框厚度（像素），比其它尺寸细 1 像素。 */
+    private static final float SMALL_FRAME_BORDER_PIXELS = 1.0f;
     private static final float FRAME_TEXTURE_SIZE = 16.0f;
+    private static final float EPSILON = 1.0E-4f;
 
     public PhotographEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -38,33 +43,66 @@ extends EntityRenderer<PhotographEntity> {
     @SuppressWarnings("deprecation")
     public void render(@NotNull PhotographEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
-        float border = FRAME_SIZE * FRAME_BORDER_PIXELS / FRAME_TEXTURE_SIZE;
-        float photoSize = FRAME_SIZE - border * 2.0f;
+        // 边长（格）：1x1 ~ 8x8，与实体碰撞箱一致；每格 16 像素。
+        int size = PhotographData.frameSize(entity.getItem());
+        float frameSize = size;
+        float gap = FRAME_GAP_PIXELS / FRAME_TEXTURE_SIZE;
+        // 1x1 的边框只有 1 像素，照片相应外扩 1 像素。
+        float border = (size == 1 ? SMALL_FRAME_BORDER_PIXELS : FRAME_BORDER_PIXELS) / FRAME_TEXTURE_SIZE;
+        float photoSize = frameSize - (gap + border) * 2.0f;
+        float photoMin = gap + border;
+        float photoCenter = photoMin + photoSize / 2.0f;
         poseStack.pushPose();
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entity.getYRot()));
-        poseStack.mulPose(Axis.ZP.rotationDegrees((float)entity.getRotation() * 90.0f + 180.0f));
-        poseStack.translate(-FRAME_SIZE / 2.0f, -FRAME_SIZE / 2.0f, 0.026f);
+        poseStack.translate(-frameSize / 2.0f, -frameSize / 2.0f, 0.026f);
         Matrix4f matrix = poseStack.last().pose();
         var block = BuiltInRegistries.BLOCK.get(PhotographData.frameBlock(entity.getItem()));
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(block.defaultBlockState()).getParticleIcon();
         VertexConsumer frameConsumer = bufferSource.getBuffer(RenderType.text(InventoryMenu.BLOCK_ATLAS));
-        float pixel = (sprite.getU1() - sprite.getU0()) / FRAME_TEXTURE_SIZE;
+        PhotographEntityRenderer.renderFrame(frameConsumer, matrix, size, gap, border, packedLight, sprite);
+        // 右键旋转只作用于照片本体，相框保持竖直不动。
+        poseStack.pushPose();
+        poseStack.translate(photoCenter, photoCenter, 0.0f);
+        poseStack.mulPose(Axis.ZP.rotationDegrees((float)entity.getRotation() * 90.0f + 180.0f));
+        poseStack.translate(-photoCenter, -photoCenter, 0.0f);
+        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.text(PhotographTextureCache.textureFor(entity.getItem())));
+        PhotographEntityRenderer.renderQuad(photoConsumer, poseStack.last().pose(), photoMin, photoMin, photoSize, -0.002f, packedLight);
+        poseStack.popPose();
+        poseStack.popPose();
+    }
+
+    /**
+     * 画相框四边：边框厚 {@code border} 格（1x1 为 1 像素、其余为 {@link #FRAME_BORDER_PIXELS} 像素），
+     * 纹理沿边长按“一格一张方块纹理”平铺，边长几格就平铺几张
+     * （边框总长不是整数格时按剩余长度裁剪 UV，不拉伸纹理）。
+     */
+    private static void renderFrame(VertexConsumer consumer, Matrix4f matrix, int size, float gap, float border, int light, TextureAtlasSprite sprite) {
+        float min = gap;
+        float max = size - gap;
+        float edge = max - border;
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
         float v0 = sprite.getV0();
         float v1 = sprite.getV1();
-        float innerU0 = u0 + pixel;
-        float innerU1 = u1 - pixel;
-        float innerV0 = v0 + pixel;
-        float innerV1 = v1 - pixel;
-        PhotographEntityRenderer.renderSprite(frameConsumer, matrix, 0.0f, 0.0f, FRAME_SIZE, border, 0.002f, packedLight, u0, u1, v0, v0 + pixel);
-        PhotographEntityRenderer.renderSprite(frameConsumer, matrix, 0.0f, FRAME_SIZE - border, FRAME_SIZE, border, 0.002f, packedLight, u0, u1, v1 - pixel, v1);
-        PhotographEntityRenderer.renderSprite(frameConsumer, matrix, 0.0f, border, border, photoSize, 0.002f, packedLight, u0, innerU0, innerV0, innerV1);
-        PhotographEntityRenderer.renderSprite(frameConsumer, matrix, FRAME_SIZE - border, border, border, photoSize, 0.002f, packedLight, innerU1, u1, innerV0, innerV1);
-        VertexConsumer photoConsumer = bufferSource.getBuffer(RenderType.text(PhotographTextureCache.textureFor(entity.getItem())));
-        PhotographEntityRenderer.renderQuad(photoConsumer, matrix, border, border, photoSize, -0.002f, packedLight);
-        poseStack.popPose();
+        float uBorder = (u1 - u0) * border;
+        float vBorder = (v1 - v0) * border;
+        for (float x = min; x < max - EPSILON; ) {
+            float width = Math.min(1.0f, max - x);
+            float uEnd = u0 + (u1 - u0) * width;
+            PhotographEntityRenderer.renderSprite(consumer, matrix, x, edge, width, border, 0.002f, light, u0, uEnd, v0, v0 + vBorder);
+            PhotographEntityRenderer.renderSprite(consumer, matrix, x, min, width, border, 0.002f, light, u0, uEnd, v1 - vBorder, v1);
+            x += width;
+        }
+        float verticalMin = min + border;
+        float verticalMax = max - border;
+        for (float y = verticalMin; y < verticalMax - EPSILON; ) {
+            float height = Math.min(1.0f, verticalMax - y);
+            float vEnd = v0 + (v1 - v0) * height;
+            PhotographEntityRenderer.renderSprite(consumer, matrix, min, y, border, height, 0.002f, light, u0, u0 + uBorder, v0, vEnd);
+            PhotographEntityRenderer.renderSprite(consumer, matrix, edge, y, border, height, 0.002f, light, u1 - uBorder, u1, v0, vEnd);
+            y += height;
+        }
     }
 
     @SuppressWarnings("SameParameterValue")

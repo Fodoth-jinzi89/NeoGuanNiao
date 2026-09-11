@@ -27,6 +27,11 @@ public final class PhotographData {
     public static final String TAG_Y = "Y";
     public static final String TAG_Z = "Z";
     public static final String TAG_FRAME_BLOCK = "FrameBlock";
+    public static final String TAG_FRAME_SIZE = "FrameSize";
+
+    /** 相框边长（格）：1x1 ~ 8x8。 */
+    public static final int MIN_FRAME_SIZE = 1;
+    public static final int MAX_FRAME_SIZE = 8;
 
     private PhotographData() {
     }
@@ -76,6 +81,16 @@ public final class PhotographData {
     }
     public static void setFrameBlock(ItemStack stack, ResourceLocation blockId) {
         CameraItemData.update(stack, tag -> tag.putString(TAG_FRAME_BLOCK, blockId.toString()));
+    }
+
+    /** 相框边长（格），没有记录时按 1x1 处理。 */
+    public static int frameSize(ItemStack stack) {
+        return Math.clamp(CameraItemData.read(stack).getInt(TAG_FRAME_SIZE), MIN_FRAME_SIZE, MAX_FRAME_SIZE);
+    }
+
+    public static void setFrameSize(ItemStack stack, int size) {
+        int clamped = Math.clamp(size, MIN_FRAME_SIZE, MAX_FRAME_SIZE);
+        CameraItemData.update(stack, tag -> tag.putInt(TAG_FRAME_SIZE, clamped));
     }
 
     public static int width(ItemStack stack) {
