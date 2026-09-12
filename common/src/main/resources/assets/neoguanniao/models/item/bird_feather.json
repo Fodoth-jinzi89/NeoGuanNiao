@@ -83,6 +83,13 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 0
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_common"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 1
       },
@@ -164,6 +171,13 @@
         "neoguanniao:rarity": 1
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_myna_uncommon"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 1
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_uncommon"
     },
     {
       "predicate": {
@@ -251,6 +265,13 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 2
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_rare"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 3
       },
@@ -332,6 +353,13 @@
         "neoguanniao:rarity": 3
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_myna_epic"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 3
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_epic"
     },
     {
       "predicate": {
@@ -419,6 +447,13 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 4
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_legendary"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 5
       },
@@ -500,6 +535,13 @@
         "neoguanniao:rarity": 5
       },
       "model": "neoguanniao:item/bird_feather/bird_feather_myna_ancient"
+    },
+    {
+      "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 5
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_ancient"
     },
     {
       "predicate": {
@@ -587,6 +629,13 @@
     },
     {
       "predicate": {
+        "neoguanniao:bird_type": 12,
+        "neoguanniao:rarity": 6
+      },
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_unique"
+    },
+    {
+      "predicate": {
         "neoguanniao:bird_type": 0,
         "neoguanniao:rarity": 999
       },
@@ -671,115 +720,10 @@
     },
     {
       "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 10,
+        "neoguanniao:bird_type": 12,
         "neoguanniao:rarity": 999
       },
-      "model": "neoguanniao:item/bird_feather/bird_feather_kiwi_hidden"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 0
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_common"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 1
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_uncommon"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 2
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_rare"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 3
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_epic"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 4
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_legendary"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 5
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_ancient"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 6
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_unique"
-    },
-    {
-      "predicate": {
-        "neoguanniao:bird_type": 11,
-        "neoguanniao:rarity": 999
-      },
-      "model": "neoguanniao:item/bird_feather/bird_feather_myna_hidden"
+      "model": "neoguanniao:item/bird_feather/bird_feather_woodcock_hidden"
     }
   ]
 }

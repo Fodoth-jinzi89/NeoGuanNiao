@@ -56,6 +56,7 @@ public final class NeoGuanNiaoFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
+        EntityRendererRegistry.register(NeoGuanNiaoEntityTypes.NEO_WOODCOCK.get(), BirdModelRenderer::new);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(), BirdCageRendererHooks::create);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(), BirdBathRendererHooks::create);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(), BirdNestRenderer::new);

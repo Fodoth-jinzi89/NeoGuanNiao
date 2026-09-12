@@ -4,7 +4,8 @@ from pathlib import Path
 
 MODID = "neoguanniao"
 
-OUTPUT = Path("output/models/item/bird_feather")
+OUTPUT = Path("common/src/main/resources/assets/neoguanniao/models/item/bird_feather")
+MAIN_OUTPUT = OUTPUT.parent / "bird_feather.json"
 
 
 SKIN_RARITIES = {
@@ -30,7 +31,8 @@ BIRD_TYPES = {
     8: "crow",
     9: "seagull",
     10: "kiwi",
-    11: "myna"
+    11: "myna",
+    12: "woodcock"
 }
 
 
@@ -85,7 +87,7 @@ def save(path, data):
 def main():
     # 主模型
     save(
-        OUTPUT / "bird_feather.json",
+        MAIN_OUTPUT,
         generate_main()
     )
 

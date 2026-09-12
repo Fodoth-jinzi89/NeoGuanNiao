@@ -57,6 +57,7 @@ public final class NeoGuanNiaoClientModEvents {
                 || !NeoGuanNiaoEntityTypes.NEO_SEAGULL.isPresent()
                 || !NeoGuanNiaoEntityTypes.NEO_KIWI.isPresent()
                 || !NeoGuanNiaoEntityTypes.NEO_MYNA.isPresent()
+                || !NeoGuanNiaoEntityTypes.NEO_WOODCOCK.isPresent()
                 || !NeoGuanNiaoEntityTypes.PHOTOGRAPH.isPresent()
                 || !NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.isPresent()
                 || !NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.isPresent()
@@ -96,6 +97,7 @@ public final class NeoGuanNiaoClientModEvents {
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_KIWI.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_MYNA.get(), BirdModelRenderer::new);
+        event.registerEntityRenderer(NeoGuanNiaoEntityTypes.NEO_WOODCOCK.get(), BirdModelRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.PHOTOGRAPH.get(), PhotographEntityRenderer::new);
         event.registerEntityRenderer(NeoGuanNiaoEntityTypes.FEATHER_FAN_PROJECTILE.get(), FeatherFanProjectileRenderer::new);
 

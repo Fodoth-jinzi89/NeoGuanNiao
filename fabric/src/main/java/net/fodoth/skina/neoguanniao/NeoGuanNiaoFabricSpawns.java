@@ -15,6 +15,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.DoveEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.WoodcockEntity;
 import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoEntityTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +44,7 @@ final class NeoGuanNiaoFabricSpawns {
         add("seagull", NeoGuanNiaoEntityTypes.NEO_SEAGULL.get(), 4, 1, 3, SeagullEntity.createAttributes(), SeagullEntity::canSpawn);
         add("sparrow", NeoGuanNiaoEntityTypes.NEO_SPARROW.get(), 3, 2, 4, SparrowEntity.createAttributes(), SparrowEntity::canSpawn);
         add("spotted_dove", NeoGuanNiaoEntityTypes.NEO_DOVE.get(), 3, 1, 2, DoveEntity.createAttributes(), DoveEntity::canSpawn);
+        add("woodcock", NeoGuanNiaoEntityTypes.NEO_WOODCOCK.get(), 3, 1, 2, WoodcockEntity.createAttributes(), WoodcockEntity::canSpawn);
     }
 
     private static <T extends Mob> void add(String habitat, EntityType<T> type, int weight, int min, int max,

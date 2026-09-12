@@ -70,6 +70,8 @@ public final class NeoGuanNiaoSoundEvents {
             register("entity.myna.hurt");
     public static final RegistrySupplier<SoundEvent> MYNA_DEATH =
             register("entity.myna.death");
+    public static final RegistrySupplier<SoundEvent> WOODCOCK_AMBIENT =
+            register("entity.woodcock.ambient");
 
 
     private NeoGuanNiaoSoundEvents() {

@@ -13,6 +13,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.NightHeronEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.PigeonEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.WoodcockEntity;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographEntity;
 import net.fodoth.skina.neoguanniao.content.fan.FeatherFanProjectileEntity;
 import net.minecraft.core.registries.Registries;
@@ -40,6 +41,7 @@ public final class NeoGuanNiaoEntityTypes {
     public static final RegistrySupplier<EntityType<SeagullEntity>> NEO_SEAGULL;
     public static final RegistrySupplier<EntityType<KiwiEntity>> NEO_KIWI;
     public static final RegistrySupplier<EntityType<MynaEntity>> NEO_MYNA;
+    public static final RegistrySupplier<EntityType<WoodcockEntity>> NEO_WOODCOCK;
     public static final RegistrySupplier<EntityType<PhotographEntity>> PHOTOGRAPH;
     public static final RegistrySupplier<EntityType<FeatherFanProjectileEntity>> FEATHER_FAN_PROJECTILE;
 
@@ -67,6 +69,7 @@ public final class NeoGuanNiaoEntityTypes {
         NEO_SEAGULL = registerCreature("neo_seagull", SeagullEntity::new, 0.72F, 0.81F);
         NEO_KIWI = registerCreature("neo_kiwi", KiwiEntity::new, 0.58F, 0.7F);
         NEO_MYNA = registerCreature("neo_myna", MynaEntity::new, 0.416F, 0.576F);
+        NEO_WOODCOCK = registerCreature("neo_woodcock", WoodcockEntity::new, 0.576F, 0.648F);
         PHOTOGRAPH = ENTITY_TYPES.register("photograph", () -> EntityType.Builder
                 .<PhotographEntity>of(PhotographEntity::new, MobCategory.MISC)
                 .sized(0.5F, 0.5F)

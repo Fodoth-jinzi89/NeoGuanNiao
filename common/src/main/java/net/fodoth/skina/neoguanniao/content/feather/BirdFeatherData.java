@@ -96,6 +96,7 @@ public record BirdFeatherData(
             case "neo_seagull" -> 9;
             case "neo_kiwi" -> 10;
             case "neo_myna" -> 11;
+            case "neo_woodcock" -> 12;
             default -> -1;
         };
     }
