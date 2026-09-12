@@ -66,11 +66,17 @@ final class BirdCageEntityRender {
                 slotOffset[2] / 16.0D);
         poseStack.scale(scale, scale, scale);
         poseStack.translate(-entityCenter.x, -entityCenter.y, -entityCenter.z);
-        var entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
-        Vec3 renderOffset = entityRenderer.getRenderOffset(entity, partialTick);
-        poseStack.translate(renderOffset.x, renderOffset.y, renderOffset.z);
-        entityRenderer.render(entity, 0.0F, partialTick, poseStack, buffer, light);
-        poseStack.translate(-renderOffset.x, -renderOffset.y, -renderOffset.z);
+        var dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        var entityRenderer = dispatcher.getRenderer(entity);
+        // 必须经由 EntityRenderDispatcher.render 渲染：EMF/ETF 等实体模型/纹理模组只在它的
+        // HEAD/RETURN 建立与清理“当前实体”上下文。直接调用 EntityRenderer.render 会让上下文
+        // 停留在上一个实体（或鸟笼方块实体）上，后放进去的实体会因此套用前一只缓存的模型与纹理。
+        dispatcher.setRenderShadow(false);
+        try {
+            dispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTick, poseStack, buffer, light);
+        } finally {
+            dispatcher.setRenderShadow(true);
+        }
         if (entity.hasCustomName()) {
             try {
                 var method = entityRenderer.getClass().getSuperclass().getDeclaredMethod("renderNameTag",
