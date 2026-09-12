@@ -22,6 +22,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
@@ -47,7 +48,8 @@ public final class CameraPreviewPostEffect {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static void prepare(float partialTick) {
-        if (!ClientConfigHooks.enablePreviewPostEffect()) {
+        // 拍摄用的干净帧必须照常准备（与预览后处理开关无关），否则拍摄只能退回主渲染目标，把取景器/HUD 拍进照片
+        if (!ClientConfigHooks.enablePreviewPostEffect() && !CameraClientCapture.isCleanCapturePending()) {
             preparedThisFrame = false;
             cleanCapturePrepared = false;
             return;
@@ -94,6 +96,9 @@ public final class CameraPreviewPostEffect {
             }
             if (cleanCapture) {
                 cleanCapturePrepared = true;
+                return;
+            }
+            if (!ClientConfigHooks.enablePreviewPostEffect()) {
                 return;
             }
             CameraPreviewPostEffect.blitColor((RenderTarget)opticsTarget, (RenderTarget)previewTarget);
@@ -336,8 +341,14 @@ public final class CameraPreviewPostEffect {
         targetHeight = -1;
     }
 
-    public static RenderTarget cleanCaptureTarget(RenderTarget fallback) {
-        return cleanCapturePrepared && opticsTarget != null ? opticsTarget : fallback;
+    /**
+     * 只含取景画面（不含取景器/HUD）的干净帧目标。
+     *
+     * @return 干净帧目标；本帧还没准备好时返回 {@code null}，调用方应等下一帧再拍
+     */
+    @Nullable
+    public static RenderTarget cleanCaptureTarget() {
+        return cleanCapturePrepared && opticsTarget != null ? opticsTarget : null;
     }
 
     private static void closeChain() {

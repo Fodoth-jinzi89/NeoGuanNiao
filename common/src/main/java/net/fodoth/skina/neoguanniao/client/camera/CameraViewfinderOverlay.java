@@ -27,15 +27,11 @@ final class CameraViewfinderOverlay {
         int width = minecraft.getWindow().getGuiScaledWidth();
         int height = minecraft.getWindow().getGuiScaledHeight();
         Objects.requireNonNull(font);
-        int topTextReserve = 9 + 8;
-        Objects.requireNonNull(font);
-        int bottomTextReserve = 9 * 3 + 12;
-        int apertureSize = Math.clamp(height - topTextReserve - bottomTextReserve, 1, CameraViewfinderOverlay.apertureSize(width, height));
-        int left = (width - apertureSize) / 2;
-        int availableHeight = Math.max(1, height - topTextReserve - bottomTextReserve);
-        int top = topTextReserve + Math.max(0, (availableHeight - apertureSize) / 2);
-        int right = left + apertureSize;
-        int bottom = top + apertureSize;
+        int[] aperture = CameraViewfinderOverlay.apertureRect(width, height);
+        int left = aperture[0];
+        int top = aperture[1];
+        int right = left + aperture[2];
+        int bottom = top + aperture[2];
         CameraPreviewPostEffect.drawFilteredLens(graphics, left, top, right, bottom);
         int mask = ((int) (ClientConfigHooks.viewfinderOpacity() * 255) << 24) | 0x101010;
         graphics.fill(0, 0, width, top, mask);
@@ -61,6 +57,22 @@ final class CameraViewfinderOverlay {
             int hintY = settingsY + 9 + 2;
             CameraViewfinderOverlay.drawCenteredFitted(graphics, font, (Component)hint, width, hintY, -1430530849);
         }
+    }
+
+    /**
+     * 取景框方孔在 GUI 坐标下的位置：{@code {left, top, size}}。
+     * <p>
+     * 取景器渲染与照片裁剪共用同一区域，保证“拍到 = 框内所见”。
+     * </p>
+     */
+    static int[] apertureRect(int width, int height) {
+        int topTextReserve = 9 + 8;
+        int bottomTextReserve = 9 * 3 + 12;
+        int apertureSize = Math.clamp(height - topTextReserve - bottomTextReserve, 1, CameraViewfinderOverlay.apertureSize(width, height));
+        int left = (width - apertureSize) / 2;
+        int availableHeight = Math.max(1, height - topTextReserve - bottomTextReserve);
+        int top = topTextReserve + Math.max(0, (availableHeight - apertureSize) / 2);
+        return new int[]{left, top, apertureSize};
     }
 
     static int apertureSize(int width, int height) {

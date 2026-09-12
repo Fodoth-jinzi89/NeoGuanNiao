@@ -16,6 +16,7 @@ import net.fodoth.skina.neoguanniao.content.bird.impl.SeagullEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.SparrowEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.KiwiEntity;
 import net.fodoth.skina.neoguanniao.content.bird.impl.MynaEntity;
+import net.fodoth.skina.neoguanniao.content.bird.impl.WoodcockEntity;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.Entity;
@@ -57,7 +58,8 @@ public final class NeoGuanNiaoModEvents {
                     NeoGuanNiaoBirdData.CROW,
                     NeoGuanNiaoBirdData.SEAGULL,
                     NeoGuanNiaoBirdData.KIWI,
-                    NeoGuanNiaoBirdData.MYNA)) {
+                    NeoGuanNiaoBirdData.MYNA,
+                    NeoGuanNiaoBirdData.WOODCOCK)) {
 
                 BirdData birdData = holder.get();
 
@@ -87,6 +89,7 @@ public final class NeoGuanNiaoModEvents {
         putAttributes(event, NeoGuanNiaoEntityTypes.NEO_SEAGULL, SeagullEntity.createAttributes().build());
         putAttributes(event, NeoGuanNiaoEntityTypes.NEO_KIWI, KiwiEntity.createAttributes().build());
         putAttributes(event, NeoGuanNiaoEntityTypes.NEO_MYNA, MynaEntity.createAttributes().build());
+        putAttributes(event, NeoGuanNiaoEntityTypes.NEO_WOODCOCK, WoodcockEntity.createAttributes().build());
     }
 
     private static <T extends net.minecraft.world.entity.LivingEntity> void putAttributes(
@@ -114,6 +117,7 @@ public final class NeoGuanNiaoModEvents {
         registerSpawnPlacement(event, NeoGuanNiaoEntityTypes.NEO_SEAGULL, SeagullEntity::canSpawn);
         registerSpawnPlacement(event, NeoGuanNiaoEntityTypes.NEO_KIWI, KiwiEntity::canSpawn);
         registerSpawnPlacement(event, NeoGuanNiaoEntityTypes.NEO_MYNA, MynaEntity::canSpawn);
+        registerSpawnPlacement(event, NeoGuanNiaoEntityTypes.NEO_WOODCOCK, WoodcockEntity::canSpawn);
     }
 
     private static <T extends Entity> void registerSpawnPlacement(

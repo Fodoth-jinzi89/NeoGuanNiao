@@ -262,6 +262,27 @@ public final class NeoGuanNiaoBirdData {
                             Map.entry("sleep", playThenLoop("sleep", "sleep_loop")), Map.entry("sleep_loop", loop("sleep_loop")))))
                     .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(4)));
 
+    public static final RegistrySupplier<BirdData> WOODCOCK = BIRD_DATA.register("neo_woodcock", () ->
+            BirdData.createDefault()
+                    .withSound(sound(300, NeoGuanNiaoSoundEvents.WOODCOCK_AMBIENT.get(),
+                            SoundEvents.PARROT_HURT, SoundEvents.PARROT_DEATH,
+                            NeoGuanNiaoSoundEvents.WOODCOCK_AMBIENT.get(), SoundEvents.PARROT_EAT))
+                    .withFlying(flying(BirdFlightProfile.SPARROW))
+                    .withModel(modelData("woodcock", "woodcock",
+                            genderedSkins("woodcock", skinVariant("woodcock", BirdSkinRarity.COMMON)),
+                            BirdModelScaleProfile.SPARROW, 0.16F, 0.684F))
+                    .withAnimation(animation("woodcock", "woodcock", Map.ofEntries(
+                            Map.entry("idle", loop("idle")),
+                            Map.entry("preen", playThenIdle("idle_diff_2")),
+                            Map.entry("curious", playThenIdle("idle_diff_1")),
+                            Map.entry("walk", loop("walk")), Map.entry("walk1", loop("walk1")),
+                            Map.entry("walk1_idle", loop("walk1_idle")), Map.entry("walk2", loop("walk2")),
+                            Map.entry("walk2_idle", loop("walk2_idle")),
+                            Map.entry("fly", loop("fly")), Map.entry("eat", playThenIdle("eat")),
+                            Map.entry("sleep", playThenLoop("sleep", "sleep_loop")),
+                            Map.entry("sleep_loop", loop("sleep_loop")))))
+                    .withMisc(BirdMiscDatum.createDefault().withSpawnRarity(3).withActiveTime(11000, 1500)));
+
     private static RegistrySupplier<BirdData> registerSimpleBird(
             String id, String assetName, List<SkinVariant> skins, BirdFlightProfile flightProfile,
             BirdModelScaleProfile scaleProfile, float shadowRadius, float globalScale, int localSpawnCap,

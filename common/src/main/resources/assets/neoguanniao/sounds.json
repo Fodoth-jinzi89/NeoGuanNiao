@@ -181,6 +181,10 @@
     "subtitle": "subtitles.neoguanniao.entity.myna.death",
     "sounds": ["neoguanniao:entity/myna/call_05"]
   },
+  "entity.woodcock.ambient": {
+    "subtitle": "subtitles.neoguanniao.entity.woodcock.ambient",
+    "sounds": ["neoguanniao:entity/woodcock/ambient_01"]
+  },
   "item.feather_fan.burial_vortex":{"sounds":["neoguanniao:item/feather_fan/burial_vortex"]},
   "item.feather_fan.burial_slash":{"sounds":["neoguanniao:item/feather_fan/burial_slash"]},
   "item.feather_fan.riven_pin":{"sounds":["neoguanniao:item/feather_fan/riven_pin"]},

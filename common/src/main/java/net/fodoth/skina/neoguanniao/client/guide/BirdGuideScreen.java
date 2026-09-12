@@ -55,7 +55,8 @@ public class BirdGuideScreen extends Screen {
             new BirdGuideEntry("spotted_dove", List.of("intro")),
             new BirdGuideEntry("pigeon", List.of("intro")),
             new BirdGuideEntry("kiwi", List.of("intro")),
-            new BirdGuideEntry("myna", List.of("intro"))
+            new BirdGuideEntry("myna", List.of("intro")),
+            new BirdGuideEntry("woodcock", List.of("intro"))
     );
     private static final PoseKind[] POSES = PoseKind.values();
     private static final List<String> LAYOUT_RECT_IDS = List.of(

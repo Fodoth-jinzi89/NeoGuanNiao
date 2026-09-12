@@ -87,6 +87,10 @@ public class BirdRoostGoalController<T extends AbstractBirdEntity<?>> extends Ab
 
         if (bird().isBaby() || distance < goalDatum().roostGoalRange()) {
             // 到达栖息位置
+            // 先结束仍在进行的飞行：飞行计时器在每个 tick 的最后运行，若不归零，
+            // 它会把行为状态重新覆盖为 FLYING 并保持无重力，
+            // 鸟就会卡在栖息点半空中一直保持飞行动画无法入睡。
+            bird().getFlyingController().cancelFlight();
             bird().getBehaviorStateController().setBehaviorState(BirdBehaviorState.SLEEPING);
             // Ground birds (for example kiwi) already stand at a valid floor
             // position; teleporting them to the block center would sink them.

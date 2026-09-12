@@ -1,6 +1,6 @@
 # Neo Guan Niao - 观鸟模组
 
-[![Mod Version](https://img.shields.io/badge/version-3.3-blue.svg)](https://github.com/fodoth/neoguanniao)
+[![Mod Version](https://img.shields.io/badge/version-3.4-blue.svg)](https://github.com/fodoth/neoguanniao)
 [![Minecraft Version](https://img.shields.io/badge/minecraft-1.21.1-green.svg)](https://minecraft.net)
 [![NeoForge Version](https://img.shields.io/badge/neoforge-21.1.233+-orange.svg)](https://neoforged.net)
 [![Architectury API](https://img.shields.io/badge/architectury--api-13.0.8%2B-purple.svg)](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
@@ -205,8 +205,8 @@ Neo Guan Niao 使用模块化 Controller + Ticker 架构。
 # 📋 游戏需求
 
 - Minecraft: **1.21.1**
-- NeoForge: **21.1.233+**（对应 `neoguanniao-3.3-1.21.1-neoforge.jar`）
-- Fabric: **Fabric Loader 0.17.0+** + Fabric API（对应 `neoguanniao-3.3-1.21.1-fabric.jar`）
+- NeoForge: **21.1.233+**（对应 `neoguanniao-3.4-1.21.1-neoforge.jar`）
+- Fabric: **Fabric Loader 0.17.0+** + Fabric API（对应 `neoguanniao-3.4-1.21.1-fabric.jar`）
 - Architectury API: **13.0.8+**（**3.2 起必需**，两个加载器都需要）
 - Java: **21**
 - GeckoLib: **4.8.4+**（两个加载器都需要）
@@ -218,7 +218,7 @@ Neo Guan Niao 使用模块化 Controller + Ticker 架构。
 1. 安装 NeoForge 1.21.1（或 Fabric Loader + Fabric API）
 2. 安装 **GeckoLib 4.8.4+**
 3. 安装 **Architectury API 13.0.8+**（3.2 起必需，缺失会导致游戏无法启动）
-4. 按加载器选择 `neoguanniao-3.3-1.21.1-neoforge.jar` 或 `neoguanniao-3.3-1.21.1-fabric.jar`，放入 `.minecraft/mods`
+4. 按加载器选择 `neoguanniao-3.4-1.21.1-neoforge.jar` 或 `neoguanniao-3.4-1.21.1-fabric.jar`，放入 `.minecraft/mods`
 5. 启动游戏
 
 ---
