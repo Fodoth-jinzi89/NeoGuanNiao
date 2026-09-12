@@ -271,23 +271,26 @@ public final class CameraClientCapture {
             return;
         }
         cleanFramePrepared = false;
-        try {
-            CameraClientCapture.captureAndSend(pendingCaptureHand);
+        // 这一帧还没有可用的干净帧（例如世界没有渲染）时保留待拍摄状态，下一帧再拍
+        if (!CameraClientCapture.captureAndSend(pendingCaptureHand)) {
+            return;
         }
-        finally {
-            CameraClientCapture.restoreAfterCleanCapture();
-        }
+        CameraClientCapture.restoreAfterCleanCapture();
     }
 
-    public static void captureAndSend(InteractionHand hand) {
+    public static boolean captureAndSend(InteractionHand hand) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) {
-            return;
+            return false;
         }
-        RenderTarget captureTarget = CameraPreviewPostEffect.cleanCaptureTarget(minecraft.getMainRenderTarget());
-        if (captureTarget == null || captureTarget.width <= 0 || captureTarget.height <= 0) {
+        // 只使用渲染阶段准备好的干净帧：不能退回主渲染目标，否则会把上一帧的取景器/HUD 一起拍进照片
+        RenderTarget captureTarget = CameraPreviewPostEffect.cleanCaptureTarget();
+        if (captureTarget == null) {
+            return false;
+        }
+        if (captureTarget.width <= 0 || captureTarget.height <= 0) {
             NeoGuanNiao.LOGGER.error("Unable to capture photograph: render target is unavailable");
-            return;
+            return false;
         }
         try (NativeImage image = Screenshot.takeScreenshot((RenderTarget)captureTarget);){
             int[] pixels = CameraClientCapture.cropSquare(image);
@@ -313,24 +316,29 @@ public final class CameraClientCapture {
             NeoGuanNiao.LOGGER.error("Failed to capture or upload photograph", exception);
             minecraft.player.displayClientMessage((Component)Component.translatable((String)"item.neoguanniao.nikon_d750.capture_failed"), true);
         }
+        return true;
     }
 
     public static void captureImmediately() {
         if (!cleanCapturePending) {
             return;
         }
-        try {
-            captureAndSend(pendingCaptureHand);
-        } finally {
-            restoreAfterCleanCapture();
+        // 本帧的干净帧还没准备好就保持待拍摄状态，交给渲染帧补拍，避免拍到含取景器/HUD 的旧帧
+        if (CameraClientCapture.captureAndSend(pendingCaptureHand)) {
+            CameraClientCapture.restoreAfterCleanCapture();
         }
     }
         private static int[] cropSquare(NativeImage image) {
         int sourceWidth = image.getWidth();
         int sourceHeight = image.getHeight();
-        int sourceSize = CameraViewfinderOverlay.apertureSize(sourceWidth, sourceHeight);
-        int offsetX = (sourceWidth - sourceSize) / 2;
-        int offsetY = (sourceHeight - sourceSize) / 2;
+        // 与取景框方孔对齐：把 GUI 坐标的方孔换算成帧缓冲像素，保证照片内容就是取景框里的景
+        int guiWidth = Math.max(1, Minecraft.getInstance().getWindow().getGuiScaledWidth());
+        int guiHeight = Math.max(1, Minecraft.getInstance().getWindow().getGuiScaledHeight());
+        int[] aperture = CameraViewfinderOverlay.apertureRect(guiWidth, guiHeight);
+        double scale = (double)sourceWidth / (double)guiWidth;
+        int sourceSize = Mth.clamp((int)Math.round((double)aperture[2] * scale), 1, Math.min(sourceWidth, sourceHeight));
+        int offsetX = Mth.clamp((int)Math.round((double)aperture[0] * scale), 0, sourceWidth - sourceSize);
+        int offsetY = Mth.clamp((int)Math.round((double)aperture[1] * scale), 0, sourceHeight - sourceSize);
         int[] pixels = new int[PhotographData.IMAGE_SIZE * PhotographData.IMAGE_SIZE];
         for (int y = 0; y < PhotographData.IMAGE_SIZE; ++y) {
             int sampleY = offsetY + Math.min(sourceSize - 1, (int)(((double)y + 0.5) * (double)sourceSize / (double) PhotographData.IMAGE_SIZE));
