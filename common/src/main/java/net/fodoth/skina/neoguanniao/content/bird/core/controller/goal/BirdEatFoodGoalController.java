@@ -63,7 +63,19 @@ public class BirdEatFoodGoalController<T extends AbstractBirdEntity<?>> extends 
             this.targetFood = null;
         }
 
-        return this.targetFood != null && this.targetFood.isAlive()
+        if (this.targetFood == null) {
+            return false;
+        }
+
+        // 寻路失败（路径为 null）时目标不可达，必须放弃目标，
+        // 否则鸟会一直停在觅食状态原地播放走动动画。
+        if (bird().getNavigation().isDone()
+                && bird().distanceToSqr(this.targetFood) > goalDatum().eatFoodConsumeDistance()) {
+            this.targetFood = null;
+            return false;
+        }
+
+        return this.targetFood.isAlive()
                 && !this.targetFood.getItem().isEmpty()
                 && canUse();
     }

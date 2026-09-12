@@ -303,6 +303,27 @@ public class BirdFlyingController<T extends AbstractBirdEntity<T>>
     }
 
     /**
+     * 立即结束当前飞行，且不触发挥着陆冷却与落地缓冲
+     * <p>
+     * 用于“目标点已到达”的场景（例如栖息落点确认）。飞行计时器必须一并归零：
+     * 否则计时器会在目标之后继续运行，把行为状态重新设为
+     * {@link BirdBehaviorState#FLYING} 并保持无重力，鸟就会卡在空中保持飞行动画。
+     * </p>
+     */
+    public void cancelFlight() {
+        var flyingTicker = bird.getTickController().getTickTimer().getBirdFlyingTicker();
+
+        flyingTicker.setTicks(0);
+        flyingTicker.flyingTime = 0;
+        flyingTicker.hoverRetargetTicks = 0;
+
+        flightTarget = null;
+        isEscapeFlightActive = false;
+        isLandingFlight = false;
+        isMountFlight = false;
+    }
+
+    /**
      * 开始降落飞行
      */
     public void beginLandingFlight() {
