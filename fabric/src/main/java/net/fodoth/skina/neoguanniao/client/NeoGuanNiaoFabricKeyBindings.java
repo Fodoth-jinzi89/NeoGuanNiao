@@ -1,41 +1,19 @@
 package net.fodoth.skina.neoguanniao.client;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fodoth.skina.neoguanniao.client.keybind.NeoGuanNiaoClientKeyBindings;
-import net.minecraft.client.KeyMapping;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fodoth.skina.neoguanniao.client.keybind.NeoGuanNiaoKeyInputHandler;
 import net.fodoth.skina.neoguanniao.client.camera.CameraKeyMappings;
 
 /**
- * Fabric key mapping registration; actions are enabled when the shared guide screen is ported.
+ * Fabric key mapping registration for the camera key binds.
  */
 public final class NeoGuanNiaoFabricKeyBindings {
-    public static final KeyMapping TOGGLE_LAYOUT_EDIT = NeoGuanNiaoClientKeyBindings.TOGGLE_LAYOUT_EDIT;
-    public static final KeyMapping SAVE_LAYOUT = NeoGuanNiaoClientKeyBindings.SAVE_LAYOUT;
-    public static final KeyMapping RELOAD_LAYOUT = NeoGuanNiaoClientKeyBindings.RELOAD_LAYOUT;
-
     private NeoGuanNiaoFabricKeyBindings() {
     }
 
     public static void register() {
-        KeyBindingHelper.registerKeyBinding(TOGGLE_LAYOUT_EDIT);
-        KeyBindingHelper.registerKeyBinding(SAVE_LAYOUT);
-        KeyBindingHelper.registerKeyBinding(RELOAD_LAYOUT);
         KeyBindingHelper.registerKeyBinding(CameraKeyMappings.OPEN_FILTER_LIBRARY);
         KeyBindingHelper.registerKeyBinding(CameraKeyMappings.OPEN_CREATIVE_CONTROLS);
         KeyBindingHelper.registerKeyBinding(CameraKeyMappings.FOCUS);
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            int toggleKey = TOGGLE_LAYOUT_EDIT.getDefaultKey().getValue();
-            int saveKey = SAVE_LAYOUT.getDefaultKey().getValue();
-            int reloadKey = RELOAD_LAYOUT.getDefaultKey().getValue();
-            if (TOGGLE_LAYOUT_EDIT.consumeClick())
-                NeoGuanNiaoKeyInputHandler.onKeyInput(toggleKey, 1, toggleKey, saveKey, reloadKey);
-            if (SAVE_LAYOUT.consumeClick())
-                NeoGuanNiaoKeyInputHandler.onKeyInput(saveKey, 1, toggleKey, saveKey, reloadKey);
-            if (RELOAD_LAYOUT.consumeClick())
-                NeoGuanNiaoKeyInputHandler.onKeyInput(reloadKey, 1, toggleKey, saveKey, reloadKey);
-        });
     }
 
 }

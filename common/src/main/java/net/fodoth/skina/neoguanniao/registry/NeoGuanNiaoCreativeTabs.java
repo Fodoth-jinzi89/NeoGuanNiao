@@ -27,9 +27,8 @@ public final class NeoGuanNiaoCreativeTabs {
             CREATIVE_MODE_TABS.register("main", () ->
                     CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                             .title(Component.translatable("itemGroup.neoguanniao.main"))
-                            .icon(() -> new ItemStack(NeoGuanNiaoItems.BIRD_GUIDE.get()))
+                            .icon(() -> new ItemStack(NeoGuanNiaoItems.NIKON_D750.get()))
                             .displayItems((parameters, output) -> {
-                                output.accept(NeoGuanNiaoItems.BIRD_GUIDE.get());
                                 output.accept(NeoGuanNiaoItems.BREADCRUMBS.get());
                                 output.accept(NeoGuanNiaoItems.NIKON_D750.get());
                                 output.accept(NeoGuanNiaoItems.FILM.get());
