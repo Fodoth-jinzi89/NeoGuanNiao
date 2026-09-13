@@ -1,0 +1,26 @@
+{
+	id: "0AAA68B86464ED52"
+	loot_size: 1
+	order_index: 3
+	rewards: [
+		{ id: "5E39C2A6C7B72FBE", item: { count: 1, id: "minecraft:blaze_rod" } }
+		{ id: "5AD16B50599FADAF", item: { count: 1, id: "hazennstuff:charred_bones" } }
+		{ id: "5EB7868F62E1E216", item: { count: 1, id: "irons_spellbooks:frozen_bone" } }
+		{ id: "110829A8F578A64D", item: { count: 1, id: "irons_spellbooks:lightning_bottle" } }
+		{ id: "321AB138CBA2D80F", item: { count: 1, id: "irons_spellbooks:divine_pearl" } }
+		{ id: "78736C7F9853DC03", item: { count: 1, id: "minecraft:poisonous_potato" } }
+		{ id: "77CDFAB0F7E8505C", item: { count: 1, id: "minecraft:ender_pearl" } }
+		{ id: "22DB83125846C7D9", item: { count: 1, id: "irons_spellbooks:blood_vial" } }
+		{ id: "55B14C9F0AC23A3F", item: { count: 1, id: "minecraft:emerald" } }
+		{ id: "7527B67BC8292612", item: { count: 1, id: "hazennstuff:overgrown_bone" } }
+		{ id: "277244DEF9CA240B", item: { count: 1, id: "minecraft:echo_shard" } }
+		{ id: "72C74C9836396423", item: { count: 1, id: "hazennstuff:arcane_sea_shell" } }
+		{ id: "4DA92BDC2A1321AA", item: { count: 1, id: "hazennstuff:glowing_mushroom" } }
+		{ id: "04AA08CD4E6B41B7", item: { count: 1, id: "hazennstuff:shadow_scale" } }
+		{ id: "48995E0D43FE7AD8", item: { count: 1, id: "hazennstuff:nightmare_fuel" } }
+		{ id: "047BBACC8C909904", item: { count: 1, id: "hazennstuff:stardust" } }
+		{ id: "0CDA51167BA6A61E", item: { count: 1, id: "minecraft:note_block" } }
+		{ id: "4E1DFD9C78CB7DC5", item: { count: 1, id: "iss_magicfromtheeast:yin_yang_core" } }
+		{ id: "6B1D9C23606A33E2", item: { count: 1, id: "iss_magicfromtheeast:bottle_of_souls" } }
+	]
+}

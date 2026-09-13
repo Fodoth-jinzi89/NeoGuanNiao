@@ -1,0 +1,19 @@
+{
+	id: "230F4F590100613D"
+	loot_size: 1
+	order_index: 15
+	rewards: [
+		{ id: "22A8A77320E8C269", item: { components: { "bountiful:decree_data": { ids: ["archeologist"] }, "minecraft:custom_name": "\"考古收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2CE2E81065608E05", item: { components: { "bountiful:decree_data": { ids: ["archeologist_sell"] }, "minecraft:custom_name": "\"考古出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "779710CE572C9FA5", item: { components: { "bountiful:decree_data": { ids: ["wizard"] }, "minecraft:custom_name": "\"魔法收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "20E77E6DD104AFA8", item: { components: { "bountiful:decree_data": { ids: ["wizard_sell"] }, "minecraft:custom_name": "\"魔法出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "7852AFA2F0779933", item: { components: { "bountiful:decree_data": { ids: ["adventurer"] }, "minecraft:custom_name": "\"灾变收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "4F7B4154E8225007", item: { components: { "bountiful:decree_data": { ids: ["adventurer_sell"] }, "minecraft:custom_name": "\"灾变出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "734471A953B43E77", item: { components: { "bountiful:decree_data": { ids: ["arcanist"] }, "minecraft:custom_name": "\"神秘收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "05E4B2A88680D97D", item: { components: { "bountiful:decree_data": { ids: ["arcanist_sell"] }, "minecraft:custom_name": "\"神秘出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2123409F2B776F00", item: { components: { "bountiful:decree_data": { ids: ["alchemist"] }, "minecraft:custom_name": "\"炼金收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "1D8769E782EA8A1A", item: { components: { "bountiful:decree_data": { ids: ["alchemist_sell"] }, "minecraft:custom_name": "\"炼金出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "5C4C19FF77C392A3", item: { components: { "bountiful:decree_data": { ids: ["painter"] }, "minecraft:custom_name": "\"光谱收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "1FBB3302B79107CF", item: { components: { "bountiful:decree_data": { ids: ["painter_sell"] }, "minecraft:custom_name": "\"光谱出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}

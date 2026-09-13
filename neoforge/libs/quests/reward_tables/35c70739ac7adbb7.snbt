@@ -1,0 +1,23 @@
+{
+	id: "35C70739AC7ADBB7"
+	loot_size: 1
+	order_index: 8
+	rewards: [
+		{ id: "59A82351496305FC", item: { count: 1, id: "minecraft:amethyst_shard" } }
+		{ id: "18B2B7D94316DEB0", item: { count: 1, id: "iss_magicfromtheeast:crystallized_soul" } }
+		{ id: "39D2F6287A7C6F92", item: { count: 1, id: "minecraft:diamond" } }
+		{ id: "7B4AEDE535F1C0E2", item: { count: 1, id: "irons_spellbooks:divine_pearl" } }
+		{ id: "579CC5B56655F680", item: { count: 1, id: "minecraft:emerald" } }
+		{ id: "7D54D901051BA796", item: { count: 1, id: "minecraft:lapis_lazuli" } }
+		{ id: "0A0F3470DDC478AE", item: { count: 1, id: "irons_jewelry:peridot" } }
+		{ id: "4842F59BEE735DF3", item: { count: 1, id: "irons_jewelry:onyx" } }
+		{ id: "6DC0E40AF27EF5EF", item: { count: 1, id: "irons_jewelry:garnet" } }
+		{ id: "04FF620C205D5596", item: { count: 1, id: "irons_jewelry:ruby" } }
+		{ id: "1391F8B3B7839785", item: { count: 1, id: "irons_jewelry:sapphire" } }
+		{ id: "3686862C33161BDA", item: { count: 1, id: "irons_jewelry:topaz" } }
+		{ id: "3D20ECBCFBDEC6A8", item: { count: 1, id: "irons_jewelry:moonstone" } }
+		{ id: "2934801D6430C298", item: { count: 1, id: "hazennstuff:permafrost_fragment" } }
+		{ id: "1EBB530C84BEFB6E", item: { count: 1, id: "hazennstuff:solar_core" } }
+		{ id: "710B2BDC6847914B", item: { count: 1, id: "hazennstuff:volt_core" } }
+	]
+}

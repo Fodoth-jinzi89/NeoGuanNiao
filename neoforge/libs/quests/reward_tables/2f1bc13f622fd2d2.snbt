@@ -1,0 +1,27 @@
+{
+	icon: {
+		id: "sophisticatedbackpacks:backpack"
+	}
+	id: "2F1BC13F622FD2D2"
+	loot_size: 1
+	order_index: 1
+	rewards: [
+		{ id: "31E87859CB96F779", item: { count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "6557479E65540D9D", item: { components: { "sophisticatedcore:accent_color": -393218, "sophisticatedcore:main_color": -393218 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "6624C854FE842CC0", item: { components: { "sophisticatedcore:accent_color": -425955, "sophisticatedcore:main_color": -425955 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "1B380EF3AE6743CF", item: { components: { "sophisticatedcore:accent_color": -3715395, "sophisticatedcore:main_color": -3715395 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "78F84F20420335A3", item: { components: { "sophisticatedcore:accent_color": -12930086, "sophisticatedcore:main_color": -12930086 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "1F8FEFDC4F3F33E8", item: { components: { "minecraft:custom_name": "\"探险\"", "sophisticatedcore:accent_color": -10039160, "sophisticatedcore:main_color": -8337633, "sophisticatedcore:number_of_inventory_slots": 108, "sophisticatedcore:number_of_upgrade_slots": 5, "sophisticatedcore:open_tab_id": 0, "sophisticatedcore:render_info_tag": { upgradeItems: [ { components: { "sophisticatedcore:filter_attributes": { filter_items: [ { item: { count: 1, id: "silentgear:pebble" }, slot: 0 }, { item: { components: { "minecraft:damage": 5 }, count: 1, id: "minecraft:bow" }, slot: 1 }, { item: { count: 1, id: "minecraft:wheat_seeds" }, slot: 2 }, { item: { count: 1, id: "kaleidoscope_cookery:wild_rice" }, slot: 3 }, { item: { count: 1, id: "farmersdelight:tomato_seeds" }, slot: 4 }, { item: { count: 1, id: "minecraft:arrow" }, slot: 5 }, { item: { components: { "minecraft:damage": 136 }, count: 1, id: "minecraft:shield" }, slot: 6 }, { item: { components: { "minecraft:damage": 307, "minecraft:enchantments": { levels: { "minecraft:piercing": 2 } } }, count: 1, id: "minecraft:crossbow" }, slot: 7 } ], is_allow_list: 1b, match_any_tag: 1b }, "sophisticatedcore:should_work_in_gui": 1b }, count: 1, id: "sophisticatedbackpacks:advanced_void_upgrade" }, { count: 1, id: "sophisticatedbackpacks:advanced_deposit_upgrade" }, { count: 1, id: "sophisticatedbackpacks:stack_upgrade_tier_3" }, { count: 1, id: "sophisticatedbackpacks:inception_upgrade" }, { count: 1, id: "sophisticatedbackpacks:advanced_magnet_upgrade" } ] }, "sophisticatedcore:sort_by": "tags", "sophisticatedcore:storage_uuid": [I; 2052404607, -892910672, -2082258819, -169204255 ] }, count: 1, id: "sophisticatedbackpacks:diamond_backpack" } }
+		{ id: "792B289C99E68ECA", item: { components: { "sophisticatedcore:accent_color": -816214, "sophisticatedcore:main_color": -816214 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "3B8D36915729C4C7", item: { components: { "sophisticatedcore:accent_color": -12103854, "sophisticatedcore:main_color": -12103854 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "34A43CAD513E8A3A", item: { components: { "sophisticatedcore:accent_color": -6447721, "sophisticatedcore:main_color": -6447721 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "30A6856FAE2C3A9A", item: { components: { "sophisticatedcore:accent_color": -15295332, "sophisticatedcore:main_color": -15295332 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "2B1A1AE6B594CA4B", item: { components: { "sophisticatedcore:accent_color": -7785800, "sophisticatedcore:main_color": -7785800 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "5AFA18291F28135F", item: { components: { "sophisticatedcore:accent_color": -12827478, "sophisticatedcore:main_color": -12827478 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "404AA1146248A41B", item: { components: { "sophisticatedcore:accent_color": -8170446, "sophisticatedcore:main_color": -8170446 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "658295D448E17A58", item: { components: { "sophisticatedcore:accent_color": -10585066, "sophisticatedcore:main_color": -10585066 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "7874CB009E49B2CC", item: { components: { "sophisticatedcore:accent_color": -5231066, "sophisticatedcore:main_color": -5231066 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "039209124265272F", item: { components: { "sophisticatedcore:accent_color": -14869215, "sophisticatedcore:main_color": -14869215 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+		{ id: "7F7D4BA76447CD47", item: { components: { "sophisticatedcore:accent_color": -13881243, "sophisticatedcore:main_color": -3087822 }, count: 1, id: "sophisticatedbackpacks:backpack" } }
+	]
+}

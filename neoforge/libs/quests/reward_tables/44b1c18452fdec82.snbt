@@ -1,0 +1,29 @@
+{
+	id: "44B1C18452FDEC82"
+	loot_size: 1
+	order_index: 6
+	rewards: [
+		{ id: "24242604D92B9BC8", item: { count: 1, id: "tunes_n_tomes:melody_rune" } }
+		{ id: "261922A956F9C85C", item: { count: 1, id: "iss_magicfromtheeast:symmetry_rune" } }
+		{ id: "11A172A9280BEFA0", item: { count: 1, id: "iss_magicfromtheeast:spirit_rune" } }
+		{ id: "09B358E096E1F5DB", item: { count: 1, id: "irons_spellbooks:fire_rune" } }
+		{ id: "1729CB8645C7D4F0", item: { count: 1, id: "irons_spellbooks:ice_rune" } }
+		{ id: "0219FD6DBD8B3059", item: { count: 1, id: "irons_spellbooks:lightning_rune" } }
+		{ id: "5972C04BBBF4DF99", item: { count: 1, id: "irons_spellbooks:ender_rune" } }
+		{ id: "65EA120422B3B6CD", item: { count: 1, id: "irons_spellbooks:holy_rune" } }
+		{ id: "4EE35BB9C55B8B01", item: { count: 1, id: "irons_spellbooks:blood_rune" } }
+		{ id: "68FEC728C9AC43FA", item: { count: 1, id: "irons_spellbooks:evocation_rune" } }
+		{ id: "29AC109DEAF2279A", item: { count: 1, id: "irons_spellbooks:arcane_rune" } }
+		{ id: "6630654C3441136A", item: { count: 1, id: "irons_spellbooks:cooldown_rune" } }
+		{ id: "4DBFCE558E80BF3E", item: { count: 1, id: "irons_spellbooks:protection_rune" } }
+		{ id: "740092A3E4BA739B", item: { count: 1, id: "irons_spellbooks:nature_rune" } }
+		{ id: "6C361BFE421405DB", item: { count: 1, id: "hazentouvelib:shadow_rune" } }
+		{ id: "556EC3360403BBB1", item: { count: 1, id: "hazentouvelib:radiance_rune" } }
+		{ id: "02C243460709D2C2", item: { count: 1, id: "hazentouvelib:cosmic_rune" } }
+		{ id: "5A7C0052D4658BE9", item: { count: 1, id: "hazennstuff:melee_rune" } }
+		{ id: "1A4AADEC04C929BC", item: { count: 1, id: "hazennstuff:archery_rune" } }
+		{ id: "6B7FFBD8DB5E3D0C", item: { count: 1, id: "hazennstuff:health_rune" } }
+		{ id: "17784BA16A95D7EC", item: { count: 1, id: "hazennstuff:hydro_rune" } }
+		{ id: "4F915066A7BC9D60", item: { count: 1, id: "hazennstuff:eldritch_rune" } }
+	]
+}

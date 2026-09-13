@@ -1,0 +1,21 @@
+{
+	id: "7A753B1A1EC7BDEB"
+	loot_size: 1
+	order_index: 16
+	rewards: [
+		{ id: "0BDE93CBA961510F", item: { components: { "bountiful:decree_data": { ids: ["chef"] }, "minecraft:custom_name": "\"美食收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "162058F98E128C95", item: { components: { "bountiful:decree_data": { ids: ["chef_sell"] }, "minecraft:custom_name": "\"美食出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "09562C16DA5C0BBF", item: { components: { "bountiful:decree_data": { ids: ["farmer"] }, "minecraft:custom_name": "\"果蔬收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "4DE21340AFB25C3C", item: { components: { "bountiful:decree_data": { ids: ["farmer_sell"] }, "minecraft:custom_name": "\"果蔬出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "23AB3DD86ACBA7A6", item: { components: { "bountiful:decree_data": { ids: ["pistrinamaster"] }, "minecraft:custom_name": "\"甜品收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "0F6105BDD84999E4", item: { components: { "bountiful:decree_data": { ids: ["pistrinamaster_sell"] }, "minecraft:custom_name": "\"甜品出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "7C02A3F870C244D2", item: { components: { "bountiful:decree_data": { ids: ["bartender"] }, "minecraft:custom_name": "\"酿造收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "36178C05867F4739", item: { components: { "bountiful:decree_data": { ids: ["bartender_sell"] }, "minecraft:custom_name": "\"酿造出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "0F21014D314FDB55", item: { components: { "bountiful:decree_data": { ids: ["shepherd"] }, "minecraft:custom_name": "\"织布收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "7A918BFA8B4906A3", item: { components: { "bountiful:decree_data": { ids: ["shepherd_sell"] }, "minecraft:custom_name": "\"织布出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "162B2876A185E827", item: { components: { "bountiful:decree_data": { ids: ["fisherman"] }, "minecraft:custom_name": "\"鱼类收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "31404B1AC49224C6", item: { components: { "bountiful:decree_data": { ids: ["fisherman_sell"] }, "minecraft:custom_name": "\"鱼类出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "581198462ED76215", item: { components: { "bountiful:decree_data": { ids: ["butcher"] }, "minecraft:custom_name": "\"肉类收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2DD931B2DBEC3401", item: { components: { "bountiful:decree_data": { ids: ["butcher_sell"] }, "minecraft:custom_name": "\"肉类出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}

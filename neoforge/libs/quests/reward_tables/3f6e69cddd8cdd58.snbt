@@ -1,0 +1,43 @@
+{
+	id: "3F6E69CDDD8CDD58"
+	loot_size: 1
+	order_index: 5
+	rewards: [
+		{
+			count: 4
+			id: "410E16968E7BA677"
+			item: {
+				count: 1
+				id: "irons_spellbooks:common_ink"
+			}
+			weight: 10.0f
+		}
+		{
+			count: 2
+			id: "66C30AA0F2BA8132"
+			item: {
+				count: 1
+				id: "irons_spellbooks:uncommon_ink"
+			}
+			weight: 8.0f
+		}
+		{
+			count: 2
+			id: "40355FF019FA746B"
+			item: {
+				count: 1
+				id: "irons_spellbooks:rare_ink"
+			}
+			weight: 5.0f
+		}
+		{
+			id: "232F4CD25AAE05F1"
+			item: {
+				count: 1
+				id: "irons_spellbooks:epic_ink"
+			}
+			weight: 3.0f
+		}
+		{ id: "1714841CBAB8DA32", item: { count: 1, id: "irons_spellbooks:legendary_ink" } }
+	]
+}

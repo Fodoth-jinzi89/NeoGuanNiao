@@ -1,0 +1,17 @@
+{
+	id: "26CE0C9A31F45DB5"
+	loot_size: 1
+	order_index: 2
+	rewards: [
+		{ id: "5E215DC701E2CCA7", item: { count: 1, id: "create_connected:fan_blasting_catalyst" } }
+		{ id: "0C02B1B7BC541C10", item: { count: 1, id: "create_connected:fan_smoking_catalyst" } }
+		{ id: "2558279648AC4EB6", item: { count: 1, id: "create_connected:fan_splashing_catalyst" } }
+		{ id: "59296A702E415463", item: { count: 1, id: "create_connected:fan_haunting_catalyst" } }
+		{ id: "2E88523D621C402E", item: { count: 1, id: "create_connected:fan_freezing_catalyst" } }
+		{ id: "4F477F3EFA1126EB", item: { count: 1, id: "create_connected:fan_seething_catalyst" } }
+		{ id: "22A946B97D8D3219", item: { count: 1, id: "create_connected:fan_sanding_catalyst" } }
+		{ id: "693CE3F7316094D2", item: { count: 1, id: "create_connected:fan_enriched_catalyst" } }
+		{ id: "74A0AF6AF5CC222A", item: { count: 1, id: "create_connected:fan_ending_catalyst_dragons_breath" } }
+		{ id: "5CE010A893A97B2C", item: { count: 1, id: "create_connected:fan_ending_catalyst_dragon_head" } }
+	]
+}

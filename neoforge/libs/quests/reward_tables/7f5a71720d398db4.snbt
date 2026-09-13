@@ -1,0 +1,20 @@
+{
+	id: "7F5A71720D398DB4"
+	loot_size: 1
+	order_index: 10
+	rewards: [
+		{ id: "0019AE80A8A3EA22", item: { count: 1, id: "alshanex_familiars:mage_trinket" } }
+		{ id: "2620712A0F4743F2", item: { count: 1, id: "alshanex_familiars:archmage_trinket" } }
+		{ id: "6AF17D2F4E3EDD59", item: { count: 1, id: "alshanex_familiars:illusionist_trinket" } }
+		{ id: "6CA7E7E3A7BB63A7", item: { count: 1, id: "alshanex_familiars:scorcher_trinket" } }
+		{ id: "1C8BA41BF4247832", item: { count: 1, id: "alshanex_familiars:cleric_trinket" } }
+		{ id: "168B62A49974630F", item: { count: 1, id: "alshanex_familiars:plague_trinket" } }
+		{ id: "018A523FA5C988AC", item: { count: 1, id: "alshanex_familiars:bard_trinket" } }
+		{ id: "0FD1D49FD28198CE", item: { count: 1, id: "alshanex_familiars:frostling_trinket" } }
+		{ id: "79ABD157E23C246B", item: { count: 1, id: "alshanex_familiars:dragon_warrior_trinket" } }
+		{ id: "7EC9AF3B30811A8F", item: { count: 1, id: "alshanex_familiars:summoner_trinket" } }
+		{ id: "1EC98DEFBC60737B", item: { count: 1, id: "alshanex_familiars:necromancer_trinket" } }
+		{ id: "2436EF8D25FEBAE6", item: { count: 1, id: "alshanex_familiars:hunter_trinket" } }
+		{ id: "149479803F27362F", item: { count: 1, id: "alshanex_familiars:forest_trinket" } }
+	]
+}

@@ -1,0 +1,17 @@
+{
+	id: "2A9547346F9513B3"
+	loot_size: 1
+	order_index: 13
+	rewards: [
+		{ id: "4486F1D86C24403E", item: { components: { "bountiful:decree_data": { ids: ["librarian"] }, "minecraft:custom_name": "\"书籍收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2EFDAD61F2876B62", item: { components: { "bountiful:decree_data": { ids: ["librarian_sell"] }, "minecraft:custom_name": "\"书籍出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "29D5DA8194219045", item: { components: { "bountiful:decree_data": { ids: ["photographer"] }, "minecraft:custom_name": "\"摄影收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "547357D86DF27D3F", item: { components: { "bountiful:decree_data": { ids: ["photographer_sell"] }, "minecraft:custom_name": "\"摄影出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "6743A7072A2B21D8", item: { components: { "bountiful:decree_data": { ids: ["mapper"] }, "minecraft:custom_name": "\"图样模板收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "162FAC8B92A1C398", item: { components: { "bountiful:decree_data": { ids: ["mapper_sell"] }, "minecraft:custom_name": "\"图样模板出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "61B87EF20E1D6B12", item: { components: { "bountiful:decree_data": { ids: ["musician"] }, "minecraft:custom_name": "\"音乐收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "5BE93DE370549FC3", item: { components: { "bountiful:decree_data": { ids: ["musician_sell"] }, "minecraft:custom_name": "\"音乐出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "38A7976304A93D30", item: { components: { "bountiful:decree_data": { ids: ["admiral"] }, "minecraft:custom_name": "\"炮弹收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "1209E9F95745CD3F", item: { components: { "bountiful:decree_data": { ids: ["admiral_sell"] }, "minecraft:custom_name": "\"炮弹出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}

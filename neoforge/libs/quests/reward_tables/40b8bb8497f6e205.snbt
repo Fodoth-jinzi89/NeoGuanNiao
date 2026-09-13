@@ -1,0 +1,23 @@
+{
+	id: "40B8BB8497F6E205"
+	loot_size: 1
+	order_index: 9
+	rewards: [
+		{ id: "496C5E2028F81B1C", item: { count: 1, id: "irons_spellbooks:arcane_ingot" } }
+		{ id: "6FA024AC95A94A19", item: { count: 1, id: "create:brass_ingot" } }
+		{ id: "2CEB32E19C585211", item: { count: 1, id: "alltheores:bronze_ingot" } }
+		{ id: "65C34AB6D4AC8EAB", item: { count: 1, id: "hazennstuff:chlorophyte_ingot" } }
+		{ id: "7A72569BA6217E3F", item: { count: 1, id: "hazennstuff:dreadsteel_ingot" } }
+		{ id: "4BF62FA1BA7DCE53", item: { count: 1, id: "hazennstuff:hallowed_ingot" } }
+		{ id: "3992AC19884503CB", item: { count: 1, id: "alltheores:platinum_ingot" } }
+		{ id: "2CDC6E2A583D4373", item: { count: 1, id: "irons_spellbooks:mithril_ingot" } }
+		{ id: "317AD93446A03005", item: { count: 1, id: "minecraft:netherite_ingot" } }
+		{ id: "1BAC1F0418E11E57", item: { count: 1, id: "irons_spellbooks:pyrium_ingot" } }
+		{ id: "5BCDDD8003EF446E", item: { count: 1, id: "iss_magicfromtheeast:refined_jade_ingot" } }
+		{ id: "4B1CAEB329B37683", item: { count: 1, id: "hazennstuff:rose_gold_ingot" } }
+		{ id: "066E7228B59BCAE1", item: { count: 1, id: "alltheores:silver_ingot" } }
+		{ id: "1A31A4876FD5D547", item: { count: 1, id: "minecraft:copper_ingot" } }
+		{ id: "3AFABD48D6E31F3F", item: { count: 1, id: "minecraft:gold_ingot" } }
+		{ id: "4E2D011F3DA8D514", item: { count: 1, id: "hazennstuff:zenalite_ingot" } }
+	]
+}

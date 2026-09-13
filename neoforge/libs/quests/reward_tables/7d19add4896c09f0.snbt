@@ -1,0 +1,23 @@
+{
+	id: "7D19ADD4896C09F0"
+	loot_size: 1
+	order_index: 14
+	rewards: [
+		{ id: "5A695F4E0D012BF3", item: { components: { "bountiful:decree_data": { ids: ["ae2_specialist"] }, "minecraft:custom_name": "\"ECO收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "1E2CD3F269A0D192", item: { components: { "bountiful:decree_data": { ids: ["ae2_specialist_sell"] }, "minecraft:custom_name": "\"ECO出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "4296196AC83F8AAE", item: { components: { "bountiful:decree_data": { ids: ["ae2_engineer"] }, "minecraft:custom_name": "\"AE收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "7262ED4B7582BFE2", item: { components: { "bountiful:decree_data": { ids: ["ae2_engineer_sell"] }, "minecraft:custom_name": "\"AE出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "5A991E6311ADB019", item: { components: { "bountiful:decree_data": { ids: ["chemical_engineer"] }, "minecraft:custom_name": "\"Mek收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "26ACF301E4AA1A3D", item: { components: { "bountiful:decree_data": { ids: ["chemical_engineer_sell"] }, "minecraft:custom_name": "\"Mek出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2E67286DBEBA7AF6", item: { components: { "bountiful:decree_data": { ids: ["fluix_researcher"] }, "minecraft:custom_name": "\"AE材料收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "4FDAE1F1E6B732E2", item: { components: { "bountiful:decree_data": { ids: ["fluix_researcher_sell"] }, "minecraft:custom_name": "\"AE材料出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "4C56C7DDF4333135", item: { components: { "bountiful:decree_data": { ids: ["pilot"] }, "minecraft:custom_name": "\"航空学收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "6497E84667AE698A", item: { components: { "bountiful:decree_data": { ids: ["pilot_sell"] }, "minecraft:custom_name": "\"航空学出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2848F659334178BE", item: { components: { "bountiful:decree_data": { ids: ["mechanic"] }, "minecraft:custom_name": "\"机械动力收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "6A98266ED56ABC35", item: { components: { "bountiful:decree_data": { ids: ["mechanic_sell"] }, "minecraft:custom_name": "\"机械动力出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "621FE0638C0EED27", item: { components: { "bountiful:decree_data": { ids: ["programmer"] }, "minecraft:custom_name": "\"电脑收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "785A4EF24CC7E8A9", item: { components: { "bountiful:decree_data": { ids: ["programmer_sell"] }, "minecraft:custom_name": "\"电脑出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "66AC83F101F42E23", item: { components: { "bountiful:decree_data": { ids: ["astronaut"] }, "minecraft:custom_name": "\"北极星收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "282BC5F721DA5E85", item: { components: { "bountiful:decree_data": { ids: ["astronaut_sell"] }, "minecraft:custom_name": "\"北极星出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}
