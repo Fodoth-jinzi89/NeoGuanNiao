@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.looking_around.name",
+  "description": "book.neoguanniao.bird_guide.entry.looking_around.description",
+  "icon": {
+    "item": "minecraft:spyglass"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 4,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.looking_around.page1.text"
+    }
+  ]
+}

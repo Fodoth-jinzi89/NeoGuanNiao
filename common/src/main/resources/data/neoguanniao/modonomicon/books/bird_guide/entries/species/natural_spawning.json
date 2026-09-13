@@ -1,0 +1,25 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.natural_spawning.name",
+  "description": "book.neoguanniao.bird_guide.entry.natural_spawning.description",
+  "icon": {
+    "item": "minecraft:oak_sapling"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 2,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.natural_spawning.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.natural_spawning.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.natural_spawning.page3.text"
+    }
+  ]
+}

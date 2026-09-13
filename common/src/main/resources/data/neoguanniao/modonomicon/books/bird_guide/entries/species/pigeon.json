@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.pigeon.name",
+  "description": "book.neoguanniao.bird_guide.entry.pigeon.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 4,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.pigeon.page1.text"
+    }
+  ]
+}

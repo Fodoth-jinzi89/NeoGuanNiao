@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.film_and_photos.name",
+  "description": "book.neoguanniao.bird_guide.entry.film_and_photos.description",
+  "icon": {
+    "item": "neoguanniao:blank_film"
+  },
+  "category": "neoguanniao:camera",
+  "parents": [],
+  "x": 2,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page1.text"
+    }
+  ]
+}

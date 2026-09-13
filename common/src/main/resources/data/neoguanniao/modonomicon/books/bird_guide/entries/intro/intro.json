@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.intro.name",
+  "description": "book.neoguanniao.bird_guide.entry.intro.description",
+  "icon": {
+    "item": "neoguanniao:bird_guide"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.intro.page1.text"
+    }
+  ]
+}

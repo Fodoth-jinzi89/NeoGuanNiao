@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.following.name",
+  "description": "book.neoguanniao.bird_guide.entry.following.description",
+  "icon": {
+    "item": "minecraft:heart_pottery_sherd"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 0,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.following.page1.text"
+    }
+  ]
+}

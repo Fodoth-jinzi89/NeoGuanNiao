@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.feathers.name",
+  "description": "book.neoguanniao.bird_guide.entry.feathers.description",
+  "icon": {
+    "item": "neoguanniao:bird_feather"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 2,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.feathers.page1.text"
+    }
+  ]
+}

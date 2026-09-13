@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.skin_upgrade.name",
+  "description": "book.neoguanniao.bird_guide.entry.skin_upgrade.description",
+  "icon": {
+    "item": "neoguanniao:golden_food_bag_upgrade"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 2,
+  "y": 6,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.skin_upgrade.page1.text"
+    }
+  ]
+}

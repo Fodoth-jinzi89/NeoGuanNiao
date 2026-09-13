@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.breeding.name",
+  "description": "book.neoguanniao.bird_guide.entry.breeding.description",
+  "icon": {
+    "item": "neoguanniao:bird_food_bag"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 6,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.breeding.page1.text"
+    }
+  ]
+}

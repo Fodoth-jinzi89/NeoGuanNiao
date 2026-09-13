@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.startled.name",
+  "description": "book.neoguanniao.bird_guide.entry.startled.description",
+  "icon": {
+    "item": "minecraft:creeper_head"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 2,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.startled.page1.text"
+    }
+  ]
+}

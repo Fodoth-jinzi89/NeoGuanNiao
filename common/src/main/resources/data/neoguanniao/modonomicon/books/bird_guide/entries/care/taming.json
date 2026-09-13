@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.taming.name",
+  "description": "book.neoguanniao.bird_guide.entry.taming.description",
+  "icon": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.taming.page1.text"
+    }
+  ]
+}

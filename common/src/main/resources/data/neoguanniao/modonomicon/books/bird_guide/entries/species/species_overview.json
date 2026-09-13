@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.species_overview.name",
+  "description": "book.neoguanniao.bird_guide.entry.species_overview.description",
+  "icon": {
+    "item": "minecraft:egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.species_overview.page1.text"
+    }
+  ]
+}

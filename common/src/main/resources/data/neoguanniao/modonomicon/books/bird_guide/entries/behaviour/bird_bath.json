@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_bath.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_bath.description",
+  "icon": {
+    "item": "neoguanniao:bird_bath_2"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 0,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_bath.page1.text"
+    }
+  ]
+}

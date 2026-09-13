@@ -1,0 +1,9 @@
+{
+  "name": "book.neoguanniao.bird_guide.category.intro.name",
+  "description": "book.neoguanniao.bird_guide.category.intro.description",
+  "icon": {
+    "item": "neoguanniao:bird_guide"
+  },
+  "background": "neoguanniao:textures/gui/category_background.png",
+  "sort_number": 0
+}

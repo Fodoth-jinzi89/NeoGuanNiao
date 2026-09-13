@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_researcher.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_researcher.description",
+  "icon": {
+    "item": "minecraft:villager_spawn_egg"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_researcher.page1.text"
+    }
+  ]
+}

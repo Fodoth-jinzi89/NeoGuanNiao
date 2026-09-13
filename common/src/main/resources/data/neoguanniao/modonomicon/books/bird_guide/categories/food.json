@@ -1,0 +1,9 @@
+{
+  "name": "book.neoguanniao.bird_guide.category.food.name",
+  "description": "book.neoguanniao.bird_guide.category.food.description",
+  "icon": {
+    "item": "neoguanniao:green_food_bag"
+  },
+  "background": "neoguanniao:textures/gui/category_background.png",
+  "sort_number": 3
+}

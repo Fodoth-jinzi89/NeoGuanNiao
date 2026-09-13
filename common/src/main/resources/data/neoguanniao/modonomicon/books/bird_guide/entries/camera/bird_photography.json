@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_photography.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_photography.description",
+  "icon": {
+    "item": "neoguanniao:nikon_d750"
+  },
+  "category": "neoguanniao:camera",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_photography.page1.text"
+    }
+  ]
+}

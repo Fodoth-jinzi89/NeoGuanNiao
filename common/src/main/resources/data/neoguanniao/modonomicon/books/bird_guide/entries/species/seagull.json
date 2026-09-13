@@ -1,0 +1,16 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.seagull.name",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 2,
+  "y": 6,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.seagull.page1.text"
+    }
+  ]
+}

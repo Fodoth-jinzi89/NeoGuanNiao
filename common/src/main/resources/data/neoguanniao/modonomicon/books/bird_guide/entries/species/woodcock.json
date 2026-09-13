@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.woodcock.name",
+  "description": "book.neoguanniao.bird_guide.entry.woodcock.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 0,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.woodcock.page1.text"
+    }
+  ]
+}

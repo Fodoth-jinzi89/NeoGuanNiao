@@ -1,0 +1,9 @@
+{
+  "name": "book.neoguanniao.bird_guide.category.behaviour.name",
+  "description": "book.neoguanniao.bird_guide.category.behaviour.description",
+  "icon": {
+    "item": "neoguanniao:bird_feather"
+  },
+  "background": "neoguanniao:textures/gui/category_background.png",
+  "sort_number": 1
+}

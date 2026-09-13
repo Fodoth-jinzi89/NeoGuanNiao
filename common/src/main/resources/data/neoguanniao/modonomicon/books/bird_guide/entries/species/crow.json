@@ -1,0 +1,16 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.crow.name",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 0,
+  "y": 6,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.crow.page1.text"
+    }
+  ]
+}

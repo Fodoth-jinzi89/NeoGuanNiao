@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.daily_schedule.name",
+  "description": "book.neoguanniao.bird_guide.entry.daily_schedule.description",
+  "icon": {
+    "item": "minecraft:clock"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 2,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.daily_schedule.page1.text"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.egg_add.name",
+  "description": "book.neoguanniao.bird_guide.entry.egg_add.description",
+  "icon": {
+    "item": "neoguanniao:golden_food_bag_egg_add"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 0,
+  "y": 8,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.egg_add.page1.text"
+    }
+  ]
+}

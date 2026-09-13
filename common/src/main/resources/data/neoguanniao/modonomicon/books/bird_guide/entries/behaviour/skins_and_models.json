@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.skins_and_models.name",
+  "description": "book.neoguanniao.bird_guide.entry.skins_and_models.description",
+  "icon": {
+    "item": "minecraft:painting"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 6,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.skins_and_models.page1.text"
+    }
+  ]
+}

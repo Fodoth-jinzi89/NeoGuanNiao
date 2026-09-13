@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.dancing.name",
+  "description": "book.neoguanniao.bird_guide.entry.dancing.description",
+  "icon": {
+    "item": "minecraft:jukebox"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 4,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.dancing.page1.text"
+    }
+  ]
+}

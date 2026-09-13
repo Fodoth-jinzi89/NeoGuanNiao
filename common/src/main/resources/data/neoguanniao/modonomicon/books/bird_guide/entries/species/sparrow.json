@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.sparrow.name",
+  "description": "book.neoguanniao.bird_guide.entry.sparrow.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 6,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.sparrow.page1.text"
+    }
+  ]
+}

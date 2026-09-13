@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.spotted_dove.name",
+  "description": "book.neoguanniao.bird_guide.entry.spotted_dove.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 2,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.spotted_dove.page1.text"
+    }
+  ]
+}

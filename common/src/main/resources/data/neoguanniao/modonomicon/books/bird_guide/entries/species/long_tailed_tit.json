@@ -1,0 +1,16 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.long_tailed_tit.name",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 4,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.long_tailed_tit.page1.text"
+    }
+  ]
+}

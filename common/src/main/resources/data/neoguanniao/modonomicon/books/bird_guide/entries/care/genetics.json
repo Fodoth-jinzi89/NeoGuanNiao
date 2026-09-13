@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.genetics.name",
+  "description": "book.neoguanniao.bird_guide.entry.genetics.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 0,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page1.text"
+    }
+  ]
+}

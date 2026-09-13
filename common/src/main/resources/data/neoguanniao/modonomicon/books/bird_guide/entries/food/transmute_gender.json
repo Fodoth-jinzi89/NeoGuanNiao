@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.transmute_gender.name",
+  "description": "book.neoguanniao.bird_guide.entry.transmute_gender.description",
+  "icon": {
+    "item": "neoguanniao:green_food_bag_transmute"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 4,
+  "y": 8,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.transmute_gender.page1.text"
+    }
+  ]
+}

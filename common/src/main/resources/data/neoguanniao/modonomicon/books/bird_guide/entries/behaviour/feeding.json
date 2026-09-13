@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.feeding.name",
+  "description": "book.neoguanniao.bird_guide.entry.feeding.description",
+  "icon": {
+    "item": "neoguanniao:breadcrumbs"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 6,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.feeding.page1.text"
+    }
+  ]
+}

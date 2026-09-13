@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.flight.name",
+  "description": "book.neoguanniao.bird_guide.entry.flight.description",
+  "icon": {
+    "item": "minecraft:feather"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 2,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.flight.page1.text"
+    }
+  ]
+}

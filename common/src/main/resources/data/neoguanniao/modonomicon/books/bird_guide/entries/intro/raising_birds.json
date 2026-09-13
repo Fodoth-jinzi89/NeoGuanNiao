@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.raising_birds.name",
+  "description": "book.neoguanniao.bird_guide.entry.raising_birds.description",
+  "icon": {
+    "item": "neoguanniao:bird_nest"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [],
+  "x": 4,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.raising_birds.page1.text"
+    }
+  ]
+}

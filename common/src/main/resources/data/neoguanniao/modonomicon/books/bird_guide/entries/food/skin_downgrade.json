@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.skin_downgrade.name",
+  "description": "book.neoguanniao.bird_guide.entry.skin_downgrade.description",
+  "icon": {
+    "item": "neoguanniao:golden_food_bag_downgrade"
+  },
+  "category": "neoguanniao:food",
+  "parents": [],
+  "x": 4,
+  "y": 6,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.skin_downgrade.page1.text"
+    }
+  ]
+}

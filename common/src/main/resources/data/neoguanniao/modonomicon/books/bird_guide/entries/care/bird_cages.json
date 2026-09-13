@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_cages.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_cages.description",
+  "icon": {
+    "item": "neoguanniao:small_bird_cage"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 2,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page1.text"
+    }
+  ]
+}

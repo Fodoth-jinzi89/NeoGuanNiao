@@ -1,0 +1,9 @@
+{
+  "name": "book.neoguanniao.bird_guide.category.care.name",
+  "description": "book.neoguanniao.bird_guide.category.care.description",
+  "icon": {
+    "item": "neoguanniao:bird_nest"
+  },
+  "background": "neoguanniao:textures/gui/category_background.png",
+  "sort_number": 2
+}

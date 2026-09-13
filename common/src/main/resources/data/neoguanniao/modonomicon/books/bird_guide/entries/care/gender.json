@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.gender.name",
+  "description": "book.neoguanniao.bird_guide.entry.gender.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 4,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.gender.page1.text"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.budgerigar.name",
+  "description": "book.neoguanniao.bird_guide.entry.budgerigar.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 4,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.budgerigar.page1.text"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.movement.name",
+  "description": "book.neoguanniao.bird_guide.entry.movement.description",
+  "icon": {
+    "item": "minecraft:leather_boots"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.movement.page1.text"
+    }
+  ]
+}

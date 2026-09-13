@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.chicks_and_adults.name",
+  "description": "book.neoguanniao.bird_guide.entry.chicks_and_adults.description",
+  "icon": {
+    "item": "minecraft:chicken_spawn_egg"
+  },
+  "category": "neoguanniao:care",
+  "parents": [],
+  "x": 2,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.chicks_and_adults.page1.text"
+    }
+  ]
+}

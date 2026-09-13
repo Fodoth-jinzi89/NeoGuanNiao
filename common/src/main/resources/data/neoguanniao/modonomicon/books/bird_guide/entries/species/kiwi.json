@@ -1,0 +1,17 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.kiwi.name",
+  "description": "book.neoguanniao.bird_guide.entry.kiwi.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:species",
+  "parents": [],
+  "x": 6,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.kiwi.page1.text"
+    }
+  ]
+}
