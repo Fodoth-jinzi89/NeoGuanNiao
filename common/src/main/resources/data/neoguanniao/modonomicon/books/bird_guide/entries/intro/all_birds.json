@@ -1,0 +1,126 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.all_birds.name",
+  "description": "book.neoguanniao.bird_guide.entry.all_birds.description",
+  "icon": {
+    "item": "minecraft:feather"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/natural_spawning"
+    }
+  ],
+  "x": 6,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.all_birds.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.all_birds.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_budgerigar",
+      "entity_id": "neoguanniao:neo_budgerigar",
+      "scale": 0.8,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.budgerigar.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_sparrow",
+      "entity_id": "neoguanniao:neo_sparrow",
+      "scale": 0.8,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.sparrow.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_night_heron",
+      "entity_id": "neoguanniao:neo_night_heron",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.night_heron.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_dove",
+      "entity_id": "neoguanniao:neo_dove",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.spotted_dove.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_pigeon",
+      "entity_id": "neoguanniao:neo_pigeon",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.pigeon.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_kiwi",
+      "entity_id": "neoguanniao:neo_kiwi",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.kiwi.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_woodcock",
+      "entity_id": "neoguanniao:neo_woodcock",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.woodcock.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_cockatiel",
+      "entity_id": "neoguanniao:neo_cockatiel",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.cockatiel.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_long_tailed_tit",
+      "entity_id": "neoguanniao:neo_long_tailed_tit",
+      "scale": 0.8,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.long_tailed_tit.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_macaw",
+      "entity_id": "neoguanniao:neo_macaw",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.macaw.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_crow",
+      "entity_id": "neoguanniao:neo_crow",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.crow.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_seagull",
+      "entity_id": "neoguanniao:neo_seagull",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.seagull.page1.text"
+    },
+    {
+      "type": "modonomicon:entity",
+      "name": "entity.neoguanniao.neo_myna",
+      "entity_id": "neoguanniao:neo_myna",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "book.neoguanniao.bird_guide.entry.myna.page1.text"
+    }
+  ]
+}

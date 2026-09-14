@@ -1,0 +1,61 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.feather_fan.name",
+  "description": "book.neoguanniao.bird_guide.entry.feather_fan.description",
+  "icon": {
+    "item": "neoguanniao:wind_feather_fan"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/feathers"
+    }
+  ],
+  "x": 13,
+  "y": -1,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.feather_fan.name",
+      "text": "book.neoguanniao.bird_guide.entry.feather_fan.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.wind_feather_fan",
+      "recipe_id_1": "neoguanniao:wind_feather_fan",
+      "text": "book.neoguanniao.bird_guide.entry.feather_fan.page2.text"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "title": "item.neoguanniao.wind_feather_fan.mode.burial",
+      "item": {
+        "item": "neoguanniao:wind_feather_fan",
+        "components": {
+          "neoguanniao:feather_fan_mode": 0
+        }
+      },
+      "text": "book.neoguanniao.bird_guide.entry.feather_fan.page3.text"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "title": "item.neoguanniao.wind_feather_fan.mode.riven",
+      "item": {
+        "item": "neoguanniao:wind_feather_fan",
+        "components": {
+          "neoguanniao:feather_fan_mode": 1
+        }
+      },
+      "text": "book.neoguanniao.bird_guide.entry.feather_fan.page4.text"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "title": "item.neoguanniao.wind_feather_fan.mode.hunting",
+      "item": {
+        "item": "neoguanniao:wind_feather_fan",
+        "components": {
+          "neoguanniao:feather_fan_mode": 2
+        }
+      },
+      "text": "book.neoguanniao.bird_guide.entry.feather_fan.page5.text"
+    }
+  ]
+}

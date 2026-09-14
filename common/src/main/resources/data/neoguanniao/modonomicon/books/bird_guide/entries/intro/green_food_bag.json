@@ -1,0 +1,88 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.green_food_bag.name",
+  "description": "book.neoguanniao.bird_guide.entry.green_food_bag.description",
+  "icon": {
+    "item": "neoguanniao:green_food_bag_transmute"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/bird_food_bag"
+    }
+  ],
+  "x": 13,
+  "y": 3,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.green_food_bag.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.green_food_bag.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag",
+      "recipe_id_1": "neoguanniao:green_food_bag",
+      "text": "book.neoguanniao.bird_guide.entry.green_food_bag.page2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_stop",
+      "recipe_id_1": "neoguanniao:green_food_bag_stop",
+      "text": "book.neoguanniao.bird_guide.entry.growth_control.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_growth",
+      "recipe_id_1": "neoguanniao:green_food_bag_growth",
+      "text": "book.neoguanniao.bird_guide.entry.grow_up.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_rejuvenate",
+      "recipe_id_1": "neoguanniao:green_food_bag_rejuvenate",
+      "text": "book.neoguanniao.bird_guide.entry.rejuvenate.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_feather_add",
+      "recipe_id_1": "neoguanniao:green_food_bag_feather_add",
+      "text": "book.neoguanniao.bird_guide.entry.feather_add.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_feather_minus",
+      "recipe_id_1": "neoguanniao:green_food_bag_feather_minus",
+      "text": "book.neoguanniao.bird_guide.entry.feather_minus.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_feather_fast",
+      "recipe_id_1": "neoguanniao:green_food_bag_feather_fast",
+      "text": "book.neoguanniao.bird_guide.entry.feather_fast.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_feather_slow",
+      "recipe_id_1": "neoguanniao:green_food_bag_feather_slow",
+      "text": "book.neoguanniao.bird_guide.entry.feather_slow.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_size_up",
+      "recipe_id_1": "neoguanniao:green_food_bag_size_up",
+      "text": "book.neoguanniao.bird_guide.entry.size_up.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_size_down",
+      "recipe_id_1": "neoguanniao:green_food_bag_size_down",
+      "text": "book.neoguanniao.bird_guide.entry.size_down.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.green_food_bag_transmute",
+      "recipe_id_1": "neoguanniao:green_food_bag_transmute",
+      "text": "book.neoguanniao.bird_guide.entry.transmute_gender.page1.text"
+    }
+  ]
+}

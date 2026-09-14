@@ -1,0 +1,38 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.feathers.name",
+  "description": "book.neoguanniao.bird_guide.entry.feathers.description",
+  "icon": {
+    "item": "neoguanniao:bird_feather"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/taming"
+    }
+  ],
+  "x": 12,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.feathers.page1.text",
+      "title": "book.neoguanniao.bird_guide.entry.feathers.page1.name"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "neoguanniao:bird_feather",
+        "components": {
+          "neoguanniao:bird_feather_data": {
+            "bird_type": "neoguanniao:neo_budgerigar",
+            "rarity": 0
+          },
+          "neoguanniao:bird_feather_bird_type": 0,
+          "neoguanniao:bird_feather_skin_rarity": 0
+        }
+      },
+      "text": "book.neoguanniao.bird_guide.entry.feathers.page2.text",
+      "title": "item.neoguanniao.bird_feather"
+    }
+  ]
+}

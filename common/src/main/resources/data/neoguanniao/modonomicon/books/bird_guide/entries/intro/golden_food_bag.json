@@ -1,0 +1,58 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.golden_food_bag.name",
+  "description": "book.neoguanniao.bird_guide.entry.golden_food_bag.description",
+  "icon": {
+    "item": "neoguanniao:golden_food_bag_unique"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/bird_food_bag"
+    }
+  ],
+  "x": 13,
+  "y": 5,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.golden_food_bag.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.golden_food_bag.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag",
+      "recipe_id_1": "neoguanniao:golden_food_bag",
+      "text": "book.neoguanniao.bird_guide.entry.golden_food_bag.page2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag_upgrade",
+      "recipe_id_1": "neoguanniao:golden_food_bag_upgrade",
+      "text": "book.neoguanniao.bird_guide.entry.skin_upgrade.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag_downgrade",
+      "recipe_id_1": "neoguanniao:golden_food_bag_downgrade",
+      "text": "book.neoguanniao.bird_guide.entry.skin_downgrade.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag_unique",
+      "recipe_id_1": "neoguanniao:golden_food_bag_unique",
+      "text": "book.neoguanniao.bird_guide.entry.unique_skin.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag_egg_add",
+      "recipe_id_1": "neoguanniao:golden_food_bag_egg_add",
+      "text": "book.neoguanniao.bird_guide.entry.egg_add.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.golden_food_bag_egg_minus",
+      "recipe_id_1": "neoguanniao:golden_food_bag_egg_minus",
+      "text": "book.neoguanniao.bird_guide.entry.egg_minus.page1.text"
+    }
+  ]
+}

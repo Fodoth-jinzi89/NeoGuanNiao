@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:mod_loaded",
+      "modid": "modonomicon"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modonomicon"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "neoguanniao:bird_feather"
+    }
+  ],
+  "result": {
+    "id": "neoguanniao:bird_guide",
+    "components": {
+      "modonomicon:book_id": "neoguanniao:bird_guide"
+    }
+  }
+}
