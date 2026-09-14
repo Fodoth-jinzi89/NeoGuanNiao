@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoFabricNetwork;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fodoth.skina.neoguanniao.compat.modonomicon.pages.BookLinkPage;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoFabricConfig;
+import net.fodoth.skina.neoguanniao.platform.ModonomiconHooks;
 import java.io.IOException;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.Holder;
@@ -52,6 +54,10 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
         NeoGuanNiaoFabricSpawns.register();
         NeoGuanNiaoFabricNetwork.register();
         NeoGuanNiaoFabricServerEvents.register();
+        if (ModonomiconHooks.isLoaded()) {
+            // Modonomicon 是可选依赖：装了才注册观鸟手册的自定义页面类型。
+            BookLinkPage.register();
+        }
     }
 
     // 漏斗/自动化：把鸟巢暴露为 fabric-transfer 的物品存储（对应 NeoForge 的 Capabilities.ItemHandler.BLOCK）。

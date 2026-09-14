@@ -11,7 +11,12 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.breeding.page1.name",
       "text": "book.neoguanniao.bird_guide.entry.breeding.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.breeding.page2.text"
     }
   ]
 }

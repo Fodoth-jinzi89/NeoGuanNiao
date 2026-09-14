@@ -1,0 +1,94 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.general_behaviour.name",
+  "description": "book.neoguanniao.bird_guide.category.behaviour.description",
+  "icon": {
+    "item": "neoguanniao:bird_feather"
+  },
+  "category": "neoguanniao:behaviour",
+  "parents": [],
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.daily_schedule.name",
+      "text": "book.neoguanniao.bird_guide.entry.daily_schedule.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.daily_schedule.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.movement.name",
+      "text": "book.neoguanniao.bird_guide.entry.movement.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.looking_around.name",
+      "text": "book.neoguanniao.bird_guide.entry.looking_around.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.feeding.name",
+      "text": "book.neoguanniao.bird_guide.entry.feeding.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.feeding.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.bird_bath.name",
+      "text": "book.neoguanniao.bird_guide.entry.bird_bath.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_bath.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_bath.page3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.startled.name",
+      "text": "book.neoguanniao.bird_guide.entry.startled.page1.text"
+    },
+    {
+      "type": "neoguanniao:link",
+      "title": "book.neoguanniao.bird_guide.entry.calls.name",
+      "text": "book.neoguanniao.bird_guide.entry.calls.page1.text",
+      "link_text": "book.neoguanniao.bird_guide.entry.calls.page1.link_text",
+      "url": "https://modrinth.com/mod/extreme_sound_muffler"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.skins_and_models.name",
+      "text": "book.neoguanniao.bird_guide.entry.skins_and_models.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.skins_and_models.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.following.name",
+      "text": "book.neoguanniao.bird_guide.entry.following.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.flight.name",
+      "text": "book.neoguanniao.bird_guide.entry.flight.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.flight.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.dancing.name",
+      "text": "book.neoguanniao.bird_guide.entry.dancing.page1.text"
+    }
+  ]
+}

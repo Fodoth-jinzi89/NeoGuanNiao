@@ -5,5 +5,6 @@
     "item": "neoguanniao:bird_egg"
   },
   "background": "neoguanniao:textures/gui/category_background.png",
+  "entry_textures": "neoguanniao:textures/gui/entry_textures.png",
   "sort_number": 4
 }

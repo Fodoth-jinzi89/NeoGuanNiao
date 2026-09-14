@@ -11,7 +11,38 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.bird_cages.page1.name",
       "text": "book.neoguanniao.bird_guide.entry.bird_cages.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "block.neoguanniao.small_bird_cage",
+      "recipe_id_1": "neoguanniao:small_bird_cage",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "block.neoguanniao.medium_bird_cage",
+      "recipe_id_1": "neoguanniao:medium_bird_cage",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page3.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "block.neoguanniao.large_bird_cage",
+      "recipe_id_1": "neoguanniao:large_bird_cage",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page4.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.bird_cages.page5.name",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page5.text"
+    },
+    {
+      "type": "neoguanniao:link",
+      "title": "book.neoguanniao.bird_guide.entry.bird_cages.page6.name",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages.page6.text",
+      "link_text": "book.neoguanniao.bird_guide.entry.bird_cages.page6.link_text",
+      "url": "https://modrinth.com/mod/carry-on"
     }
   ]
 }
