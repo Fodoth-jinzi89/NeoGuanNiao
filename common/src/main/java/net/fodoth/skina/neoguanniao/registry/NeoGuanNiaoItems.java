@@ -12,13 +12,14 @@ import net.fodoth.skina.neoguanniao.content.egg.BirdEggItem;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherItem;
 import net.fodoth.skina.neoguanniao.content.fan.FeatherFanItem;
 import net.fodoth.skina.neoguanniao.content.feed.*;
-import net.fodoth.skina.neoguanniao.content.guide.BirdGuideItem;
 import net.fodoth.skina.neoguanniao.content.nest.BirdNestItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
+import net.fodoth.skina.neoguanniao.platform.ModonomiconHooks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -26,8 +27,9 @@ public final class NeoGuanNiaoItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(NeoGuanNiao.MODID, Registries.ITEM);
 
+    /** 观鸟手册（Modonomicon 书）；未安装 Modonomicon 时为 null。 */
+    public static final @Nullable RegistrySupplier<Item> BIRD_GUIDE;
     public static final RegistrySupplier<Item> BREADCRUMBS;
-    public static final RegistrySupplier<Item> BIRD_GUIDE;
     public static final RegistrySupplier<Item> NIKON_D750;
     public static final RegistrySupplier<Item> FILM;
     public static final RegistrySupplier<Item> BLANK_FILM;
@@ -100,14 +102,14 @@ public final class NeoGuanNiaoItems {
     }
 
     static {
+        // Modonomicon 是可选依赖：未安装时不注册这本手册，避免加载缺失的 Modonomicon 类。
+        BIRD_GUIDE = ModonomiconHooks.isLoaded()
+                ? ITEMS.register("bird_guide", ModonomiconHooks::birdGuide)
+                : null;
+
         BREADCRUMBS = ITEMS.register(
                 "breadcrumbs",
                 () -> new BreadcrumbItem(new Item.Properties())
-        );
-
-        BIRD_GUIDE = ITEMS.register(
-                "bird_guide",
-                () -> new BirdGuideItem(new Item.Properties().stacksTo(1))
         );
 
         NIKON_D750 = ITEMS.register("nikon_d750", () -> new NikonD750Item(new Item.Properties().stacksTo(1)));

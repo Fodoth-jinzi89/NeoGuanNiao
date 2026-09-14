@@ -764,12 +764,6 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
      * @return 播放状态，包含要播放的动画
      */
     public <E extends AbstractBirdEntity<?>> PlayState movementController(AnimationState<E> animationState) {
-        // 优先检查是否有引导预览动画（外部强制指定的动画）
-        RawAnimation guidePreviewRawAnimation = getAnimationController().getCurrentGuideAnimation();
-        if (guidePreviewRawAnimation != null) {
-            return animationState.setAndContinue(guidePreviewRawAnimation);
-        }
-
         BirdBehaviorState state = getBehaviorStateController().getBehaviorState();
         var tickTimer = getTickController().getTickTimer();
 

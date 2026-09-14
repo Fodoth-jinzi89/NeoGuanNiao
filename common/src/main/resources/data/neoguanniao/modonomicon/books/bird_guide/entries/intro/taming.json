@@ -1,0 +1,42 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.taming.name",
+  "description": "book.neoguanniao.bird_guide.entry.taming.description",
+  "icon": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/all_birds"
+    }
+  ],
+  "x": 9,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.taming.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.taming.page1.text"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "tag": "neoguanniao:bird_food"
+      },
+      "title": "tag.neoguanniao.bird_food",
+      "text": "book.neoguanniao.bird_guide.entry.taming.page2.text"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "tag": "neoguanniao:bird_food_fish"
+      },
+      "title": "tag.neoguanniao.bird_food_fish",
+      "text": "book.neoguanniao.bird_guide.entry.taming.page3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.taming.page4.text"
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 package net.fodoth.skina.neoguanniao.content.bird.core.controller;
 
-import net.fodoth.skina.neoguanniao.content.bird.core.BirdGuidePreviewAnimation;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.content.bird.core.flight.BirdFlightAware;
 import net.minecraft.world.phys.Vec3;
@@ -28,13 +27,6 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
     private RawAnimation currentSleepAnimation;
 
     /**
-     * 当前引导预览动画
-     */
-    private RawAnimation currentGuideAnimation;
-
-
-
-    /**
      * GeckoLib 动画实例缓存
      */
     private AnimatableInstanceCache cache;
@@ -55,7 +47,6 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
 
         this.currentIdleAnimation = pickIdleAnimation();
         this.currentSleepAnimation = null;
-        setGuidePreviewAnimation(null);
     }
 
 
@@ -275,17 +266,6 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
     }
 
 
-    public void setGuidePreviewAnimation(
-            RawAnimation guidePreviewAnimation
-    ) {
-
-        this.currentGuideAnimation =
-                guidePreviewAnimation == null
-                        ? BirdGuidePreviewAnimation.NONE.animation()
-                        : guidePreviewAnimation;
-    }
-
-
     private int getIdleAnimationRollMax(
             int trustTicker,
             int curiousTicker
@@ -323,10 +303,6 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
     @Override
     public void tick() {
         super.tick();
-    }
-
-    public RawAnimation getCurrentGuideAnimation() {
-        return currentGuideAnimation;
     }
 
     public AnimatableInstanceCache getCache() {

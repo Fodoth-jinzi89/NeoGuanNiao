@@ -24,7 +24,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallbac
 import net.fodoth.skina.neoguanniao.client.camera.CameraOpticsShader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.resources.ResourceLocation;
+import net.fodoth.skina.neoguanniao.compat.modonomicon.client.pages.BookLinkPageRenderer;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoFabricConfigCommand;
+import net.fodoth.skina.neoguanniao.platform.ModonomiconHooks;
 
 public final class NeoGuanNiaoFabricClient implements ClientModInitializer {
     @Override
@@ -60,5 +62,9 @@ public final class NeoGuanNiaoFabricClient implements ClientModInitializer {
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(), BirdCageRendererHooks::create);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_BATH.get(), BirdBathRendererHooks::create);
         BlockEntityRenderers.register(NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get(), BirdNestRenderer::new);
+        if (ModonomiconHooks.isLoaded()) {
+            // 观鸟手册链接页的渲染器（仅客户端）。
+            BookLinkPageRenderer.register();
+        }
     }
 }

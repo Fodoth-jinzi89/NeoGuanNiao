@@ -1,0 +1,40 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_food_bag.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_food_bag.description",
+  "icon": {
+    "item": "neoguanniao:bird_food_bag_seed"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/breeding"
+    }
+  ],
+  "x": 12,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.bird_food_bag.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.bird_food_bag.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.bird_food_bag",
+      "recipe_id_1": "neoguanniao:bird_food_bag",
+      "text": "book.neoguanniao.bird_guide.entry.bird_food_bag.page2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.bird_food_bag_seed",
+      "recipe_id_1": "neoguanniao:bird_food_bag_seed",
+      "text": "book.neoguanniao.bird_guide.entry.bird_food_bag.page3.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.bird_food_bag_fish",
+      "recipe_id_1": "neoguanniao:bird_food_bag_fish",
+      "text": "book.neoguanniao.bird_guide.entry.bird_food_bag.page4.text"
+    }
+  ]
+}

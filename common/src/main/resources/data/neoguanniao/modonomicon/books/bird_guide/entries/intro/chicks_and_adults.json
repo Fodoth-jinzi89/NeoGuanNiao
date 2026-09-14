@@ -1,0 +1,33 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.chicks_and_adults.name",
+  "description": "book.neoguanniao.bird_guide.entry.chicks_and_adults.description",
+  "icon": {
+    "item": "minecraft:chicken_spawn_egg"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/gender"
+    },
+    {
+      "entry": "neoguanniao:intro/genetics"
+    }
+  ],
+  "x": 9,
+  "y": 5,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.chicks_and_adults.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.chicks_and_adults.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.chicks_and_adults.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.chicks_and_adults.page3.text"
+    }
+  ]
+}

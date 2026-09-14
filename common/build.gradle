@@ -1,2 +1,10 @@
 architectury { common rootProject.enabled_platforms.split(',') }
-dependencies { modCompileOnly "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"; modCompileOnly "dev.architectury:architectury:$rootProject.architectury_api_version"; modCompileOnly "software.bernie.geckolib:geckolib-fabric-1.21.1:4.8.4" }
+dependencies {
+    modCompileOnly "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modCompileOnly "dev.architectury:architectury:$rootProject.architectury_api_version"
+    modCompileOnly "software.bernie.geckolib:geckolib-fabric-1.21.1:4.8.4"
+    // Modonomicon 是可选依赖：common 里只有观鸟手册相关代码引用它（BookLinkPage / BookLinkPageRenderer）。
+    // NeoForge 包是 mojmap 命名，与 common 的编译映射一致，所以直接 compileOnly 即可（无需 Loom 重映射）；
+    // 运行时由两端模块各自提供依赖（fabric/libs/implementation、neoforge/libs/implementation）。
+    compileOnly fileTree(dir: '../neoforge/libs/implementation', include: ['modonomicon-*.jar'])
+}

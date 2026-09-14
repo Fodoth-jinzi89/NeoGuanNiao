@@ -1,0 +1,7 @@
+{
+  "name": "book.neoguanniao.bird_guide.name",
+  "tooltip": "book.neoguanniao.bird_guide.tooltip",
+  "custom_book_item": "neoguanniao:bird_guide",
+  "model": "neoguanniao:bird_guide",
+  "generate_book_item": false
+}

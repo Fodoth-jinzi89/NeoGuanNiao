@@ -1,8 +1,10 @@
 package net.fodoth.skina.neoguanniao;
 
 import com.mojang.logging.LogUtils;
+import net.fodoth.skina.neoguanniao.compat.modonomicon.pages.BookLinkPage;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoNeoForgeClientConfig;
 import net.fodoth.skina.neoguanniao.config.NeoGuanNiaoNeoForgeCommonConfig;
+import net.fodoth.skina.neoguanniao.platform.ModonomiconHooks;
 import net.fodoth.skina.neoguanniao.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -37,6 +39,10 @@ public class NeoGuanNiaoNeoForge {
         NeoGuanNiaoVillagerProfessions.POI_TYPES_REGISTER.register();
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register();
         NeoGuanNiaoCriteriaTriggers.register();
+        if (ModonomiconHooks.isLoaded()) {
+            // Modonomicon 是可选依赖：装了才注册观鸟手册的自定义页面类型。
+            BookLinkPage.register();
+        }
         LOGGER.info("NeoGuanNiao Architectury registries registered");
         container.registerConfig(ModConfig.Type.COMMON, NeoGuanNiaoNeoForgeCommonConfig.SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, NeoGuanNiaoNeoForgeClientConfig.SPEC);

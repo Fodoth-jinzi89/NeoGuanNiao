@@ -1,0 +1,47 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.film_and_photos.name",
+  "description": "book.neoguanniao.bird_guide.entry.film_and_photos.description",
+  "icon": {
+    "item": "neoguanniao:blank_film"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/bird_photography"
+    }
+  ],
+  "x": 4,
+  "y": 3,
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "neoguanniao:film"
+      },
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page1.text",
+      "title": "item.neoguanniao.film"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "neoguanniao:photograph"
+      },
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page2.text",
+      "title": "item.neoguanniao.photograph"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page4.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "item.neoguanniao.blank_film",
+      "recipe_id_1": "neoguanniao:blank_film",
+      "text": "book.neoguanniao.bird_guide.entry.film_and_photos.page5.text"
+    }
+  ]
+}

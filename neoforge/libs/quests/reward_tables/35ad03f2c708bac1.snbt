@@ -1,0 +1,92 @@
+{
+	id: "35AD03F2C708BAC1"
+	loot_size: 1
+	order_index: 0
+	rewards: [
+		{
+			count: 64
+			id: "5E3E0F3347746FAE"
+			item: {
+				count: 1
+				id: "apotheosis:mysterious_scrap_metal"
+			}
+			weight: 0.8f
+		}
+		{
+			count: 32
+			id: "45886DD4364BAD7C"
+			item: {
+				count: 1
+				id: "apotheosis:timeworn_fabric"
+			}
+			weight: 0.7f
+		}
+		{
+			count: 16
+			id: "6142141FD4E51C20"
+			item: {
+				count: 1
+				id: "apotheosis:luminous_crystal_shard"
+			}
+			weight: 0.68f
+		}
+		{
+			count: 8
+			id: "7100B4FB310E09B2"
+			item: {
+				count: 1
+				id: "apotheosis:arcane_sands"
+			}
+			weight: 0.5f
+		}
+		{
+			count: 4
+			id: "33C89B28CFCAFB61"
+			item: {
+				count: 1
+				id: "apotheosis:godforged_pearl"
+			}
+			weight: 0.2f
+		}
+		{
+			count: 2
+			id: "7414E0D00707D595"
+			item: {
+				count: 1
+				id: "ancientreforging:ancient_material"
+			}
+			weight: 0.1f
+		}
+		{
+			count: 4
+			id: "39BDD6E3D0DB6A09"
+			item: {
+				count: 1
+				id: "minecraft:end_crystal"
+			}
+			weight: 0.6f
+		}
+		{
+			count: 2
+			id: "173EE2415AB66019"
+			item: {
+				count: 1
+				id: "minecraft:enchanted_golden_apple"
+			}
+			weight: 0.66f
+		}
+		{
+			id: "4E4793EF9A1FF7D4"
+			item: {
+				components: {
+					"minecraft:potion_contents": {
+						potion: "minecraft:strong_regeneration"
+					}
+				}
+				count: 1
+				id: "minecraft:potion"
+			}
+			weight: 0.79f
+		}
+	]
+}

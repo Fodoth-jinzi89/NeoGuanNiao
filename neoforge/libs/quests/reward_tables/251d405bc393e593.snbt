@@ -1,0 +1,17 @@
+{
+	id: "251D405BC393E593"
+	loot_size: 1
+	order_index: 11
+	rewards: [
+		{ id: "23FA5A3B4F853986", item: { components: { "bountiful:decree_data": { ids: ["carpenter"] }, "minecraft:custom_name": "\"木材收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "1061024112B19360", item: { components: { "bountiful:decree_data": { ids: ["carpenter_sell"] }, "minecraft:custom_name": "\"木材出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "136C93BFD9893B9A", item: { components: { "bountiful:decree_data": { ids: ["ae2_toolsmith"] }, "minecraft:custom_name": "\"水晶收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "136F5372854F885E", item: { components: { "bountiful:decree_data": { ids: ["ae2_toolsmith_sell"] }, "minecraft:custom_name": "\"水晶出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "6A48F360BE5E5FD4", item: { components: { "bountiful:decree_data": { ids: ["leatherer"] }, "minecraft:custom_name": "\"皮革收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "67769CE42C0A58BE", item: { components: { "bountiful:decree_data": { ids: ["leatherer_sell"] }, "minecraft:custom_name": "\"皮革出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "7AC7ADD3F1F14065", item: { components: { "bountiful:decree_data": { ids: ["mason"] }, "minecraft:custom_name": "\"石料收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "06B932F67AEB3772", item: { components: { "bountiful:decree_data": { ids: ["mason_sell"] }, "minecraft:custom_name": "\"石料出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "6A42F8AC507B1FFB", item: { components: { "bountiful:decree_data": { ids: ["priest"] }, "minecraft:custom_name": "\"鲜花宝石收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "48FB0B9DB4D5A1C4", item: { components: { "bountiful:decree_data": { ids: ["priest_sell"] }, "minecraft:custom_name": "\"鲜花宝石出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}

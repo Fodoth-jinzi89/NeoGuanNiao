@@ -1,0 +1,19 @@
+{
+	id: "64971A4F4BF5876B"
+	loot_size: 1
+	order_index: 7
+	rewards: [
+		{ id: "13689C2BECF1D5CF", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:amulet_of_protection", "minecraft:custom_name": "\"保护符\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "7E2D3B01C673D5B2", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:bane_ring", "minecraft:custom_name": "\"杀戮戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "3C4F147F6B06A095", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:barbed_band", "minecraft:custom_name": "\"倒刺指环\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "1E86CF07A64602C6", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:piglin_signet_ring", "minecraft:custom_name": "\"猪灵图章戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "3DA556256D3CAE5E", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:improved_gemset_ring", "minecraft:custom_name": "\"改进宝石戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "5A8D411F1FA50506", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:haggler_ring", "minecraft:custom_name": "\"议价戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "2215D6FDF3FB6C12", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:tearstone_ring", "minecraft:custom_name": "\"泪石戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "76B98D3EFAE98180", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:superior_gemset_ring", "minecraft:custom_name": "\"优良宝石戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "5D9810A099005F8F", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:stalwart_ring", "minecraft:custom_name": "\"坚韧戒指\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "7747B30EEE95FBE5", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:sharpshooter_loop", "minecraft:custom_name": "\"神枪手之环\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "454ADC94A13CE750", item: { components: { "irons_jewelry:stored_pattern": "irons_jewelry:rhinestone_amulet", "minecraft:custom_name": "\"莱茵石护身符\"" }, count: 1, id: "irons_jewelry:recipe" } }
+		{ id: "3288ACDE487367D1", item: { components: { "irons_jewelry:stored_pattern": "irons_spellbooks:rune_inscribed_ring", "minecraft:custom_name": "\"铭刻符文之戒\"" }, count: 1, id: "irons_jewelry:recipe" } }
+	]
+}

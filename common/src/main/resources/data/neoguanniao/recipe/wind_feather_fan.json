@@ -1,1 +1,24 @@
-{"type":"neoguanniao:feather_fan","category":"equipment"}
+{
+  "type": "neoguanniao:feather_fan",
+  "category": "equipment",
+  "group": "",
+  "pattern": [
+    "FFF",
+    "FFF",
+    "ESE"
+  ],
+  "key": {
+    "F": {
+      "item": "neoguanniao:bird_feather"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "E": {
+      "item": "minecraft:echo_shard"
+    }
+  },
+  "result": {
+    "id": "neoguanniao:wind_feather_fan"
+  }
+}

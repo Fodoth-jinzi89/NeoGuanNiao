@@ -1,0 +1,76 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.genetics.name",
+  "description": "book.neoguanniao.bird_guide.entry.genetics.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg",
+    "components": {
+      "neoguanniao:bird_egg_data": {
+        "bird_type": "neoguanniao:neo_budgerigar",
+        "gender": true,
+        "model": "neoguanniao:budgerigar",
+        "skin": "neoguanniao:green_male",
+        "egg_count": 2,
+        "feather_count": 3,
+        "feather_interval": 24000,
+        "size": 1.0,
+        "hatch_time": 20,
+        "alive": true
+      },
+      "neoguanniao:bird_egg_rarity": 0,
+      "neoguanniao:bird_egg_model_rarity": 0,
+      "neoguanniao:bird_egg_gender": 1
+    }
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/breeding"
+    }
+  ],
+  "x": 10,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page1.text",
+      "title": "book.neoguanniao.bird_guide.entry.genetics.page1.name"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "neoguanniao:bird_egg",
+        "components": {
+          "neoguanniao:bird_egg_data": {
+            "bird_type": "neoguanniao:neo_budgerigar",
+            "gender": true,
+            "model": "neoguanniao:budgerigar",
+            "skin": "neoguanniao:green_male",
+            "egg_count": 2,
+            "feather_count": 3,
+            "feather_interval": 24000,
+            "size": 1.0,
+            "hatch_time": 20,
+            "alive": true
+          },
+          "neoguanniao:bird_egg_rarity": 0,
+          "neoguanniao:bird_egg_model_rarity": 0,
+          "neoguanniao:bird_egg_gender": 1
+        }
+      },
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page2.text",
+      "title": "item.neoguanniao.bird_egg"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page4.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.genetics.page5.text"
+    }
+  ]
+}

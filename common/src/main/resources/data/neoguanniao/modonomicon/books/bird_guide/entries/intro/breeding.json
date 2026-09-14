@@ -1,0 +1,32 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.breeding.name",
+  "description": "book.neoguanniao.bird_guide.entry.breeding.description",
+  "icon": {
+    "item": "neoguanniao:bird_nest"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/taming"
+    }
+  ],
+  "x": 9,
+  "y": 3,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.breeding.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.breeding.page1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "title1": "block.neoguanniao.bird_nest",
+      "recipe_id_1": "neoguanniao:bird_nest",
+      "text": "book.neoguanniao.bird_guide.entry.breeding.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.breeding.page3.text"
+    }
+  ]
+}

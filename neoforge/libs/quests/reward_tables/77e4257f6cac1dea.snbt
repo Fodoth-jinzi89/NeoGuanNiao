@@ -1,0 +1,26 @@
+{
+	id: "77E4257F6CAC1DEA"
+	loot_size: 1
+	order_index: 4
+	rewards: [
+		{ id: "77DCEBA087CF16A4", item: { count: 1, id: "tunes_n_tomes:melody_upgrade_orb" } }
+		{ id: "683F5510D10FBE1D", item: { count: 1, id: "iss_magicfromtheeast:symmetry_upgrade_orb" } }
+		{ id: "4A13F76B06FDB78C", item: { count: 1, id: "iss_magicfromtheeast:spirit_upgrade_orb" } }
+		{ id: "580B9F876109C333", item: { count: 1, id: "irons_spellbooks:fire_upgrade_orb" } }
+		{ id: "2943C25B58B38410", item: { count: 1, id: "irons_spellbooks:ice_upgrade_orb" } }
+		{ id: "137D65B7EF94765B", item: { count: 1, id: "irons_spellbooks:lightning_upgrade_orb" } }
+		{ id: "3455FE4E40EBEC18", item: { count: 1, id: "irons_spellbooks:holy_upgrade_orb" } }
+		{ id: "5D42C2A821335A45", item: { count: 1, id: "irons_spellbooks:ender_upgrade_orb" } }
+		{ id: "17C0A1078EDE2792", item: { count: 1, id: "irons_spellbooks:blood_upgrade_orb" } }
+		{ id: "1AC82416B4DCC250", item: { count: 1, id: "irons_spellbooks:evocation_upgrade_orb" } }
+		{ id: "2F67852004BEEE94", item: { count: 1, id: "irons_spellbooks:nature_upgrade_orb" } }
+		{ id: "1E9AABC0E61F9CC0", item: { count: 1, id: "irons_spellbooks:mana_upgrade_orb" } }
+		{ id: "7A0AC75224452309", item: { count: 1, id: "irons_spellbooks:cooldown_upgrade_orb" } }
+		{ id: "6C5F3B7E32B92D6C", item: { count: 1, id: "irons_spellbooks:protection_upgrade_orb" } }
+		{ id: "66EF4CA85D7207AB", item: { count: 1, id: "hazennstuff:hydro_upgrade_orb" } }
+		{ id: "79415EC8703E2697", item: { count: 1, id: "hazennstuff:archery_upgrade_orb" } }
+		{ id: "4AE37585EB3E32A9", item: { count: 1, id: "hazennstuff:melee_upgrade_orb" } }
+		{ id: "44D91FC1CF236D16", item: { count: 1, id: "hazennstuff:health_upgrade_orb" } }
+		{ id: "13720F34FB2654AB", item: { count: 1, id: "hazennstuff:eldritch_upgrade_orb" } }
+	]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.intro.name",
+  "description": "book.neoguanniao.bird_guide.entry.intro.description",
+  "icon": {
+    "item": "neoguanniao:bird_guide"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [],
+  "background_u_index": 0,
+  "background_v_index": 4,
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:image",
+      "use_legacy_rendering": true,
+      "title": "book.neoguanniao.bird_guide.entry.intro.page0.title",
+      "images": [
+        "neoguanniao:textures/gui/neoguanniao.png"
+      ],
+      "border": true,
+      "text": "book.neoguanniao.bird_guide.entry.intro.page0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.intro.page1.text"
+    },
+    {
+      "type": "neoguanniao:link",
+      "text": "book.neoguanniao.bird_guide.entry.intro.page2.text",
+      "link_text": "book.neoguanniao.bird_guide.entry.intro.page2.link_text",
+      "url": "https://github.com/Fodoth-jinzi89/NeoGuanNiao"
+    }
+  ]
+}

@@ -1,0 +1,2176 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: "square"
+	filename: "333355b291ec2662"
+	group: "24036B58B15AA5CA"
+	hide_quest_until_deps_visible: true
+	icon: {
+		id: "neoguanniao:bird_guide"
+	}
+	id: "333355B291EC2662"
+	images: [
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_night_heron"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 1.0d
+			id: "0C2EB36D4533AD66"
+			image: ""
+			rotation: 0.0d
+			width: 1.0d
+			x: 6.5d
+			y: -2.5d
+		}
+		{
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_budgerigar"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.6d
+			id: "62D8A1C8692EE88C"
+			image: ""
+			rotation: 0.0d
+			width: 0.6d
+			x: 3.5d
+			y: -2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_sparrow"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.4d
+			id: "6047DD372D5EE373"
+			image: ""
+			rotation: 0.0d
+			width: 0.4d
+			x: 5.0d
+			y: -2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_dove"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "6F0C25FF41B472DC"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 8.0d
+			y: -2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_pigeon"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "4B8F236FA84A2CC2"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 9.5d
+			y: -2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_long_tailed_tit"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.4d
+			id: "23F348B4FDD7471C"
+			image: ""
+			rotation: 0.0d
+			width: 0.4d
+			x: 5.0d
+			y: 2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_macaw"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.8d
+			id: "08F488A6D6132CD6"
+			image: ""
+			rotation: 0.0d
+			width: 0.8d
+			x: 6.5d
+			y: 2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_crow"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "605CD67A4D35C23C"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 8.0d
+			y: 2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_seagull"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.7d
+			id: "7BC7B82002BE500D"
+			image: ""
+			rotation: 0.0d
+			width: 0.7d
+			x: 9.5d
+			y: 2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_cockatiel"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.65d
+			id: "3473F057EBABE871"
+			image: ""
+			rotation: 0.0d
+			width: 0.65d
+			x: 3.5d
+			y: 2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_kiwi"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "1D98744D4D1145FF"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 11.0d
+			y: -2.5d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_woodcock"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "4928EB262F35CDC1"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 12.0d
+			y: 0.0d
+		}
+		{
+			click_action: "none:"
+			entity_vis_enabled: 1b
+			entity_vis_entity: "neoguanniao:neo_myna"
+			entity_vis_idle_mode: "USE_GLOBAL"
+			entity_vis_offset_x: 0.0f
+			entity_vis_offset_y: 0.0f
+			entity_vis_rotation: 0.0f
+			entity_vis_silhouette: 0b
+			entity_vis_size: 1.0f
+			entity_vis_spin_mode: "USE_GLOBAL"
+			entity_vis_walk_mode: "USE_GLOBAL"
+			height: 0.5d
+			id: "62EF1FC12A95943E"
+			image: ""
+			rotation: 0.0d
+			width: 0.5d
+			x: 11.0d
+			y: 2.5d
+		}
+	]
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: ["0F9C73D882CD65B8"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "neoguanniao:bird_guide"
+			}
+			icon_scale: 0.9d
+			id: "03C5C81BF997B2A2"
+			rewards: [
+				{
+					auto: "enabled"
+					icon: {
+						id: "questshop:coin"
+					}
+					id: "268B91782CA9C775"
+					type: "questshop:coins"
+				}
+				{
+					count: 4
+					id: "50643072AB5B9180"
+					item: {
+						count: 1
+						id: "minecraft:wheat_seeds"
+					}
+					type: "item"
+				}
+				{
+					id: "06D909FE86030A27"
+					item: {
+						count: 1
+						id: "neoguanniao:bird_guide"
+					}
+					type: "item"
+				}
+			]
+			shape: "gear"
+			size: 1.5d
+			tasks: [{
+				disable_toast: true
+				id: "2CFC47DEAAEE7901"
+				type: "checkmark"
+			}]
+			x: 0.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["03C5C81BF997B2A2"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "silentgear:fluffy_feather"
+			}
+			id: "27CE429E8F5F45E9"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "385F7A27F82D2292"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			size: 1.2d
+			tasks: [{
+				disable_toast: true
+				id: "6FEA733808AE65A4"
+				type: "checkmark"
+			}]
+			x: 0.0d
+			y: -7.0d
+		}
+		{
+			dependencies: ["03C5C81BF997B2A2"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "minecraft:egg"
+			}
+			id: "3477D9E5320D97AC"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "027540722A3B9D3D"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			size: 1.2d
+			tasks: [{
+				disable_toast: true
+				id: "2FD8716CC99AF81C"
+				type: "checkmark"
+			}]
+			x: 7.199999999999999d
+			y: 0.0d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "flavor_immersed_daily:rawsheepeye"
+			}
+			id: "384DAE274C7812C9"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "729C1FD4EA5ED1C7"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "4F0D10C6CE77D54B"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -8.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:heart_pottery_sherd"
+			}
+			id: "0FD80DF8429E9F8A"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "2CB6E0C2BA5323CF"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "084154BEA3F1277F"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -5.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:breadcrumbs"
+			}
+			id: "6FC829D50423D5D5"
+			rewards: [
+				{
+					auto: "enabled"
+					icon: {
+						id: "questshop:coin"
+					}
+					id: "6794989946EA5A6E"
+					type: "questshop:coins"
+				}
+				{
+					count: 4
+					id: "1084C8C46F575B11"
+					item: {
+						count: 1
+						id: "neoguanniao:breadcrumbs"
+					}
+					type: "item"
+				}
+			]
+			shape: "pentagon"
+			tasks: [{
+				id: "095516E00C84F22B"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:oak_sapling"
+			}
+			id: "2A39BD143E4CAA2F"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "3A27A738BD78C9FB"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "30AD606F78EAC751"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -9.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:leather_boots"
+			}
+			id: "6587A87D45C324FB"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "4DDE5F0982CCED58"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "213D343440BEEA7B"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -9.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "touhou_little_maid:trumpet"
+			}
+			id: "62202277A767DA9F"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "3739B419D2B5948F"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "35A88C834C76A321"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:jukebox"
+			}
+			id: "38DB7193B44EBE43"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "48A9B777D988733C"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "64D252B0B47EFF86"
+				type: "checkmark"
+			}]
+			x: 2.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:clock"
+			}
+			id: "62813EA91C0D981F"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "06ECD71100D83718"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "129AE06F0FB0E7C1"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -8.5d
+		}
+		{
+			dependencies: ["4827C85F17FA2816"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:wheat_seeds"
+			}
+			id: "412021E134842B92"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "3B9453DDFBA0C394"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "3FF8667D7950DC16"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "40588993A2C73D83"
+					item: { count: 1, id: "supplementaries:cage" }
+					optional_task: true
+					type: "item"
+				}
+				{
+					disable_toast: true
+					id: "2DADF3EE52288984"
+					item: { count: 1, id: "apothic_enchanting:flimsy_ender_lead" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -8.5d
+			y: -2.0d
+		}
+		{
+			dependencies: ["4827C85F17FA2816"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:bird_food_bag"
+			}
+			id: "11A7767B732604C5"
+			rewards: [
+				{
+					auto: "enabled"
+					icon: {
+						id: "questshop:coin"
+					}
+					id: "303601B96A690496"
+					type: "questshop:coins"
+				}
+				{
+					id: "686EC057DB40ECCE"
+					item: {
+						count: 1
+						id: "neoguanniao:bird_food_bag_seed"
+					}
+					type: "item"
+				}
+				{
+					id: "600B8972310E596A"
+					item: {
+						count: 1
+						id: "neoguanniao:bird_food_bag_fish"
+					}
+					type: "item"
+				}
+			]
+			shape: "pentagon"
+			tasks: [{
+				id: "1BBCEBFEE0F93CA0"
+				item: { count: 1, id: "neoguanniao:bird_food_bag" }
+				type: "item"
+			}]
+			x: -8.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["11A7767B732604C5"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_egg_data": {
+						alive: 1b
+						bird_type: "neoguanniao:neo_budgerigar"
+						egg_count: 2
+						feather_count: 3
+						feather_interval: 24000
+						gender: 1b
+						hatch_time: 20
+						model: "neoguanniao:budgerigar"
+						size: 1.0f
+						skin: "neoguanniao:green_male"
+					}
+					"neoguanniao:bird_egg_gender": 0
+					"neoguanniao:bird_egg_model_rarity": 0
+					"neoguanniao:bird_egg_rarity": 0
+				}
+				id: "neoguanniao:bird_egg"
+			}
+			id: "1B5987D9F64EA518"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6179278F421550C7"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				disable_toast: true
+				id: "0E551A12B6511FE1"
+				optional_task: true
+				type: "checkmark"
+			}]
+			x: -10.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["03C5C81BF997B2A2"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "neoguanniao:bird_nest"
+			}
+			id: "4827C85F17FA2816"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "2C056798D585F7D8"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			size: 1.2d
+			tasks: [{
+				disable_toast: true
+				id: "3B46876018E878FA"
+				type: "checkmark"
+			}]
+			x: -6.6d
+			y: 0.0d
+		}
+		{
+			dependencies: ["4827C85F17FA2816"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"azurelib:az_id": [I;
+						1060010156
+						-1853142035
+						-1495799968
+						-1183209392
+					]
+				}
+				id: "hazennstuff:slc_cat_helmet"
+			}
+			id: "1BD67E4C88FA5F16"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "27422C09B40D510C"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "5927F93210378550"
+				type: "checkmark"
+			}]
+			x: -8.5d
+			y: -4.0d
+		}
+		{
+			dependencies: ["4827C85F17FA2816"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:chicken_spawn_egg"
+			}
+			id: "7DD6E9B7C6836E26"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "39671C7DA8075133"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				disable_toast: true
+				id: "718ADBE8FC7F8629"
+				optional_task: true
+				type: "checkmark"
+			}]
+			x: -8.5d
+			y: 2.0d
+		}
+		{
+			dependencies: ["4827C85F17FA2816"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 0
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_budgerigar"
+						rarity: 1
+					}
+					"neoguanniao:bird_feather_skin_rarity": 1
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "617041C47BD0ABFC"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "00F25E73162603D1"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				disable_toast: true
+				id: "6F78DB202EB9CD8A"
+				optional_task: true
+				type: "checkmark"
+			}]
+			x: -8.5d
+			y: 4.0d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:bird_bath_2"
+			}
+			id: "3C630351E95AB59C"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "1BD7AD6094817D99"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "54530AC3B4A96371"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "minecraft:creeper_head"
+			}
+			id: "610F3968C7563D66"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "4239292D4A253A5E"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "64D8397B676D1F6C"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "exspectriments:lab_coat_cmy"
+			}
+			id: "161C54A4981151C5"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "4EEA9505075851E1"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "3C587CF93B67F2ED"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -5.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"minecraft:damage": 0
+					"minecraft:item_name": "{\"translate\":\"item.silentgear.elytra.nameProper\",\"with\":[{\"translate\":\"material.silentgear.gold\"}]}"
+					"silentgear:construction": {
+						broken_count: 0
+						example: 0b
+						parts: [
+							{
+								item: {
+									components: {
+										"silentgear:material_list": [{
+											item: {
+												count: 1
+												id: "minecraft:gold_ingot"
+											}
+											material: "silentgear:gold"
+										}]
+									}
+									count: 1
+									id: "silentgear:elytra_wings"
+								}
+								part: "silentgear:elytra_wings"
+							}
+							{
+								item: {
+									components: {
+										"silentgear:material_list": [{
+											item: {
+												count: 1
+												id: "minecraft:string"
+											}
+											material: "silentgear:string"
+										}]
+									}
+									count: 1
+									id: "silentgear:binding"
+								}
+								part: "silentgear:binding"
+							}
+						]
+						repairedCount: 0
+					}
+					"silentgear:model_index": 3
+					"silentgear:model_key": "elytra:elytra_wings{gold},binding{string},"
+					"silentgear:properties": {
+						"silentgear:armor": 0.35000038f
+						"silentgear:armor_durability": 7.0f
+						"silentgear:armor_toughness": 0.0f
+						"silentgear:charging_value": 1.2f
+						"silentgear:durability": 32.0f
+						"silentgear:enchantment_value": 22.0f
+						"silentgear:knockback_resistance": 0.0f
+						"silentgear:magic_armor": 8.0f
+						"silentgear:rarity": 50.0f
+						"silentgear:repair_efficiency": 1.05f
+						"silentgear:repair_value": 0.0f
+						"silentgear:traits": [
+							{
+								conditions: [ ]
+								level: 1
+								trait: "silentgear:brilliant"
+							}
+							{
+								conditions: [ ]
+								level: 1
+								trait: "silentgear:malleable"
+							}
+							{
+								conditions: [ ]
+								level: 1
+								trait: "silentgear:flexible"
+							}
+						]
+					}
+				}
+				id: "silentgear:elytra"
+			}
+			id: "75E38379F4B99990"
+			rewards: [
+				{
+					auto: "enabled"
+					icon: {
+						id: "questshop:coin"
+					}
+					id: "6589F6BEEA3223AD"
+					type: "questshop:coins"
+				}
+				{
+					id: "5BFD167D22261FB9"
+					item: {
+						components: {
+							"netmusic:song_info": {
+								artists: ["高森奈津美"]
+								name: "花鳥風月"
+								readOnly: 1b
+								time_second: 281
+								url: "https://music.163.com/song/media/outer/url?id=497131065.mp3"
+							}
+						}
+						count: 1
+						id: "netmusic:music_cd"
+					}
+					type: "item"
+				}
+			]
+			shape: "pentagon"
+			tasks: [{
+				id: "007C39A336C2C03F"
+				type: "checkmark"
+			}]
+			x: -2.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 1
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_night_heron"
+						rarity: 2
+					}
+					"neoguanniao:bird_feather_skin_rarity": 2
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "50165146D628B79D"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "470EA5063E41EE2F"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "52499F987DCD1A8F"
+				type: "checkmark"
+			}]
+			x: 6.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 4
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_sparrow"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "671EF09D3DA59129"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6D7E71BFB8A34595"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "773837E43BCAAC4D"
+				type: "checkmark"
+			}]
+			x: 5.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 0
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_budgerigar"
+						rarity: 1
+					}
+					"neoguanniao:bird_feather_skin_rarity": 1
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "155E0243415620CA"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "404D3B3F0DCDDCDE"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "768A8D90A8A0351B"
+				type: "checkmark"
+			}]
+			x: 3.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 2
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_dove"
+						rarity: 2
+					}
+					"neoguanniao:bird_feather_skin_rarity": 2
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "3665B05D7599DD10"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "64A2895FC193EFBE"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "57CF2121480EC06C"
+				type: "checkmark"
+			}]
+			x: 8.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 3
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_pigeon"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "5F7B968F318D8040"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "276E17527CADB603"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "529018932EBF6574"
+				type: "checkmark"
+			}]
+			x: 9.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["03C5C81BF997B2A2"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "minecraft:villager_spawn_egg"
+			}
+			id: "1DC2BF753593B294"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "623B22E6D7692FDE"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			size: 1.2d
+			tasks: [{
+				disable_toast: true
+				id: "0A7F3A6DE190ED86"
+				type: "checkmark"
+			}]
+			x: 0.0d
+			y: 7.0d
+		}
+		{
+			dependencies: ["1DC2BF753593B294"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag"
+			}
+			id: "71B05E8F3D423063"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "54351C6E76D98B08"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "281F093FA329297E"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "0A205F8ED61FC1A3"
+					item: { count: 1, id: "neoguanniao:green_food_bag" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -2.5d
+			y: 7.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_growth"
+			}
+			id: "56D0C7BA1510C116"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "0018FB3CA25BE0C6"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "5EC2EEC217A7FCDB"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "2E5A7CAC5BE3F125"
+					item: { count: 1, id: "neoguanniao:green_food_bag_growth" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -4.0d
+			y: 6.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_rejuvenate"
+			}
+			id: "6B55B2D7D7628E7A"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "2EFE4D2D4784B893"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "1F65AC7FFE54ADF9"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "163998E6B37F87B3"
+					item: { count: 1, id: "neoguanniao:green_food_bag_rejuvenate" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -3.5d
+			y: 5.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_stop"
+			}
+			id: "0EED45F9B8B6390D"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "414FCEA39626A52D"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "10F85A89288AAB3C"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "58C96FE7CD60DBB0"
+					item: { count: 1, id: "neoguanniao:green_food_bag_stop" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -2.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_transmute"
+			}
+			id: "00D06C51F307381F"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "464AB52E33B2B7F5"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "7127E6BC137722E2"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "233B52D8879C476F"
+					item: { count: 1, id: "neoguanniao:green_food_bag_transmute" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -2.5d
+			y: 9.5d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_feather_add"
+			}
+			id: "1CC73CD5BBBC6301"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "374688D1AB3A891A"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "2406B9C16CC84AD5"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "444C9C1EA8E788E1"
+					item: { count: 1, id: "neoguanniao:green_food_bag_feather_add" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -4.0d
+			y: 8.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_feather_minus"
+			}
+			id: "2DDB3AEFF9BE3751"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "7BD9886DFB4A3AED"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "140441FDEE924E8F"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "400D09774BCA6239"
+					item: { count: 1, id: "neoguanniao:green_food_bag_feather_minus" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -3.5d
+			y: 9.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_feather_fast"
+			}
+			id: "29D62848E2DF7473"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "225198EE6B5BEA28"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "2E3F542F60775807"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "7A1BE304DD2CD5D1"
+					item: { count: 1, id: "neoguanniao:green_food_bag_feather_fast" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -1.0d
+			y: 6.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_feather_slow"
+			}
+			id: "28DD01B4A835197E"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "11DFDEA0C097CA18"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "46ADA846303262A6"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "79AEE019E98EA418"
+					item: { count: 1, id: "neoguanniao:green_food_bag_feather_slow" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -1.5d
+			y: 5.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_size_up"
+			}
+			id: "402665C28443F2C3"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "01947A221BA23D4E"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "6CA1335BB70BF824"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "17DD016A823820A3"
+					item: { count: 1, id: "neoguanniao:green_food_bag_size_up" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -1.0d
+			y: 8.0d
+		}
+		{
+			dependencies: ["71B05E8F3D423063"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:green_food_bag_size_down"
+			}
+			id: "33D09A1FC9045EAF"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6E5070A2965E2AD1"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "6B3AFA723BF77E6E"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "120408C6D3DEC61C"
+					item: { count: 1, id: "neoguanniao:green_food_bag_size_down" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -1.5d
+			y: 9.0d
+		}
+		{
+			dependencies: ["1DC2BF753593B294"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag"
+			}
+			id: "35C519ADA4205DEF"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "7BEA5E49D00259D3"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "0C14D510B3D24FC4"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "1DEA85DE8880963B"
+					item: { count: 1, id: "neoguanniao:golden_food_bag" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 2.5d
+			y: 7.0d
+		}
+		{
+			dependencies: ["35C519ADA4205DEF"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag_upgrade"
+			}
+			id: "7D53DEF3387B96B8"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "74295E112B7E9261"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "4C872A9945CF5FB2"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "2D4392AA0605DA90"
+					item: { count: 1, id: "neoguanniao:golden_food_bag_upgrade" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 1.5d
+			y: 5.0d
+		}
+		{
+			dependencies: ["35C519ADA4205DEF"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag_downgrade"
+			}
+			id: "656B85E5D83A3A63"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "507128993567F366"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "5C4E44A887132D46"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "6ED43F4E9C819DC6"
+					item: { count: 1, id: "neoguanniao:golden_food_bag_downgrade" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 3.5d
+			y: 5.0d
+		}
+		{
+			dependencies: ["35C519ADA4205DEF"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag_unique"
+			}
+			id: "7473394FDB7B691F"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "266E59C40FB131BC"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "7479DE93788ECCFC"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "210DADA0644043BC"
+					item: { count: 1, id: "neoguanniao:golden_food_bag_unique" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 4.0d
+			y: 7.0d
+		}
+		{
+			dependencies: ["35C519ADA4205DEF"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag_egg_add"
+			}
+			id: "4C3A0818E1E8A065"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "671D52F0FF018007"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "0B87FC775286941C"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "7D374C10C51820FB"
+					item: { count: 1, id: "neoguanniao:golden_food_bag_egg_add" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 1.5d
+			y: 9.0d
+		}
+		{
+			dependencies: ["35C519ADA4205DEF"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:golden_food_bag_egg_minus"
+			}
+			id: "592596E9E1941BC9"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6356EE7BBDE1FC39"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "7B9BDFF774C54598"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "7A75B2F9A7184772"
+					item: { count: 1, id: "neoguanniao:golden_food_bag_egg_minus" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 3.5d
+			y: 9.0d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 5
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_cockatiel"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "5CA56B98620B043D"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "1230D734C1240B81"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "709A17A18E3A5428"
+				type: "checkmark"
+			}]
+			x: 3.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 6
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_long_tailed_tit"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "33BBF22688A5016C"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "5A22D931A3B9C196"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "444CB0180F18D8B1"
+				type: "checkmark"
+			}]
+			x: 5.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 7
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_macaw"
+						rarity: 1
+					}
+					"neoguanniao:bird_feather_skin_rarity": 1
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "00DC620CA4106C1B"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "3CE3363B2BA1424E"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "59965414D478C761"
+				type: "checkmark"
+			}]
+			x: 6.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 8
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_crow"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "6914A6CE62C06643"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6121966707E19969"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "6DB9E420A6334661"
+				type: "checkmark"
+			}]
+			x: 8.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 9
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_seagull"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "37E57300A4F18272"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "790CCC7062594D8D"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "023D9420DCABE9CD"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "4E33CC9F20402D6F"
+					item: { components: { "ftbfiltersystem:filter": "ftbfiltersystem:item_tag(neoguanniao:seagull_extra_food)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: 9.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 10
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_kiwi"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "68CD2375AD292290"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "6FC164F39C465591"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "02F0496AA1A6792E"
+				type: "checkmark"
+			}]
+			x: 11.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 11
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_myna"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "196EAAD591C5ADFB"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "277AE193444E2E6E"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "6CF676AFF0CA0C19"
+				type: "checkmark"
+			}]
+			x: 11.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["27CE429E8F5F45E9"]
+			entity_vis_size: 1.0f
+			icon: {
+				id: "neoguanniao:nikon_d750"
+			}
+			id: "22C94A6C3526D227"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "60C2919B39994E53"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			size: 1.2d
+			tasks: [{
+				id: "4050581D9699AAE1"
+				item: { count: 1, id: "neoguanniao:nikon_d750" }
+				type: "item"
+			}]
+			x: 0.0d
+			y: -13.0d
+		}
+		{
+			dependencies: ["412021E134842B92"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:small_bird_cage"
+			}
+			id: "1FB802AC08804134"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "2BC8D383D2292F39"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "22D26E691E2079E6"
+					type: "checkmark"
+				}
+				{
+					disable_toast: true
+					id: "1E77C1AA87065C74"
+					item: { count: 1, id: "neoguanniao:small_bird_cage" }
+					optional_task: true
+					type: "item"
+				}
+				{
+					disable_toast: true
+					id: "56EA0C5ABAD61475"
+					item: { count: 1, id: "neoguanniao:medium_bird_cage" }
+					optional_task: true
+					type: "item"
+				}
+				{
+					disable_toast: true
+					id: "4C737C71C699B9D4"
+					item: { count: 1, id: "neoguanniao:large_bird_cage" }
+					optional_task: true
+					type: "item"
+				}
+			]
+			x: -10.0d
+			y: -2.0d
+		}
+		{
+			dependencies: ["3477D9E5320D97AC"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				components: {
+					"neoguanniao:bird_feather_bird_type": 12
+					"neoguanniao:bird_feather_data": {
+						bird_type: "neoguanniao:neo_woodcock"
+						rarity: 0
+					}
+					"neoguanniao:bird_feather_skin_rarity": 0
+				}
+				id: "neoguanniao:bird_feather"
+			}
+			id: "254013603D871BE0"
+			rewards: [{
+				auto: "enabled"
+				icon: {
+					id: "questshop:coin"
+				}
+				id: "0DE09A51E456D1B7"
+				type: "questshop:coins"
+			}]
+			shape: "pentagon"
+			tasks: [{
+				id: "75965BA75B038EBB"
+				type: "checkmark"
+			}]
+			x: 11.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["22C94A6C3526D227"]
+			disable_toast: true
+			entity_vis_size: 1.0f
+			hide_until_deps_complete: true
+			icon: {
+				id: "neoguanniao:blank_film"
+			}
+			id: "2116F129A5301F2E"
+			rewards: [
+				{
+					auto: "enabled"
+					icon: {
+						id: "questshop:coin"
+					}
+					id: "2A9EE380E0FD827D"
+					type: "questshop:coins"
+				}
+				{
+					count: 4
+					id: "20EA59759F00B7FE"
+					item: {
+						count: 1
+						id: "neoguanniao:blank_film"
+					}
+					type: "item"
+				}
+			]
+			shape: "pentagon"
+			tasks: [{
+				id: "47C2BA41B1C26AB6"
+				item: { count: 1, id: "neoguanniao:blank_film" }
+				type: "item"
+			}]
+			x: 0.0d
+			y: -14.5d
+		}
+	]
+}

@@ -1,26 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "pattern": [
-    "FPF",
-    "PBP",
-    " I "
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:mod_loaded",
+      "modid": "modonomicon"
+    }
   ],
-  "key": {
-    "F": {
-      "item": "minecraft:feather"
-    },
-    "P": {
-      "item": "minecraft:paper"
-    },
-    "B": {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modonomicon"
+    }
+  ],
+  "ingredients": [
+    {
       "item": "minecraft:book"
     },
-    "I": {
-      "item": "minecraft:ink_sac"
+    {
+      "item": "neoguanniao:bird_feather"
     }
-  },
+  ],
   "result": {
-    "id": "neoguanniao:bird_guide"
+    "id": "neoguanniao:bird_guide",
+    "components": {
+      "modonomicon:book_id": "neoguanniao:bird_guide"
+    }
   }
 }

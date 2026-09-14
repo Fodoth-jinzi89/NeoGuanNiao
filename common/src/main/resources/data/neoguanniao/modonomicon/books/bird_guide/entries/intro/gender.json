@@ -1,0 +1,35 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.gender.name",
+  "description": "book.neoguanniao.bird_guide.entry.gender.description",
+  "icon": {
+    "item": "neoguanniao:bird_egg"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/breeding"
+    }
+  ],
+  "x": 8,
+  "y": 4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.gender.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.gender.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.gender.page2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.gender.page3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.gender.page4.name",
+      "text": "book.neoguanniao.bird_guide.entry.gender.page4.text"
+    }
+  ]
+}

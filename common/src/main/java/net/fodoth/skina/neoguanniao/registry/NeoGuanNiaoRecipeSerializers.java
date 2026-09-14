@@ -6,6 +6,7 @@ import net.fodoth.skina.neoguanniao.content.camera.FilmToPhotographRecipe;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographReplaceImageRecipe;
 import net.fodoth.skina.neoguanniao.content.camera.PhotographToFilmRecipe;
 import net.fodoth.skina.neoguanniao.content.fan.FeatherFanRecipe;
+import net.fodoth.skina.neoguanniao.content.fan.FeatherFanRecipeSerializer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -25,7 +26,8 @@ public class NeoGuanNiaoRecipeSerializers {
             RECIPE_SERIALIZERS.register("photograph_replace_image", () -> new SimpleCraftingRecipeSerializer<>(PhotographReplaceImageRecipe::new));
     public static final RegistrySupplier<RecipeSerializer<PhotographToFilmRecipe>> PHOTOGRAPH_TO_FILM =
             RECIPE_SERIALIZERS.register("photograph_to_film", () -> new SimpleCraftingRecipeSerializer<>(PhotographToFilmRecipe::new));
-    public static final RegistrySupplier<RecipeSerializer<FeatherFanRecipe>> FEATHER_FAN = RECIPE_SERIALIZERS.register("feather_fan", () -> new SimpleCraftingRecipeSerializer<>(FeatherFanRecipe::new));
+    public static final RegistrySupplier<RecipeSerializer<FeatherFanRecipe>> FEATHER_FAN =
+            RECIPE_SERIALIZERS.register("feather_fan", () -> FeatherFanRecipeSerializer.INSTANCE);
 
 
     private NeoGuanNiaoRecipeSerializers() {

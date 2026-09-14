@@ -2,7 +2,6 @@ package net.fodoth.skina.neoguanniao.registry;
 
 import com.mojang.serialization.Codec;
 import net.fodoth.skina.neoguanniao.NeoGuanNiao;
-import net.fodoth.skina.neoguanniao.client.guide.layout.BirdGuideLayoutData;
 import net.fodoth.skina.neoguanniao.content.egg.BirdEggData;
 import net.fodoth.skina.neoguanniao.content.feather.BirdFeatherData;
 import net.minecraft.core.component.DataComponentType;
@@ -21,15 +20,6 @@ public final class NeoGuanNiaoDataComponents {
         public <T> RegistrySupplier<DataComponentType<T>> registerComponentType(String id, java.util.function.UnaryOperator<DataComponentType.Builder<T>> op) { return delegate.register(id, () -> op.apply(DataComponentType.builder()).build()); }
         public void register() { delegate.register(); }
     }
-
-    public static final RegistrySupplier<DataComponentType<BirdGuideLayoutData>> BIRD_GUIDE_LAYOUT =
-            DATA_COMPONENTS.registerComponentType(
-                    "bird_guide_layout",
-                    builder -> builder
-                            .persistent(BirdGuideLayoutData.CODEC)
-                            .networkSynchronized(BirdGuideLayoutData.STREAM_CODEC)
-                            .cacheEncoding()
-            );
 
     public static final RegistrySupplier<DataComponentType<BirdEggData>> BIRD_EGG_DATA =
             DATA_COMPONENTS.registerComponentType(

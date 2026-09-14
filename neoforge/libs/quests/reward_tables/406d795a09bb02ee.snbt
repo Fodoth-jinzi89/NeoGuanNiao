@@ -1,0 +1,15 @@
+{
+	id: "406D795A09BB02EE"
+	loot_size: 1
+	order_index: 12
+	rewards: [
+		{ id: "0441AE45C01E3752", item: { components: { "bountiful:decree_data": { ids: ["armorer"] }, "minecraft:custom_name": "\"装备收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "5D6BA48A6A556378", item: { components: { "bountiful:decree_data": { ids: ["armorer_sell"] }, "minecraft:custom_name": "\"装备出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "744EC0CCC488C486", item: { components: { "bountiful:decree_data": { ids: ["weaponsmith"] }, "minecraft:custom_name": "\"武器收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "52F5D940F90CF949", item: { components: { "bountiful:decree_data": { ids: ["weaponsmith_sell"] }, "minecraft:custom_name": "\"武器出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "2513B5555918342F", item: { components: { "bountiful:decree_data": { ids: ["fletcher"] }, "minecraft:custom_name": "\"远程收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "52A58E9FEC373F03", item: { components: { "bountiful:decree_data": { ids: ["fletcher_sell"] }, "minecraft:custom_name": "\"远程出售\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "701A9912E3FEDCFF", item: { components: { "bountiful:decree_data": { ids: ["toolsmith"] }, "minecraft:custom_name": "\"工具收购\"" }, count: 1, id: "bountiful:decree" } }
+		{ id: "00E9D7DD0D081E87", item: { components: { "bountiful:decree_data": { ids: ["toolsmith_sell"] }, "minecraft:custom_name": "\"工具出售\"" }, count: 1, id: "bountiful:decree" } }
+	]
+}

@@ -7,32 +7,42 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 
-public final class FeatherFanRecipe extends CustomRecipe {
-    public FeatherFanRecipe(CraftingBookCategory c) {
-        super(c);
+/**
+ * 风翎扇的合成表：3x3 有形配方（FFF / FFF / ESE，F 任意鸟羽、E 回响碎片、S 木棍）。
+ * 继承 ShapedRecipe 是为了让配方查看器（观鸟手册的合成表页、JEI、EMI）按「有形配方」渲染，
+ * 只有 assemble 被改写：把合成格里的羽毛数据存进扇子，决定攻击伤害与攻击距离。
+ */
+public final class FeatherFanRecipe extends ShapedRecipe {
+    private static final int FEATHER_SLOTS = 6;
+
+    /** 自留一份，父类的 pattern / result 没有公开的读取方法，序列化时需要。 */
+    private final ShapedRecipePattern pattern;
+    private final ItemStack result;
+
+    public FeatherFanRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern,
+                            ItemStack result, boolean showNotification) {
+        super(group, category, pattern, result, showNotification);
+        this.pattern = pattern;
+        this.result = result;
     }
 
-    public boolean matches(@NotNull CraftingInput in, @NotNull Level l) {
-        if (in.width() != 3 || in.height() != 3) return false;
-        for (int i = 0; i < 9; i++) {
-            ItemStack s = in.getItem(i);
-            if (i < 6 && !s.is(NeoGuanNiaoItems.BIRD_FEATHER.get())) return false;
-            if (i >= 6 && ((i == 7 && !s.is(Items.STICK)) || ((i == 6 || i == 8) && !s.is(Items.ECHO_SHARD))))
-                return false;
-        }
-        return true;
+    public ShapedRecipePattern pattern() {
+        return this.pattern;
     }
 
+    public ItemStack result() {
+        return this.result;
+    }
+
+    @Override
     public @NotNull ItemStack assemble(@NotNull CraftingInput in, HolderLookup.@NotNull Provider r) {
         ItemStack out = new ItemStack(NeoGuanNiaoItems.WIND_FEATHER_FAN.get());
         ListTag list = new ListTag();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < in.width() * in.height() && list.size() < FEATHER_SLOTS; i++) {
             var d = BirdFeatherItem.getFeatherData(in.getItem(i));
             if (d != null) {
                 CompoundTag t = new CompoundTag();
@@ -45,15 +55,8 @@ public final class FeatherFanRecipe extends CustomRecipe {
         return out;
     }
 
-    public boolean canCraftInDimensions(int w, int h) {
-        return w >= 3 && h >= 3;
-    }
-
-    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider r) {
-        return new ItemStack(NeoGuanNiaoItems.WIND_FEATHER_FAN.get());
-    }
-
+    @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
-        return NeoGuanNiaoRecipeSerializers.FEATHER_FAN.get();
+        return FeatherFanRecipeSerializer.INSTANCE;
     }
 }
