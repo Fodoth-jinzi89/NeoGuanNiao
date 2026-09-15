@@ -182,16 +182,24 @@ public class BirdCageItem extends BlockItem implements GeoItem, Equipable {
             target.saveWithoutId(tag);
             tag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()).toString());
             if (target instanceof LivingEntity living) tag.putFloat("MaxHealth", living.getMaxHealth());
-            List<CompoundTag> birds = capturedBirds(stack);
+            // 手上不止一个鸟笼时，分离出单独的一个来装这只生物：否则写入的是整组物品栈的数据，
+            // 会让整组鸟笼一起变成「笼中有鸟」。分离出来的笼子放回背包，放不下就丢在地上。
+            ItemStack cage = stack.getCount() > 1 ? stack.copy() : stack;
+            cage.setCount(1);
+            List<CompoundTag> birds = capturedBirds(cage);
             // 鸟笼物品没有朝向，笼位只影响它在笼中的站位，挑编号最小的空笼位即可。
             tag.putInt(BirdCageBlockEntity.SLOT_KEY, BirdCageBlockEntity.freeSlot(birds, variant.capacity(), -1));
             ListTag list = new ListTag();
             for (CompoundTag bird : birds) list.add(bird.copy());
             list.add(tag);
-            CustomData.update(DataComponents.CUSTOM_DATA, stack, t -> {
+            CustomData.update(DataComponents.CUSTOM_DATA, cage, t -> {
                 t.remove("CapturedBird");
                 t.put("CapturedBirds", list);
             });
+            if (cage != stack) {
+                stack.shrink(1);
+                if (!player.getInventory().add(cage)) player.drop(cage, false);
+            }
             target.discard();
         }
         return InteractionResult.sidedSuccess(player.level().isClientSide);
