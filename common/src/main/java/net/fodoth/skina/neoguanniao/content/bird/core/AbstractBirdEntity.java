@@ -77,6 +77,12 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     private static final int MAX_LOCAL_BIRDS = 12;
 
+    /** 展示用预览（笼中鸟、被 Carry On 等移出世界但仍渲染的鸟）待机动画播完一轮后，再按 1/N 的概率好奇一次。 */
+    private static final int CURIOUS_CHANCE = 4;
+
+    /** {@link #tickAnimationPreview(long)} 的去重时间戳；预览不参与存档。 */
+    private long previewTickedAt = Long.MIN_VALUE;
+
     // ================== 数据序列化器 ===================
     public static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
             SynchedEntityData.defineId(AbstractBirdEntity.class, EntityDataSerializers.INT);
@@ -1066,6 +1072,65 @@ public abstract class AbstractBirdEntity<T extends AbstractBirdEntity<T>> extend
 
     public void setGrowthStopped(boolean growthStopped) {
         this.growthStopped = growthStopped;
+    }
+
+    /**
+     * 只推进「展示用」的动画与行为状态：适用于**被移出世界但仍在渲染**的鸟
+     * （Carry On 抱持、鸟笼预览等），它们不会被 level tick，动画时间与状态机都得自己走一遍。
+     *
+     * <p>与笼中鸟的表现一致：同步 GeckoLib 的动画时间（{@code tickCount}）、推进客户端计时器，
+     * 并在没有 goal 的情况下自己走一遍睡眠 / 清醒 / 好奇的状态机。</p>
+     *
+     * <p><b>调用方不要改用 {@code Entity#tick()}：</b>那会同时驱动 AI、重力与骑乘逻辑，
+     * 而 Carry On 抱持时玩家是骑在这只实体上的，会导致玩家按方向键被「拖着冲刺」。</p>
+     *
+     * @param gameTime 客户端 {@code level.getGameTime()}；同一 gameTime 内重复调用直接返回
+     */
+    public void tickAnimationPreview(long gameTime) {
+        if (this.previewTickedAt == gameTime) {
+            return;
+        }
+        this.previewTickedAt = gameTime;
+
+        // ① GeckoLib 的动画时间。
+        this.tickCount = (int) gameTime;
+        // ② 客户端计时器（待机动画会像真实鸟一样按自己的节奏更换）。
+        getTickController().tickClient();
+
+        var stateController = getBehaviorStateController();
+        var routineController = getRoutineController();
+
+        // ③ 行为状态机：等价于各个 goal。
+        // 休息时间：等价于 roost and sleep goal，预览鸟无法飞到栖息点，直接入睡。
+        if (!routineController.isActiveTime()) {
+            stateController.setBehaviorState(BirdBehaviorState.SLEEPING);
+            return;
+        }
+
+        // 回到活动时间：等价于 wake up goal，从 sleep_loop 转回 idle。
+        if (routineController.isSleeping()) {
+            stateController.setBehaviorState(BirdBehaviorState.IDLE);
+            return;
+        }
+
+        var timer = getTickController().getTickTimer();
+
+        // 好奇结束：等价于 curious follow goal 的 onStop。
+        if (stateController.getBehaviorState() == BirdBehaviorState.CURIOUS) {
+            if (!timer.getBirdBehaviorStateTicker().isRunning()) {
+                stateController.setBehaviorState(BirdBehaviorState.IDLE);
+            }
+            return;
+        }
+
+        // 偶尔好奇：等价于 curious follow goal，只是预览鸟无法跟过去，只能张望。
+        if (stateController.getBehaviorState() == BirdBehaviorState.IDLE
+                && timer.getBirdIdleAnimationTicker().getTicks() <= 0
+                && getRandom().nextInt(CURIOUS_CHANCE) == 0) {
+            var goalDatum = getBirdData().goal();
+            stateController.setBehaviorStateFor(BirdBehaviorState.CURIOUS,
+                    goalDatum.curiousTicks() + getRandom().nextInt(goalDatum.curiousTicksVariance()));
+        }
     }
 
 }
