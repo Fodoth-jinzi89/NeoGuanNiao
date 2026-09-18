@@ -130,6 +130,12 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         }
 
 
+        // GeckoLib 收到 null 动画时不会套用任何骨骼变换（模型停在预置姿势、看起来完全静止），
+        // 而首次进入预览时 idleTicker 往往还在倒数、currentIdleAnimation 尚未赋值仍是 null，这里兜底。
+        if (this.currentIdleAnimation == null) {
+            this.currentIdleAnimation = animationDatum.animationMap().get("idle");
+        }
+
         return currentIdleAnimation;
     }
 
@@ -309,7 +315,25 @@ public class BirdAnimationController<T extends AbstractBirdEntity<T>> extends Ab
         return cache;
     }
 
+    /**
+     * 飞行/滑翔动画。有些鸟只配了 {@code fly_glide}（例如鸽类、夜鹭），只有 {@code fly} 的话 GeckoLib
+     * 会收到 null 动画、整段骨骼变换被跳过（模型停在预置姿势），所以这里按 {@code movementController}
+     * 里拴绳分支同一套顺序回退：fly → fly_glide → walk → idle。
+     */
     public RawAnimation pickFlyAnimation() {
-        return bird().getBirdData().animation().animationMap().get("fly");
+        var animationMap = bird().getBirdData().animation().animationMap();
+        RawAnimation animation = animationMap.get("fly");
+
+        if (animation == null) {
+            animation = animationMap.get("fly_glide");
+        }
+        if (animation == null) {
+            animation = animationMap.get("walk");
+        }
+        if (animation == null) {
+            animation = animationMap.get("idle");
+        }
+
+        return animation;
     }
 }

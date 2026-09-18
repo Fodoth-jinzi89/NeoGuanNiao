@@ -1,7 +1,6 @@
 package net.fodoth.skina.neoguanniao.client.cage;
 
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
-import net.fodoth.skina.neoguanniao.content.bird.core.BirdBehaviorState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -15,18 +14,14 @@ import java.util.List;
  * 鸟笼中预览实体的缓存与行为驱动。
  *
  * <p>
- * 笼中的鸟不会运行真实的 goal，这里按游戏 tick 复刻 idle、curious、roost and sleep
- * 与 wake up goal 的关键行为，使笼中鸟播放与野外一致的动画：活动时间播放各种待机动画
- * 并偶尔理毛、好奇，休息时间进入 sleep 动画再进入 sleep_loop，回到活动时间后从
- * sleep_loop 转回 idle。
+ * 笼中的鸟不会运行真实的 goal，这里按游戏 tick 调用
+ * {@link AbstractBirdEntity#tickAnimationPreview(long)}（与 Carry On 抱持等
+ * 「被移出世界但仍在渲染的鸟」共用同一份实现），使笼中鸟播放与野外一致的动画：
+ * 活动时间播放各种待机动画并偶尔理毛、好奇，休息时间进入 sleep 动画再进入 sleep_loop，
+ * 回到活动时间后从 sleep_loop 转回 idle。
  * </p>
  */
 final class CageBirdPreview {
-
-    /**
-     * 待机动画播完一轮后再按 1/N 的概率好奇一次
-     */
-    private static final int CURIOUS_CHANCE = 4;
 
     private CompoundTag tag;
     private Entity entity;
@@ -88,10 +83,6 @@ final class CageBirdPreview {
         }
         this.tickedAt = gameTime;
 
-        bird.tickCount = (int) gameTime;
-        // 推进待机动画等客户端计时器，待机动画会像真实鸟一样按自己的节奏更换。
-        bird.getTickController().tickClient();
-
         if (soundAnchor != null) {
             // 预览实体不在世界里，声源位置得自己摆到鸟笼上，否则会从捕捉时记录的坐标发声。
             bird.setPos(soundAnchor.x, soundAnchor.y, soundAnchor.z);
@@ -103,38 +94,7 @@ final class CageBirdPreview {
             }
         }
 
-        var stateController = bird.getBehaviorStateController();
-        var routineController = bird.getRoutineController();
-
-        // 休息时间：等价于 roost and sleep goal，笼中鸟无法飞到栖息点，直接入睡。
-        if (!routineController.isActiveTime()) {
-            stateController.setBehaviorState(BirdBehaviorState.SLEEPING);
-            return;
-        }
-
-        // 回到活动时间：等价于 wake up goal，从 sleep_loop 转回 idle。
-        if (routineController.isSleeping()) {
-            stateController.setBehaviorState(BirdBehaviorState.IDLE);
-            return;
-        }
-
-        var timer = bird.getTickController().getTickTimer();
-
-        // 好奇结束：等价于 curious follow goal 的 onStop。
-        if (stateController.getBehaviorState() == BirdBehaviorState.CURIOUS) {
-            if (!timer.getBirdBehaviorStateTicker().isRunning()) {
-                stateController.setBehaviorState(BirdBehaviorState.IDLE);
-            }
-            return;
-        }
-
-        // 偶尔好奇：等价于 curious follow goal，只是笼中鸟无法跟过去，只能张望。
-        if (stateController.getBehaviorState() == BirdBehaviorState.IDLE
-                && timer.getBirdIdleAnimationTicker().getTicks() <= 0
-                && bird.getRandom().nextInt(CURIOUS_CHANCE) == 0) {
-            var goalDatum = bird.getBirdData().goal();
-            stateController.setBehaviorStateFor(BirdBehaviorState.CURIOUS,
-                    goalDatum.curiousTicks() + bird.getRandom().nextInt(goalDatum.curiousTicksVariance()));
-        }
+        // 动画时间 / 客户端计时器 / 行为状态机：与其它「被移出世界但仍在渲染的鸟」（Carry On 抱持等）共用一份实现。
+        bird.tickAnimationPreview(gameTime);
     }
 }
