@@ -35,6 +35,8 @@ public class BirdCageRenderer extends GeoBlockRenderer<BirdCageBlockEntity> {
     public void render(@NotNull BirdCageBlockEntity cage, float partialTick, @NotNull PoseStack poseStack,
                        @NotNull MultiBufferSource buffer, int light, int overlay) {
         super.render(cage, partialTick, poseStack, buffer, light, overlay);
+        // 产量的鸟羽、食盆里的食物/流体都和笼中有没有鸟无关，放在这里，空笼子也能看见。
+        BirdCageContentsRender.render(cage, getFacing(cage), poseStack, buffer, light, overlay);
         if (cage.isEmpty() || cage.getLevel() == null) {
             cachedPreviews.remove(cage);
             return;

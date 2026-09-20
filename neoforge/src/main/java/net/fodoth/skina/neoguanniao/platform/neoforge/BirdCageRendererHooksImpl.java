@@ -3,9 +3,18 @@ package net.fodoth.skina.neoguanniao.platform.neoforge;
 import net.fodoth.skina.neoguanniao.client.cage.BirdCageRenderer;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
 import net.fodoth.skina.neoguanniao.content.cage.BirdCageVariant;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class BirdCageRendererHooksImpl {
     private BirdCageRendererHooksImpl() {}
@@ -29,5 +38,17 @@ public final class BirdCageRendererHooksImpl {
                 );
             }
         };
+    }
+
+    public static @Nullable TextureAtlasSprite fluidStillSprite(@NotNull Fluid fluid) {
+        ResourceLocation still = IClientFluidTypeExtensions.of(fluid).getStillTexture();
+        if (still == null) return null;
+        return Minecraft.getInstance().getModelManager()
+                .getAtlas(InventoryMenu.BLOCK_ATLAS)
+                .getSprite(still);
+    }
+
+    public static int fluidTint(@NotNull Fluid fluid, @NotNull BlockAndTintGetter level, @NotNull BlockPos pos) {
+        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), level, pos);
     }
 }

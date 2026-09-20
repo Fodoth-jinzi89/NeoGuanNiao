@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -22,7 +24,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
@@ -31,17 +35,26 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.fodoth.skina.neoguanniao.content.bird.core.AbstractBirdEntity;
 import net.fodoth.skina.neoguanniao.platform.CarryOnHooks;
+import net.fodoth.skina.neoguanniao.platform.FluidBucketHooks;
+import net.fodoth.skina.neoguanniao.platform.LiquidContainerHooks;
+import net.fodoth.skina.neoguanniao.registry.NeoGuanNiaoBlockEntityTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -95,6 +108,14 @@ public class BirdCageBlock extends BaseEntityBlock {
     }
 
 
+    /**
+     * 形状贴着模型：中/大型鸟笼占地 3x3（48 像素），模型比一格大得多，所以每格只取模型真正占到的那一段，
+     * 边上的占位方块往内收，选中的框和右键的判定范围就都跟模型对齐了。
+     * <p>
+     * 收进去的宽度按模型的实际外沿算：中型 x 到 ±16、z 到 ±14.6，大型 x 到 ±24、z 到 ±15.5（像素），
+     * 减去中间那格占的 ±8 就是要收的量。纵向仍按整格给，模型每一列都占满这一格的高度。
+     * </p>
+     */
     @Override
     public @NotNull VoxelShape getShape(
             @NotNull BlockState state,
@@ -109,17 +130,15 @@ public class BirdCageBlock extends BaseEntityBlock {
             int dx = pos.getX() - origin.getX();
             int dz = pos.getZ() - origin.getZ();
             int localX = dx * facing.getClockWise().getStepX() + dz * facing.getClockWise().getStepZ();
-            int localY = pos.getY() - origin.getY();
             int localZ = dx * facing.getOpposite().getStepX() + dz * facing.getOpposite().getStepZ();
-            int inset = variant == BirdCageVariant.LARGE ? 0 : 6;
+            int inset = variant == BirdCageVariant.LARGE ? 0 : 8;
+            int zInset = variant == BirdCageVariant.LARGE ? 8 : 9;
             double minX = localX == -1 ? inset : 0;
             double maxX = localX == 1 ? 16 - inset : 16;
-            int zInset = variant == BirdCageVariant.LARGE ? 8 : inset;
             double minZ = localZ == -1 ? zInset : 0;
             double maxZ = localZ == 1 ? 16 - zInset : 16;
-            double maxY = 16;
             double[] bounds = rotateBounds(facing, minX, minZ, maxX, maxZ);
-            return Block.box(bounds[0], 0, bounds[1], bounds[2], maxY, bounds[3]);
+            return Block.box(bounds[0], 0, bounds[1], bounds[2], 16, bounds[3]);
         }
         return variant.shape();
     }
@@ -162,6 +181,19 @@ public class BirdCageBlock extends BaseEntityBlock {
                 pos,
                 state
         );
+    }
+
+    /** 只有原点那个部件带方块实体，所以只有它会拿到这个 ticker。 */
+    @Override
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(
+            @NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type
+    ) {
+        return createTickerHelper(type, NeoGuanNiaoBlockEntityTypes.BIRD_CAGE.get(), BirdCageBlock::serverTick);
+    }
+
+    private static void serverTick(Level level, BlockPos pos, BlockState state, BirdCageBlockEntity cage) {
+        if (level.isClientSide) return;
+        BirdCageSimulation.serverTick(level, cage);
     }
 
     @Override
@@ -216,6 +248,10 @@ public class BirdCageBlock extends BaseEntityBlock {
             for (int i = 0; i < birds.size(); i++) {
                 cage.addCapturedBird(birds.get(i), BirdCageBlockEntity.slotOf(birds.get(i), i));
             }
+            // 还原破坏时存进物品里的物品/流体。
+            cage.readStorageFromItem(stack, level.registryAccess());
+            // 方块实体会从鸟笼物品继承一份 custom_data 镜像，清掉它，别让鸟数据在方块数据里留两份。
+            cage.clearMirroredItemComponents();
         }
         if (state.getValue(PART) || variant == BirdCageVariant.SMALL) return;
         int height = structureHeight();
@@ -260,7 +296,7 @@ public class BirdCageBlock extends BaseEntityBlock {
     }
 
     /**
-     * 破坏鸟笼时把笼中的实体写回鸟笼物品，避免笼中鸟随方块一起消失。
+     * 破坏鸟笼时把笼中的实体和物品/流体写回鸟笼物品，避免这些内容随方块一起消失或掉一地。
      * <p>
      * 中/大型鸟笼破坏任一部件都会走到原点方块的掉落，因此这里按方块实体统一处理；
      * 笼位信息存在每只实体的 NBT 里，随物品重新放置时会原样恢复。
@@ -268,22 +304,52 @@ public class BirdCageBlock extends BaseEntityBlock {
      */
     @Override
     protected @NotNull List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootParams.Builder params) {
-        if (!state.getValue(PART)
-                && params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof BirdCageBlockEntity cage
-                && !cage.isEmpty()) {
+        BirdCageBlockEntity cage = !state.getValue(PART)
+                && params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof BirdCageBlockEntity blockEntity
+                ? blockEntity : null;
+        List<ItemStack> drops = new ArrayList<>();
+        if (cage != null && !cage.isEmpty()) {
             ItemStack stack = new ItemStack(this);
             ListTag list = new ListTag();
             for (CompoundTag bird : cage.capturedBirds()) list.add(bird.copy());
             CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.put("CapturedBirds", list));
-            return List.of(stack);
+            drops.add(stack);
+        } else {
+            drops.addAll(super.getDrops(state, params));
         }
-        return super.getDrops(state, params);
+        // 笼内的物品/流体写进鸟笼物品，破坏时随物品一起带走，而不是掉一地。
+        if (cage != null && cage.getLevel() != null) {
+            for (ItemStack drop : drops) {
+                if (drop.is(this.asItem())) cage.writeStorageToItem(drop, cage.getLevel().registryAccess());
+            }
+        }
+        return drops;
     }
 
+    /**
+     * 从结构里任意一格（包括占位方块）取出带方块实体的原点那个鸟笼。
+     * <p>
+     * 中/大型鸟笼的占位方块没有方块实体，交互和自动化（漏斗、管道）都必须先回到原点那一格。
+     * </p>
+     */
+    public static @Nullable BirdCageBlockEntity cageAt(BlockGetter level, BlockPos pos, BlockState state) {
+        if (!(state.getBlock() instanceof BirdCageBlock cageBlock)) return null;
+        BlockPos origin = state.getValue(PART) ? cageBlock.findOrigin(level, pos, state.getValue(FACING)) : pos;
+        return origin != null && level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage ? cage : null;
+    }
+
+
+    /**
+     * 从结构里任意一格找回带方块实体的原点那格。
+     * <p>
+     * 纵向要上下都找：食槽和水槽在模型上位于原点那一格的上方，点到的往往是原点上面的占位方块，
+     * 只往上扫就会漏掉真正的原点。
+     * </p>
+     */
     private @Nullable BlockPos findOrigin(BlockGetter level, BlockPos pos, Direction facing) {
         int height = structureHeight();
         for (int x = -1; x <= 1; x++)
-            for (int y = 0; y < height; y++)
+            for (int y = -(height - 1); y < height; y++)
                 for (int z = -1; z <= 1; z++) {
                     BlockPos origin = offset(pos, facing, -x, -y, -z);
                     BlockState originState = level.getBlockState(origin);
@@ -314,11 +380,124 @@ public class BirdCageBlock extends BaseEntityBlock {
         };
     }
 
+    /**
+     * 手持物品右键鸟笼：
+     * <ul>
+     *     <li>手里拿着鸟食点食盆：加进食物槽；</li>
+     *     <li>空手点食盆：取出一组鸟食，从食盆那一侧飞到笼子外面；</li>
+     *     <li>任意流体容器点水槽：把水槽里的流体抽进容器；</li>
+     *     <li>桶：把桶里的流体倒进空着或未满的水槽。</li>
+     * </ul>
+     * 潜行时不处理，把这次右键留给 {@link #useWithoutItem} 放出笼中鸟；空手掏鸟羽也在那边。
+     */
+    @Override
+    public @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level,
+                                                   @NotNull BlockPos pos, @NotNull Player player,
+                                                   @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+        if (player.isShiftKeyDown()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        BirdCageBlockEntity cage = cageAt(level, pos, state);
+        if (cage == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        BlockPos origin = cage.getBlockPos();
+        Direction facing = state.getValue(FACING);
+
+        // 食盆：手里拿着鸟食就加料，空手就把鸟食取出来。只认点中的那一个盆，一次只动它对应的那个槽。
+        BirdCageVariant.PotLayer foodPot = BirdCageLoot.potAt(cage, facing, origin, hit, true);
+        if (foodPot != null) {
+            if (!stack.isEmpty() && BirdCageLoot.isFood(stack)) {
+                if (!level.isClientSide) {
+                    BirdCageLoot.addFood(cage, player, stack, foodPot.storageIndex());
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+            if (stack.isEmpty() && BirdCageLoot.hasFood(cage, foodPot.storageIndex())) {
+                if (!level.isClientSide) {
+                    BirdCageLoot.takeFood(level, origin, cage, player, facing, hit.getDirection(), foodPot.storageIndex());
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+            // 盆里没东西就往下走，让收鸟羽接手。
+        }
+
+        // 流体容器：把点中的那个水盆抽进手里的容器。
+        BirdCageVariant.PotLayer fluidPot = BirdCageLoot.potAt(cage, facing, origin, hit, false);
+        if (fluidPot != null
+                && LiquidContainerHooks.drainIntoContainer(
+                        cage.fluidTank(fluidPot.storageIndex()), player, hand, level.isClientSide) > 0) {
+            if (!level.isClientSide) {
+                cage.setChanged();
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        // 再按原来的规则：桶里的流体倒进空着或未满的水槽。
+        return fillTankFromBucket(stack, level, origin, player, hand, cage);
+    }
+
+    /**
+     * 把手里流体桶的流体倒进鸟笼的水槽，桶换成空桶还给玩家。
+     * <p>
+     * 多个水槽时优先找空槽，其次找装着同一种流体且没满的槽；一次倒一桶（{@link SimpleFluidTank#BUCKET_VOLUME} mB），
+     * 槽装不下的部分就没了。
+     * 都装不下（槽里是别的流体）就什么都不做，让交互继续往下走。
+     * </p>
+     */
+    private ItemInteractionResult fillTankFromBucket(ItemStack stack, Level level, BlockPos origin,
+                                                     Player player, InteractionHand hand, BirdCageBlockEntity cage) {
+        if (!(stack.getItem() instanceof BucketItem)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        ResourceLocation fluidId = FluidBucketHooks.bucketFluid(stack);
+        if (fluidId == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        SimpleFluidTank target = null;
+        boolean sameFluidFull = false;
+        for (SimpleFluidTank tank : cage.fluidTanks()) {
+            if (tank.isEmpty()) {
+                target = tank;
+                break;
+            }
+            if (!fluidId.equals(tank.getFluidId())) continue;
+            if (tank.getAmount() < tank.getCapacity()) {
+                target = tank;
+                break;
+            }
+            sameFluidFull = true;
+        }
+        if (target == null) {
+            // 装的是同一种流体但已经满了：吃掉这次右键，别让桶接着把流体倒到地上。
+            return sameFluidFull
+                    ? ItemInteractionResult.sidedSuccess(level.isClientSide)
+                    : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (!level.isClientSide) {
+            target.fill(fluidId, SimpleFluidTank.BUCKET_VOLUME);
+            cage.setChanged();
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+                ItemStack emptyBucket = new ItemStack(Items.BUCKET);
+                if (stack.isEmpty()) {
+                    player.setItemInHand(hand, emptyBucket);
+                } else if (!player.getInventory().add(emptyBucket)) {
+                    player.drop(emptyBucket, false);
+                }
+            }
+            level.playSound(null, origin, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
     @Override
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hit) {
-        BlockPos origin = state.getValue(PART) ? findOrigin(level, pos, state.getValue(FACING)) : pos;
-        if (origin == null || !(level.getBlockEntity(origin) instanceof BirdCageBlockEntity cage))
-            return InteractionResult.PASS;
+        BirdCageBlockEntity cage = cageAt(level, pos, state);
+        if (cage == null) return InteractionResult.PASS;
+        BlockPos origin = cage.getBlockPos();
         // 装笼放在去重标记之前：空手右键时 storeCarriedEntity 不会消耗标记，而 Fabric 没有
         // NeoForge 的 RightClickBlock 预处理，抱着实体装笼只能靠这里（NeoForge 侧仍由事件抢先处理）。
         if (!cage.isFull() && storeCarriedEntity(level, pos, player)) {
@@ -358,6 +537,17 @@ public class BirdCageBlock extends BaseEntityBlock {
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        // 收产量槽里的鸟羽，落在点击的那一面外侧；手上拿着东西也照收，潜行时留给上面放鸟。
+        if (!player.isShiftKeyDown()) {
+            if (level.isClientSide) {
+                return BirdCageLoot.hasOutput(cage)
+                        ? InteractionResult.sidedSuccess(true)
+                        : InteractionResult.PASS;
+            }
+            return BirdCageLoot.takeOutput(level, origin, cage, player, hit.getDirection())
+                    ? InteractionResult.sidedSuccess(false)
+                    : InteractionResult.PASS;
         }
         return InteractionResult.PASS;
     }
