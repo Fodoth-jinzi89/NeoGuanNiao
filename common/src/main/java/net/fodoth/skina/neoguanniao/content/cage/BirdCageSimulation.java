@@ -35,6 +35,9 @@ import java.util.List;
  * 每只鸟都按自己的剩余量跳步推进：剩 10 秒以上就 10 秒一步、剩 1 秒以上就 1 秒一步、最后一秒才每刻推进，
  * 所以一个默认 24000 tick 的周期只会被检查上百次，而不是两万多次。
  * </p>
+ * <p>
+ * 笼里的其它生物（比如鸡）不参与这里的模拟，也不影响别的鸟的检查节奏。
+ * </p>
  */
 public final class BirdCageSimulation {
 
@@ -82,6 +85,9 @@ public final class BirdCageSimulation {
 
         int nextCheck = STEP_COARSE;
         for (CompoundTag bird : birds) {
+            // 笼里除了鸟还可能装着别的生物（比如鸡），它们不产毛也不成长：直接跳过，
+            // 否则下面的推进步长会算成 1 tick，把整笼的检查节奏拖成每刻一次，鸟的倒计时就会按 10 秒一步飞速归零。
+            if (createBird(level, bird) == null) continue;
             // 下一次检查按最急的那只鸟来定，别错过任何一个到点。
             nextCheck = Math.min(nextCheck, tickFeathers(level, cage, bird));
             int growthStep = tickAge(level, cage, bird);
