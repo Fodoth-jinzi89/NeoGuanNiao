@@ -3,7 +3,13 @@ package net.fodoth.skina.neoguanniao;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlock;
+import net.fodoth.skina.neoguanniao.content.cage.BirdCageBlockEntity;
+import net.fodoth.skina.neoguanniao.platform.fabric.BirdCageFluidStorage;
+import net.fodoth.skina.neoguanniao.platform.fabric.BirdCageItemStorage;
 import net.fodoth.skina.neoguanniao.registry.*;
+import net.minecraft.world.level.block.Block;
 import net.fodoth.skina.neoguanniao.network.NeoGuanNiaoFabricNetwork;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fodoth.skina.neoguanniao.compat.modonomicon.pages.BookLinkPage;
@@ -49,6 +55,7 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
         NeoGuanNiaoVillagerProfessions.POI_TYPES_REGISTER.register();
         registerPoiBlockStates();
         registerNestItemStorage();
+        registerCageStorages();
         NeoGuanNiaoVillagerProfessions.PROFESSIONS.register();
         NeoGuanNiaoFabricVillagerTrades.register();
         NeoGuanNiaoFabricSpawns.register();
@@ -64,6 +71,30 @@ public final class NeoGuanNiaoFabric implements ModInitializer {
     private static void registerNestItemStorage() {
         ItemStorage.SIDED.registerForBlockEntity(InventoryStorage::of,
                 NeoGuanNiaoBlockEntityTypes.BIRD_NEST.get());
+    }
+
+    // 漏斗/管道：把鸟笼暴露为 fabric-transfer 的物品/流体存储（对应 NeoForge 的 Capabilities）。三种规格都参与，
+    // 而且注册在方块上：中/大型鸟笼的占位方块没有方块实体，接在占位方块上的漏斗也要查得到，这里统一回到原点。
+    private static void registerCageStorages() {
+        Block[] cageBlocks = {
+                NeoGuanNiaoBlocks.SMALL_BIRD_CAGE.get(),
+                NeoGuanNiaoBlocks.MEDIUM_BIRD_CAGE.get(),
+                NeoGuanNiaoBlocks.LARGE_BIRD_CAGE.get()
+        };
+        ItemStorage.SIDED.registerForBlocks(
+                (level, pos, state, blockEntity, direction) -> {
+                    BirdCageBlockEntity cage = BirdCageBlock.cageAt(level, pos, state);
+                    return cage != null && cage.supportsCageStorage() ? new BirdCageItemStorage(cage) : null;
+                },
+                cageBlocks
+        );
+        FluidStorage.SIDED.registerForBlocks(
+                (level, pos, state, blockEntity, direction) -> {
+                    BirdCageBlockEntity cage = BirdCageBlock.cageAt(level, pos, state);
+                    return cage != null && cage.supportsCageStorage() ? new BirdCageFluidStorage(cage) : null;
+                },
+                cageBlocks
+        );
     }
 
     private static void registerPoiBlockStates() {

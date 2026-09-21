@@ -1,0 +1,26 @@
+{
+  "name": "book.neoguanniao.bird_guide.entry.bird_cages_interact.name",
+  "description": "book.neoguanniao.bird_guide.entry.bird_cages_interact.description",
+  "icon": {
+    "item": "neoguanniao:medium_bird_cage"
+  },
+  "category": "neoguanniao:intro",
+  "parents": [
+    {
+      "entry": "neoguanniao:intro/bird_cages"
+    }
+  ],
+  "x": 10,
+  "y": -4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.neoguanniao.bird_guide.entry.bird_cages_interact.page1.name",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages_interact.page1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.neoguanniao.bird_guide.entry.bird_cages_interact.page2.text"
+    }
+  ]
+}
